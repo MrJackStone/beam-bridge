@@ -1,0 +1,170 @@
+! BRIDGE_V1_POSTCOMPOSITE
+
+secCount=101
+
+xPitch=GEO_deckLength/(secCount-1)
+
+*del,MPATHPLOT_ARR_pathNames
+*dim,MPATHPLOT_ARR_pathNames,char,secCount
+*del,MPATHPLOT_ARR_labels
+*dim,MPATHPLOT_ARR_labels,char,secCount
+
+myPeakLS=0
+qxPeakLS=0
+myOverallPeak=0
+qxOverallPeak=0
+
+cmsel,s,COMPE_Slab
+nsle,s,active
+
+*get,yMin,node,,mnloc,y
+*get,yMax,node,,mxloc,y
+
+*do,nthLS,1,LoadStepCount,1
+
+    subset,nthLS
+    cshell_my
+    cshell_qx
+
+
+    *do,nthSec,1,secCount,1
+        ! Calculate cross-section position
+        xCoord=xPitch*(nthSec-1)
+
+        ! Create cross-sectional path
+        pthName=strcat('SS_',chrval(nthSec))
+        path,%pthName%,2,,100
+        ppath,1,,xCoord,yMin,0
+        ppath,2,,xCoord,yMax,0
+
+        ! Map bending moment (about transversal direction)
+        pdef,'MY',etab,'SHELL_MY'
+        pcalc,intg,'MY_CUM','MY','S',1
+        *get,myCumMax,path,,max,'MY_CUM'
+        *get,myCumMin,path,,min,'MY_CUM'
+        myCumPeak=(abs(myCumMin)>abs(myCumMax))
+        *if,myCumPeak,gt,myOverallPeak,then
+            myOverallPeak=myCumPeak
+            myPeakLS=nthLS
+        *endif
+
+        ! Mat shear force (along transversal direction)
+        pdef,'QX',etab,'SHELL_QX'
+        pcalc,intg,'QX_CUM','QX','S',1
+        *get,qxCumMax,path,,max,'QX_CUM'
+        *get,qxCumMin,path,,min,'QX_CUM'
+        qxCumPeak=(abs(qxCumMin)>abs(qxCumMax))
+        *if,qxCumPeak,gt,qxOverallPeak,then
+            qxOverallPeak=qxCumPeak
+            qxPeakLS=nthLS
+        *endif
+
+        MPATHPLOT_ARR_pathNames(nthSec)=pthName
+
+        MPATHPLOT_ARR_labels(nthSec)='MY_CUM'
+        !MPATHPLOT_ARR_labels(nthSec)='MY'
+
+        MPATHPLOT_ARR_labels(nthSec)='QX_CUM'
+        !MPATHPLOT_ARR_labels(nthSec)='QX'
+
+    *enddo
+
+*enddo
+
+
+! Plot peak MY
+subset,myPeakLS
+
+*do,nthSec,1,secCount,1
+    ! Calculate cross-section position
+    xCoord=xPitch*(nthSec-1)
+
+    ! Create cross-sectional path
+    pthName=strcat('SS_',chrval(nthSec))
+    path,%pthName%,2,,100
+    ppath,1,,xCoord,yMin,0
+    ppath,2,,xCoord,yMax,0
+
+    ! Map bending moment (about transversal direction)
+    pdef,'MY',etab,'SHELL_MY'
+    pcalc,intg,'MY_CUM','MY','S',1
+
+    MPATHPLOT_ARR_pathNames(nthSec)=pthName
+    MPATHPLOT_ARR_labels(nthSec)='MY_CUM'
+*enddo
+
+view1w
+windefa,1
+wincln,1
+wntitle,'LAJE - MOMENTO ACUM. [kNm]',1
+/gformat,f,1,1
+/plopts,leg3,on
+/udoc,1,cntr,right
+/view,1,1,1,1
+/angle,1,0
+/auto,1
+/eshape,0
+eplot
+/user,1
+go2png,1200
+    /device,vector,on
+    /type,,0
+    eplot
+    /noerase
+    /device,vector,off
+    cleanplot,'mpathplot','5','0'
+    /type,,3
+endpng,'COMPOSITE_SLAB_My'
+/erase
+clims
+/annot,dele
+
+
+
+! Plot peak QX
+subset,qxPeakLS
+
+*do,nthSec,1,secCount,1
+    ! Calculate cross-section position
+    xCoord=xPitch*(nthSec-1)
+
+    ! Create cross-sectional path
+    pthName=strcat('SS_',chrval(nthSec))
+    path,%pthName%,2,,100
+    ppath,1,,xCoord,yMin,0
+    ppath,2,,xCoord,yMax,0
+
+    ! Map bending moment (about transversal direction)
+    pdef,'QX',etab,'SHELL_QX'
+    pcalc,intg,'QX_CUM','QX','S',1
+
+    MPATHPLOT_ARR_pathNames(nthSec)=pthName
+    MPATHPLOT_ARR_labels(nthSec)='QX_CUM'
+*enddo
+
+view1w
+windefa,1
+wincln,1
+wntitle,'LAJE - CORTANTE ACUM. [kN]',1
+/gformat,f,1,1
+/plopts,leg3,on
+/udoc,1,cntr,right
+/view,1,1,1,1
+/angle,1,0
+/auto,1
+/eshape,0
+eplot
+/user,1
+go2png,1200
+    /device,vector,on
+    /type,,0
+    eplot
+    /noerase
+    /device,vector,off
+    cleanplot,'mpathplot','5','0'
+    /type,,3
+endpng,'COMPOSITE_SLAB_Qx'
+/erase
+clims
+/annot,dele
+

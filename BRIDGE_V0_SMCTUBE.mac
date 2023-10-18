@@ -1,0 +1,101 @@
+! BRIDGE_V0_SMCTUBE, nthSupport
+! BRIDGE_V0_SMCTUBE, arg1
+
+BRIDGE_V0_CSMESO, arg1
+*get,CS_num,active,,csys
+
+acmName=strcat('COMPA_TUBE_',chrval(arg1))
+
+! Top and bottom Z coordinates of the frame
+nthFrameZTop=zFrameTop+GEO_frameTopOffset(arg1)
+nthFrameZBot=zFrameBot+GEO_frameBotOffset(arg1)
+
+x_i=-GEO_columnDepth/2
+x_j=GEO_columnDepth/2
+
+! Create array with keypoint numbers
+*get,KMaxD,KP,,NUM,MAXD
+K1=KMaxD+1
+K2=KMaxD+2
+K3=KMaxD+3
+K4=KMaxD+4
+K5=KMaxD+5
+K6=KMaxD+6
+K7=KMaxD+7
+K8=KMaxD+8
+
+ksel,u,kp,,all
+asel,u,area,,all
+
+! Bottom keypoints
+k,K1,x_i,-GEO_columnWidth/2,nthFrameZBot
+k,K2,x_i, GEO_columnWidth/2,nthFrameZBot
+k,K3,x_j,-GEO_columnWidth/2,nthFrameZBot
+k,K4,x_j, GEO_columnWidth/2,nthFrameZBot
+
+! Top keypoints
+k,K5,x_i,-GEO_columnWidth/2,nthFrameZTop
+k,K6,x_i, GEO_columnWidth/2,nthFrameZTop
+k,K7,x_j,-GEO_columnWidth/2,nthFrameZTop
+k,K8,x_j, GEO_columnWidth/2,nthFrameZTop
+
+! Sides
+a,K1,K5,K6,K2
+a,K3,K4,K8,K7
+a,K1,K3,K7,K5
+a,K4,K2,K6,K8
+
+! Top cap
+a,K5,K7,K8,K6
+
+! Slice at water level
+*if,GEO_waterHeight+zFrameBot,gt,nthFrameZBot,then
+    wpslicexy,zFrameBot+GEO_waterHeight
+*endif
+
+cm,%acmName%,area
+asel,u,loc,y,-GEO_columnWidth/2
+asel,u,loc,y, GEO_columnWidth/2
+
+! Slice at superstructure positions
+wpcsys,,CS_num
+batch_slicexz,'XZslice',1
+
+! Slice at infrastructure positions
+wpcsys,,CS_num
+wprota,180
+batch_slicexz,'GEO_yTubeSlice',1
+
+cmsel,a,%acmName%
+batch_sliceyz,'GEO_xTubeSlice',1
+wpcsys,,0
+
+! Selection components
+cm,%acmName%,area
+
+cmsel,a,%acmName%
+lsla,s
+ksll,s
+ksel,r,loc,z,nthFrameZBot
+cmpadd,'COMPK_FrameBottom'
+
+cmsel,s,%acmName%
+asel,r,loc,z,nthFrameZTop
+cmpadd,'COMPA_coltubeCap'
+
+cmsel,s,%acmName%
+cmsel,u,COMPA_coltubeCap
+cmpadd,'COMPA_coltubeWall'
+
+cmsel,s,COMPA_coltubeCap
+cmsel,a,COMPA_coltubeWall
+cmpadd,'COMPA_tubeColumn'
+
+cmsel,s,COMPA_colTubeWall
+asel,r,loc,y,GEO_columnWidth/2
+cmpadd,'COMPA_tubeWindFace'
+
+csys,0
+
+
+

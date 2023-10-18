@@ -1,0 +1,228 @@
+! BRIDGE_V0_OCCUP
+! BRIDGE_V0_OCCUP
+
+!!                                                                                                !!
+!! 5.1 BRIDGE OCCUPATION                                                                          !!
+!!                                                                                                !!
+
+!! 5.1.1 CROSS-SECTIONAL OCCUPATION                                                               !!
+!!                                                                                                !!
+*if,LOAD_transOption,EQ,0,THEN
+   ! Deck fully occupied
+   CMSEL,S,COMPE_Slab
+   cmsel,a,COMPE_ABT_appSlab
+   CM,COMPE_transOccupied,ELEM
+
+*elseif,LOAD_transOption,EQ,1,THEN !!
+   ! Left half occupied
+   CMSEL,S,COMPE_Slab
+   cmsel,a,COMPE_ABT_appSlab
+   NSLE,S,ACTIVE
+   NSEL,R,LOC,Y,-GEO_deckWidth/2,0
+   ESLN,R,1
+   CM,COMPE_transOccupied,ELEM
+
+*elseif,LOAD_transOption,EQ,2,THEN !!
+   ! Right half occupied
+   CMSEL,S,COMPE_Slab
+   cmsel,a,COMPE_ABT_appSlab
+   NSLE,S,ACTIVE
+   NSEL,R,LOC,Y,0,GEO_deckWidth/2
+   ESLN,R,1
+   CM,COMPE_transOccupied,ELEM
+
+*elseif,LOAD_transOption,EQ,3,THEN !!
+   ! Both overhangs occupied
+   CMSEL,S,COMPE_Slab
+   cmsel,a,COMPE_ABT_appSlab
+   NSLE,S,ACTIVE
+   NSEL,R,LOC,Y,-GEO_deckWidth/2,(-GEO_deckWidth/2)+GEO_leftSlabHang
+   ESLN,R,1
+   CM,COMPE_temp,ELEM
+   CMSEL,S,COMPE_Slab
+   cmsel,a,COMPE_ABT_appSlab
+   NSLE,S,ACTIVE
+   NSEL,R,LOC,Y,(GEO_deckWidth/2)-GEO_rightSlabHang,-GEO_deckWidth/2
+   ESLN,R,1
+   CMSEL,A,COMPE_temp
+   CM,COMPE_transOccupied,ELEM
+
+*elseif,LOAD_transOption,EQ,4,THEN !!
+   ! Left overhang occupied
+   CMSEL,S,COMPE_Slab
+   cmsel,a,COMPE_ABT_appSlab
+   NSLE,S,ACTIVE
+   NSEL,R,LOC,Y,-GEO_deckWidth/2,(-GEO_deckWidth/2)+GEO_leftSlabHang
+   ESLN,R,1
+   CM,COMPE_transOccupied,ELEM
+
+*elseif,LOAD_transOption,EQ,5,THEN !!
+   ! Right overhang occupied
+   CMSEL,S,COMPE_Slab
+   cmsel,a,COMPE_ABT_appSlab
+   NSLE,S,ACTIVE
+   NSEL,R,LOC,Y,(GEO_deckWidth/2)-GEO_rightSlabHang,-GEO_deckWidth/2
+   ESLN,R,1
+   CM,COMPE_transOccupied,ELEM
+
+*endif
+NSLE,S,ACTIVE
+CM,COMPN_transOccupied,NODE
+!
+!
+!! 5.1.2 LONGITUDINAL OCCUPATION                                                                  !!
+!!                                                                                                !!
+*if,LOAD_longScenario,EQ,0,THEN
+   ! Bridge fully occupied
+   CMSEL,S,COMPE_Slab
+   cmsel,a,COMPE_ABT_appSlab
+   CM,COMPE_longOccupied,ELEM
+
+*elseif,LOAD_longScenario,EQ,1,THEN !!
+   ! Mid span only
+   CMSEL,S,COMPE_Slab
+   cmsel,a,COMPE_colCap
+   NSLE,S,ACTIVE
+   NSEL,R,LOC,X,GEO_leftCantilever,GEO_deckLength-GEO_rightCantilever
+   ESLN,R,1
+   CM,COMPE_longOccupied,ELEM
+
+*elseif,LOAD_longScenario,EQ,2,THEN
+!   ! Both cantilevers only  *********** CANCELLED ***************
+!   CMSEL,S,COMPE_Slab
+!   NSLE,S,LOC,X,0,GEO_leftCantilever
+!   NSEL,A,LOC,X,GEO_deckLength-GEO_rightCantilever,GEO_deckLength
+!   ESLN,R,1
+!   CM,COMPE_longOccupied,ELEM
+
+*elseif,LOAD_longScenario,EQ,3,THEN
+!   ! Left cantilever only  *********** CANCELLED ***************
+!   CMSEL,S,COMPE_Slab
+!   NSLE,S,LOC,X,0,GEO_leftCantilever
+!   ESLN,R,1
+!   CM,COMPE_longOccupied,ELEM
+
+*elseif,LOAD_longScenario,EQ,4,THEN
+!   ! Right cantilever only  *********** CANCELLED ***************
+!   CMSEL,S,COMPE_Slab
+!   NSEL,S,LOC,X,GEO_deckLength-GEO_rightCantilever,GEO_deckLength
+!   ESLN,R,1
+!   CM,COMPE_longOccupied,ELEM
+
+*endif
+NSLE,S,ACTIVE
+CM,COMPN_longOccupied,NODE
+
+! Intersection of occupied regions
+CMSEL,S,COMPE_transOccupied
+CMSEL,R,COMPE_longOccupied
+CM,COMPE_occupied,ELEM
+NSLE,S,ACTIVE
+CM,COMPN_occupied,NODE
+!
+!
+!! 5.1.3 LOAD TRAIN POSITIONS                                                                     !!
+!!                                                                                                !!
+*if,LOAD_ltScenario,EQ,1,THEN
+   ! Change longitudinal position incrementally
+
+   ! Calculate travelled length
+   *if,GEO_ABT1_status,eq,1,then
+       xi=0-GEO_ABT1_length
+   *else
+       xi=0
+   *endif
+
+   *if,GEO_ABT2_status,eq,1,then
+       xf=LOAD_ltLength+GEO_deckLength+GEO_ABT2_length
+   *else
+       xf=LOAD_ltLength+GEO_deckLength
+   *endif
+
+   LOAD_ltTravel=xf-xi
+
+   ! Calculate number of load train positions
+   posCount=1+nint(0.5+(LOAD_ltTravel/LOAD_ltStep))
+
+   ! Fill array with positions of the leading point load
+   *del,LTleadingPos
+   *dim,LTleadingPos,ARRAY,posCount
+   *vfill,LTleadingPos,RAMP,xi,LOAD_ltStep
+   LTleadingPos(posCount)=xf
+
+*elseif,LOAD_ltScenario,EQ,2,THEN
+   ! Center of the load train in the middle of the length of the bridge
+   posCount=1
+   *del,LTleadingPos
+   *dim,LTleadingPos,ARRAY,posCount
+   LTleadingPos(posCount)=(GEO_deckLength+LOAD_ltLength)/2
+
+*elseif,LOAD_ltScenario,EQ,3,THEN
+   ! Center of the load train in the middle of the first span
+   posCount=1
+   *del,LTleadingPos
+   *dim,LTleadingPos,ARRAY,posCount
+   LTleadingPos(posCount)=(GEO_spanLengths(1)+LOAD_ltLength)/2
+
+*elseif,LOAD_ltScenario,EQ,4,THEN
+   ! Load train entering the bridge
+   posCount=1
+   *del,LTleadingPos
+   *dim,LTleadingPos,ARRAY,posCount
+   LTleadingPos(posCount)=LOAD_ltLength
+
+*elseif,LOAD_ltScenario,EQ,5,THEN
+   ! Load train exiting the bridge
+   posCount=1
+   *del,LTleadingPos
+   *dim,LTleadingPos,ARRAY,posCount
+   LTleadingPos(posCount)=GEO_deckLength
+
+*elseif,LOAD_ltScenario,EQ,6,THEN
+   ! Load train at key places
+   ! Calculate number of load train positions
+   posCount=GEO_spanCount+GEO_supportCount+2
+   *if,GEO_ABT2_status,eq,1,then
+       posCount=posCount+1
+   *endif
+   *del,LTleadingPos
+   *dim,LTleadingPos,ARRAY,posCount
+   posIndex=0
+   ! Middle of each span
+   spanStart=0
+   *do,nthSpan,1,GEO_spanCount,1
+      nthSpanLength=GEO_spanLengths(nthSpan)
+      posIndex=posIndex+1
+      LTleadingPos(posIndex)=spanStart+(nthSpanLength/2)
+      spanStart=spanStart+nthSpanLength
+   *enddo
+   ! Over each support
+   *do,nthSupport,1,GEO_supportCount,1
+      nthSupportPosition=GEO_supportX(nthSupport)
+      posIndex=posIndex+1
+      LTleadingPos(posIndex)=nthSupportPosition
+   *enddo
+   ! Entering the bridge
+   posIndex=posIndex+1
+   LTleadingPos(posIndex)=0
+   ! Exiting the bridge
+   posIndex=posIndex+1
+   LTleadingPos(posIndex)=GEO_deckLength
+   ! Over second abutment
+   *if,GEO_ABT2_status,eq,1,then
+       posIndex=posIndex+1
+       LTleadingPos(posIndex)=GEO_deckLength+GEO_ABT2_length
+   *endif
+   ! Organize array
+   arruniq,'LTleadingPos','LTleadingPos',1
+   *get,posCount,PARM,LTleadingPos,DIM,X
+
+*else
+   ! Load train off
+   posCount=0
+   *del,LTleadingPos
+
+*endif
+
+
+

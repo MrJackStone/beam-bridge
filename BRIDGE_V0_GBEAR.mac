@@ -1,0 +1,286 @@
+! BRIDGE_V0_GBEAR
+
+! Activate bearing attributes
+type,TYPE_MATRIX27
+mat,MAT_Matrix
+
+! Connect girders to frame girders
+*do,nthSpan,1,GEO_supportCount-1,1
+
+    cmsel,s,COMPN_GirderSupport
+    cmsel,r,COMPN_GIRDERS_S%nthSpan%
+    cm,COMPN_girderBoth,node
+
+    ! Select nodes at each extremity of the span's girders
+    *if,GEO_deckRadius,ne,0,then
+        ! Curved deck:
+        csys,CS_deck
+        *get,chi_min,node,,mnloc,y
+        *get,chi_max,node,,mxloc,y
+        nsel,s,loc,y,chi_min
+        cm,COMPN_mxloc,node
+        nsel,s,loc,y,chi_max
+        cm,COMPN_mnloc,node
+        csys,0
+    *else
+        ! Straight deck:
+        *get,x_min,node,,mnloc,x
+        *get,x_max,node,,mxloc,x
+        nsel,s,loc,x,x_min
+        cm,COMPN_mnloc,node
+        nsel,s,loc,x,x_max
+        cm,COMPN_mxloc,node
+    *endif
+
+    ! Nodes on girders
+    cmsel,s,COMPN_girderBoth
+    cmsel,r,COMPN_mnloc
+    cm,COMPN_girderBeg,node
+    cmsel,s,COMPN_girderBoth
+    cmsel,r,COMPN_mxloc
+    cm,COMPN_girderEnd,node
+
+    ! Nodes on beginning support (frames, column caps, or gerber tips)
+    mesoType_beg=GEO_mesoType(nthSpan)
+    *if,mesoType_beg,eq,CTE_MESO_frame,then
+        ! Column-girder frame:
+        cmsel,s,COMPN_FrameGirder
+        begAbt=0
+    *elseif,mesoType_beg,eq,CTE_MESO_tube,then
+        ! Tubular pier column:
+        cmsel,s,COMPN_ColCap
+        begAbt=0
+    *elseif,mesoType_beg,eq,CTE_MESO_tcolumn,then
+        ! Tubular T-column:
+        cmsel,s,COMPN_GerberTip
+        begAbt=0
+    *elseif,mesoType_beg,eq,CTE_MESO_abutment,then
+        ! Abutment:
+        cmsel,s,COMPN_ABT_girder
+        begAbt=1
+    *endif
+    cmsel,r,COMPN_mnloc
+    cm,COMPN_supBeg,node
+
+    ! Nodes on end support (frames, column caps, or gerber tips)
+    mesoType_end=GEO_mesoType(nthSpan+1)
+    *if,mesoType_end,eq,CTE_MESO_frame,then
+        ! Column-girder frame:
+        cmsel,s,COMPN_FrameGirder
+        endAbt=0
+    *elseif,mesoType_end,eq,CTE_MESO_tube,then
+        ! Tubular pier column:
+        cmsel,s,COMPN_ColCap
+        endAbt=0
+    *elseif,mesoType_end,eq,CTE_MESO_tcolumn,then
+        ! Tubular T-column:
+        cmsel,s,COMPN_GerberTip
+        endAbt=0
+    *elseif,mesoType_end,eq,CTE_MESO_abutment,then
+        ! Abutment:
+        cmsel,s,COMPN_ABT_girder
+        endAbt=1
+    *endif
+    cmsel,r,COMPN_mxloc
+    cm,COMPN_supEnd,node
+
+    ! Couple DOFs: girders & supports
+    *do,nthGirder,1,GEO_girderCount,1
+        ncmName=strcat('COMPN_S',strcat(chrval(nthSpan),strcat('_G',chrval(nthGirder))))
+
+        ! Girder node at the beginning
+        cmsel,s,%ncmName%
+        cmsel,r,COMPN_girderBeg
+        GBNode=ndnext(0)
+
+        ! Girder node at the end
+        cmsel,s,%ncmName%
+        cmsel,r,COMPN_girderEnd
+        GENode=ndnext(0)
+
+        ! Support node at the beginning
+        cmsel,s,COMPN_supBeg
+        nsel,a,node,,GBNode
+        SBNode=nnear(GBNode)
+
+        ! Support node at the end
+        cmsel,s,COMPN_supEnd
+        nsel,a,node,,GENode
+        SENode=nnear(GENode)
+
+        nsel,s,node,,GBNode
+        nsel,a,node,,GENode
+        nsel,a,node,,SBNode
+        nsel,a,node,,SENode
+        csys,0
+        nrotat,all
+
+        ! Vertical connection between girder and frame girder
+        *if,FEM_GirderConnection_UZ,EQ,0,THEN
+            ! Couple vertical displacements at both ends
+            safe_cp,'UZ',SBNode,GBNode
+            safe_cp,'UZ',SENode,GENode
+        *elseif,FEM_GirderConnection_UZ,eq,1,then
+            ! Use vertical springs at both ends
+            real,SEC_Bearing_num
+            e,SBNode,GBNode
+            e,SENode,GENode
+        *endif
+
+        ! Horizontal connection between girder and frame girder
+        *if,FEM_GirderConnection_UXY,eq,0,then
+            ! Couple DOFs at both ends of the span (rigid link)
+            safe_cp,'UX',SBNode,GBNode
+            safe_cp,'UY',SBNode,GBNode
+            safe_cp,'UX',SENode,GENode
+            safe_cp,'UY',SENode,GENode
+
+        *elseif,FEM_GirderConnection_UXY,eq,1,then
+            ! Couple DOFs at the beginning of the span (rigid link)
+            *if,endAbt,eq,1,and,begAbt,eq,0,then
+                ! Override: couple at end abutment
+                safe_cp,'UX',SENode,GENode
+                safe_cp,'UY',SENode,GENode
+!            *elseif,endAbt,eq,1,and,begAbt,eq,1,then
+!                ! Override: couple at both abutments
+!                safe_cp,'UX',SENode,GENode
+!                safe_cp,'UY',SENode,GENode
+!                safe_cp,'UX',SBNode,GBNode
+!                safe_cp,'UY',SBNode,GBNode
+            *else
+                ! Default behavior: couple beginning
+                safe_cp,'UX',SBNode,GBNode
+                safe_cp,'UY',SBNode,GBNode
+            *endif
+
+        *elseif,FEM_GirderConnection_UXY,eq,2,then
+            ! Use springs at both ends of the span
+            real,SEC_Bearing_num
+            e,SBNode,GBNode
+            e,SENode,GENode
+
+        *elseif,FEM_GirderConnection_UXY,eq,3,then
+            ! Use springs at the beginning of the span
+            real,SEC_Bearing_num
+            *if,endAbt,eq,1,and,begAbt,eq,0,then
+                ! Override: connect at end abutment
+                e,SENode,GENode
+!            *elseif,endAbt,eq,1,and,begAbt,eq,1,then
+!                ! Override: connect at both abutments
+!                e,SENode,GENode
+!                e,SBNode,GBNode
+            *else
+                ! Default behavior: connect beginning
+                e,SBNode,GBNode
+            *endif
+
+        *elseif,FEM_GirderConnection_UXY,eq,4,then
+            ! Statically determinate bearings
+            *if,nthGirder,eq,1,then
+                ! Fix beginning: UX, UY; Fix end: UY
+                *if,endAbt,eq,1,and,begAbt,eq,0,then
+                    ! Override: couple UX at end abutment
+                    safe_cp,'UY',SBNode,GBNode
+                    safe_cp,'UX',SENode,GENode
+                    safe_cp,'UY',SENode,GENode
+!                *elseif,endAbt,eq,1,and,begAbt,eq,1,then
+!                    ! Override: couple UX at both abutments
+!                    safe_cp,'UX',SBNode,GBNode
+!                    safe_cp,'UY',SBNode,GBNode
+!                    safe_cp,'UX',SENode,GENode
+!                    safe_cp,'UY',SENode,GENode
+                *else
+                    ! Default behavior
+                    safe_cp,'UX',SBNode,GBNode
+                    safe_cp,'UY',SBNode,GBNode
+                    safe_cp,'UY',SENode,GENode
+                *endif
+
+            *else
+                ! Fix beginning: UX; Fix end: none
+                *if,endAbt,eq,1,and,begAbt,eq,0,then
+                    ! Override: couple UX at end abutment
+                    safe_cp,'UX',SENode,GENode
+!                *elseif,endAbt,eq,1,and,begAbt,eq,1,then
+!                    ! Override: couple UX at both abutments
+!                    safe_cp,'UX',SBNode,GBNode
+!                    safe_cp,'UX',SENode,GENode
+                *else
+                    ! Default behavior
+                    safe_cp,'UX',SBNode,GBNode
+                *endif
+
+            *endif
+
+        *elseif,FEM_GirderConnection_UXY,eq,5,then
+            ! Statically determinate bearings
+            *if,nthGirder,eq,1,then
+                ! Connect beginning: UX, UY; Connect end: UY
+                *if,endAbt,eq,1,and,begAbt,eq,0,then
+                    ! Override: couple UX at end abutment
+                    real,SEC_Bearing_num
+                    e,SENode,GENode
+                    real,SEC_BearingYZ_num
+                    e,SBNode,GBNode
+!                *elseif,endAbt,eq,1,and,begAbt,eq,1,then
+!                    ! Override: couple UX at both abutments
+!                    real,SEC_Bearing_num
+!                    e,SBNode,GBNode
+!                    e,SENode,GENode
+                *else
+                    ! Default behavior
+                    real,SEC_Bearing_num
+                    e,SBNode,GBNode
+                    real,SEC_BearingYZ_num
+                    e,SENode,GENode
+                *endif
+
+            *else
+                real,SEC_BearingXZ_num
+                ! Fix beginning: UX; Fix end: none
+                *if,endAbt,eq,1,and,begAbt,eq,0,then
+                    ! Override: couple UX at end abutment
+                    e,SENode,GENode
+!                *elseif,endAbt,eq,1,and,begAbt,eq,1,then
+!                    ! Override: couple UX at both abutments
+!                    e,SBNode,GBNode
+!                    e,SENode,GENode
+                *else
+                    ! Default behavior
+                    e,SBNode,GBNode
+                *endif
+
+            *endif
+
+        *endif
+
+    *enddo
+
+*enddo
+
+esel,s,real,,SEC_Bearing_num
+nsle,s,active
+cm,COMPE_Bearing,elem
+cm,COMPN_Bearing,node
+
+! Connect gerber to tubular column cap
+*if,GEO_gerberStatus,eq,1,then
+    cmsel,s,COMPN_GerberSupported
+    *get,nc,node,,count
+    nn=0
+    *do,nthNode,1,nc,1
+        cmsel,s,COMPN_GerberSupported
+        nn=ndnext(nn)
+        nsel,s,node,,nn
+        cmsel,a,COMPN_colCap
+        ns=nnear(nn)
+        safe_CP,'UX',nn,ns
+        safe_CP,'UY',nn,ns
+        safe_CP,'UZ',nn,ns
+    *enddo
+*endif
+
+
+
+
+

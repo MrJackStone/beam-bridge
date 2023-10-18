@@ -1,0 +1,298 @@
+! BRIDGE_V1_LSTRANS
+
+
+horDir_fct=1
+SOLU_LSdt=LOAD_ltStep/(LOAD_speed/3.6)
+totalTime=SOLU_dlTime
+
+! Write load steps
+*do,nthPos,1,posCount,1
+
+    ! Initialize load step
+    allsel
+    lsclear,all
+    sfcum,all,add
+    fcum,add
+    lsread,1
+
+    ! Get X position of leading load
+    xLead=LTleadingPos(nthPos)
+
+    ! Calculate X coordinates of each point load
+    *del,LOAD_x
+    *dim,LOAD_x,,LOAD_plCount
+    *voper,LOAD_x,xLead,sub,LOAD_plDist
+
+    ! Determine which point loads are on the bridge (including abutments)
+    *del,LOAD_in
+    *del,LOAD_notOut
+    *voper,LOAD_in,LOAD_x,ge,GEO_ABT1_xMin
+    *voper,LOAD_notOut,LOAD_x,le,GEO_ABT2_xmax
+    *del,LOAD_true
+    *voper,LOAD_true,LOAD_in,mult,LOAD_notOut
+    *vscfun,LOAD_count,sum,LOAD_true
+
+    *if,LOAD_count,eq,0,then
+        ! No point loads over bridge + abutments
+        esel,u,elem,,all
+        cm,COMPE_loaded,elem
+        cm,COMPE_LTshadow,elem
+
+        ! Apply static live loads
+        BRIDGE_V1_LIVELOADS
+
+    *else
+
+        ! Compress load-train arrays: keep only point loads on the bridge
+        *del,LOAD_vert
+        *vmask,LOAD_true
+        *vfun,LOAD_vert,comp,LOAD_plValue
+        *del,LOAD_pos
+        *vmask,LOAD_true
+        *vfun,LOAD_pos,comp,LOAD_x
+
+        ! Determine loaded spans
+        *vscfun,LOAD_xMin,min,LOAD_pos
+        *vscfun,LOAD_xMax,max,LOAD_pos
+        *del,span_before
+        *del,span_after
+        *voper, span_before , LOAD_xMin , lt , GEO_genSpanLimits
+        *voper, span_after  , LOAD_xMax , gt , GEO_genSpanLimits
+        *del,ahead
+        *dim,ahead,,GEO_genSpanCount
+        *del,behind
+        *dim,behind,,GEO_genSpanCount
+        *vfun,ahead(1),copy,span_after(1)
+        *vfun,behind(1),copy,span_before(2)
+        *del,loaded_spans
+        *voper,loaded_spans,ahead,mult,behind
+        esel,u,elem,,all
+        *do,nthSpan,1,GEO_genSpanCount,1
+            loaded_check=loaded_spans(nthSpan)
+            *if,loaded_check,eq,1,then
+                x_i=GEO_genSpanLimits(nthSpan)
+                x_j=GEO_genSpanLimits(nthSpan+1)
+                esel,a,cent,x,x_i,x_j
+            *endif
+        *enddo
+        cm,COMPE_loaded,elem
+
+        ! Calculate area occupied by load-train, to which uniform traffic load will not be applied
+        nsel,u,node,,all
+        cm,COMPN_LTshadow,node
+        *vscfun,x_min,min,LOAD_pos
+        *vscfun,x_max,max,LOAD_pos
+        *if,GEO_deckRadius,eq,0,then
+            ! Tangent deck:
+            *do,nthLT,1,LOAD_ltCount,1
+                y_min=LOAD_ltWheelOff(nthLT*2-1)
+                y_max=LOAD_ltWheelOff(nthLT*2)
+                nsel,s,loc,y,y_min,y_max
+                nsel,r,loc,x,x_min,x_max
+                cmsel,r,COMPN_occupied
+                cmpadd,'COMPN_LTshadow'
+            *enddo
+        *else
+            ! Curved deck:
+            csys,CS_deck
+            BRIDGE_V1_XTOCHI,'chi_min',x_min
+            BRIDGE_V1_XTOCHI,'chi_max',x_max
+            *do,nthLT,1,LOAD_ltCount,1
+                y_min=LOAD_ltWheelOff(nthLT*2-1)
+                y_max=LOAD_ltWheelOff(nthLT*2)
+                nsel,s,loc,x,GEO_deckRadius+y_min,GEO_deckRadius+y_max
+                nsel,r,loc,y,180-chi_min,180-chi_max
+                cmsel,r,COMPN_occupied
+                cmpadd,'COMPN_LTshadow'
+            *enddo
+            csys,0
+        *endif
+        cmsel,s,COMPN_LTshadow
+        esln,s,0
+        cmsel,r,COMPE_occupied
+        cm,COMPE_LTshadow,elem
+
+        ! Calculate longitudinal braking/accelerating forces
+        *if,BRIDGE_type,eq,0,then
+            ! Highway bridge:
+
+            *del,LOAD_long
+            *voper,LOAD_long,LOAD_vert,mult,1/3
+
+        *elseif,BRIDGE_type,eq,1,then
+            ! Railway bridge:
+
+            *if,LOAD_railOpt,eq,0,then
+                ! Discontinuous rail
+                *del,loaded_longitudinal
+                *voper,loaded_longitudinal,arr_f_longitudinal,mult,loaded_spans
+                *vscfun,f_longitudinal,sum,loaded_longitudinal
+            *elseif,LOAD_railOpt,eq,1,then
+                ! Continuous rail
+                *del,loaded_lengths
+                *voper,loaded_lengths,GEO_genSpanLengths,mult,loaded_spans
+                *vscfun,loaded_length,sum,loaded_lengths
+                f_braking=200+17.5*loaded_length
+                f_accelerating=200*sqrt(loaded_length)
+                f_longitudinal=(f_braking>f_accelerating)
+            *endif
+            f_longitudinal=f_longitudinal*1e3
+            *vscfun,Fvert_total,sum,LOAD_vert
+            vl_ratio=f_longitudinal/Fvert_total
+            long_fact=(vl_ratio<0.25)
+            *del,LOAD_long
+            *voper,LOAD_long,LOAD_vert,mult,long_fact
+
+        *endif
+
+        ! Apply static live loads
+        BRIDGE_V1_LIVELOADS
+
+        ! Apply moving live loads
+        *do,nthLoad,1,LOAD_count,1
+
+            ! Point load longitudinal position
+            xCoord=LOAD_pos(nthLoad)
+            BRIDGE_V1_XTOCHI,'chiAngle',xCoord
+
+            ! Load values
+            F_vert=LOAD_ltCount*LOAD_vert(nthLoad)/LOAD_wheelCount
+            F_long=LOAD_ltCount*(LOAD_long(nthLoad)/LOAD_wheelCount)*horDir_fct
+            F_cen=F_vert*(LOAD_centrifugalPct/100)
+
+            *do,nthWheel,1,LOAD_wheelCount,1
+                ! Point load transversal position
+                *afun,deg
+                yWheel=LOAD_ltWheelOff(nthWheel)
+                yCoord=(GEO_deckRadius+yWheel)*sin(chiAngle)-GEO_chordOff
+                *afun,rad
+
+                *if,xCoord,GE,0,AND,xCoord,LE,GEO_deckLength,THEN
+                    ! Load on the bridge (longitudinally)
+                    cmsel,s,COMPN_Slab
+                    cmsel,r,COMPN_LoadTrain
+
+                    ! Adjust Y coordinate to account for load train skewness
+                    *afun,deg
+                    nthSkewedDeltaY=xCoord*tan(LOAD_ltSkewness)
+                    yCoord=yCoord+nthSkewedDeltaY
+                    *afun,rad
+
+                    ! Search for nearest node in delimited region
+                    SEARCH_TOL=0.5
+                    nsel,r,loc,x,xCoord-SEARCH_TOL,xCoord+SEARCH_TOL
+                    nsel,r,loc,y,yCoord-SEARCH_TOL,yCoord+SEARCH_TOL
+                    NodeNum=NODE(xCoord,yCoord,0)
+                    cmsel,s,COMPN_Slab
+                    cmsel,r,COMPN_LoadTrain
+
+                    *if,NodeNum,gt,0,then
+                        *if,GEO_deckRadius,eq,0,then
+                            ! Straight deck, no force decomposition:
+                            F,NodeNum,FZ,-F_vert
+                            F,NodeNum,FX, F_long
+                            ! Transversal impact load (straight deck only)
+                            *if,nthLoad,eq,1,and,LOAD_latImpact,ne,0,then
+                                F,NodeNum,FY, LOAD_latImpact/LOAD_wheelCount
+                            *endif
+                        *else
+                            ! Curved deck: centrifugal force and vector decomposition:
+                            BRIDGE_V1_XTOCHI,'chiAngle',xCoord
+                            *afun,deg
+                            F_x=F_long*sin(chiAngle)-F_cen*cos(chiAngle)
+                            F_y=F_long*cos(chiAngle)+F_cen*sin(chiAngle)
+                            *afun,rad
+                            F,NodeNum,FZ,-F_vert
+                            F,NodeNum,FX, F_x
+                            F,NodeNum,FY, F_y
+                        *endif
+                    *endif
+                *else
+                    ! Load on abutment
+                    BRIDGE_V1_ABTLIVE, xCoord, yWheel, F_vert, F_long, F_cen, horDir_fct
+                *endif
+            *enddo
+        *enddo
+
+    *endif
+
+    ! Write load step
+    nthLoadStep=nthLoadStep+1
+    ALLSEL
+    antype,trans,new
+    trnopt,full
+    timint,on,all
+    lumpm,0
+    kbc,0
+
+    alphad,SOLU_alpha
+    betad,SOLU_beta
+
+    outres,erase
+    outres,nsol,all
+    outres,rsol,all
+    outres,v,all
+    outres,a,all
+    outres,esol,all
+    outres,nloa,all
+    outres,strs,all
+    outres,misc,all
+
+    deltim,SOLU_dt,SOLU_dt*0.1
+    totalTime=totalTime+SOLU_LSdt
+    time,totalTime
+
+    lswrite,nthLoadStep
+
+    ! Capture image of structural loading
+    *if,SOLU_type,eq,0,then
+        ALLSEL
+        /eshape,0
+        /device,VECTOR,ON
+        /edge,,1
+        /psf,PRES,,2,1,ON
+        /pbc,U,,1
+        /pbc,F,,1
+        imgName=STRCAT('LS_',CHRVAL(nthLoadStep))
+        /show
+        EPLOT
+        BRIDGE_V1_TAKEPIC,imgName,800
+    *endif
+
+*enddo
+
+
+! Write last load step (unloaded)
+nthLoadStep=nthLoadStep+1
+ALLSEL
+lsclear,all
+lsread,1
+antype,trans,new
+trnopt,full
+timint,on,all
+lumpm,0
+kbc,1
+
+alphad,SOLU_alpha
+betad,SOLU_beta
+
+outres,erase
+outres,nsol,all
+outres,rsol,all
+outres,v,all
+outres,a,all
+outres,esol,all
+outres,nloa,all
+outres,strs,all
+outres,misc,all
+
+deltim,SOLU_dt,SOLU_dt*0.1
+totalTime=totalTime+10
+time,totalTime
+
+lswrite,nthLoadStep
+
+LoadStepCount=nthLoadStep
+
+
+

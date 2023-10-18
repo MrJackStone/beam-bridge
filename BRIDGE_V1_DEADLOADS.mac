@@ -1,0 +1,47 @@
+! BRIDGE_V1_DEADLOADS
+! BRIDGE_V1_DEADLOADS
+
+! Self-weight
+ACEL,,,LOAD_g
+
+! Pavement surface load
+ALLSEL
+CMSEL,S,COMPE_Slab
+NSLE,S,ACTIVE
+SFE,ALL,2,PRES,,LOAD_pav
+
+! Barriers on bridge
+*if,LOAD_barrierStatus,EQ,1,THEN
+   CMSEL,S,COMPN_Barrier
+   *get,NodeCount,NODE,,COUNT
+   *if,NodeCount,GT,0,THEN
+      totalLoad=LOAD_barrierCount*LOAD_barrierValue*GEO_deckLength
+      nodalLoad=totalLoad/NodeCount
+      F,ALL,FZ,-nodalLoad
+   *endif
+*endif
+
+! Loads on abutments
+*if,GEO_ABT1_status,eq,1,or,GEO_ABT2_status,eq,1,then
+    ! Pavement over approach slabs
+    cmsel,s,COMPE_ABT_appSlab
+    nsle,s,active
+    sfe,all,2,pres,,LOAD_pav
+
+    ! Barriers
+    cmsel,s,COMPN_ABT_Barrier
+    *get,nc,node,,count
+    *if,nc,gt,0,then
+        abtLength=GEO_ABT1_length*GEO_ABT1_status+GEO_ABT2_length*GEO_ABT2_status
+        totalLoad=LOAD_barrierCount*LOAD_barrierValue*abtLength
+        nodalLoad=totalLoad/nc
+        f,all,fz,-nodalLoad
+    *endif
+
+    ! Earth pressures
+    BRIDGE_V1_EARTHPRES,0
+*endif
+
+
+
+

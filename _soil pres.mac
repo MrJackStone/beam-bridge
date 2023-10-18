@@ -1,0 +1,76 @@
+allsel
+! DISTPRES, etabName, uDOF, elasticBaseStiffness, scale
+distpres, 'APSLB_S' , 'z', MAT_ABT_Soil_kv, -1e-3, -1
+distpres, 'ABLWLp_S', 'y', MAT_ABT_Soil_kh, -1e-3, -1
+distpres, 'ABLWLn_S', 'y', MAT_ABT_Soil_kh,  1e-3,  1
+distpres, 'ABTWLb_S', 'x', MAT_ABT_Soil_kh, -1e-3, -1
+distpres, 'ABTWLe_S', 'x', MAT_ABT_Soil_kh, -1e-3,  1
+
+cmsel,s,COMPA_ABT_longwalls
+cmsel,a,COMPA_ABT_tranwall
+esla,s
+
+mxsg=0
+cmsel,s,COMPA_ABT_longwalls
+asel,r,loc,y,0,1e6
+esla,s
+pletab,'ABLWLp_S'
+*get,scmx,plnsol,,max
+mxsg=(mxsg>scmx)
+cmsel,s,COMPA_ABT_longwalls
+asel,r,loc,y,-1e6,0
+esla,s
+pletab,'ABLWLn_S'
+*get,scmx,plnsol,,max
+mxsg=(mxsg>scmx)
+cmsel,s,COMPA_ABT_tranwall
+asel,r,loc,x,-1e6,GEO_deckLength/2
+esla,s
+pletab,'ABTWLb_S'
+*get,scmx,plnsol,,max
+mxsg=(mxsg>scmx)
+cmsel,s,COMPA_ABT_tranwall
+asel,r,loc,x,GEO_deckLength/2,1e6
+esla,s
+pletab,'ABTWLe_S'
+*get,scmx,plnsol,,max
+mxsg=(mxsg>scmx)
+
+clims,0,mxsg
+
+asel,s,area,,all
+aplot
+/auto,1
+aplot
+/user,1
+
+/device,vector,on
+!/type,,0
+lplot
+/noerase
+/device,vector,off
+!/type,,3
+
+cmsel,s,COMPA_ABT_longwalls
+asel,r,loc,y,0,1e6
+esla,s
+pletab,'ABLWLp_S'
+
+cmsel,s,COMPA_ABT_longwalls
+asel,r,loc,y,-1e6,0
+esla,s
+pletab,'ABLWLn_S'
+
+
+cmsel,s,COMPA_ABT_tranwall
+asel,r,loc,x,-1e6,GEO_deckLength/2
+esla,s
+pletab,'ABTWLb_S'
+
+cmsel,s,COMPA_ABT_tranwall
+asel,r,loc,x,GEO_deckLength/2,1e6
+esla,s
+pletab,'ABTWLe_S'
+
+/erase
+

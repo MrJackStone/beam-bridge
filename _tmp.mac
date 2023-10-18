@@ -1,0 +1,59 @@
+        ! Top and bottom Z coordinates of the frame
+        nthFrameZTop=zFrameTop+GEO_frameTopOffset(nthSupport)
+        nthFrameZBot=zFrameBot+GEO_frameBotOffset(nthSupport)
+
+        xCenter=GEO_supportX(nthSupport)
+        x_i=xCenter-GEO_columnDepth/2
+        x_j=xCenter+GEO_columnDepth/2
+
+        ! Create array with keypoint numbers
+        *get,KMaxD,KP,,NUM,MAXD
+        K1=KMaxD+1
+        K2=KMaxD+2
+        K3=KMaxD+3
+        K4=KMaxD+4
+        K5=KMaxD+5
+        K6=KMaxD+6
+        K7=KMaxD+7
+        K8=KMaxD+8
+
+        ksel,u,kp,,all
+        asel,u,area,,all
+
+        k,K1,x_i,-GEO_deckWidth/2,nthFrameZBot
+        k,K2,x_i, GEO_deckWidth/2,nthFrameZBot
+        k,K3,x_j,-GEO_deckWidth/2,nthFrameZBot
+        k,K4,x_j, GEO_deckWidth/2,nthFrameZBot
+
+        k,K5,x_i,-GEO_deckWidth/2,nthFrameZTop
+        k,K6,x_i, GEO_deckWidth/2,nthFrameZTop
+        k,K7,x_j,-GEO_deckWidth/2,nthFrameZTop
+        k,K8,x_j, GEO_deckWidth/2,nthFrameZTop
+
+        a,K1,K5,K6,K2
+        a,K3,K4,K8,K7
+        a,K1,K3,K7,K5
+        a,K4,K2,K6,K8
+
+        a,K5,K7,K8,K6
+
+        batch_sliceyz,'XZslice'
+        wplane,,xCenter,0,nthFrameZBot,xCenter-1,0,nthFrameZBot,xCenter,1,nthFrameZBot
+        batch_sliceyz,'GEO_xCapSlice',1
+        batch_slicexz,'GEO_yCapSlice',1
+        wpcsys,,0
+
+        cm,COMPA_temp,area
+
+        asel,r,loc,z,nthFrameZTop
+        cmpadd,'COMPA_coltubeCap'
+
+        cmsel,s,COMPA_temp
+        cmsel,u,COMPA_coltubeCap
+        cmpadd,'COMPA_coltubeWall'
+
+        cmsel,s,COMPA_coltubeCap
+        cmsel,a,COMPA_coltubeWall
+        cmpadd,'COMPA_tubeColumn'
+
+

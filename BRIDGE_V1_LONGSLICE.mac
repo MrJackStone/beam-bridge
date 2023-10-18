@@ -1,0 +1,55 @@
+! BRIDGE_V1_LONGSLICE
+
+csbackup
+
+*do,nthGirder,1,GEO_girderCount,1
+    nthCS=CS_girders(nthGirder)
+    csys,nthCS
+    wpcsys,-1,nthCS
+    wprota,,90
+    asbw,all,,delete
+    csys,0
+    wpcsys,-1,0
+*enddo
+
+*do,nthLT,1,LOAD_wheelCount,1
+    nthCS=CS_loadTrains(nthLT)
+    csys,nthCS
+    wpcsys,-1,nthCS
+    wprota,,90
+    asbw,all,,delete
+    csys,0
+    wpcsys,-1,0
+*enddo
+
+*if,LOAD_barrierStatus,eq,1,then
+    *do,nthBarrier,1,LOAD_barrierCount,1
+        nthCS=CS_barriers(nthBarrier)
+        csys,nthCS
+        wpcsys,-1,nthCS
+        wprota,,90
+        asbw,all,,delete
+        csys,0
+        wpcsys,-1,0
+    *enddo
+*endif
+
+*if,GEO_footpathLeft_beg,gt,0,or,GEO_footpathLeft_end,gt,0,then
+    csys,CS_leftFootpath
+    wpcsys,-1,nthCS
+    wprota,,90
+    asbw,all,,delete
+    csys,0
+    wpcsys,-1,0
+*endif
+
+*if,GEO_footpathRight_beg,gt,0,or,GEO_footpathRight_end,gt,0,then
+    csys,CS_rightFootpath
+    wpcsys,-1,nthCS
+    wprota,,90
+    asbw,all,,delete
+    csys,0
+    wpcsys,-1,0
+*endif
+
+csrestore

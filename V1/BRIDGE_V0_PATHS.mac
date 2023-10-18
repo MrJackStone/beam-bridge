@@ -1,0 +1,207 @@
+! BRIDGE_V0_PATHS
+
+! Calculate number of key cross-sections
+secCount=(GEO_supportCount*2)-1
+
+! Determine position (X coordinate) of key cross-sections
+*del,secX
+*dim,secX,ARRAY,secCount
+*vfun,secX,COPY,GEO_supportX
+*do,nthMid,1,GEO_supportCount-1
+   s1=GEO_supportX(nthMid)
+   s2=GEO_supportX(nthMid+1)
+   midPoint=(s1+s2)/2
+   secX(GEO_supportCount+nthMid)=midPoint
+*enddo
+*vfun,secX,ASORT,secX
+
+! Create paths at key cross-sections and map element tables onto paths
+*do,nthSec,1,secCount,1
+   ! X coordinate of path
+   xPos=secX(nthSec)
+   ! First path node
+   CMSEL,S,COMPN_Slab
+   NSEL,R,LOC,Y,(-GEO_deckWidth/2)
+   NSEL,R,LOC,X,xPos
+   NSEL,R,LOC,Z,0
+   *get,n1,NODE,,NUM,MIN
+   ! Second path node
+   CMSEL,S,COMPN_Slab
+   NSEL,R,LOC,Y,GEO_deckWidth/2
+   NSEL,R,LOC,X,xPos
+   NSEL,R,LOC,Z,0
+   *get,n2,NODE,,NUM,MIN
+   ! Create path
+   CMSEL,S,COMPE_Slab
+   NSLE,S,ACTIVE
+   pathName=STRCAT('P_',CHRVAL(nthSec))
+   PATH,%pathName%,2,30,500
+   PATH,%pathName%
+   PPATH,1,n1
+   PPATH,2,n2
+   ! Map ETABLEs onto path
+   PDEF,MXpos,ETAB,'S_MX_MAX',NOAV
+   PDEF,MXneg,ETAB,'S_MX_MIN',NOAV
+   PDEF,MYpos,ETAB,'S_MY_MAX',NOAV
+   PDEF,MYneg,ETAB,'S_MY_MIN',NOAV
+   PDEF,QXpos,ETAB,'S_QX_MAX',NOAV
+   PDEF,QXneg,ETAB,'S_QX_MIN',NOAV
+   PDEF,QYpos,ETAB,'S_QY_MAX',NOAV
+   PDEF,QYneg,ETAB,'S_QY_MIN',NOAV
+   PDEF,UZ,ETAB,'S_UZ_MIN',NOAV
+*enddo
+
+! Set plot options
+VIEW1W
+/view,1,,,1
+/triad,OFF
+/plopts,INFO,OFF
+/plopts,LEG1,OFF
+/plopts,LEG2,OFF
+/plopts,LEG3,OFF
+/device,VECTOR,ON
+/auto
+CMSEL,S,COMPE_Slab
+CMSEL,S,COMPN_Slab
+CMSEL,S,COMPA_Slab
+LSLA,S
+NPLOT
+
+! Switch to image folder
+/cwd,'%PATH_img(1)%'
+
+! Plot path item: MX maximum
+go2png
+    LPLOT
+    /noerase
+    *do,nthSec,1,secCount,1
+        pathName=STRCAT('P_',CHRVAL(nthSec))
+        PATH,%pathName%
+        PLPAGM,MXpos,20,NODE
+    *enddo
+endpng,'SP_MX_MAX'
+/erase
+NPLOT
+
+! Plot path item: MX minimum
+go2png
+    LPLOT
+    /noerase
+    *do,nthSec,1,secCount,1
+        pathName=STRCAT('P_',CHRVAL(nthSec))
+        PATH,%pathName%
+        PLPAGM,MXneg,20,NODE
+    *enddo
+endpng,'SP_MX_MIN'
+/erase
+NPLOT
+
+! Plot path item: MY maximum
+go2png
+    LPLOT
+    /noerase
+    *do,nthSec,1,secCount,1
+        pathName=STRCAT('P_',CHRVAL(nthSec))
+        PATH,%pathName%
+        PLPAGM,MYpos,20,NODE
+    *enddo
+endpng,'SP_MY_MAX'
+/erase
+NPLOT
+
+! Plot path item: MY minimum
+go2png
+    LPLOT
+    /noerase
+    *do,nthSec,1,secCount,1
+        pathName=STRCAT('P_',CHRVAL(nthSec))
+        PATH,%pathName%
+        PLPAGM,MYneg,20,NODE
+    *enddo
+endpng,'SP_MY_MIN'
+/erase
+NPLOT
+
+! Plot path item: QX maximum
+go2png
+    LPLOT
+    /noerase
+    *do,nthSec,1,secCount,1
+        pathName=STRCAT('P_',CHRVAL(nthSec))
+        PATH,%pathName%
+        PLPAGM,QXpos,20,NODE
+    *enddo
+endpng,'SP_QX_MAX'
+/erase
+NPLOT
+
+! Plot path item: QX minimum
+go2png
+    LPLOT
+    /noerase
+    *do,nthSec,1,secCount,1
+        pathName=STRCAT('P_',CHRVAL(nthSec))
+        PATH,%pathName%
+        PLPAGM,QXneg,20,NODE
+    *enddo
+endpng,'SP_QX_MIN'
+/erase
+NPLOT
+
+! Plot path item: QY maximum
+go2png
+    LPLOT
+    /noerase
+    *do,nthSec,1,secCount,1
+        pathName=STRCAT('P_',CHRVAL(nthSec))
+        PATH,%pathName%
+        PLPAGM,QYpos,20,NODE
+    *enddo
+endpng,'SP_QY_MAX'
+/erase
+NPLOT
+
+! Plot path item: QY minimum
+go2png
+    LPLOT
+    /noerase
+    *do,nthSec,1,secCount,1
+        pathName=STRCAT('P_',CHRVAL(nthSec))
+        PATH,%pathName%
+        PLPAGM,QYneg,20,NODE
+    *enddo
+endpng,'SP_QY_MIN'
+/erase
+NPLOT
+
+! Plot path item: UZ minimum
+go2png
+    LPLOT
+    /noerase
+    *do,nthSec,1,secCount,1
+        pathName=STRCAT('P_',CHRVAL(nthSec))
+        PATH,%pathName%
+        PLPAGM,UZ,20,NODE
+    *enddo
+endpng,'SP_UZ'
+/erase
+NPLOT
+
+! Revert to main folder
+/cwd,'%PATH_main(1)%'
+
+! Set plot options
+VIEW1W
+/view,1,1,1,1
+/triad,ON
+/plopts,INFO,3
+/plopts,LEG1,ON
+/plopts,LEG2,ON
+/plopts,LEG3,ON
+/device,VECTOR,OFF
+/auto
+/eshape,1
+EPLOT
+
+
+

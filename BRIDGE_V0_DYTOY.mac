@@ -1,0 +1,7 @@
+! BRIDGE_V0_DYTOY, yParm,    x,   dy
+! BRIDGE_V0_DYTOY,  arg1, arg2, arg3
+
+bridge_v0_xtochi,'tmp_chi',arg2
+*afun,deg
+%arg1%=(GEO_deckRadius+arg3)*sin(tmp_chi)-GEO_chordOff
+*afun,rad

@@ -1,0 +1,1789 @@
+
+/device,font,3,Arial,1000,0,-64,0,0,,,
+/device,font,1,Arial,1000,0,-42,0,0,,,
+/device,text,1,100
+/tspec,15,1.5,4,0,0
+/annot,dele
+
+/triad,off
+
+
+/psf   , PRES ,NORM,2,0,1
+/pbf   , DEFA ,,1
+/psymb , CS   ,0
+/psymb , NDIR ,0
+/psymb , ESYS ,0
+/psymb , LDIV ,0
+/psymb , LDIR ,0
+/psymb , ADIR ,0
+/psymb , ECON ,0
+/psymb , XNODE,0
+/psymb , DOT  ,1
+/psymb , PCONV,0
+/psymb , LAYR ,0
+/psymb , FBCS ,0
+/pbc   , U    ,,0
+/pbc   , ROT  ,,0
+/pbc   , TEMP ,,0
+/pbc   , PRES ,,0
+/pbc   , VOLT ,,0
+/pbc   , MAG  ,,0
+/pbc   , A    ,,0
+/pbc   , CHRG ,,0
+/pbc   , F    ,,1
+/pbc   , M    ,,0
+/pbc   , HEAT ,,0
+/pbc   , AMPS ,,0
+/pbc   , FLUX ,,0
+/pbc   , CSG  ,,0
+/pbc   , NFOR ,,0
+/pbc   , NMOM ,,0
+/pbc   , RFOR ,,0
+/pbc   , RMOM ,,0
+/pbc   , PATH ,,0
+/pbc   , MAST ,,0
+/pbc   , CP   ,,0
+/pbc   , CE   ,,0
+/pbc   , ACEL ,,0
+/pbc   , OMEG ,,0
+/pbc   , PATH ,,0
+
+/udoc,1,cntr,off
+/udoc,1,type,off
+/udoc,1,typ2,off
+/udoc,1,inum,off
+/udoc,1,misc,off
+/udoc,1,surf,off
+/udoc,1,body,off
+/udoc,1,bcdc,off
+
+
+!!
+!!
+!!
+!!
+!!
+
+/prep7
+
+!!
+!!
+!!
+!!
+!!
+
+displayLS=nint(LoadStepCount/2)
+allsel
+lsclear,all
+lsread,displayLS
+/eshape,0
+
+/window,all,dele
+/window,1,-1,1.67,-1,1
+/vup,all,z
+/view,1,0,-1,0
+/angle,1,0,xs
+/angle,1,0,ys
+/angle,1,0,zs
+/auto,1
+/edge,1,1
+esel,u,type,,3
+eplot
+
+/user,1
+
+
+cm,compe_color,elem
+/color,cm,'DGRA',compe_color
+/color,f,11
+/hbc,1,0
+clims,-1,1
+
+/pbc,f,,1
+/vscale,1,0.5
+eplot
+
+takepic,'IMG01_loadSideView',1200
+
+
+
+
+
+!!
+!!
+!!
+!!
+!!
+/annot,dele
+
+/anum,,7
+/pspec,0,1,1
+p4gon,-1,-1,0.335,-0.92
+/anum,,1
+/tspec,15,1,4
+/tlabel,-0.98,-0.98,'(a) ENCONTRO 01'
+
+
+/anum,,7
+/pspec,0,1,1
+p4gon,0.335,-1,1.67,-0.92
+/anum,,1
+/tspec,15,1,4
+/tlabel,0.337,-0.98,'(b) ENCONTRO 02'
+
+*if,geo_abt1_status,eq,1,then
+    cmsel,s,compa_abt_1
+    cmsel,u,compa_abt_appslab
+    esla,s
+    nsle,s,active
+    cm,compn_tmp,node
+    cm,compe_tmp,elem
+    *if,geo_abt1_type,eq,3,then
+        cmsel,s,compn_abt1_pilefree
+        esln,s
+        cmsel,a,compn_tmp
+        cmsel,a,compe_tmp
+    *endif
+*else
+    allsel
+    cm,compn_tmp,node
+    cm,compe_tmp,elem
+*endif
+/window,all,dele
+/window,1,-1,0.335,-1,1
+/window,2,0.335,1.67,-1,1
+/view,1,-1,1,1
+/view,2,1,1,1
+/edge,1,0
+/edge,2,0
+/window,2,off
+/auto,1
+eplot
+/user,1
+/vscale,1,0.5
+/vscale,2,0.5
+/hbc,1,1
+/color,f,red
+go2png,1200
+    *if,geo_abt1_status,eq,1,and,geo_abt1_type,eq,3,then
+        /eshape,1
+        /pbc,f,,0
+        cmsel,s,compn_abt1_pilerestrained
+        esln,s
+        esel,u,type,,3
+        /device,vector,on
+        eplot
+        /noerase
+        /device,vector,off
+        /pbc,f,,1
+        cmsel,s,compn_abt1_pilefree
+        esln,s
+        eplot
+        /eshape,0
+    *endif
+    cmsel,s,compe_tmp
+    cmsel,s,compn_tmp
+    eplot
+    /noerase
+    /window,1,off
+    /window,2,on
+    /hbc,2,1
+    /type,2,3
+    /auto,2
+    /udoc,2,cntr,off
+    /udoc,2,type,off
+    /udoc,2,typ2,off
+    /udoc,2,inum,off
+    /udoc,2,misc,off
+    /udoc,2,surf,off
+    /udoc,2,body,off
+    /udoc,2,bcdc,off
+    *if,geo_abt2_status,eq,1,then
+        /pbc,f,,0
+        cmsel,s,compa_abt_2
+        cmsel,u,compa_abt_appslab
+        esla,s
+        nsle,s,active
+        cm,compn_tmp,node
+        cm,compe_tmp,elem
+        eplot
+        /pbc,f,,1
+    *endif
+    /user,2
+    *if,geo_abt2_status,eq,1,and,geo_abt2_type,eq,3,then
+        /eshape,1
+        /pbc,f,,0
+        cmsel,s,compn_abt2_pilerestrained
+        esln,s
+        esel,u,type,,3
+        /device,vector,on
+        eplot
+        /device,vector,off
+        /pbc,f,,1
+        cmsel,s,compn_abt2_pilefree
+        esln,s
+        eplot
+        /eshape,0
+    *endif
+    *if,geo_abt2_status,eq,1,then
+        esel,u,elem,,all
+        *if,geo_abt2_type,eq,3,then
+            cmsel,s,compn_abt2_pilefree
+            esln,s
+        *endif
+        cmsel,a,compn_tmp
+        cmsel,a,compe_tmp
+    *else
+        allsel
+    *endif
+    eplot
+endpng,'IMG02_abtLoads'
+/erase
+
+
+
+
+
+
+!!
+!!
+!!
+!!
+!!
+esel,s,type,,3
+cm,compe_scolor,elem
+/color,cm,oran,compe_scolor
+allsel
+cmsel,u,compe_scolor
+cm,compe_color,elem
+/color,cm,dgra,compe_color
+allsel
+
+/pbc,f,,0
+/psf,pres,norm,0
+/window,all,dele
+view1w
+windefa,1
+view4w
+wincln,1
+wincln,2
+wincln,3
+wincln,4
+allsel
+/eshape,0
+/auto,all
+eplot
+/user,all
+
+
+/window,1,-1,1.67,0.5,1
+/window,2,-1,1.67,0,0.5
+/window,3,-1,0,-1,0
+/window,4,0,1.67,-1,0
+
+/view,1,0,0,1
+/view,2,0,-1,0
+/view,3,1,0,0
+/view,4,-1,-1,1
+/angle,1,90
+/angle,2,0
+/angle,3,0
+/angle,4,0
+/auto,all
+
+/edge,all,0
+
+eplot
+
+takepic,'IMG03_mesh'
+
+
+
+
+
+!!
+!!
+!!
+!!
+!!
+
+/post1
+set,last
+
+allsel
+smax,'ENEG_MX','EMX_MX','ZEROS'
+smax,'EPOS_MX','EMN_MX','ZEROS',-1
+!sabs,1
+!smax,'EPOS_MX','EPOS_MX'
+sabs,0
+!!
+!!
+!!
+!!
+!!
+cmsel,s,compa_slab
+esla,s
+nsle,s,active
+cm,vn,node
+/input,'F:\Ansys\03 Design\30 Pontes Anchieta\01 APDL\_slab_paths',mac
+
+*del,MPATHPLOT_ARR_pathNames
+*dim,MPATHPLOT_ARR_pathNames,char,GEO_genSpanCount*5
+*del,MPATHPLOT_ARR_labels
+*dim,MPATHPLOT_ARR_labels,char,GEO_genSpanCount*5
+*do,i,1,GEO_genSpanCount*5,1
+    MPATHPLOT_ARR_pathNames(i)=pthNames(i)
+    MPATHPLOT_ARR_labels(i)='ENEG_MX'
+*enddo
+
+allsel
+esel,u,type,,3
+cmsel,u,COMPE_pile
+nsle,s,active
+
+view1w
+windefa,1
+wincln,1
+/edge,1,0
+
+wntitle,'LAJES: MOM. FLETOR (-) [kNm/m]'
+
+/view,1,-1,-1,1
+/angle,1,0
+/auto,1
+eplot
+/user,1
+cmsel,a,COMPE_pile
+
+cmsel,s,compa_slab
+esla,u
+
+/plopts,info,3
+/plopts,leg3,1
+/udoc,1,cntr,right
+/gformat,F,1,1
+
+! Bending moments on superstructure slabs
+go2png,1200
+    /edge,1,1
+    eplot
+    /noerase
+    cmsel,s,compa_slab
+    esla,s
+    nsle,s,active
+    /udoc,1,cntr,right !!off
+    /edge,1,0
+    clims
+    pletab,'ENEG_MX',1
+
+    !!/udoc,1,cntr,right
+    !!mpathplot,20
+
+endpng,'IMG04a_slabMx_neg'
+/erase
+clims
+
+!!
+!!
+*do,i,1,GEO_genSpanCount*5,1
+    MPATHPLOT_ARR_pathNames(i)=pthNames(i)
+    MPATHPLOT_ARR_labels(i)='EPOS_MX'
+*enddo
+
+allsel
+esel,u,type,,3
+cmsel,u,COMPE_pile
+nsle,s,active
+
+view1w
+windefa,1
+wincln,1
+/edge,1,0
+
+wntitle,'LAJES: MOM. FLETOR (+) [kNm/m]'
+
+/view,1,-1,-1,1
+/angle,1,0
+/auto,1
+eplot
+/user,1
+cmsel,a,COMPE_pile
+
+cmsel,s,compa_slab
+esla,u
+
+/plopts,info,3
+/plopts,leg3,1
+/udoc,1,cntr,right
+/gformat,F,1,1
+
+! Bending moments on superstructure slabs
+go2png,1200
+    /edge,1,1
+    eplot
+    /noerase
+    cmsel,s,compa_slab
+    esla,s
+    nsle,s,active
+    /udoc,1,cntr,right !!off
+    /edge,1,0
+    clims
+    pletab,'EPOS_MX',1
+
+    !!/udoc,1,cntr,right
+    !!mpathplot,20
+
+endpng,'IMG04b_slabMx_pos'
+/erase
+clims
+
+!!
+!!
+!!
+!!
+!!
+!!
+!!
+cmsel,s,compa_abt_appslab
+esla,s
+nsle,s,active
+cm,vn,node
+/input,'F:\Ansys\03 Design\30 Pontes Anchieta\01 APDL\_slab_paths',mac
+
+*del,MPATHPLOT_ARR_pathNames
+*dim,MPATHPLOT_ARR_pathNames,char,GEO_genSpanCount*5
+*del,MPATHPLOT_ARR_labels
+*dim,MPATHPLOT_ARR_labels,char,GEO_genSpanCount*5
+*do,i,1,GEO_genSpanCount*5,1
+    MPATHPLOT_ARR_pathNames(i)=pthNames(i)
+    MPATHPLOT_ARR_labels(i)='ENEG_MX'
+*enddo
+
+allsel
+esel,u,type,,3
+cmsel,u,COMPE_pile
+nsle,s,active
+
+view1w
+windefa,1
+wincln,1
+/edge,1,0
+
+wntitle,'APROX: MOM. FLETOR (-) [kNm/m]'
+
+/view,1,-1,-1,1
+/angle,1,0
+/auto,1
+eplot
+/user,1
+cmsel,a,COMPE_pile
+
+cmsel,s,compa_abt_appslab
+esla,u
+
+/plopts,info,3
+/plopts,leg3,1
+/udoc,1,cntr,right
+/gformat,F,1,1
+
+! Bending moments on superstructure slabs
+go2png,1200
+    /edge,1,1
+    eplot
+    /noerase
+    cmsel,s,compa_abt_appslab
+    esla,s
+    nsle,s,active
+    /udoc,1,cntr,right !!off
+    /edge,1,0
+    clims
+    pletab,'ENEG_MX',1
+
+    !!/udoc,1,cntr,right
+    !!mpathplot,20
+
+endpng,'IMG04c_approxMx_neg'
+/erase
+clims
+
+!!
+!!
+*do,i,1,GEO_genSpanCount*5,1
+    MPATHPLOT_ARR_pathNames(i)=pthNames(i)
+    MPATHPLOT_ARR_labels(i)='EPOS_MX'
+*enddo
+
+allsel
+esel,u,type,,3
+cmsel,u,COMPE_pile
+nsle,s,active
+
+view1w
+windefa,1
+wincln,1
+/edge,1,0
+
+wntitle,'APROX: MOM. FLETOR (+) [kNm/m]'
+
+/view,1,-1,-1,1
+/angle,1,0
+/auto,1
+eplot
+/user,1
+cmsel,a,COMPE_pile
+
+cmsel,s,compa_abt_appslab
+esla,u
+
+/plopts,info,3
+/plopts,leg3,1
+/udoc,1,cntr,right
+/gformat,F,1,1
+
+! Bending moments on superstructure slabs
+go2png,1200
+    /edge,1,1
+    eplot
+    /noerase
+    cmsel,s,compa_abt_appslab
+    esla,s
+    nsle,s,active
+    /udoc,1,cntr,right !!off
+    /edge,1,0
+    clims
+    pletab,'EPOS_MX',1
+
+    !!/udoc,1,cntr,right
+    !!mpathplot,20
+
+endpng,'IMG04d_approxMx_pos'
+/erase
+clims
+
+
+
+
+!!
+!!
+!!
+!!
+!!
+cmsel,s,compe_girder
+nsle,s,active
+
+view1w
+windefa,1
+wincln,1
+/edge,1,0
+
+wntitle,'MOM. FLETOR NAS LONGARINAS [kNm]'
+
+/view,1,-1,-1,1
+/angle,1,0
+/auto,1
+/eshape,0
+allsel
+cmsel,s,compa_slab
+esel,u,type,,3
+esla,u
+cmsel,u,COMPE_pile !!
+eplot
+/user,1
+cmsel,a,COMPE_pile !!
+
+/plopts,info,3
+/plopts,leg3,1
+/udoc,1,cntr,right
+/gformat,F,1,1
+
+! Bending moments on beams
+go2png,1200
+    /edge,1,1
+    eplot
+    /noerase
+
+    cmsel,s,compe_girder
+    nsle,s,active
+    /udoc,1,cntr,right
+    /edge,1,0
+    plls,'EMN_MYi','EMN_MYj',0.63,,1
+
+    /device,vector,on
+    /type,1,3
+    /edge,1,1
+    !esel,s,type,,2
+    cmsel,s,compa_slab
+    esla,s
+    eplot
+
+
+endpng,'IMG05a_girderMy'
+/erase
+/device,vector,off
+/type,1,3
+
+!!
+cmsel,s,compe_girder
+nsle,s,active
+
+view1w
+windefa,1
+wincln,1
+/edge,1,0
+
+wntitle,'MOM. FLETOR NAS LONGARINAS [kNm]'
+/anum,,1
+/tspec,15,1,4
+/tlabel,1,-0.98,'(CARGAS PERMANENTES)'
+
+/view,1,-1,-1,1
+/angle,1,0
+/auto,1
+/eshape,0
+allsel
+cmsel,s,compa_slab
+esel,u,type,,3
+esla,u
+cmsel,u,COMPE_pile !!
+eplot
+/user,1
+cmsel,a,COMPE_pile !!
+
+/plopts,info,3
+/plopts,leg3,1
+/udoc,1,cntr,right
+/gformat,F,1,1
+
+! Bending moments on beams
+go2png,1200
+    /edge,1,1
+    eplot
+    /noerase
+
+    cmsel,s,compe_girder
+    nsle,s,active
+    /udoc,1,cntr,right
+    /edge,1,0
+    plls,'DW_MYi','DW_MYj',0.63,,1
+
+    /device,vector,on
+    /type,1,3
+    /edge,1,1
+    !esel,s,type,,2
+    cmsel,s,compa_slab
+    esla,s
+    eplot
+
+
+endpng,'IMG05b_girderMy_perm'
+/erase
+/device,vector,off
+/type,1,3
+
+
+!!
+view1w
+windefa,1
+wincln,1
+/edge,1,0
+
+wntitle,'T. NORMAL NAS LONGARINAS [kN]'
+
+/view,1,-1,-1,1
+/angle,1,0
+/auto,1
+/eshape,0
+allsel
+cmsel,s,compa_slab
+esel,u,type,,3
+esla,u
+cmsel,u,COMPE_pile !!
+eplot
+/user,1
+cmsel,a,COMPE_pile !!
+
+/plopts,info,3
+/plopts,leg3,1
+/udoc,1,cntr,right
+/gformat,F,1,1
+
+! Axial tensile force on beams
+go2png,1200
+    /edge,1,1
+    eplot
+    /noerase
+
+    cmsel,s,compe_girder
+    nsle,s,active
+    /udoc,1,cntr,right
+    /edge,1,0
+    plls,'N_t','N_t',0.63,,1
+
+    /device,vector,on
+    /type,1,3
+    /edge,1,1
+    !esel,s,type,,2
+    cmsel,s,compa_slab
+    esla,s
+    eplot
+
+
+endpng,'IMG05b_girderNt'
+/erase
+/device,vector,off
+/type,1,3
+
+
+!!
+view1w
+windefa,1
+wincln,1
+/edge,1,0
+
+wntitle,'C. NORMAL NAS LONGARINAS [kN]'
+
+/view,1,-1,-1,1
+/angle,1,0
+/auto,1
+/eshape,0
+allsel
+cmsel,s,compa_slab
+esel,u,type,,3
+esla,u
+cmsel,u,COMPE_pile !!
+eplot
+/user,1
+cmsel,a,COMPE_pile !!
+
+/plopts,info,3
+/plopts,leg3,1
+/udoc,1,cntr,right
+/gformat,F,1,1
+
+! Axial compressive force on beams
+go2png,1200
+    /edge,1,1
+    eplot
+    /noerase
+
+    cmsel,s,compe_girder
+    nsle,s,active
+    /udoc,1,cntr,right
+    /edge,1,0
+    plls,'N_c','N_c',0.63,,1
+
+    /device,vector,on
+    /type,1,3
+    /edge,1,1
+    !esel,s,type,,2
+    cmsel,s,compa_slab
+    esla,s
+    eplot
+
+
+endpng,'IMG05c_girderNc'
+/erase
+/device,vector,off
+/type,1,3
+
+
+!!
+view1w
+windefa,1
+wincln,1
+/edge,1,0
+
+wntitle,'F.CORTANTE NAS LONGARINAS [kN]'
+
+/view,1,-1,-1,1
+/angle,1,0
+/auto,1
+/eshape,0
+allsel
+cmsel,s,compa_slab
+esel,u,type,,3
+esla,u
+cmsel,u,COMPE_pile !!
+eplot
+/user,1
+cmsel,a,COMPE_pile !!
+
+/plopts,info,3
+/plopts,leg3,1
+/udoc,1,cntr,right
+/gformat,F,1,1
+
+! Bending moments on beams
+go2png,1200
+    /edge,1,1
+    eplot
+    /noerase
+
+    cmsel,s,compe_girder
+    nsle,s,active
+    /udoc,1,cntr,right
+    /edge,1,0
+    plls,'EAB_QZi','EAB_QZj',0.63,,1
+
+    /device,vector,on
+    /type,1,3
+    /edge,1,1
+    !esel,s,type,,2
+    cmsel,s,compa_slab
+    esla,s
+    eplot
+
+
+endpng,'IMG05d_girderQ'
+/erase
+/device,vector,off
+/type,1,3
+
+
+!!
+view1w
+windefa,1
+wincln,1
+/edge,1,0
+
+wntitle,'F. CORTANTE NAS LONGARINAS [kN]'
+/anum,,1
+/tspec,15,1,4
+/tlabel,1,-0.98,'(CARGAS PERMANENTES)'
+
+/view,1,-1,-1,1
+/angle,1,0
+/auto,1
+/eshape,0
+allsel
+cmsel,s,compa_slab
+esel,u,type,,3
+esla,u
+cmsel,u,COMPE_pile !!
+eplot
+/user,1
+cmsel,a,COMPE_pile !!
+
+/plopts,info,3
+/plopts,leg3,1
+/udoc,1,cntr,right
+/gformat,F,1,1
+
+! Bending moments on beams
+go2png,1200
+    /edge,1,1
+    eplot
+    /noerase
+
+    cmsel,s,compe_girder
+    nsle,s,active
+    /udoc,1,cntr,right
+    /edge,1,0
+    plls,'DW_QZi','DW_QZj',0.63,,1
+
+    /device,vector,on
+    /type,1,3
+    /edge,1,1
+    !esel,s,type,,2
+    cmsel,s,compa_slab
+    esla,s
+    eplot
+
+
+endpng,'IMG05e_girderQ_perm'
+/erase
+/device,vector,off
+/type,1,3
+
+
+
+
+
+!!
+!!
+!!
+!!
+!!
+*if,GEO_pierCount,gt,0,then
+
+    *if,GEO_frameOpt,eq,1,then
+        ! Tubular pier columns
+        /annot,dele
+
+        allsel
+        esel,u,type,,3
+
+        view1w
+        windefa,1
+        wincln,1
+        /view,1,-1,-1,1
+        /auto,1
+        eplot
+        /user,1
+
+        wntitle,'F. AXIAL (V) NOS PILARES [kN/m]'
+
+        go2png,1200
+
+            cmsel,s,compa_coltubewall
+            cmsel,a,compa_coltubecap
+            esla,s
+            nsle,s,active
+
+            /udoc,1,cntr,right
+            /plopts,leg3,on
+            /plopts,info,3
+            /gformat,f,1,1
+
+            ! Vertical axial force (compression)
+            pletab,'EMN_NY',1
+            /noerase
+
+            /device,vector,on
+            allsel
+            esel,u,type,,3
+            nsle,s,active
+            eplot
+            /device,vector,off
+
+        endpng,'IMG06_pierNY'
+        /erase
+        /annot,dele
+
+        !!
+        wntitle,'F. AXIAL (H) NOS PILARES [kN/m]'
+
+        go2png,1200
+
+            cmsel,s,compa_coltubewall
+            cmsel,a,compa_coltubecap
+            esla,s
+            nsle,s,active
+
+            /udoc,1,cntr,right
+            /plopts,leg3,on
+            /plopts,info,3
+            /gformat,f,1,1
+
+            ! Vertical axial force (compression)
+            pletab,'EMX_NX',1
+            /noerase
+
+            /device,vector,on
+            allsel
+            esel,u,type,,3
+            nsle,s,active
+            eplot
+            /device,vector,off
+
+        endpng,'IMG07_pierNX'
+        /erase
+        /annot,dele
+
+        !!
+        wntitle,'M. FLETOR NOS PILARES [kNm/m]'
+
+        go2png,1200
+
+            cmsel,s,compa_coltubewall
+            cmsel,a,compa_coltubecap
+            esla,s
+            nsle,s,active
+
+            /udoc,1,cntr,right
+            /plopts,leg3,on
+            /plopts,info,3
+            /gformat,f,1,1
+
+            ! Vertical axial force (compression)
+            pletab,'EMN_MX',1
+            /noerase
+
+            /device,vector,on
+            allsel
+            esel,u,type,,3
+            nsle,s,active
+            eplot
+            /device,vector,off
+
+        endpng,'IMG08_pierMX'
+        /erase
+        /annot,dele
+
+        !!
+        wntitle,'F. CORTANTE NOS PILARES [kN/m]'
+
+        go2png,1200
+
+            cmsel,s,compa_coltubewall
+            cmsel,a,compa_coltubecap
+            esla,s
+            nsle,s,active
+
+            /udoc,1,cntr,right
+            /plopts,leg3,on
+            /plopts,info,3
+            /gformat,f,1,1
+
+            ! Vertical axial force (compression)
+            pletab,'EAB_Q',1
+            /noerase
+
+            /device,vector,on
+            allsel
+            esel,u,type,,3
+            nsle,s,active
+            eplot
+            /device,vector,off
+
+        endpng,'IMG09_pierQ'
+        /erase
+        /annot,dele
+
+    *elseif,GEO_frameOpt,eq,0,then
+        ! Column-girder frame
+        /annot,dele
+
+        allsel
+        esel,u,type,,3
+
+        view1w
+        windefa,1
+        wincln,1
+        /view,1,-1,-1,1
+        /auto,1
+        eplot
+        /user,1
+
+        wntitle,'F. AXIAL NOS PILARES [kN]'
+
+        go2png,1200
+
+            cmsel,s,compl_column
+            esll,s
+            nsle,s,active
+
+            /udoc,1,cntr,right
+            /plopts,leg3,on
+            /plopts,info,3
+            /gformat,f,1,1
+
+            ! Vertical axial force (compression)
+            /vup,1,x
+            /angle,1,-60,zs
+            plls,EAB_Ni,EAB_Nj,3,,1
+            /vup,1,z
+            /angle,1,0,zs
+            /noerase
+
+            /device,vector,on
+            allsel
+            esel,u,type,,3
+            nsle,s,active
+            eplot
+            /device,vector,off
+
+        endpng,'IMG06_columnN'
+        /erase
+        /annot,dele
+
+        !!
+        wntitle,'M. FLETOR NOS PILARES [kNm]'
+
+        /anum,,1
+        /tspec,15,1,4
+        /tlabel,-0.94,-0.65,'MY'
+        /anum,,1
+        /tspec,15,1,4
+        /tlabel,1.55,-0.65,'MZ'
+
+
+        go2png,1200
+
+            cmsel,s,compl_column
+            esll,s
+            nsle,s,active
+
+            /udoc,1,cntr,right
+            /plopts,leg3,on
+            /plopts,info,3
+            /gformat,f,1,1
+
+            ! Y bending moment
+            /vup,1,x
+            /angle,1,-60,zs
+            /udoc,1,cntr,left
+            plls,EAB_MYi,EAB_MYj,3,,1
+            /vup,1,z
+            /angle,1,0,zs
+            /noerase
+
+            ! Z bending moment
+            /vup,1,y
+            /angle,1,60,zs
+            /udoc,1,cntr,right
+            plls,EAB_MZi,EAB_MZj,3,,1
+            /vup,1,z
+            /angle,1,0,zs
+
+            /device,vector,on
+            allsel
+            esel,u,type,,3
+            nsle,s,active
+            eplot
+            /device,vector,off
+
+        endpng,'IMG07_columnM'
+        /erase
+        /annot,dele
+
+        !!
+        wntitle,'F. CORTANTE NOS PILARES [kN]'
+
+        /anum,,1
+        /tspec,15,1,4
+        /tlabel,-0.94,-0.65,'QY'
+        /anum,,1
+        /tspec,15,1,4
+        /tlabel,1.55,-0.65,'QZ'
+
+        go2png,1200
+
+            cmsel,s,compl_column
+            esll,s
+            nsle,s,active
+
+            /udoc,1,cntr,right
+            /plopts,leg3,on
+            /plopts,info,3
+            /gformat,f,1,1
+
+            ! Z-Shear force
+            /vup,1,x
+            /angle,1,-60,zs
+            /udoc,1,cntr,left
+            plls,EAB_QZi,EAB_QZj,3,,1
+            /vup,1,z
+            /angle,1,0,zs
+            /noerase
+
+            ! Y-Shear force
+            /vup,1,y
+            /angle,1,60,zs
+            /udoc,1,cntr,right
+            plls,EAB_QYi,EAB_QYj,3,,1
+            /vup,1,z
+            /angle,1,0,zs
+
+            /device,vector,on
+            allsel
+            esel,u,type,,3
+            nsle,s,active
+            eplot
+            /device,vector,off
+
+        endpng,'IMG08_columnQ'
+        /erase
+        /annot,dele
+
+        !!
+        wntitle,'F. AXIAL NA TRAVESSA [kN]'
+
+        go2png,1200
+
+            cmsel,s,compl_framegirder
+            esll,s
+            nsle,s,active
+
+            /udoc,1,cntr,right
+            /plopts,leg3,on
+            /plopts,info,3
+            /gformat,f,1,1
+
+            ! Vertical axial force (compression)
+            plls,EAB_Ni,EAB_Nj,3,,1
+            /noerase
+
+            /device,vector,on
+            allsel
+            esel,u,type,,3
+            nsle,s,active
+            eplot
+            /device,vector,off
+
+        endpng,'IMG20_framegN'
+        /erase
+        /annot,dele
+
+        !!
+        wntitle,'M. FLETOR NA TRAVESSA [kNm]'
+
+        /anum,,1
+        /tspec,15,1,4
+        /tlabel,-0.94,-0.65,'MY'
+        /anum,,1
+        /tspec,15,1,4
+        /tlabel,1.55,-0.65,'MZ'
+
+
+        go2png,1200
+
+            cmsel,s,compl_framegirder
+            esll,s
+            nsle,s,active
+
+            /udoc,1,cntr,right
+            /plopts,leg3,on
+            /plopts,info,3
+            /gformat,f,1,1
+
+            ! Y bending moment
+            /udoc,1,cntr,left
+            plls,EAB_MYi,EAB_MYj,3,,1
+            /noerase
+
+            ! Z bending moment
+            /vup,1,x
+            /angle,1,-60,zs
+            /udoc,1,cntr,right
+            plls,EAB_MZi,EAB_MZj,-3,,1
+            /vup,1,z
+            /angle,1,0,zs
+
+            /device,vector,on
+            allsel
+            esel,u,type,,3
+            nsle,s,active
+            eplot
+            /device,vector,off
+
+        endpng,'IMG21_framegM'
+        /erase
+        /annot,dele
+
+        !!
+        wntitle,'F. CORTANTE NA TRAVESSA [kN]'
+
+        /anum,,1
+        /tspec,15,1,4
+        /tlabel,-0.94,-0.65,'QY'
+        /anum,,1
+        /tspec,15,1,4
+        /tlabel,1.55,-0.65,'QZ'
+
+        go2png,1200
+
+            cmsel,s,compl_framegirder
+            esll,s
+            nsle,s,active
+
+            /udoc,1,cntr,right
+            /plopts,leg3,on
+            /plopts,info,3
+            /gformat,f,1,1
+
+            ! Z-Shear force
+            /udoc,1,cntr,left
+            plls,EAB_QZi,EAB_QZj,3,,1
+            /noerase
+
+            ! Y-Shear force
+            /vup,1,x
+            /angle,1,-60,zs
+            /udoc,1,cntr,right
+            plls,EAB_QYi,EAB_QYj,-3,,1
+            /vup,1,z
+            /angle,1,0,zs
+
+            /device,vector,on
+            allsel
+            esel,u,type,,3
+            nsle,s,active
+            eplot
+            /device,vector,off
+
+        endpng,'IMG22_framegQ'
+        /erase
+        /annot,dele
+
+    *endif
+
+*endif
+
+
+
+!!
+!!
+!!
+!!
+!!
+/annot,dele
+
+/window,all,dele
+/window,1,-1,0.335,-0.92,1
+/window,2,0.335,1.67,-0.92,1
+/view,1,-1,1,1
+/view,2,1,1,1
+wincln,1
+wincln,2
+/plopts,leg3,on
+/plopts,info,3
+/udoc,1,cntr,right
+/udoc,2,cntr,right
+/edge,1,1
+/edge,2,1
+
+wntitle,'F. AXIAL VERTICAL [kN/m]'
+
+/anum,,7
+p4gon,-1,-0.92,0.335,-0.84
+/anum,,1
+/tspec,15,1,4
+/tlabel,-0.60,-0.90,'(a) ENCONTRO 01'
+
+
+/anum,,7
+p4gon,0.335,-0.92,1.67,-0.84
+/anum,,1
+/tspec,15,1,4
+/tlabel,0.70,-0.90,'(b) ENCONTRO 02'
+
+
+go2png,1200
+    /window,1,on
+    /window,2,off
+    /auto,1
+    *if,GEO_ABT1_status,eq,1,then
+        cmsel,s,compa_abt_1
+        cmsel,u,compa_abt_appslab
+        esla,s
+        nsle,s,active
+    *else
+        allsel
+    *endif
+    pletab,'EMN_NY',1
+    /noerase
+    /window,1,off
+
+    /window,2,on
+    /auto,2
+    *if,GEO_ABT2_status,eq,1,then
+        cmsel,s,compa_abt_2
+        cmsel,u,compa_abt_appslab
+        esla,s
+        nsle,s,active
+    *else
+        allsel
+    *endif
+    pletab,'EMN_NY',1
+endpng,'IMG10_abtNY'
+/erase
+/annot,dele
+
+!!
+wntitle,'M. FLETOR [kNm/m]'
+
+/anum,,7
+p4gon,-1,-0.92,0.335,-0.84
+/anum,,1
+/tspec,15,1,4
+/tlabel,-0.60,-0.90,'(a) ENCONTRO 01'
+
+
+/anum,,7
+p4gon,0.335,-0.92,1.67,-0.84
+/anum,,1
+/tspec,15,1,4
+/tlabel,0.70,-0.90,'(b) ENCONTRO 02'
+
+
+go2png,1200
+    /window,1,on
+    /window,2,off
+    /auto,1
+    *if,GEO_ABT1_status,eq,1,then
+        cmsel,s,compa_abt_1
+        cmsel,u,compa_abt_appslab
+        esla,s
+        nsle,s,active
+    *else
+        allsel
+    *endif
+    pletab,'EMN_MX',1
+    /noerase
+    /window,1,off
+
+    /window,2,on
+    /auto,2
+    *if,GEO_ABT2_status,eq,1,then
+        cmsel,s,compa_abt_2
+        cmsel,u,compa_abt_appslab
+        esla,s
+        nsle,s,active
+    *else
+        allsel
+    *endif
+    pletab,'EMN_MX',1
+endpng,'IMG11_abtMX'
+/erase
+/annot,dele
+
+!!
+wntitle,'F. CORTANTE [kN/m]'
+
+/anum,,7
+p4gon,-1,-0.92,0.335,-0.84
+/anum,,1
+/tspec,15,1,4
+/tlabel,-0.60,-0.90,'(a) ENCONTRO 01'
+
+
+/anum,,7
+p4gon,0.335,-0.92,1.67,-0.84
+/anum,,1
+/tspec,15,1,4
+/tlabel,0.70,-0.90,'(b) ENCONTRO 02'
+
+
+go2png,1200
+    /window,1,on
+    /window,2,off
+    /auto,1
+    *if,GEO_ABT1_status,eq,1,then
+        cmsel,s,compa_abt_1
+        cmsel,u,compa_abt_appslab
+        esla,s
+        nsle,s,active
+    *else
+        allsel
+    *endif
+    pletab,'EAB_Q',1
+    /noerase
+    /window,1,off
+
+    /window,2,on
+    /auto,2
+    *if,GEO_ABT2_status,eq,1,then
+        cmsel,s,compa_abt_2
+        cmsel,u,compa_abt_appslab
+        esla,s
+        nsle,s,active
+    *else
+        allsel
+    *endif
+    pletab,'EAB_Q',1
+endpng,'IMG12_abtQ'
+/erase
+/annot,dele
+
+
+
+
+
+!!
+!!
+!!
+!!
+!!
+*if,GEO_pierCount,gt,0,then
+    /annot,dele
+
+    allsel
+    esel,u,type,,3
+
+    view1w
+    windefa,1
+    wincln,1
+    /view,1,-1,-1,-1
+    /auto,1
+    eplot
+    /user,1
+
+
+    !!
+    wntitle,'M. FLETOR NOS BLOCOS [kNm/m]'
+
+    go2png,1200
+
+        *if,GEO_frameOpt,eq,0,then
+            ! Column-girder frame
+            cmsel,s,compa_pilecap
+        *elseif,GEO_frameOpt,eq,1,then
+            ! Tubular pier column
+            cmsel,s,compa_centerpilecaps
+        *endif
+        esla,s
+        nsle,s,active
+
+        /udoc,1,cntr,right
+        /plopts,leg3,on
+        /plopts,info,3
+        /gformat,f,1,1
+
+        ! Vertical axial force (compression)
+        pletab,'EMN_MX',1
+        /noerase
+
+        /device,vector,on
+        allsel
+        esel,u,type,,3
+        nsle,s,active
+        eplot
+        /device,vector,off
+
+    endpng,'IMG13_capMX'
+    /erase
+    /annot,dele
+
+    !!
+    wntitle,'F. CORTANTE NOS BLOCOS [kN/m]'
+
+    go2png,1200
+
+        *if,GEO_frameOpt,eq,0,then
+            ! Column-girder frame
+            cmsel,s,compa_pilecap
+        *elseif,GEO_frameOpt,eq,1,then
+            ! Tubular pier column
+            cmsel,s,compa_centerpilecaps
+        *endif
+        esla,s
+        nsle,s,active
+
+        /udoc,1,cntr,right
+        /plopts,leg3,on
+        /plopts,info,3
+        /gformat,f,1,1
+
+        ! Vertical axial force (compression)
+        pletab,'EAB_Q',1
+        /noerase
+
+        /device,vector,on
+        allsel
+        esel,u,type,,3
+        nsle,s,active
+        eplot
+        /device,vector,off
+
+    endpng,'IMG14_capQ'
+    /erase
+    /annot,dele
+
+*endif
+
+
+
+!!
+!!
+!!
+!!
+!!
+/annot,dele
+
+view1w
+windefa,1
+wincln,1
+/edge,1,0
+
+/view,1,-1,-1,1
+/angle,1,0
+/auto,1
+/eshape,0
+allsel
+esel,u,type,,3
+eplot
+/user,1
+
+/plopts,info,3
+/plopts,leg3,1
+/udoc,1,cntr,right
+/gformat,F,1,1
+
+wntitle,'F. AXIAL NAS ESTACAS [kN]'
+
+go2png,1200
+    /edge,1,1
+    eplot
+    /noerase
+
+    cmsel,s,compl_pile
+    cmsel,a,compl_abt_piles
+    esll,s
+    nsle,s,active
+    /edge,1,0
+    /vup,1,x
+    /angle,1,-60,zs
+    /gline,,-1
+    /udoc,1,cntr,off
+    plls,'N_c','N_c',0.21,,1
+    /gline,,0
+
+    /type,1,3
+    /edge,1,1
+    esel,s,type,,2
+    eplot
+    /vup,1,z
+    /angle,1,0,zs
+
+    cmsel,s,compl_pile
+    cmsel,a,compl_abt_piles
+    esll,s
+    nsle,s,active
+    *get,fcx_auto,graph,1,focus,x
+    *get,fcy_auto,graph,1,focus,y
+    *get,fcz_auto,graph,1,focus,z
+    /focus,1,1e6
+    /udoc,1,cntr,right
+    plls,'N_c','N_c',0.1,,1
+    /focus,1,fcx_auto,fcy_auto,fcz_auto
+    esel,s,type,,2
+
+endpng,'IMG15_pileN'
+/erase
+/annot,dele
+
+!!
+wntitle,'MOM. FLETOR NAS ESTACAS [kNm]'
+
+go2png,1200
+    /edge,1,1
+    esel,s,type,,2
+    eplot
+    /noerase
+
+    cmsel,s,compl_pile
+    cmsel,a,compl_abt_piles
+    esll,s
+    nsle,s,active
+    /edge,1,0
+    /vup,1,x
+    /angle,1,-60,zs
+    /gline,,-1
+    plls,'M_obl','M_obl',0.52,,1
+    /gline,,0
+
+    /type,1,3
+    /edge,1,1
+    esel,s,type,,2
+    eplot
+    /vup,1,z
+    /angle,1,0,zs
+
+endpng,'IMG16_pileM'
+/erase
+/annot,dele
+
+!!
+wntitle,'F. CORTANTE NAS ESTACAS [kN]'
+
+go2png,1200
+    /edge,1,1
+    eplot
+    /noerase
+
+    cmsel,s,compl_pile
+    cmsel,a,compl_abt_piles
+    esll,s
+    nsle,s,active
+    /edge,1,0
+    /vup,1,x
+    /angle,1,-60,zs
+    /gline,,-1
+    plls,'Q_obl','Q_obl',0.52,,1
+    /gline,,0
+
+    /type,1,3
+    /edge,1,1
+    esel,s,type,,2
+    eplot
+    /vup,1,z
+    /angle,1,0,zs
+
+endpng,'IMG17_pileQ'
+/erase
+/annot,dele
+
+
+
+
+
+
+
+
+
+
+
+
+
+!!
+!!
+!!
+!!
+!!
+*if,GEO_gerberstatus,eq,1,then
+    cmsel,s,COMPL_Gerber
+    esll,s
+    cm,COMPE_gerber,elems
+    cmsel,s,compe_GERBER
+    nsle,s,active
+
+    view1w
+    windefa,1
+    wincln,1
+    /edge,1,0
+
+    wntitle,'MOM. FLETOR NOS CONSOLES [kNm]'
+
+    /view,1,-1,-1,1
+    /angle,1,0
+    /auto,1
+    /eshape,0
+    allsel
+    cmsel,s,compa_slab
+    esel,u,type,,3
+    esla,u
+    eplot
+    /user,1
+
+    /plopts,info,3
+    /plopts,leg3,1
+    /udoc,1,cntr,right
+    /gformat,F,1,1
+
+    ! Bending moments on beams
+    go2png,1200
+        /edge,1,1
+        eplot
+        /noerase
+
+        cmsel,s,compe_gerber
+        nsle,s,active
+        /udoc,1,cntr,right
+        /edge,1,0
+        plls,'EMN_MYi','EMN_MYj',0.63,,1
+
+        /device,vector,on
+        /type,1,3
+        /edge,1,1
+        !esel,s,type,,2
+        cmsel,s,compa_slab
+        esla,s
+        eplot
+
+
+    endpng,'IMG18_gerberMy'
+    /erase
+    /device,vector,off
+    /type,1,3
+*endif
+
+/erase
+/annot,dele
+
+
+
+
+
+
+

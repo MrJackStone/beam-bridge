@@ -1,0 +1,72 @@
+! BRIDGE_V0_ABTSPRSUP
+
+cm,COMPN_valid,node
+
+! Longitudinal walls and wings
+cmsel,s,COMPA_ABT_longWalls
+cmsel,a,COMPA_ABT_wings
+asel,r,loc,y,-GEO_deckWidth,0
+nsla,s,1
+cmsel,r,COMPN_valid
+sprsup,0,FEM_ABT_springL,0,MAT_ABT_Soil,REAL_ABT_kh,TYPE_LINK180,'COMPN_sup','COMPE_sup',1,5
+cmsel,s,COMPN_sup
+nrotat,all
+d,all,uy,0
+
+cmsel,s,COMPA_ABT_longWalls
+cmsel,a,COMPA_ABT_wings
+asel,r,loc,y,0,GEO_deckWidth
+nsla,s,1
+cmsel,r,COMPN_valid
+sprsup,0,-FEM_ABT_springL,0,MAT_ABT_Soil,REAL_ABT_kh,TYPE_LINK180,'COMPN_sup','COMPE_sup',1,5
+cmsel,s,COMPN_sup
+nrotat,all
+d,all,uy,0
+
+! Transversal wall
+cmsel,s,COMPA_ABT_tranWall
+nsla,s,1
+cmsel,r,COMPN_valid
+sprsup,FEM_ABT_springL,0,0,MAT_ABT_Soil,REAL_ABT_kh,TYPE_LINK180,'COMPN_sup','COMPE_sup',1,6
+cmsel,s,COMPN_sup
+nrotat,all
+d,all,ux,0
+
+! Approach slab
+cmsel,s,COMPA_ABT_appSlab
+nsla,s,1
+cmsel,r,COMPN_valid
+sprsup,,,-FEM_ABT_springL,MAT_ABT_Soil,REAL_ABT_kv,TYPE_LINK180,'COMPN_sup','COMPE_sup',1,3
+cmsel,s,COMPN_sup
+nrotat,all
+cmsel,s,COMPA_ABT_pileCap
+nsla,s,1
+cmsel,r,COMPN_valid
+cm,COMPN_remoteSup,node
+cmsel,s,COMPN_sup
+*get,nc,node,,count
+nn=0
+*do,nthNode,1,nc,1
+    cmsel,s,COMPN_sup
+    nn=ndnext(nn)
+    cmsel,s,COMPN_remoteSup
+    nsel,a,node,,nn
+    rn=nnear(nn)
+    safe_cp,'UZ',rn,nn
+*enddo
+
+!    ! Beams
+!    cmsel,s,COMPA_ABT_beam
+!    lsla,s
+!    nsla,s,1
+!    sprsup,-FEM_ABT_springL,0,0,MAT_ABT_Soil,REAL_ABT_kh,TYPE_LINK180,'COMPN_sup','COMPE_sup',1,6
+!    cmsel,s,COMPN_sup
+!    d,all,ux,0
+!
+!    cmsel,s,COMPA_ABT_beam
+!    lsla,s
+!    nsla,s,1
+!    sprsup, FEM_ABT_springL,0,0,MAT_ABT_Soil,REAL_ABT_kh,TYPE_LINK180,'COMPN_sup','COMPE_sup',1,6
+!    cmsel,s,COMPN_sup
+!    d,all,ux,0
+

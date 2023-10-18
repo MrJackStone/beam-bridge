@@ -1,0 +1,15 @@
+!!
+!! TODO
+!!
+! ·  1. Connect girder: console, tubular column
+! ·  2. Connect gerber to tubular column
+! ·  3. Pile components: fix abutments
+! -  4. Pile curtain: transversal connection (BRIDGE_V0_CURTAINCP)
+! -  5. Pile curtain: perpendicular supports
+! *  6. Bridge occupation (BRIDGE_V0_OCCUP)
+! ·  7. Abutments: rotate nodes so loads remain perpendicular
+! ·  8. Calculate and apply transversal load-train loads
+! -  9. Post-processing
+! · 10. Create materials and cross-sections: gerber, console
+
+

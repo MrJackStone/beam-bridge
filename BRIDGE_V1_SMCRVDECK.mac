@@ -1,0 +1,273 @@
+! BRIDGE_V1_SMCRVDECK
+
+GEO_centerKP=1
+k,GEO_centerKP,GEO_deckLength/2,-GEO_chordOff,0
+
+wpcsys,,CS_deck
+
+cyl4,0,0,GEO_deckRadius-(GEO_deckWidth/2),,GEO_deckRadius+(GEO_deckWidth/2)
+
+! Cut spans
+BRIDGE_V1_RADSLICE,'GEO_supportChi',1
+
+! Cut at midspans
+BRIDGE_V1_RADSLICE,'GEO_midspanChi',0
+
+! Cut at gerber connection
+*if,GEO_gerberStatus,eq,1,then
+    BRIDGE_V1_RADSLICE,'GEO_gerberChi_i',1
+    BRIDGE_V1_RADSLICE,'GEO_gerberChi_j',1
+*endif
+
+! Cut at tubular column faces
+*if,GEO_pierCount,gt,0,then
+    BRIDGE_V1_RADSLICE,'GEO_pierChi_i',0
+    BRIDGE_V1_RADSLICE,'GEO_pierChi_j',0
+*endif
+
+! Delete ring areas outside bridge length
+csys,CS_deck
+allsel
+asel,u,loc,y,180-GEO_supportChi_0,180-GEO_supportChi_L
+lsla,s
+ksll,s
+adele,all,,,1
+allsel
+csys,0
+
+! Perform curved slicing
+wpcsys,,CS_deck
+*do,nthY,1,partial_XZsliceCount,1
+    lsel,u,line,,all
+    circle,GEO_centerKP,GEO_deckRadius+partial_XZslice(nthY)
+    cm,COMPL_slicer,line
+
+    allsel
+    asbl,all,COMPL_slicer,,delete,keep
+    cmsel,s,COMPL_slicer
+    cmdele,COMPL_slicer
+    ldele,all,,,1
+*enddo
+
+! Perform linear slicing at girders
+wpcsys,,CS_deck
+*do,nthGirder,1,GEO_girderCount,1
+
+    girderCompName=strcat('COMPL_GIRDER_',chrval(nthGirder))
+
+    girder_yOff=GEO_girderY(nthGirder)
+    lsel,u,line,,all
+    ksel,s,kp,,GEO_centerKP
+    circle,GEO_centerKP,GEO_deckRadius+girder_yOff
+    cm,COMPL_slicer,line
+
+    *do,nthSpan,1,GEO_supportCount-1,1
+        csys,CS_deck
+        chi_i=GEO_supportChi(nthSpan)
+        chi_j=GEO_supportChi(nthSpan+1)
+        asel,s,loc,y,180-chi_i,180-chi_j
+        lsla,s
+        ksel,s,loc,y,180-chi_i
+        ksel,a,loc,y,180-chi_j
+        lslk,r,1
+        cm,COMPL_sliced,line
+
+        cmsel,a,COMPL_slicer
+        lsbl,COMPL_sliced,COMPL_slicer,,delete,keep
+
+        cm,COMPA_temp,area
+        ksel,s,loc,y,180-chi_i
+        ksel,a,loc,y,180-chi_j
+        lsla,s
+        ksll,r
+        ksel,r,loc,x,GEO_deckRadius+girder_yOff
+
+        k_i=kpnext(0)
+        k_j=kpnext(k_i)
+        lsel,u,line,,all
+        lstr,k_i,k_j
+        l_slicer=lsnext(0)
+        cmsel,s,COMPA_temp
+        lsla,a
+        asbl,COMPA_temp,l_slicer,,delete,delete
+        cm,COMPL_temp,line
+        ksll,s
+
+        k_k=kpnext(k_j)
+        cskp,100,cart,k_i,k_j,k_k
+        csys,100
+        ksel,s,loc,y,0
+        csys,CS_deck
+        lslk,s,1
+        cmsel,r,COMPL_temp
+        cmpadd,girderCompName
+        cmpadd,'COMPL_Girder'
+    *enddo
+
+    cmsel,s,COMPL_slicer
+    ldele,all,,,1
+*enddo
+cmsel,s,COMPL_Girder
+ksll,s
+cm,COMPK_Girder,kp
+
+! Create component with gerber beams
+lsel,u,line,,all
+ksel,u,kp,,all
+*if,GEO_gerberStatus,eq,1,then
+    *do,nthGerber,1,GEO_gerberCount,1
+        chi_i=GEO_gerberChi_i(nthGerber)
+        chi_j=GEO_gerberChi_j(nthGerber)
+        lsel,a,loc,y,180-chi_i,180-chi_j
+    *enddo
+    cmsel,r,COMPL_Girder
+    ksll,s
+    cm,COMPL_Gerber,line
+    cm,COMPK_Gerber,kp
+    cmsel,s,COMPL_Girder
+    cmsel,u,COMPL_Gerber
+    ksll,s
+    cm,COMPL_Girder,line
+    cm,COMPK_Girder,kp
+    *do,nthGirder,1,GEO_girderCount,1
+        cmsel,s,COMPL_Gerber
+        lcmName_girder=strcat('COMPL_GIRDER_',chrval(nthGirder))
+        lcmName_gerber=strcat('COMPL_GERBER_',chrval(nthGirder))
+        cmsel,r,%lcmName_girder%
+        cm,%lcmName_gerber%,line
+        cmsel,s,%lcmName_girder%
+        cmsel,u,%lcmName_gerber%
+        cm,%lcmName_girder%,line
+    *enddo
+
+*else
+    cm,COMPL_Gerber,line
+    cm,COMPK_Gerber,kp
+*endif
+
+! Create component with load train path lines
+lsel,u,line,,all
+*do,nthLT,1,LOAD_wheelCount,1
+    center_off=LOAD_ltWheelOff(nthLT)
+    lsel,a,loc,x,GEO_deckRadius+center_off
+*enddo
+ksll,s
+cm,COMPL_LoadTrain,line
+cm,COMPK_LoadTrain,kp
+
+! Create component with barrier lines
+lsel,u,line,,all
+cm,COMPL_Barrier,line
+*if,LOAD_barrierStatus,EQ,1,THEN
+    *do,nthBarrier,1,LOAD_barrierCount,1
+        center_off=LOAD_barrierOffset(nthBarrier)
+        lsel,a,loc,x,GEO_deckRadius+center_off
+    *enddo
+    cm,COMPL_Barrier,line
+*endif
+
+! Create component with girder support keypoints
+ksel,u,kp,,all
+*do,nthSupport,1,GEO_supportCount
+    chi_i=GEO_supportChi(nthSupport)
+    ksel,a,loc,y,180-chi_i
+*enddo
+*if,GEO_gerberStatus,eq,1,then
+    *do,nthGerber,1,GEO_gerberCount,1
+        chi_i=GEO_gerberChi_i(nthGerber)
+        chi_j=GEO_gerberChi_j(nthGerber)
+        ksel,a,loc,y,180-chi_i
+        ksel,a,loc,y,180-chi_j
+    *enddo
+*endif
+cmsel,r,COMPK_Girder
+cm,COMPK_GirderSupport,kp
+
+! Create component with gerber support keypoints
+ksel,u,kp,,all
+cm,COMPK_GerberTip,kp
+cm,COMPK_GerberSupported,kp
+*if,GEO_gerberStatus,eq,1,then
+    ! Gerber tip (cantilever-girder connection)
+    ksel,u,kp,,all
+    *do,nthGerber,1,GEO_gerberCount,1
+        chi_i=GEO_gerberChi_i(nthGerber)
+        chi_j=GEO_gerberChi_j(nthGerber)
+        ksel,a,loc,y,180-chi_i
+        ksel,a,loc,y,180-chi_j
+    *enddo
+    cmsel,r,COMPK_Gerber
+    cm,COMPK_GerberTip,kp
+    ! Cantilever support (over tubular column)
+    ksel,u,kp,,all
+    *do,nthGerber,1,GEO_gerberCount,1
+        chi_m=GEO_gerberChi_m(nthGerber)
+        chi_n=GEO_gerberChi_n(nthGerber)
+        ksel,a,loc,y,180-chi_m,180-chi_n
+    *enddo
+    cmsel,r,COMPK_Gerber
+    cm,COMPK_GerberSupported,kp
+*endif
+
+! Create gerber consoles
+lsel,u,line,,all
+*if,GEO_gerberStatus,eq,1,then
+    *do,nthGerber,1,GEO_gerberCount,1
+        chi_tip=GEO_gerberChi_i(nthGerber)
+        *do,chi_idx,1,2,1
+            *do,nthConsole,1,GEO_girderCount-1,1
+                *if,nthConsole,eq,1,then
+                    lcmName_1=strcat('COMPL_GERBER_',chrval(nthConsole))
+                    cmsel,s,%lcmName_1%
+                    ksll,s
+                    ksel,r,loc,y,180-chi_tip
+                    cm,COMPK_source,kp
+                    kgen,2,COMPK_source,,,0,0,0,kpinqr(0,14),1
+                    cmsel,u,COMPK_source
+                    k_A=kpnext(0)
+                *else
+                    k_A=k_B
+                *endif
+
+                lcmName_2=strcat('COMPL_GERBER_',chrval(nthConsole+1))
+                cmsel,s,%lcmName_2%
+                ksll,s
+                ksel,r,loc,y,180-chi_tip
+                cm,COMPK_source,kp
+                kgen,2,COMPK_source,,,0,0,0,kpinqr(0,14),1
+                cmsel,u,COMPK_source
+                k_B=kpnext(0)
+
+                ksel,s,kp,,k_A
+                ksel,a,kp,,k_B
+                lsel,u,line,,all
+                lstr,k_A,k_B
+                cmpadd,'COMPL_Console'
+            *enddo
+            chi_tip=GEO_gerberChi_j(nthGerber)
+        *enddo
+    *enddo
+    cmsel,s,COMPL_Console
+*endif
+ksll,s
+cm,COMPK_Console,kp
+
+! Create component with left pedestrian footpath areas
+csys,CS_deck
+*if,GEO_footpathLeft,GT,0,THEN
+    asel,s,loc,x,GEO_deckRadius-(GEO_deckWidth/2),GEO_deckRadius-(GEO_deckWidth/2)+GEO_footpathLeft
+    cm,COMPA_LeftFootpath,area
+*else
+    asel,u,area,,all
+    cm,COMPA_LeftFootpath,area
+*endif
+
+! Create component with right pedestrian footpath areas
+*if,GEO_footpathRight,GT,0,THEN
+    asel,s,loc,x,GEO_deckRadius+(GEO_deckWidth/2)-GEO_footpathRight,GEO_deckRadius+(GEO_deckWidth/2)
+    cm,COMPA_RightFootpath,area
+*else
+    asel,u,area,,all
+    cm,COMPA_RightFootPath,area
+*endif
+

@@ -1,0 +1,10 @@
+! BRIDGE_V1_CHANGELOG
+
+!! ELIMINATED PARAMETERS:
+!  GEO_deckWidth
+!  LOAD_ltWheelOff
+!  partial_XZsliceCount
+!  GEO_skewness
+!  LOAD_barrierOffset
+!  GEO_footpathLeft
+!  GEO_footpathRight

@@ -1,0 +1,38 @@
+! BRIDGE_V0_XTOCHI, chiParmName, xArrayNameOrValue
+! BRIDGE_V0_XTOCHI,        arg1,              arg2
+
+*get,parType,parm,arg2,type
+
+*if,parType,eq,3,then
+    ! Array input
+    *get,posCount,parm,%arg2%,dim,x
+
+    *del,%arg1%
+    *dim,%arg1%,,posCount
+    *if,GEO_deckRadius,ne,0,then
+        *do,nthPos,1,posCount,1
+            *afun,deg
+            x_i=%arg2%(nthPos)
+            chi_i=acos(((GEO_deckLength/2)-x_i)/GEO_deckRadius)
+            %arg1%(nthPos)=chi_i
+            *afun,rad
+        *enddo
+    *else
+        *vfill,%arg1%,ramp,90,0
+    *endif
+
+*elseif,parType,eq,0,then
+    ! Scalar input
+    *if,GEO_deckRadius,ne,0,then
+        *afun,deg
+        %arg1%=acos(((GEO_deckLength/2)-arg2)/GEO_deckRadius)
+        *afun,rad
+    *else
+        %arg1%=90
+    *endif
+*endif
+
+
+
+
+

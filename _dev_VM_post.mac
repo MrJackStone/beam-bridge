@@ -1,0 +1,54 @@
+etable
+detab
+
+! BEAM_EQVMOM
+! BEAM_EQVMOM
+
+enum=0
+
+*do,nthGirder,1,girderCount,1
+    cmsel,s,COMPE_nthGirder
+    enum=elnext(enum)
+
+    esel,s,elem,,enum
+    nsle,s,active
+    n1=nelem(enum,1)
+    n2=nelem(enum,2)
+
+    x1=nx(n1)
+    x2=nx(n2)
+
+    y1=ny(n1)
+    y2=ny(n2)
+
+    z1=nz(n1)
+    z2=nz(n2)
+
+    xc=(x1+x2)/2
+    yc=(y1+y2)/2
+    zc=(z1+z2)/2
+
+    xi=x0
+    xf=xi
+
+    yi=yLeft
+    ye=yRight
+
+    zi=zc
+    zf=zc
+
+    path,'TEMP',2,,pathDiv
+    ppath,1,,xi,yi,zi
+    ppath,2,,zf,yf,zf
+    pdef,'M',etab,%etName%,avg
+    pcalc,intg,'M_CUM','M','S',1
+
+    *get,M_cum_max,path,,max,'M_CUM'
+    *get,M_cum_min,path,,min,'M_CUM'
+    M_cum=(abs(M_cum_max)>abs(M_cum_min))
+
+
+*enddo
+
+
+

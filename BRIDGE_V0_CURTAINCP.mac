@@ -1,0 +1,148 @@
+! BRIDGE_V0_CURTAINCP
+
+cm,_local_COMPL_ABT_piles,line
+
+! Get reference transversal piles: left and right extremities of transversal wall
+cmsel,s,_local_COMPL_ABT_piles
+cmsel,r,COMPL_ABT_twPiles
+ksll,s
+cm,COMPK_temp,kp
+*get,ymn,kp,,mnloc,y
+*get,ymx,kp,,mxloc,y
+cmsel,s,COMPK_temp
+ksel,r,loc,y,ymn
+lslk,r
+refPile_tmn=lsnext(0)
+esll,s
+nsle,s,active
+cm,COMPN_refPile_tmn,node
+cmsel,s,_local_COMPL_ABT_piles
+cmsel,s,COMPK_temp
+ksel,r,loc,y,ymx
+lslk,r
+refPile_tmx=lsnext(0)
+esll,s
+nsle,s,active
+cm,COMPN_refPile_tmx,node
+cmsel,s,COMPN_refPile_tmn
+cm,COMPN_refPile_tmn,node
+cmsel,a,COMPN_refPile_tmx
+cm,COMPN_refPile_t,node
+
+
+! Get reference longitudinal piles: intersection with transversal wall
+lsel,s,line,,refPile_tmn
+ksll,s
+x_tw=kx(kpnext(0))
+
+cmsel,s,_local_COMPL_ABT_piles
+cmsel,r,COMPL_ABT_lwPiles
+ksll,s
+cm,COMPK_temp,kp
+cm,COMPL_temp,line
+*get,ymn,kp,,mnloc,y
+*get,ymx,kp,,mxloc,y
+
+cmsel,s,COMPK_temp
+ksel,r,loc,y,ymn
+ksel,r,loc,x,x_tw
+cmsel,s,COMPL_temp
+lslk,r
+refPile_lmn=lsnext(0)
+
+cmsel,s,COMPK_temp
+ksel,r,loc,y,ymx
+ksel,r,loc,x,x_tw
+cmsel,s,COMPL_temp
+lslk,r
+refPile_lmx=lsnext(0)
+
+lsel,s,line,,refPile_lmn
+esll,s
+nsle,s,active
+cm,COMPN_refPile_lmn,node
+
+
+! Couple longitudinal wall piles to transversal wall reference piles
+cmsel,s,_local_COMPL_ABT_piles
+cmsel,r,COMPL_ABT_lwPiles
+lsel,u,line,,refPile_tmn
+lsel,u,line,,refPile_tmx
+cm,COMPL_temp,line
+*get,lc,line,,count
+ln=0
+*do,nthLine,1,lc,1
+    cmsel,s,COMPL_temp
+    ln=lsnext(ln)
+    lsel,s,line,,ln
+    esll,s
+    nsle,s,active
+    *get,nc,node,,count
+    cm,COMPN_temp,node
+    nn=0
+    *do,nthNode,1,nc,1
+        cmsel,s,COMPN_temp
+        nn=ndnext(nn)
+        cmsel,s,COMPN_refPile_t
+        nsel,a,node,,nn
+        nref=nnear(nn)
+        safe_cp,'UX',nref,nn
+    *enddo
+*enddo
+
+
+! Couple transversal wall piles to reference longitudinal pile
+cmsel,s,_local_COMPL_ABT_piles
+cmsel,r,COMPL_ABT_twPiles
+lsel,a,line,,refPile_lmx
+cm,COMPL_temp,line
+*get,lc,line,,count
+ln=0
+*do,nthLine,1,lc,1
+    cmsel,s,COMPL_temp
+    ln=lsnext(ln)
+    lsel,s,line,,ln
+    esll,s
+    nsle,s,active
+    *get,nc,node,,count
+    cm,COMPN_temp,node
+    nn=0
+    *do,nthNode,1,nc,1
+        cmsel,s,COMPN_temp
+        nn=ndnext(nn)
+        cmsel,s,COMPN_refPile_lmn
+        nsel,a,node,,nn
+        nref=nnear(nn)
+        safe_cp,'UY',nref,nn
+    *enddo
+*enddo
+
+/eof
+! Couple transversal wall piles to reference longitudinal pile
+cmsel,s,_local_COMPL_ABT_piles
+cmsel,r,COMPL_ABT_twPiles
+lsel,u,line,,refPile_tmn
+cm,COMPL_temp,line
+*get,lc,line,,count
+ln=0
+*do,nthLine,1,lc,1
+    cmsel,s,COMPL_temp
+    ln=lsnext(ln)
+    lsel,s,line,,ln
+    esll,s
+    nsle,s,active
+    *get,nc,node,,count
+    cm,COMPN_temp,node
+    nn=0
+    *do,nthNode,1,nc,1
+        cmsel,s,COMPN_temp
+        nn=ndnext(nn)
+        cmsel,s,COMPN_refPile_tmn
+        nsel,a,node,,nn
+        nref=nnear(nn)
+        safe_cp,'UY',nref,nn
+    *enddo
+*enddo
+
+
+

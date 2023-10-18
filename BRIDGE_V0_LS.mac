@@ -1,0 +1,95 @@
+! BRIDGE_V0_LS
+
+
+! Accumulate pressures & loads
+ALLSEL
+SFCUM,ALL,ADD
+FCUM,ADD
+
+! Initialize nodal attribute arrays (number, location, apportioned area)
+*del,NLIST_num
+*del,NLIST_x
+*del,NLIST_y
+*del,NLIST_z
+*vget,NLIST_num,node,,nlist
+*vget,NLIST_x,node,,loc,x
+*vget,NLIST_y,node,,loc,y
+*vget,NLIST_z,node,,loc,z
+*get,NLIST_count,parm,NLIST_num,dim,x
+*del,NLIST_apportioned
+*dim,NLIST_apportioned,,NLIST_count
+esel,s,type,,TYPE_SHELL181
+nsle,s,active
+*do,nthNode,1,NLIST_count,1
+    nodenum=NLIST_num(nthNode)
+    NLIST_apportioned(nthNode)=arnode(nodenum)
+*enddo
+allsel
+
+! Manually correct apportioned areas for abutments pile curtain nodes
+*if,GEO_ABT1_type,eq,3,or,GEO_ABT2_type,eq,3,then
+    pile_manual_apportioned=FEM_PileELength*(SEC_ABT_pile_d-2*GEO_ABT_pileOvlap)
+    cmsel,s,COMPN_ABT1_piles
+    cmsel,a,COMPN_ABT2_piles
+    *get,nmxd,node,,num,maxd
+    *del,nlist_matches
+    *dim,nlist_matches,,nmxd
+    *get,nc,node,,count
+    nn=0
+    *do,nthNode,1,nc,1
+        nn=ndnext(nn)
+        *del,matches
+        *voper,matches,NLIST_num,eq,nn
+        *vscfun,idx,first,matches
+        nlist_matches(nn)=idx
+        NLIST_apportioned(idx)=pile_manual_apportioned
+    *enddo
+*endif
+
+nthLoadStep=0
+
+!! 5.3.1 FIRST LOAD STEP: DEAD LOADS                                                              !!
+!!                                                                                                !!
+! Apply loads
+BRIDGE_V0_DEADLOADS
+
+! Write load step
+*if,SOLU_type,eq,0,then
+    ! Static
+    nthLoadStep=nthLoadStep+1
+    allsel
+    antype,0
+    outres,erase
+    outres,all,last
+    nsubst,SOLU_nsubst
+    lswrite,nthLoadStep
+*elseif,SOLU_type,eq,1,then
+    ! Transient
+    nthLoadStep=nthLoadStep+1
+    allsel
+    antype,4,new
+    trnopt,full
+    timint,off
+    lumpm,0
+    kbc,1
+    outres,erase
+    outres,all,last
+
+    time,SOLU_dlTime
+    !deltim,1,1,1
+    nsubst,SOLU_nsubst
+    lswrite,nthLoadStep
+*endif
+!
+!
+!! 5.3.2 SUBSEQUENT LOAD STEPS: DEAD+LIVE LOADS                                                   !!
+!!                                                                                                !!
+*if,SOLU_type,eq,0,then
+    ! Static
+    BRIDGE_V0_LSLIVE
+*elseif,SOLU_type,eq,1,then
+    ! Transient
+    BRIDGE_V0_LSTRANS
+*endif
+
+

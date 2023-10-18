@@ -1,0 +1,12 @@
+! BRIDGE_V0_TAKEPIC, FileName, FileSize, VectorMode, graphMode
+! BRIDGE_V0_TAKEPIC,     arg1,     arg2,       arg3,      arg4
+
+! Switch to image folder
+/cwd,'%PATH_img(1)%'
+! Capture image
+TAKEPIC,arg1,arg2,arg3,arg4
+! Revert to main folder
+/cwd,'%PATH_main(1)%'
+
+
+

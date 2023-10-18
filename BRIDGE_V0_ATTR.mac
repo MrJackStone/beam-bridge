@@ -1,0 +1,1301 @@
+! BRIDGE_V0_ATTR
+
+*if,GEO_deckRadius,ne,0,then
+    GEO_chordOff=(1/2)*sqrt(4*(GEO_deckRadius**2)-(GEO_deckLength**2))
+*else
+    GEO_chordOff=0
+*endif
+
+! Solution type (default: static)
+*get,parType,parm,SOLU_type,type
+*if,parType,ne,0,then
+    SOLU_type=0
+*else
+    *if,SOLU_type,ne,0,and,SOLU_type,ne,1,then
+        SOLU_type=0
+    *endif
+*endif
+
+*get,parType,parm,SOLU_nsubst,type
+*if,parType,ne,0,then
+    SOLU_nsubst=20
+*elseif,SOLU_nsubst,le,0,then
+    SOLU_nsubst=20
+*endif
+
+!!                                                                                                !!
+!!                                                                                                !!
+!! 2. PREPARATION                                                                                 !!
+!!                                                                                                !!
+!!                                                                                                !!
+/prep7
+
+! Create results and images directories
+mkdirs,1
+
+!!                                                                                                !!
+!! 2.0 CONSTANTS                                                                                  !!
+!!                                                                                                !!
+pi=acos(-1)
+
+! Element size for pile soil springs
+FEM_springL=0.5
+
+! Element size for abutment springs (soil)
+FEM_ABT_springL=0.5*(FEM_ABT_esize**2)
+
+! Soil elastic modulus
+MAT_Soil_E=1e10                                                       !! MAT_Soil_E=1e10*FEM_PileELength
+
+! Springs
+SEC_VSOIL_area=(MAT_Soil_kv*FEM_springL*FEM_PileELength)/MAT_Soil_E   !! SEC_VSOIL_area=(MAT_Soil_kv*FEM_springL)/MAT_Soil_E
+SEC_HSOIL_area=(MAT_Soil_kh*FEM_springL*FEM_PileELength)/MAT_Soil_E   !! SEC_HSOIL_area=(MAT_Soil_kh*FEM_springL)/MAT_Soil_E
+SEC_PSOIL_area=(MAT_Soil_kp*FEM_springL)/MAT_Soil_E
+SEC_SPRING_k=1E10
+
+! Mesostructure types
+CTE_MESO_frame=1
+CTE_MESO_tube=2
+CTE_MESO_tcolumn=3
+CTE_MESO_abutment=4
+!
+!
+!
+!!                                                                                                !!
+!! 2.1 ATTRIBUTES                                                                                 !!
+!!                                                                                                !!
+! Materials
+MAT_Girder=1
+MAT_Slab=2
+MAT_Column=3
+MAT_FrameGirder=4
+MAT_GradeBeam=5
+MAT_PileCap=6
+MAT_Pile=7
+MAT_Abutment=8
+MAT_Approach=9
+MAT_Soil=10
+MAT_ABT_Soil=11
+MAT_Spring=12
+MAT_Matrix=13
+MAT_Gerber=14
+
+! Element types
+TYPE_BEAM188=1
+TYPE_SHELL181=2
+TYPE_LINK180=3
+TYPE_COMBIN14=4
+TYPE_MATRIX27=5
+TYPE_MPC184=6
+
+! Cross-sections
+SEC_GIRDER_num=1
+SEC_SLAB_num=2
+SEC_COLUMN_num=3
+SEC_FRAMEGIRDER_num=4
+SEC_PILECAP_num=5
+SEC_GRADEBEAM_num=6
+SEC_PILE_num=7
+SEC_VSOIL_num=8
+SEC_HSOIL_num=9
+SEC_SPRING_num=10
+SEC_Bearing_num=11
+SEC_BearingXZ_num=12
+SEC_BearingYZ_num=13
+SEC_FRICTION_num=14
+SEC_ABT_longWall=15
+SEC_ABT_tranWall=16
+SEC_ABT_column=17
+SEC_ABT_beam=18
+SEC_ABT_wing=19
+SEC_ABT_appSlab=20
+SEC_ABT_pile=21
+SEC_ABT_pileCap=22
+REAL_ABT_kv=23
+REAL_ABT_kh=24
+SEC_COLWALL=25
+SEC_COLCAP=26
+SEC_PSOIL_num=27
+SEC_GERBER=28
+SEC_CONSOLE=29
+
+! Coordinate systems
+CS_base=11
+CS_ABT1=12
+CS_ABT2=13
+CS_deck=20
+
+!! 2.1.1 MATERIALS                                                                                !!
+!!                                                                                                !!
+
+!! 2.1.1.1 GIRDER                                                                                 !!
+*if,MAT_Girder_type,EQ,0,THEN
+    concrete, MAT_Girder, MAT_Girder_fck, MAT_Girder_dens, MAT_Girder_Poisson,,1
+*elseif,MAT_Girder_type,EQ,1,THEN
+    MAT_Girder_E=2e11
+    steel, MAT_Girder,MAT_Girder_E,,,,,,1 !!
+*endif
+!
+!! 2.1.1.2 SLAB                                                                                   !!
+concrete, MAT_Slab,        MAT_Slab_fck,        MAT_Slab_dens,        MAT_Slab_Poisson       ,,1
+!
+!! 2.1.1.3 COLUMN                                                                                 !!
+concrete, MAT_Column,      MAT_Column_fck,      MAT_Column_dens,      MAT_Column_Poisson     ,,1
+!
+!! 2.1.1.4 FRAME GIRDER                                                                           !!
+concrete, MAT_FrameGirder, MAT_FrameGirder_fck, MAT_FrameGirder_dens, MAT_FrameGirder_Poisson,,1
+!
+!! 2.1.1.5 GRADE BEAM                                                                             !!
+concrete, MAT_GradeBeam,   MAT_GradeBeam_fck,   MAT_GradeBeam_dens,   MAT_GradeBeam_Poisson  ,,1
+!
+!! 2.1.1.6 PILE CAPS                                                                              !!
+concrete, MAT_PileCap,     MAT_PileCap_fck,     MAT_PileCap_dens,     MAT_PileCap_Poisson    ,,1
+!
+!! 2.1.1.7 PILE                                                                                   !!
+concrete, MAT_Pile,        MAT_Pile_fck,        MAT_Pile_dens,        MAT_Pile_Poisson       ,,1
+!
+!! 2.1.1.8 ABUTMENT                                                                               !!
+concrete, MAT_Abutment,    MAT_Abutment_fck,    MAT_Abutment_dens,    MAT_Abutment_Poisson   ,,1
+!
+!! 2.1.1.9 APPROACH SLABS                                                                         !!
+concrete, MAT_Approach,    MAT_Approach_fck,    MAT_Approach_dens,    MAT_Approach_Poisson   ,,1
+!
+!! 2.1.1.10 GERBER CONNECTION (CANTILEVER + CONSOLE)                                              !!
+concrete, MAT_Gerber,      MAT_Gerber_fck,      MAT_Gerber_dens,      MAT_Gerber_Poisson   ,,1
+!
+!! 2.1.1.11 SOIL (FOUNDATION)                                                                     !!
+MP,EX,MAT_Soil,MAT_Soil_E
+MP,PRXY,MAT_Soil,MAT_Soil_Poisson
+*if,MAT_Soil_sadm,ne,0,then
+    MAT_Soil_sigScale=pi*(PILE_d/2)*FEM_PileELength/SEC_HSOIL_area
+    tb,biso,MAT_Soil
+    tbdata,,MAT_Soil_sadm*MAT_Soil_sigScale
+*endif
+!
+!! 2.1.1.12 SOIL (INSIDE ABUTMENTS)                                                               !!
+MAT_ABT_Soil_E=1e9
+MP,EX,MAT_ABT_Soil,MAT_ABT_Soil_E
+MP,PRXY,MAT_ABT_Soil,MAT_ABT_Soil_Poisson
+
+! Active earth pressure coefficient (Ka)
+*afun,deg
+MAT_ABT_Soil_ka=tan(45-(MAT_ABT_Soil_fi/2))
+*afun,rad
+!
+!! 2.1.1.13 SPRING                                                                                !!
+MAT_Spring_E=1e10
+MP,EX,MAT_Spring,MAT_Spring_E
+!
+!! 2.1.1.14 Bearing & FRICTION (MATRIX27 ELEMENTS)                                               !!
+MAT_Matrix_E=1e10
+MP,EX,MAT_Matrix,MAT_Matrix_E
+!
+!
+!! 2.1.2 ELEMENT TYPES                                                                            !!
+!!                                                                                                !!
+! Girders, columns: BEAM188
+ET,TYPE_BEAM188,BEAM188
+KEYOPT,TYPE_BEAM188,3,2
+
+! Slab, pile caps: SHELL181
+ET,TYPE_SHELL181,SHELL181
+
+! Soil, springs: LINK180
+ET,TYPE_LINK180,LINK180
+
+! Springs: COMBIN14
+ET,TYPE_COMBIN14,COMBIN14
+KEYOPT,TYPE_COMBIN14,1,0
+KEYOPT,TYPE_COMBIN14,2,0
+KEYOPT,TYPE_COMBIN14,3,0
+
+! Bearing/friction: MATRIX27
+ET,TYPE_MATRIX27,MATRIX27
+KEYOPT,TYPE_MATRIX27,2,0
+KEYOPT,TYPE_MATRIX27,3,4
+
+! Rigid link
+et,TYPE_MPC184,184
+keyopt,TYPE_MPC184,1,0
+!
+!
+!! 2.1.3 CROSS-SECTIONS                                                                           !!
+!!                                                                                                !!
+
+!! 2.1.3.1 GIRDER                                                                                 !!
+*if,MAT_Girder_type,EQ,0,THEN
+   ! Write custom cross-section file
+   SEC_GIRDER,GIRDER_bfs,GIRDER_bfi,GIRDER_d,GIRDER_tfs,GIRDER_tfi,GIRDER_tw,GIRDER_hs,GIRDER_hi,GIRDER_hw,GIRDER_name
+   ! Update input geometry
+   GIRDER_bfs=SEC_GIRDER_VAR_bfs
+   GIRDER_bfi=SEC_GIRDER_VAR_bfi
+   GIRDER_d=SEC_GIRDER_VAR_d
+   GIRDER_tfs=SEC_GIRDER_VAR_tfs
+   GIRDER_tfi=SEC_GIRDER_VAR_tfi
+   GIRDER_tw=SEC_GIRDER_VAR_tw
+   GIRDER_hs=SEC_GIRDER_VAR_hs
+   GIRDER_hi=SEC_GIRDER_VAR_hi
+   GIRDER_hw=SEC_GIRDER_VAR_hw
+   ! Create cross-section
+   SECTYPE,SEC_GIRDER_num,BEAM,MESH,GIRDER_name
+   SECREAD,GIRDER_name,SECT,,MESH
+   *if,SEC_offset,EQ,1,THEN
+      SECOFFSET,USER,GIRDER_bfi/2,GIRDER_d
+   *endif
+*elseif,MAT_Girder_type,EQ,1,THEN
+   ! Create section from database
+   CEDISAVS,SEC_GIRDER_num,GIRDER_name,2
+   GIRDER_bfs=CEDISAVS_VAR_bf
+   GIRDER_bfi=CEDISAVS_VAR_bf
+   GIRDER_d=CEDISAVS_VAR_d
+   GIRDER_tfs=CEDISAVS_VAR_tf
+   GIRDER_tfi=CEDISAVS_VAR_tf
+   GIRDER_tw=CEDISAVS_VAR_tw
+   GIRDER_hs=0
+   GIRDER_hi=0
+   GIRDER_hw=CEDISAVS_VAR_d-2*CEDISAVS_VAR_tf
+   !! *if,SEC_offset,EQ,1,THEN
+      SECOFFSET,USER,,GIRDER_d
+   !! *endif
+*endif
+!
+!! 2.1.3.2 SLAB                                                                                   !!
+SECTYPE,SEC_SLAB_num,SHELL,,SLAB_name
+SECDATA,SLAB_t,MAT_Slab
+!! *if,SEC_offset,EQ,1,THEN
+   SECOFFSET,BOT
+!! *endif
+!
+!! 2.1.3.3 CANTILEVER (GERBER CONNECTION)                                                         !!
+sectype,SEC_GERBER,beam,rect,'GERBER',2
+secdata,GERBER_b,GERBER_h
+*if,SEC_offset,eq,1,then
+   secoffset,user,,GERBER_h/2
+*endif
+!
+!! 2.1.3.4 CONSOLE (GERBER CONNECTION)                                                            !!
+sectype,SEC_CONSOLE,beam,rect,'CONSOLE',2
+secdata,CONSOLE_b,CONSOLE_h
+*if,SEC_offset,eq,1,then
+   secoffset,user,,CONSOLE_h/2
+*endif
+!
+!! 2.1.3.5 COLUMNS                                                                                !!
+SECTYPE,SEC_COLUMN_num,BEAM,RECT,COLUMN_name,2
+SECDATA,COLUMN_cx,COLUMN_cy
+!
+!! 2.1.3.6 FRAME GIRDER                                                                           !!
+SECTYPE,SEC_FRAMEGIRDER_num,BEAM,RECT,FRAMEGIRDER_name,2
+SECDATA,FRAMEGIRDER_b,FRAMEGIRDER_h
+*if,SEC_offset,EQ,1,THEN
+   SECOFFSET,USER,,-FRAMEGIRDER_h/2
+*endif
+!
+!! 2.1.3.7 PILE CAPS                                                                              !!
+SECTYPE,SEC_PILECAP_num,SHELL,,PILECAP_name
+SECDATA,PILECAP_h,MAT_PileCap
+*if,SEC_offset,EQ,1,THEN
+   SECOFFSET,TOP
+*endif
+!
+!! 2.1.3.8 GRADE BEAM                                                                             !!
+SECTYPE,SEC_GRADEBEAM_num,BEAM,RECT,GRADEBEAM_name,2
+SECDATA,GRADEBEAM_b,GRADEBEAM_h
+*if,SEC_offset,EQ,1,THEN
+   SECOFFSET,USER,,GRADEBEAM_h/2
+*endif
+!
+!! 2.1.3.9 PILES                                                                                  !!
+SECTYPE,SEC_PILE_num,BEAM,CSOLID,PILE_name,2
+SECDATA,PILE_d/2
+!
+!! 2.1.3.10 SOIL: VERTICAL STIFFNESS                                                              !!
+R,SEC_VSOIL_num,SEC_VSOIL_area,,0
+!
+!! 2.1.3.11 SOIL: HORIZONTAL STIFFNESS                                                            !!
+R,SEC_HSOIL_num,SEC_HSOIL_area,,0
+!
+!! 2.1.3.12 SOIL: VERTICAL STIFFNESS AT PILE END                                                  !!
+R,SEC_PSOIL_num,SEC_PSOIL_area,,-1
+!
+!! 2.1.3.13 SPRINGS                                                                               !!
+R,SEC_SPRING_num,SEC_SPRING_k
+!
+!! 2.1.3.14 BEARING (XYZ)                                                                         !!
+! Set stiffness matrix values:
+!    C1 = KX     C19 =-KY     C58 = KX
+!    C7 =-KX     C24 = KZ     C64 = KY
+!    C13= KY     C30 =-KZ     C69 = KZ
+!    Remaining values = 0
+KX=FEM_Bearing_kh
+KY=FEM_Bearing_kh
+KZ=FEM_Bearing_kv
+R,SEC_Bearing_num,   KX,  0,  0,  0,  0,   0  ! C1  - C6
+RMORE,              -KX,  0,  0,  0,  0,   0  ! C7  - C12
+RMORE,               KY,  0,  0,  0,  0,   0  ! C13 - C18
+RMORE,              -KY,  0,  0,  0,  0,  KZ  ! C19 - C24
+RMORE,                0,  0,  0,  0,  0, -KZ  ! C25 - C30
+RMORE,                0,  0,  0,  0,  0,   0  ! C31 - C36
+RMORE,                0,  0,  0,  0,  0,   0  ! C36 - C42
+RMORE,                0,  0,  0,  0,  0,   0  ! C43 - C48
+RMORE,                0,  0,  0,  0,  0,   0  ! C49 - C54
+RMORE,                0,  0,  0, KX,  0,   0  ! C55 - C60
+RMORE,                0,  0,  0, KY,  0,   0  ! C61 - C66
+RMORE,                0,  0, KZ,  0,  0,   0  ! C67 - C72
+RMORE,                0,  0,  0,  0,  0,   0  ! C73 - C78
+!
+!! 2.1.3.15 BEARING (XZ)                                                                          !!
+! Set stiffness matrix values:
+!    C1 = KX     C19 =-KY     C58 = KX
+!    C7 =-KX     C24 = KZ     C64 = KY
+!    C13= KY     C30 =-KZ     C69 = KZ
+!    Remaining values = 0
+KX=FEM_Bearing_kh
+KY=0
+KZ=FEM_Bearing_kv
+R,SEC_BearingXZ_num, KX,  0,  0,  0,  0,   0  ! C1  - C6
+RMORE,              -KX,  0,  0,  0,  0,   0  ! C7  - C12
+RMORE,               KY,  0,  0,  0,  0,   0  ! C13 - C18
+RMORE,              -KY,  0,  0,  0,  0,  KZ  ! C19 - C24
+RMORE,                0,  0,  0,  0,  0, -KZ  ! C25 - C30
+RMORE,                0,  0,  0,  0,  0,   0  ! C31 - C36
+RMORE,                0,  0,  0,  0,  0,   0  ! C36 - C42
+RMORE,                0,  0,  0,  0,  0,   0  ! C43 - C48
+RMORE,                0,  0,  0,  0,  0,   0  ! C49 - C54
+RMORE,                0,  0,  0, KX,  0,   0  ! C55 - C60
+RMORE,                0,  0,  0, KY,  0,   0  ! C61 - C66
+RMORE,                0,  0, KZ,  0,  0,   0  ! C67 - C72
+RMORE,                0,  0,  0,  0,  0,   0  ! C73 - C78
+!
+!! 2.1.3.16 BEARING (YZ)                                                                          !!
+! Set stiffness matrix values:
+!    C1 = KX     C19 =-KY     C58 = KX
+!    C7 =-KX     C24 = KZ     C64 = KY
+!    C13= KY     C30 =-KZ     C69 = KZ
+!    Remaining values = 0
+KX=0
+KY=FEM_Bearing_kh
+KZ=FEM_Bearing_kv
+R,SEC_BearingYZ_num, KX,  0,  0,  0,  0,   0  ! C1  - C6
+RMORE,              -KX,  0,  0,  0,  0,   0  ! C7  - C12
+RMORE,               KY,  0,  0,  0,  0,   0  ! C13 - C18
+RMORE,              -KY,  0,  0,  0,  0,  KZ  ! C19 - C24
+RMORE,                0,  0,  0,  0,  0, -KZ  ! C25 - C30
+RMORE,                0,  0,  0,  0,  0,   0  ! C31 - C36
+RMORE,                0,  0,  0,  0,  0,   0  ! C36 - C42
+RMORE,                0,  0,  0,  0,  0,   0  ! C43 - C48
+RMORE,                0,  0,  0,  0,  0,   0  ! C49 - C54
+RMORE,                0,  0,  0, KX,  0,   0  ! C55 - C60
+RMORE,                0,  0,  0, KY,  0,   0  ! C61 - C66
+RMORE,                0,  0, KZ,  0,  0,   0  ! C67 - C72
+RMORE,                0,  0,  0,  0,  0,   0  ! C73 - C78
+!
+!! 2.1.3.17 GIRDER-SLAB FRICTION                                                                  !!
+! Set stiffness matrix values:
+!    C1=KX     C19=-KY   C58=KX
+!    C7=-KX    C24=KZ    C64=KY
+!    C13=KY    C30=-KZ   C69=KZ
+!    Remaining values = 0
+KX=FEM_Bearing_kh*10
+KY=FEM_Bearing_kh
+KZ=FEM_Bearing_kv
+R,SEC_FRICTION_num,  KX,  0,  0,  0,  0,   0  ! C1  - C6
+RMORE,              -KX,  0,  0,  0,  0,   0  ! C7  - C12
+RMORE,               KY,  0,  0,  0,  0,   0  ! C13 - C18
+RMORE,              -KY,  0,  0,  0,  0,  KZ  ! C19 - C24
+RMORE,                0,  0,  0,  0,  0, -KZ  ! C25 - C30
+RMORE,                0,  0,  0,  0,  0,   0  ! C31 - C36
+RMORE,                0,  0,  0,  0,  0,   0  ! C36 - C42
+RMORE,                0,  0,  0,  0,  0,   0  ! C43 - C48
+RMORE,                0,  0,  0,  0,  0,   0  ! C49 - C54
+RMORE,                0,  0,  0, KX,  0,   0  ! C55 - C60
+RMORE,                0,  0,  0, KY,  0,   0  ! C61 - C66
+RMORE,                0,  0, KZ,  0,  0,   0  ! C67 - C72
+RMORE,                0,  0,  0,  0,  0,   0  ! C73 - C78
+!
+!! 2.1.3.18 ABUTMENTS                                                                             !!
+
+! LONGITUDINAL WALLS
+sectype,SEC_ABT_longWall,shell,,'ABT_LW'
+secdata,SEC_ABT_longWall_t,MAT_Abutment
+
+! TRANSVERSAL WALL
+sectype,SEC_ABT_tranWall,shell,,'ABT_TW'
+secdata,SEC_ABT_tranWall_t,MAT_Abutment
+
+! BEAM
+sectype,SEC_ABT_beam,shell,,'ABT_BEAM'
+secdata,SEC_ABT_beam_W,MAT_Abutment
+
+! COLUMNS
+sectype,SEC_ABT_column,shell,,'ABT_COL'
+secdata,SEC_ABT_col_W,MAT_Abutment
+
+! WINGS
+sectype,SEC_ABT_wing,shell,,'ABT_WING'
+secdata,SEC_ABT_wing_t,MAT_Abutment
+
+! APPROACH SLAB
+sectype,SEC_ABT_appSlab,shell,,'ABT_SLAB'
+secdata,SEC_ABT_appSlab_t,MAT_Approach
+
+! PILES
+sectype,SEC_ABT_pile,beam,csolid,'ABT_PILE',2
+secdata,SEC_ABT_pile_d/2
+
+! PILE CAP
+sectype,SEC_ABT_pileCap,shell,,'ABT_SLAB'
+secdata,SEC_ABT_pileCap_h,MAT_Abutment
+
+! VERTICAL SOIL SPRINGS
+REAL_ABT_kv_area=(MAT_ABT_Soil_kv*FEM_ABT_springL)/MAT_ABT_Soil_E
+R,REAL_ABT_kv,REAL_ABT_kv_area,,-1
+
+! HORIZONTAL SOIL SPRINGS
+REAL_ABT_kh_area=(MAT_ABT_Soil_kh*FEM_ABT_springL)/MAT_ABT_Soil_E
+R,REAL_ABT_kh,REAL_ABT_kh_area,,-1
+!
+!! 2.1.3.19 TUBULAR COLUMN WALLS                                                                  !!
+SECTYPE,SEC_COLWALL,SHELL,,'COLWALL'
+SECDATA,COLUMN_tWall,MAT_Column
+!
+!! 2.1.3.20 TUBULAR COLUMN CAP                                                                    !!
+SECTYPE,SEC_COLCAP,SHELL,,'COLCAP'
+SECDATA,COLUMN_tCap,MAT_Column
+!
+!! 2.1.4 COORDINATE SYSTEMS                                                                       !!
+!!                                                                                                !!
+! Reference CS
+LOCAL,CS_base,CART
+csys,0
+local,CS_deck,cylin,GEO_deckLength/2,-GEO_chordOff,0
+csys,0
+!
+!
+!
+!!                                                                                                !!
+!! 2.2 GEOMETRY                                                                                   !!
+!!                                                                                                !!
+
+!! 2.2.1 SUPERSTRUCTURE                                                                           !!
+!!                                                                                                !!
+! Determine position of the girders
+*if,GEO_uniGirderSpacing,EQ,1,THEN
+   totalDist=GEO_deckWidth-(GEO_leftSlabHang+GEO_rightSlabHang)
+   girderDist=totalDist/(GEO_girderCount-1)
+   *del,GEO_girderY
+   *dim,GEO_girderY,ARRAY,GEO_girderCount
+   yPos=(-GEO_deckWidth/2)+GEO_leftSlabHang
+   *do,nthGirder,1,GEO_girderCount,1
+      GEO_girderY(nthGirder)=yPos
+      yPos=yPos+girderDist
+   *enddo
+*endif
+*vfun,GEO_girderY,DSORT,GEO_girderY
+
+! Determine position of the supports
+*if,GEO_supports,GT,1,THEN
+   ! Evenly spaced supports
+   supportDist=GEO_deckLength/(GEO_supportCount-1)
+   *del,GEO_supportX
+   *dim,GEO_supportX,ARRAY,GEO_supportCount
+   xPos=0
+   *do,nthSupport,1,GEO_supportCount,1
+      GEO_supportX(nthSupport)=xPos
+      xPos=xPos+supportDist
+   *enddo
+*endif
+
+! Location of first and last supports
+s1Offset=GEO_supportX(1)
+s2Offset=GEO_supportX(GEO_supportCount)
+
+! Calculate span lengths
+GEO_spanCount=GEO_supportCount-1
+*del,GEO_spanLengths
+*dim,GEO_spanLengths,ARRAY,GEO_spanCount
+*do,nthSpan,1,GEO_spanCount,1
+   spanLength=GEO_supportX(nthSpan+1)-GEO_supportX(nthSpan)
+   GEO_spanLengths(nthSpan)=ABS(spanLength)
+*enddo
+*vscfun,minSpanLength,MIN,GEO_spanLengths
+*vscfun,maxSpanLength,MAX,GEO_spanLengths
+
+! Calculate positions of midspans
+GEO_midspanCount=GEO_supportCount-1
+*del,GEO_midspanX
+*dim,GEO_midspanX,ARRAY,GEO_midspanCount
+*do,nthMid,1,GEO_midspanCount,1
+   x1=GEO_supportX(nthMid)
+   x2=GEO_supportX(nthMid+1)
+   xMid=(x1+x2)/2
+   GEO_midspanX(nthMid)=xMid
+*enddo
+
+! Calculate wheel transversal offsets
+LOAD_wheelCount=LOAD_ltCount*2
+*del,LOAD_ltWheelOff
+*dim,LOAD_ltWheelOff,,LOAD_wheelCount
+*do,nthLine,1,LOAD_ltCount,1
+    LOAD_ltWheelOff(nthLine*2-1)=LOAD_ltLineOff(nthLine)-(LOAD_ltWidth/2)
+    LOAD_ltWheelOff(nthLine*2)=LOAD_ltLineOff(nthLine)+(LOAD_ltWidth/2)
+*enddo
+
+! Combine arrays for longitudinal sectioning boolean operations
+*del,tmpArr
+*dim,tmpArr,,3
+tmpArr(1)= (-GEO_deckWidth/2)+GEO_footpathLeft, (GEO_deckWidth/2)-GEO_footpathRight, 0
+arrjoin, 'partial_yCoords', 'LOAD_ltWheelOff', 'tmpArr'
+arruniq,'partial_yCoords','partial_XZslice',1
+*get,partial_XZsliceCount,parm,partial_XZslice,dim,x
+
+! Combine arrays for longitudinal sectioning boolean operations
+arrjoin, 'yCoords', 'partial_XZslice', 'GEO_girderY'
+arruniq,'yCoords','XZslice',1
+*get,XZsliceCount,parm,XZslice,dim,x
+
+! Calculate X coordinates of gerber connections
+*voper,activeGerber,GEO_gerberL,gt,0
+*vscfun,GEO_gerberCount,sum,activeGerber
+*if,GEO_gerberCount,eq,0,then
+    GEO_gerberStatus=0
+*endif
+
+*if,GEO_gerberStatus,eq,1,then
+    *del,GEO_gerberX_sub
+    *del,GEO_gerberX_add
+    *dim,GEO_gerberX_sub,,GEO_supportCount
+    *dim,GEO_gerberX_add,,GEO_supportCount
+    *del,GEO_gerberX_i
+    *del,GEO_gerberX_j
+    *del,GEO_gerberX_m
+    *del,GEO_gerberX_n
+
+    ! X coordinate at tubular column faces
+    *voper,GEO_gerberX_sub,GEO_supportX,sub,GEO_columnDepth/2
+    *voper,GEO_gerberX_add,GEO_supportX,add,GEO_columnDepth/2
+
+    *vmask,activeGerber
+    *vfun,GEO_gerberX_m,comp,GEO_gerberX_sub
+    *vmask,activeGerber
+    *vfun,GEO_gerberX_n,comp,GEO_gerberX_add
+
+    ! X coordinate at gerber tips
+    *voper,GEO_gerberX_sub,GEO_gerberX_sub,sub,GEO_gerberL
+    *voper,GEO_gerberX_add,GEO_gerberX_add,add,GEO_gerberL
+
+    *vmask,activeGerber
+    *vfun,GEO_gerberX_i,comp,GEO_gerberX_sub
+    *vmask,activeGerber
+    *vfun,GEO_gerberX_j,comp,GEO_gerberX_add
+*endif
+
+! Y chord offset for curved deck
+*if,GEO_deckRadius,ne,0,then
+    GEO_chordOff=(1/2)*sqrt(4*(GEO_deckRadius**2)-(GEO_deckLength**2))
+*else
+    GEO_chordOff=0
+*endif
+
+! Calculate angular positions: supports, midspans, gerber connections
+BRIDGE_V0_XTOCHI, 'GEO_supportChi', 'GEO_supportX'
+GEO_supportChi_0=GEO_supportChi(1)
+GEO_supportChi_L=GEO_supportChi(GEO_supportCount)
+BRIDGE_V0_XTOCHI, 'GEO_midspanChi', 'GEO_midspanX'
+*if,GEO_gerberStatus,eq,1,then
+    BRIDGE_V0_XTOCHI, 'GEO_gerberChi_i', 'GEO_gerberX_i'
+    BRIDGE_V0_XTOCHI, 'GEO_gerberChi_j', 'GEO_gerberX_j'
+    BRIDGE_V0_XTOCHI, 'GEO_gerberChi_m', 'GEO_gerberX_m'
+    BRIDGE_V0_XTOCHI, 'GEO_gerberChi_n', 'GEO_gerberX_n'
+*endif
+!
+!
+!! 2.2.2 MESOSTRUCTURE                                                                            !!
+!!                                                                                                !!
+! Check width of the frame
+leftGirderY=GEO_girderY(GEO_girderCount)
+rightGirderY=GEO_girderY(1)
+minFrameWidth=rightGirderY-leftGirderY
+*if,GEO_frameWidth,LT,minFrameWidth,THEN
+   GEO_frameWidth=minFrameWidth
+   *msg,GEO_frameWidth
+WARNING: Frame width incompatible with girder layout. GEO_FRAMEWIDTH increased to %G.
+*endif
+
+! Calculate length of the left & right frame girder cantilevers
+GEO_frameGirderLeft=(GEO_frameWidth-GEO_columnSpacing)/2
+GEO_frameGirderRight=GEO_frameGirderLeft
+
+! Calculate beginning and end Y coordinates of the frame girder
+yBeg=(-GEO_columnSpacing/2)-GEO_frameGirderLeft
+yEnd=(GEO_columnSpacing/2)+GEO_frameGirderRight
+
+! Calculate column length
+*if,SEC_offset,EQ,1,THEN
+   GEO_colLength=GEO_frameHeight-FRAMEGIRDER_h
+*else
+   GEO_colLength=GEO_frameHeight
+*endif
+
+! Calculate the vertical position of the frame girder keypoints
+*if,SEC_offset,EQ,0,THEN
+   zFrameTop=0
+*elseif,SEC_offset,EQ,1,THEN
+   zFrameTop=0-GIRDER_d-FRAMEGIRDER_h
+*endif
+
+! Calculate the vertical position of the base of the columns
+zFrameBot=zFrameTop-GEO_colLength
+
+! Calculate Y coordinates of the frame girder keypoints
+*del,tempArr
+*dim,tempArr,,4
+tempArr(1)=yBeg, yEnd, -GEO_columnSpacing/2, GEO_columnSpacing/2
+arrjoin, 'yCoords','GEO_girderY', 'tempArr'
+arruniq, 'yCoords', 'GEO_frameGirderY', 1
+*get,FGKcount,PARM,GEO_frameGirderY,DIM,X
+
+! Column Y coordinates
+*del,GEO_columnY
+*dim,GEO_columnY,ARRAY,2
+*if,GEO_frameOpt,eq,0,then
+    ! Column-beam frame
+    GEO_columnY(1)=-GEO_columnSpacing/2,GEO_columnSpacing/2
+*elseif,GEO_frameOpt,eq,1,then
+    ! Tubular pier column
+    GEO_columnY(1)=-GEO_deckWidth/2,GEO_deckWidth/2
+*endif
+
+! Check compatibility between water level and column height
+*if,GEO_waterHeight,GE,GEO_colLength,THEN
+   GEO_waterHeight=GEO_colLength-0.1
+   *msg,WARN,GEO_waterHeight
+WARNING: Water level incompatible with frame height. GEO_WATERHEIGHT reduced to %G.
+*endif
+!
+!
+!! 2.2.3 INFRASTRUCTURE                                                                           !!
+!!                                                                                                !!
+! Calculate pile lengths
+*if,GEO_pileOpt,eq,0,then
+    ! Uniform lengths
+    *del,GEO_pileLengths
+    *dim,GEO_pileLengths,,GEO_SupportCount
+    *vfill,GEO_pileLengths,ramp,GEO_pileL,0
+*endif
+
+! Initialize pile position arrays
+*del,GEO_pileXL
+*dim,GEO_pileXL,ARRAY,GEO_pileCount
+*del,GEO_pileYL
+*dim,GEO_pileYL,ARRAY,GEO_pileCount
+
+! Calculate relative coordinates of the piles in the pile cap
+*if,GEO_pileCount,EQ,2,THEN
+   ! Two piles
+   *if,GEO_pileConfig,EQ,'A',THEN
+      GEO_pileXL(1)=0,0
+      GEO_pileYL(1)=-GEO_pileDist/2,GEO_pileDist/2
+      GEO_pileCapMinLength=(GEO_pileDist)+(2*PILE_d)
+      GEO_pileCapMinWidth=(2*PILE_d)
+   *elseif,GEO_pileConfig,EQ,'B',THEN
+      GEO_pileXL(1)=GEO_pileDist/2,-GEO_pileDist/2
+      GEO_pileYL(1)=0,0
+      GEO_pileCapMinLength=(2*PILE_d)
+      GEO_pileCapMinWidth=(GEO_pileDist)+(2*PILE_d)
+   *endif
+
+*elseif,GEO_pileCount,EQ,3,THEN
+   ! Three piles
+   *if,GEO_pileConfig,EQ,'A',THEN
+      GEO_pileXL(1)=0,0,0
+      GEO_pileYL(1)=-GEO_pileDist,0,GEO_pileDist
+      GEO_pileCapMinLength=(2*GEO_pileDist)+(2*PILE_d)
+      GEO_pileCapMinWidth=(2*PILE_d)
+   *elseif,GEO_pileConfig,EQ,'B',THEN
+      GEO_pileXL(1)=GEO_pileDist,0,-GEO_pileDist
+      GEO_pileYL(1)=0,0,0
+      GEO_pileCapMinLength=(2*PILE_d)
+      GEO_pileCapMinWidth=(2*GEO_pileDist)+(2*PILE_d)
+   *elseif,GEO_pileConfig,EQ,'C',THEN
+      GEO_pileXL(1)=GEO_pileDist*(SQRT(3)/6),GEO_pileDist*(SQRT(3)/6),-GEO_pileDist*(SQRT(3)/3)
+      GEO_pileYL(1)=-GEO_pileDist/2,GEO_pileDist/2,0
+      GEO_pileCapMinLength=(GEO_pileDist)+(2*PILE_d)
+      GEO_pileCapMinWidth=((2/3)*(SQRT(3))*GEO_pileDist)+(2*PILE_d)
+   *endif
+
+*elseif,GEO_pileCount,EQ,4,THEN
+   ! Four piles
+   *if,GEO_pileConfig,EQ,'A',THEN
+      GEO_pileXL(1)=GEO_pileDist/2,GEO_pileDist/2,-GEO_pileDist/2,-GEO_pileDist/2
+      GEO_pileYL(1)=-GEO_pileDist/2,GEO_pileDist/2,-GEO_pileDist/2,GEO_pileDist/2
+      GEO_pileCapMinLength=(GEO_pileDist)+(2*PILE_d)
+      GEO_pileCapMinWidth=(GEO_pileDist)+(2*PILE_d)
+   *elseif,GEO_pileConfig,EQ,'B',THEN
+      GEO_pileXL(1)=0,0,0,0
+      GEO_pileYL(1)=-1.5*GEO_pileDist,-GEO_pileDist/2,GEO_pileDist/2,1.5*GEO_pileDist
+      GEO_pileCapMinLength=(3*GEO_pileDist)+(2*PILE_d)
+      GEO_pileCapMinWidth=(2*PILE_d)
+   *elseif,GEO_pileConfig,EQ,'C',THEN
+      GEO_pileXL(1)=1.5*GEO_pileDist,GEO_pileDist/2,-GEO_pileDist/2,-1.5*GEO_pileDist
+      GEO_pileYL(1)=0,0,0,0
+      GEO_pileCapMinLength=(2*PILE_d)
+      GEO_pileCapMinWidth=(3*GEO_pileDist)+(2*PILE_d)
+   *endif
+
+*elseif,GEO_pileCount,EQ,5,THEN
+   ! Five piles
+   *if,GEO_pileConfig,EQ,'A',THEN
+      GEO_pileXL(1)=GEO_pileDist*(SQRT(2)/2),GEO_pileDist*(SQRT(2)/2),0,-GEO_pileDist*(SQRT(2)/2),-GEO_pileDist*(SQRT(2)/2)
+      GEO_pileYL(1)=-GEO_pileDist*(SQRT(2)/2),GEO_pileDist*(SQRT(2)/2),0,-GEO_pileDist*(SQRT(2)/2),GEO_pileDist*(SQRT(2)/2)
+      GEO_pileCapMinLength=((SQRT(2)*GEO_pileDist)+(2*PILE_d)
+      GEO_pileCapMinWidth=((SQRT(2)*GEO_pileDist)+(2*PILE_d)
+   *elseif,GEO_pileConfig,EQ,'B',THEN
+      GEO_pileXL(1)=(0.85065)*GEO_pileDist,(0.26287)*GEO_pileDist,(0.26287)*GEO_pileDist,-(0.68819)*GEO_pileDist,-(0.68819)*GEO_pileDist
+      GEO_pileYL(1)=0,-(0.80902)*GEO_pileDist,(0.80902)*GEO_pileDist,-(0.5)*GEO_pileDist,(0.5)*GEO_pileDist
+      GEO_pileCapMinLength=((1.61804)*GEO_pileDist)+(2*PILE_d)
+      GEO_pileCapMinWidth=((1.70130)*GEO_pileDist)+(2*PILE_d)
+   *endif
+
+*elseif,GEO_pileCount,EQ,6,THEN
+   ! Six piles
+   *if,GEO_pileConfig,EQ,'A',THEN
+      GEO_pileXL(1)=GEO_pileDist/2,GEO_pileDist/2,GEO_pileDist/2,-GEO_pileDist/2,-GEO_pileDist/2,-GEO_pileDist/2
+      GEO_pileYL(1)=-GEO_pileDist,0,GEO_pileDist,-GEO_pileDist,0,GEO_pileDist
+      GEO_pileCapMinLength=(2*GEO_pileDist)+(2*PILE_d)
+      GEO_pileCapMinWidth=(GEO_pileDist)+(2*PILE_d)
+   *elseif,GEO_pileConfig,EQ,'B',THEN
+      GEO_pileXL(1)=GEO_pileDist,GEO_pileDist,0,0,-GEO_pileDist,-GEO_pileDist
+      GEO_pileYL(1)=-GEO_pileDist/2,GEO_pileDist/2,-GEO_pileDist/2,GEO_pileDist/2,-GEO_pileDist/2,GEO_pileDist/2
+      GEO_pileCapMinLength=(GEO_pileDist)+(2*PILE_d)
+      GEO_pileCapMinWidth=(2*GEO_pileDist)+(2*PILE_d)
+   *endif
+
+*elseif,GEO_pileCount,EQ,8,THEN
+   ! Eight piles:
+   d_1=GEO_pileDist
+   d_2=GEO_pileDist/2
+   *if,GEO_pileConfig,EQ,'A',THEN
+      GEO_pileXL(1)=      d_2 ,      d_2 ,     d_2 ,     d_2 ,     -d_2 ,     -d_2 ,    -d_2 ,    -d_2
+      GEO_pileYL(1)= -1.5*d_1 , -0.5*d_1 , 0.5*d_1 , 1.5*d_1 , -1.5*d_1 , -0.5*d_1 , 0.5*d_1 , 1.5*d_1
+      GEO_pileCapMinLength=(3*GEO_pileDist)+(2*PILE_d)
+      GEO_pileCapMinWidth=(GEO_pileDist)+(2*PILE_d)
+   *elseif,GEO_pileConfig,EQ,'B',THEN
+      !GEO_pileXL(1)=GEO_pileDist,GEO_pileDist,0,0,-GEO_pileDist,-GEO_pileDist
+      !GEO_pileYL(1)=-GEO_pileDist/2,GEO_pileDist/2,-GEO_pileDist/2,GEO_pileDist/2,-GEO_pileDist/2,GEO_pileDist/2
+      !GEO_pileCapMinLength=(GEO_pileDist)+(2*PILE_d)
+      !GEO_pileCapMinWidth=(2*GEO_pileDist)+(2*PILE_d)
+   *endif
+
+*elseif,GEO_pileCount,EQ,9,THEN
+   ! Nine piles
+   GEO_pileXL(1)=  GEO_pileDist , GEO_pileDist , GEO_pileDist ,             0 , 0 ,            0 , -GEO_pileDist , -GEO_pileDist , -GEO_pileDist
+   GEO_pileYL(1)= -GEO_pileDist ,            0 , GEO_pileDist , -GEO_pileDist , 0 , GEO_pileDist , -GEO_pileDist ,             0 , GEO_pileDist
+   GEO_pileCapMinLength=(2*GEO_pileDist)+(2*PILE_d)
+   GEO_pileCapMinWidth=(2*GEO_pileDist)+(2*PILE_d)
+
+*elseif,GEO_pileCount,EQ,10,THEN
+   ! Ten piles:
+   d_1=GEO_pileDist
+   d_2=GEO_pileDist/2
+   *if,GEO_pileConfig,EQ,'A',THEN
+      GEO_pileXL(1)=    d_2 ,  d_2 , d_2 , d_2 ,   d_2 ,   -d_2 , -d_2 , -d_2 , -d_2 ,  -d_2
+      GEO_pileYL(1)=- 2*d_1 , -d_1 ,   0 , d_1 , 2*d_1 , -2*d_1 , -d_1 ,    0 ,  d_1 , 2*d_1
+      GEO_pileCapMinLength=(4*GEO_pileDist)+(2*PILE_d)
+      GEO_pileCapMinWidth=(GEO_pileDist)+(2*PILE_d)
+   *elseif,GEO_pileConfig,EQ,'B',THEN
+      !GEO_pileXL(1)=GEO_pileDist,GEO_pileDist,0,0,-GEO_pileDist,-GEO_pileDist
+      !GEO_pileYL(1)=-GEO_pileDist/2,GEO_pileDist/2,-GEO_pileDist/2,GEO_pileDist/2,-GEO_pileDist/2,GEO_pileDist/2
+      !GEO_pileCapMinLength=(GEO_pileDist)+(2*PILE_d)
+      !GEO_pileCapMinWidth=(2*GEO_pileDist)+(2*PILE_d)
+   *endif
+
+*endif
+
+! Correct minimum dimensions of pile cap
+*if,GEO_pileCapMinLength,LT,COLUMN_cy,THEN
+   GEO_pileCapMinLength=COLUMN_cy
+*endif
+*if,GEO_pileCapMinWidth,LT,COLUMN_cx,THEN
+   GEO_pileCapMinWidth=COLUMN_cx
+*endif
+*if,GEO_capLength,LT,GEO_pileCapMinLength,THEN
+   GEO_capLength=GEO_pileCapMinLength
+   *msg,WARN,GEO_capLength
+WARNING: Pile cap length too small. Size increased to %Gm.
+*endif
+*if,GEO_capWidth,LT,GEO_pileCapMinWidth,THEN
+   GEO_capWidth=GEO_pileCapMinWidth
+   *msg,WARN,GEO_capWidth
+WARNING: Pile cap width too small. Size increased to %Gm.
+*endif
+
+! Calculate X positions in which to slice tubular column piers
+zero=0
+arrjoin,'xCoords','GEO_pileXL','zero'
+arruniq,'xCoords','GEO_xTubeSlice',1
+*get,XTubeSliceCount,PARM,GEO_xTubSlice,DIM,X
+
+! Calculate Y positions in which to slice tubular column piers
+*if,GEO_frameOpt,eq,0,then
+    ! Column-girder frame
+    *del,ycols
+    *dim,ycols,,2
+    ycols(1)=-GEO_columnSpacing/2,GEO_columnSpacing/2
+*else
+    ! Tubular pier column
+    *del,ycols
+    *dim,ycols,,1
+    ycols(1)=0
+*endif
+
+arrjoin,'yCoords','GEO_pileYL','zero','ycols'
+arruniq,'yCoords','GEO_yTubeSlice',1
+*get,YTubeSliceCount,PARM,GEO_yCapSlice,DIM,X
+
+! Calculate positions in which to slice the pile cap along the YZ plane
+*if,GEO_frameOpt,eq,1,then
+    ! Tubular pier column
+    front=GEO_columnDepth/2
+    back=-GEO_columnDepth/2
+*else
+    ! Column-girder frame
+    front=0
+    back=0
+*endif
+arrjoin,'xCoords','GEO_xTubeSlice','front','back'
+arruniq,'xCoords','GEO_xCapSlice',1
+*get,XSliceCount,PARM,GEO_xCapSlice,DIM,X
+
+! Calculate positions in which to slice the pile cap along the XZ plane
+*if,GEO_pileOpt,eq,0,then
+    arrjoin,'yCoords','GEO_yTubeSlice','zero'
+*elseif,GEO_pileOpt,eq,1,then
+    arrjoin,'yCoords','GEO_yTubeSlice','GEO_columnY'
+*endif
+arruniq,'yCoords','GEO_yCapSlice',1
+*get,YSliceCount,PARM,GEO_yCapSlice,DIM,X
+
+! Determine the Z coordinate (vertical position) of the top & bottom of each pile
+*if,SEC_offset,EQ,1,THEN
+   zPileTop=zFrameBot-PILECAP_h+0.1
+*elseif,SEC_offset,EQ,0,THEN
+   zPileTop=zFrameBot
+*endif
+!
+!
+!! 2.2.4 ABUTMENTS                                                                                !!
+!!                                                                                                !!
+! Abutments status
+*if,GEO_ABT_status,eq,0,then
+    GEO_ABT1_status=0
+    GEO_ABT2_status=0
+*elseif,GEO_ABT_status,eq,1,then
+    GEO_ABT1_status=1
+    GEO_ABT2_status=1
+*elseif,GEO_ABT_status,eq,2,then
+    GEO_ABT1_status=1
+    GEO_ABT2_status=0
+*elseif,GEO_ABT_status,eq,3,then
+    GEO_ABT1_status=0
+    GEO_ABT2_status=1
+*endif
+
+! Correct height increment at the beginning of the abutments
+*if,GEO_frameTopOffStatus,EQ,0,THEN
+      GEO_ABT1_topOffset=0
+      GEO_ABT2_topOffset=0
+*endif
+
+! Calculate number of piles (for curtain option)
+pileWidth=SEC_ABT_pile_d-2*GEO_ABT_pileOvlap
+*if,GEO_ABT1_type,eq,3,then
+    GEO_ABT1_tranPiles=nint((GEO_deckWidth-pileWidth)/pileWidth)
+    GEO_ABT1_longPiles=nint(GEO_ABT1_length/pileWidth)
+*endif
+*if,GEO_ABT2_type,eq,3,then
+    GEO_ABT2_tranPiles=nint((GEO_deckWidth-pileWidth)/pileWidth)
+    GEO_ABT2_longPiles=nint(GEO_ABT2_length/pileWidth)
+*endif
+
+! Pile cap size for pile curtain
+*if,GEO_ABT1_type,eq,3,then
+    GEO_ABT1_pileCapL=GEO_ABT1_length+(GEO_ABT1_pileCapW/2)
+*endif
+*if,GEO_ABT2_type,eq,3,then
+    GEO_ABT2_pileCapL=GEO_ABT2_length+(GEO_ABT2_pileCapW/2)
+*endif
+
+! Create abutment geometry arrays
+*del,GEO_ABT1_geometry
+*dim,GEO_ABT1_geometry,,18
+GEO_ABT1_geometry(1)  = GEO_ABT1_type,     GEO_ABT1_appSlabL, GEO_ABT1_height, GEO_ABT1_length,    GEO_ABT1_longPiles
+GEO_ABT1_geometry(6)  = GEO_ABT1_pileCapL, GEO_ABT1_pileCapW, GEO_ABT1_pileL,  GEO_ABT1_topOffset, GEO_ABT1_tranPiles,
+GEO_ABT1_geometry(11) = GEO_ABT1_wings,    GEO_ABT1_wingHa,   GEO_ABT1_wingL,  GEO_ABT1_pileAngle, GEO_ABT1_supressLW
+GEO_ABT1_geometry(16) = GEO_ABT1_curtainL, GEO_ABT1_pileFree, GEO_ABT1_pileShort
+
+*del,GEO_ABT2_geometry
+*dim,GEO_ABT2_geometry,,18
+GEO_ABT2_geometry(1)  = GEO_ABT2_type,     GEO_ABT2_appSlabL, GEO_ABT2_height, GEO_ABT2_length,    GEO_ABT2_longPiles
+GEO_ABT2_geometry(6)  = GEO_ABT2_pileCapL, GEO_ABT2_pileCapW, GEO_ABT2_pileL,  GEO_ABT2_topOffset, GEO_ABT2_tranPiles
+GEO_ABT2_geometry(11) = GEO_ABT2_wings,    GEO_ABT2_wingHa,   GEO_ABT2_wingL,  GEO_ABT2_pileAngle, GEO_ABT2_supressLW
+GEO_ABT2_geometry(16) = GEO_ABT2_curtainL, GEO_ABT2_pileFree, GEO_ABT2_pileShort
+
+! Abutment extents
+GEO_ABT1_xMin=-GEO_ABT1_length
+GEO_ABT1_xMax=0
+GEO_ABT2_xMin=GEO_deckLength
+GEO_ABT2_xMax=GEO_deckLength+GEO_ABT2_length
+
+! General span lengths
+GEO_genSpanCount=GEO_supportCount-1
+*if,GEO_ABT1_status,eq,1,or,GEO_ABT2_status,eq,1,then
+
+    *if,GEO_ABT1_status,eq,1,and,GEO_ABT1_appSlab,eq,1,then
+        ! Approach slab in first abutment
+        GEO_genSpanCount=GEO_genSpanCount+1
+        i_init=1
+    *else
+        i_init=0
+    *endif
+
+    *if,GEO_ABT1_status,eq,1,and,GEO_ABT2_appSlab,eq,1,then
+        ! Approach slab in second abutment
+        GEO_genSpanCount=GEO_genSpanCount+1
+        i_end=1
+    *else
+        i_end=0
+    *endif
+
+    *del,GEO_genSpanLengths
+    *dim,GEO_genSpanLengths,,GEO_genSpanCount
+    *vfun,GEO_genSpanLengths(i_init+1),copy,GEO_spanLengths(1)
+
+    *del,GEO_genSpanLimits
+    *dim,GEO_genSpanLimits,,GEO_genSpanCount+1
+    *vfun,GEO_genSpanLimits(i_init+1),copy,GEO_supportX(1)
+
+    *if,i_init,eq,1,then
+        GEO_genSpanLengths(1)=GEO_ABT1_appSlabL
+        GEO_genSpanLimits(1)=-GEO_ABT1_appSlabL
+    *endif
+
+    *if,i_end,eq,1,then
+        GEO_genSpanLengths(GEO_genSpanCount)=GEO_ABT2_appSlabL
+        GEO_genSpanLimits(GEO_genSpanCount+1)=GEO_deckLength+GEO_ABT2_appSlabL
+    *endif
+
+*else
+    ! No abutments
+    *del,GEO_genSpanLengths
+    *dim,GEO_genSpanLengths,,GEO_supportCount-1
+    *vfun,GEO_genSpanLengths(1),copy,GEO_spanLengths
+
+    *del,GEO_genSpanLimits
+    *vfun,GEO_genSpanLimits,copy,GEO_supportX
+
+*endif
+
+! Number of piers (excluding abutments)
+GEO_pierCount=GEO_supportCount
+*if,GEO_ABT1_status,eq,1,then
+    GEO_pierCount=GEO_pierCount-1
+*endif
+*if,GEO_ABT2_status,eq,1,then
+    GEO_pierCount=GEO_pierCount-1
+*endif
+
+! XZ coordinates of each pier
+*del,GEO_pierX
+*dim,GEO_pierX,,GEO_pierCount
+*del,GEO_pierZBot
+*dim,GEO_pierZBot,,GEO_pierCount
+*del,GEO_pierZTop
+*dim,GEO_pierZTop,,GEO_pierCount
+nthPier=0
+*do,nthSupport,1,GEO_supportCount,1
+    skip=0
+    *if,nthSupport,eq,1,and,GEO_ABT1_status,eq,1,then
+        skip=1
+    *elseif,nthSupport,eq,GEO_supportCount,and,GEO_ABT2_status,eq,1,then
+        skip=1
+    *endif
+    *if,skip,eq,0,then
+        nthPier=nthPier+1
+        GEO_pierX(nthPier)=GEO_supportX(nthSupport)
+        GEO_pierZBot(nthPier)=zFrameBot+GEO_frameBotOffset(nthSupport)
+        GEO_pierZTop(nthPier)=zFrameTop+GEO_frameTopOffset(nthSupport)
+    *endif
+*enddo
+
+! Determine type of mesostructure at each support
+*del,GEO_mesoType
+*dim,GEO_mesoType,,GEO_supportCount
+*if,GEO_frameOpt,eq,0,then
+    ! Column-girder frame
+    *vfill,GEO_mesoType,ramp,CTE_MESO_frame,0
+*elseif,GEO_frameOpt,eq,1,then
+    ! Tubular pier column
+    *vfill,GEO_mesoType,ramp,CTE_MESO_tube,0
+*endif
+*if,GEO_gerberStatus,eq,1,then
+    *do,nthSupport,1,GEO_supportCount,1
+        gerberL=GEO_gerberL(nthSupport)
+        *if,gerberL,gt,0,then
+            GEO_mesoType(nthSupport)=CTE_MESO_tcolumn
+        *endif
+    *enddo
+*endif
+*if,GEO_ABT1_status,eq,1,then
+    GEO_mesoType(1)=CTE_MESO_abutment
+*endif
+*if,GEO_ABT2_status,eq,1,then
+    GEO_mesoType(GEO_supportCount)=CTE_MESO_abutment
+*endif
+
+! Calculate X coordinates of tubular column faces
+*del,GEO_pierX_i
+*del,GEO_pierX_j
+*dim,GEO_pierX_i,,GEO_pierCount
+*dim,GEO_pierX_j,,GEO_pierCount
+*voper,GEO_pierX_i,GEO_pierX,sub,GEO_columnDepth/2
+*voper,GEO_pierX_j,GEO_pierX,add,GEO_columnDepth/2
+
+! Calculate chi angles of tubular column faces
+*if,GEO_deckRadius,gt,0,then
+    BRIDGE_V0_XTOCHI,'GEO_pierChi_i','GEO_pierX_i'
+    BRIDGE_V0_XTOCHI,'GEO_pierChi_j','GEO_pierX_j'
+*endif
+!
+!
+!
+!!                                                                                                !!
+!! 2.3 LOADS                                                                                      !!
+!!                                                                                                !!
+! Calculate dynamic impact coefficient
+*if,BRIDGE_type,eq,0,then
+    ! Highway bridge
+
+    ! Basic impact coefficient (NBR 7188)
+    impactCoefficient=1+1.06*(20/(minSpanLength+50))
+    *if,impactCoefficient,GT,1.35,THEN
+        impactCoefficient=1.35
+    *endif
+    ! Additional impact coefficient
+    additionalImpactCoefficient=1.25
+    ! Lane number coefficient
+    laneCoefficient=1-0.05*(GEO_laneNumber-2)
+    *if,laneCoefficient,LT,0.9,THEN
+        laneCoefficient=0.9
+    *endif
+    ! Final impact coefficient applied to vehicle loads
+    LOAD_dynImpact=impactCoefficient*laneCoefficient*additionalImpactCoefficient
+
+*elseif,BRIDGE_type,eq,1,then
+    ! Railway bridge (VALE)
+    LOAD_dynImpact=1.6
+
+    ! Railway bridge (NBR 7187:2003)
+    LOAD_dynImpact=(1600-60*sqrt(minSpanLength)+2.25*minSpanLength)/1000
+    LOAD_dynImpact=(LOAD_dynImpact>1.2)
+
+*endif
+
+! Apply impact coefficient to dynamic loads
+
+*if,SOLU_type,eq,0,then
+    ! Static analysis
+    udlLength=GEO_deckLength
+*elseif,SOLU_type,eq,1,then
+    ! Dynamic analysis
+    udlLength=0
+*endif
+loadtrain, LOAD_ltName,1,0,LOAD_dynImpact, udlLength ! Output: LOADTRAIN_VAR_count; LOADTRAIN_ARR_positions; LOADTRAIN_ARR_loads
+LOAD_plCount=LOADTRAIN_VAR_count
+*del,LOAD_plDist
+*vfun,LOAD_plDist,copy,LOADTRAIN_ARR_positions
+*del,LOAD_plValue
+*vfun,LOAD_plValue,copy,LOADTRAIN_ARR_loads
+*del,LOAD_ltLength
+LOAD_ltLength=LOADTRAIN_VAR_length
+
+! Calculate horizontal forces
+*if,BRIDGE_type,eq,0,then
+    ! Highway bridge
+
+*elseif,BRIDGE_type,eq,1,then
+    ! Railway bridge
+
+    *if,LOAD_railOpt,eq,0,then
+        ! Discontinuous rail:
+
+        ! Braking forces
+        *del,arr_f_braking
+        *voper,arr_f_braking,GEO_genSpanLengths,mult,17.5
+        *voper,arr_f_braking,f_braking,add,200
+
+        ! Accelerating forces
+        *del,arr_f_accelerating
+        *vfun,arr_f_accelerating,sqrt,GEO_genSpanLengths
+        *voper,arr_f_accelerating,arr_f_accelerating,mult,200
+
+        ! Total longitudinal forces
+        *del,arr_f_longitudinal
+        *voper,arr_f_longitudinal,arr_f_braking,max,arr_f_accelerating
+
+    *endif
+
+*endif
+
+LOAD_vehicleTraffic=LOAD_dynImpact*LOAD_vehicleTraffic_k
+
+! Combination type: ELU or ELS
+*if,LOAD_combination,EQ,1,THEN
+   ! Ultimate load: load train as main
+   ! Live loads
+   *voper,LOADTRAIN_ARR_loads,LOAD_gammaQ,MULT,LOADTRAIN_ARR_loads
+   LOAD_vehicleTraffic    = LOAD_vehicleTraffic*LOAD_gammaQ*LOAD_psi0
+   LOAD_pedestrianTraffic = LOAD_pedestrianTraffic_k*LOAD_gammaQ*LOAD_psi0
+   LOAD_waterFlow         = LOAD_waterFlow_k*LOAD_gammaQ*LOAD_psi0
+   LOAD_columnWind        = LOAD_columnWind_k*LOAD_gammaQ*LOAD_psi0
+   LOAD_deckWind          = LOAD_deckWind_k*LOAD_gammaQ*LOAD_psi0
+   ! Dead loads
+   LOAD_g            = LOAD_g_k*LOAD_gammaG
+   LOAD_pav          = LOAD_pav_k*LOAD_gammaG
+   LOAD_barrierValue = LOAD_barrierValue_k*LOAD_gammaG
+
+*elseif,LOAD_combination,EQ,2,THEN
+   ! Ultimate load: wind/tide as main
+   ! Live loads
+   *voper,LOADTRAIN_ARR_loads,LOAD_gammaQ*LOAD_psi0,MULT,LOADTRAIN_ARR_loads
+   LOAD_vehicleTraffic    = LOAD_vehicleTraffic*LOAD_gammaQ
+   LOAD_pedestrianTraffic = LOAD_pedestrianTraffic_k*LOAD_gammaQ
+   LOAD_waterFlow         = LOAD_waterFlow_k*LOAD_gammaQ*LOAD_psi0
+   LOAD_columnWind        = LOAD_columnWind_k*LOAD_gammaQ*LOAD_psi0
+   LOAD_deckWind          = LOAD_deckWind_k*LOAD_gammaQ*LOAD_psi0
+   ! Dead loads
+   LOAD_g            = LOAD_g_k*LOAD_gammaG
+   LOAD_pav          = LOAD_pav_k*LOAD_gammaG
+   LOAD_barrierValue = LOAD_barrierValue_k*LOAD_gammaG
+
+*elseif,LOAD_combination,EQ,3,THEN
+   ! Service load ("quase-permanente")
+   ! Live loads
+   *voper,LOADTRAIN_ARR_loads,LOAD_psi2,MULT,LOADTRAIN_ARR_loads
+   LOAD_vehicleTraffic    = LOAD_vehicleTraffic*LOAD_psi2
+   LOAD_pedestrianTraffic = LOAD_pedestrianTraffic_k*LOAD_psi2
+   LOAD_waterFlow         = LOAD_waterFlow_k*LOAD_psi2
+   LOAD_columnWind        = LOAD_columnWind_k*LOAD_psi2
+   LOAD_deckWind          = LOAD_deckWind_k*LOAD_psi2
+   ! Dead loads
+   LOAD_g            = LOAD_g_k
+   LOAD_pav          = LOAD_pav_k
+   LOAD_barrierValue = LOAD_barrierValue_k
+
+*elseif,LOAD_combination,EQ,4,THEN
+   ! Service load ("rara"): load train as main
+   ! Live loads
+   *voper,LOADTRAIN_ARR_loads,1,MULT,LOADTRAIN_ARR_loads
+   LOAD_vehicleTraffic    = LOAD_vehicleTraffic*LOAD_psi1
+   LOAD_pedestrianTraffic = LOAD_pedestrianTraffic_k*LOAD_psi1
+   LOAD_waterFlow         = LOAD_waterFlow_k*LOAD_psi1
+   LOAD_columnWind        = LOAD_columnWind_k*LOAD_psi1
+   LOAD_deckWind          = LOAD_deckWind_k*LOAD_psi1
+   ! Dead loads
+   LOAD_g            = LOAD_g_k
+   LOAD_pav          = LOAD_pav_k
+   LOAD_barrierValue = LOAD_barrierValue_k
+
+*elseif,LOAD_combination,EQ,5,THEN
+   ! Service load ("rara"): wind/tide as main
+   ! Live loads
+   *voper,LOADTRAIN_ARR_loads,LOAD_psi1,MULT,LOADTRAIN_ARR_loads
+   LOAD_vehicleTraffic    = LOAD_vehicleTraffic*LOAD_psi1
+   LOAD_pedestrianTraffic = LOAD_pedestrianTraffic_k*LOAD_psi1
+   LOAD_waterFlow         = LOAD_waterFlow_k*1
+   LOAD_columnWind        = LOAD_columnWind_k*1
+   LOAD_deckWind          = LOAD_deckWind_k*1
+   ! Dead loads
+   LOAD_g            = LOAD_g_k
+   LOAD_pav          = LOAD_pav_k
+   LOAD_barrierValue = LOAD_barrierValue_k
+
+*elseif,LOAD_combination,EQ,6,THEN
+   ! Dead loads (characteristic values)
+   ! Live loads
+   *voper,LOADTRAIN_ARR_loads,0,MULT,LOADTRAIN_ARR_loads
+   LOAD_vehicleTraffic    = 0
+   LOAD_pedestrianTraffic = 0
+   LOAD_waterFlow         = 0
+   LOAD_columnWind        = 0
+   LOAD_deckWind          = 0
+   ! Dead loads
+   LOAD_g            = LOAD_g_k
+   LOAD_pav          = LOAD_pav_k
+   LOAD_barrierValue = LOAD_barrierValue_k
+
+*elseif,LOAD_combination,EQ,7,THEN
+   ! Live loads (characteristic values)
+   ! Live loads
+   *voper,LOADTRAIN_ARR_loads,1,MULT,LOADTRAIN_ARR_loads
+   LOAD_vehicleTraffic    = LOAD_vehicleTraffic
+   LOAD_pedestrianTraffic = LOAD_pedestrianTraffic_k
+   LOAD_waterFlow         = LOAD_waterFlow_k
+   LOAD_columnWind        = LOAD_columnWind_k
+   LOAD_deckWind          = LOAD_deckWind_k
+   ! Dead loads
+   LOAD_g            = 0
+   LOAD_pav          = 0
+   LOAD_barrierValue = 0
+
+*elseif,LOAD_combination,EQ,8,THEN
+   ! Fatigue analysis ("combinação frequente de fadiga, K.2.1")
+   ! Live loads
+   *voper,LOADTRAIN_ARR_loads,LOAD_psi1,MULT,LOADTRAIN_ARR_loads
+   LOAD_vehicleTraffic    = LOAD_vehicleTraffic*LOAD_psi1
+   LOAD_pedestrianTraffic = LOAD_pedestrianTraffic_k*LOAD_psi1
+   LOAD_waterFlow         = LOAD_waterFlow_k*LOAD_psi1
+   LOAD_columnWind        = LOAD_columnWind_k*LOAD_psi1
+   LOAD_deckWind          = LOAD_deckWind_k*LOAD_psi1
+   ! Dead loads
+   LOAD_g            = LOAD_g_k
+   LOAD_pav          = LOAD_pav_k
+   LOAD_barrierValue = LOAD_barrierValue_k
+
+*endif
+
+! Check load train step
+*if,LOAD_ltStep,EQ,0,OR,LOAD_ltStep,GT,GEO_deckLength/2,THEN
+   LOAD_ltStep=GEO_deckLength/2
+*endif
+
+! Calculate centrifugal force percentage (AREMA)
+*if,GEO_deckRadius,ne,0,then
+    *afun,deg
+    LOAD_degreeOfCurve=2*asin(15.24/GEO_deckRadius)
+    *afun,rad
+    LOAD_centrifugalPct=4.52e-4*(LOAD_speed**2)*LOAD_degreeOfCurve
+*else
+    LOAD_centrifugalPct=0
+*endif
+!
+!
+!
+!!                                                                                                !!
+!! 2.4 MESH                                                                                       !!
+!!                                                                                                !!
+
+!!                                                                                                !!
+!! 2.5 SOLUTION                                                                                   !!
+!!                                                                                                !!
+! Set default connection between pile and pile cap to pinned
+*get,parType,parm,FEM_PileTopConnection,type
+*if,parType,ne,0,then
+    FEM_PileTopConnection=0
+*endif
+
+! Time at the end of dead load introduction load step (dynamic analysis only)
+SOLU_dlTime=1
+
+
+

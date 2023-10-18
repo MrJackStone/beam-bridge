@@ -1,0 +1,33 @@
+! BRIDGE_V1_SKEWEDCSYS, csNum, yBeg, yEnd
+! BRIDGE_V1_SKEWEDCSYS,  arg1, arg2, arg3
+
+! Description:
+! Creates and returns the number of a coordinate system with origin at (0, yBeg, 0) and X axis
+! pointing towards (GEO_deckLength, yEnd, 0).
+
+! Local parameters:
+! AR21: skewAngle
+
+! Global output parameters:
+! CS_skewed
+
+! Generate CS number
+csnext,'CS_skewed'
+*del,%arg1%
+%arg1%=CS_skewed
+
+! Calculate skew angle
+*afun,deg
+AR21=atan((arg3-arg2)/GEO_deckLength)
+*afun,rad
+
+csys,0
+
+wpcsys,-1,0
+wpoffs,,arg2
+wprota,AR21
+
+cswpla,CS_skewed,cart
+
+csys,0
+

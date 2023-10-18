@@ -1,0 +1,89 @@
+! GEO_deckLength
+
+cshell_my
+cshell_qx
+
+secCount=101
+
+xPitch=GEO_deckLength/(secCount-1)
+
+*del,MPATHPLOT_ARR_pathNames
+*dim,MPATHPLOT_ARR_pathNames,char,secCount!+2
+*del,MPATHPLOT_ARR_labels
+*dim,MPATHPLOT_ARR_labels,char,secCount!+2
+
+*do,nthSec,1,secCount,1
+    xCoord=xPitch*(nthSec-1)
+
+    pthName=strcat('SS_',chrval(nthSec))
+
+    path,%pthName%,2,,100
+    ppath,1,,xCoord,-GEO_deckWidth/2,0
+    ppath,2,,xCoord,GEO_deckWidth/2,0
+    !pdef,'MY',etab,'SHELL_MY'
+    !pcalc,intg,'MY_CUM','MY','S',1
+    pdef,'QX',etab,'SHELL_QX'
+    pcalc,intg,'QX_CUM','QX','S',1
+
+    MPATHPLOT_ARR_pathNames(nthSec)=pthName
+
+    !MPATHPLOT_ARR_labels(nthSec)='MY_CUM'
+    !MPATHPLOT_ARR_labels(nthSec)='MY'
+
+    MPATHPLOT_ARR_labels(nthSec)='QX_CUM'
+    !MPATHPLOT_ARR_labels(nthSec)='QX'
+
+*enddo
+
+pthName=strcat('SS_',chrval(secCount+1))
+path,%pthName%,2,,100
+ppath,1,,             0,-GEO_deckWidth/2,0
+ppath,2,,GEO_deckLength,-GEO_deckWidth/2,0
+pdef,'MY',etab,'SHELL_MY'
+pcalc,intg,'MY_CUM','MY','S',1
+MPATHPLOT_ARR_pathNames(secCount+1)=pthName
+MPATHPLOT_ARR_labels(secCount+1)='MY'
+!pdef,'MY',etab,'SHELL_QX'
+!pcalc,intg,'QX_CUM','QX','S',1
+!MPATHPLOT_ARR_pathNames(secCount+1)=pthName
+!MPATHPLOT_ARR_labels(secCount+1)='QX'
+
+pthName=strcat('SS_',chrval(secCount+2))
+path,%pthName%,2,,100
+ppath,1,,             0,GEO_deckWidth/2,0
+ppath,2,,GEO_deckLength,GEO_deckWidth/2,0
+pdef,'MY',etab,'SHELL_MY'
+pcalc,intg,'MY_CUM','MY','S',1
+!MPATHPLOT_ARR_pathNames(secCount+2)=pthName
+!MPATHPLOT_ARR_labels(secCount+2)='MY'
+!pdef,'QX',etab,'SHELL_QX'
+!pcalc,intg,'QX_CUM','QX','S',1
+!MPATHPLOT_ARR_pathNames(secCount+2)=pthName
+!MPATHPLOT_ARR_labels(secCount+2)='QX'
+
+
+
+/device,vector,on
+/type,,0
+eplot
+/noerase
+/device,vector,off
+mpathplot,5,0
+/type,,3
+/erase
+clims
+
+/eof
+
+plpaths
+
+multipathplot
+
+cpath
+
+plpthenv
+
+mpathplot
+
+
+

@@ -1,0 +1,57 @@
+! BRIDGE_V1_SMPILE, nthSupport
+! BRIDGE_V1_SMPILE, arg1
+
+cCS_name=strcat('CS_INFRA_C',chrval(arg1))
+CS_active=%cCS_name%
+
+*if,GEO_capOpt,eq,0,then
+    capCount=2
+*elseif,GEO_capOpt,eq,1,then
+    capCount=1
+*endif
+
+*do,nthCap,1,capCount,1
+
+    *if,GEO_capOpt,eq,0,then
+        CS_active=CS_active+1
+    *endif
+
+    *do,nthPile,1,GEO_pileCount,1
+        ! Calculate X, Y & Z coordinates of the pile's ends
+        pileLen=GEO_pileLengths(arg1)
+        zTop=0
+        zBot=zTop-pileLen
+        xLoc=GEO_pileXL(nthPile)
+        yLoc=GEO_pileYL(nthPile)
+        xAngle=GEO_pileXAngle(nthPile)
+        yAngle=GEO_pileYAngle(nthPile)
+        xTop=xLoc
+        yTop=yLoc
+        *afun,DEG
+        xBot=xTop+TAN(yAngle)*pileLen
+        yBot=yTop+TAN(xAngle)*pileLen
+        *afun,RAD
+
+        ! Create pile line
+        csys,CS_active
+        *get,KMaxD,KP,,NUM,MAXD
+        KTop=KMaxD+1
+        KBot=KMaxD+2
+        K,KTop,xTop,yTop,zTop
+        K,KBot,xBot,yBot,zBot
+        L,KBot,KTop
+
+        ksel,s,kp,,KBot
+        cmpadd,'COMPK_Support'
+
+        ksel,s,kp,,KTop
+        cmpadd,'COMPK_PileTop'
+    *enddo
+*enddo
+
+
+
+
+
+
+

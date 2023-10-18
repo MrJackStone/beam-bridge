@@ -1,0 +1,217 @@
+/output,outfile,out
+
+! APDL development info
+APDL_name    = 'BRIDGE'
+APDL_version = 'v1'
+APDL_issued  = '2023/03/06'
+APDL_sig     = 'Felipe B. Teixeira'
+APDL_contact = 'ansysMAPDL@gmail.com'
+
+! Turn off automatic screen updating
+/prep7
+/nopr
+IMMED,0
+view4w
+/vup,all,z
+view1w
+/uis,REPLOT,0
+/dv3d,DELS
+/uis,MSGPOP,3
+/nerr,-5
+
+! Take time
+ctime,'MODEL_t0'
+
+
+!!                                                                                                !!
+!!                                                                                                !!
+!! 2. ATTRIBUTES                                                                                  !!
+!!                                                                                                !!
+!!                                                                                                !!
+BRIDGE_V1_ATTR
+!
+!
+!
+!
+!
+!!                                                                                                !!
+!!                                                                                                !!
+!! 3. SOLID MODEL                                                                                 !!
+!!                                                                                                !!
+!!                                                                                                !!
+BRIDGE_V1_SM
+!
+!
+!
+!
+!
+!!                                                                                                !!
+!!                                                                                                !!
+!! 4. FINITE ELEMENT MODEL                                                                        !!
+!!                                                                                                !!
+!!                                                                                                !!
+IMMED,0
+/uis,REPLOT,0
+BRIDGE_V1_MESH
+!
+!/eof
+!/input,'_manfix_mesh',mac
+!
+!
+!
+!!                                                                                                !!
+!!                                                                                                !!
+!! 5. SOLUTION                                                                                    !!
+!!                                                                                                !!
+!!                                                                                                !!
+/solu
+
+!!                                                                                                !!
+!! 5.1 BRIDGE OCCUPATION                                                                          !!
+!!                                                                                                !!
+BRIDGE_V1_OCCUP
+!
+!
+!
+!!                                                                                                !!
+!! 5.2 SUPPORTS                                                                                   !!
+!!                                                                                                !!
+/nopr
+/uis,REPLOT,0
+
+! Bedrock
+CMSEL,S,COMPN_RockSupport
+*if,GEO_pileType,eq,0,then
+    ! End-bearing driven pile
+    D,ALL,ALL,0
+*elseif,GEO_pileType,eq,1,then
+    /prep7
+    sprsup,,,-FEM_springL,MAT_Soil,SEC_PSOIL_num,TYPE_LINK180,'COMPN_PileEndSup','COMPE_PileEndSup',0,3
+    cmsel,s,COMPN_PileEndSup
+    d,COMPN_PileEndSup,uz,0
+    /solu
+*endif
+!
+!
+!
+!!                                                                                                !!
+!! 5.3 LOAD STEPS                                                                                 !!
+!!                                                                                                !!
+BRIDGE_V1_LS
+
+! Turn off automatic screen updating
+/nopr
+/uis,REPLOT,0
+
+/eshape,0
+/device,VECTOR,OFF
+/edge,,1
+/psf,PRES,,0,0,OFF
+/pbc,U,,0
+/pbc,F,,0
+VIEW1W
+LPLOT
+!
+!
+!
+!!                                                                                                !!
+!! 5.4 SOLVE                                                                                      !!
+!!                                                                                                !!
+! Modal analysis
+*if,SOLU_type,eq,1,then
+    /solu
+    allsel
+    lsread,1
+    antype,modal,new
+    modopt,lanb,SOLU_vibModes
+    mxpand,SOLU_vibModes,,,yes
+    solve
+    finish
+
+    /post1
+    set,first
+    pldisp,2
+    takepic,'MODE_1'
+    set,last
+    pldisp,2
+    takepic,'MOD_%SOLU_vibModes%'
+    *get,RES_f1,mode,1,freq
+    *get,RES_f2,mode,SOLU_vibModes,freq
+
+    propdmp,'SOLU_alpha','SOLU_beta',SOLU_ksi,RES_f1,RES_f2
+    finish
+*endif
+
+/solu
+
+! Solve load steps
+ALLSEL
+SAVE,,,,ALL
+!outres,erase
+!outres,all,last
+!nsubst,20
+
+*if,SOLU_type,eq,1,then
+    alphad,SOLU_alpha
+    betad,SOLU_beta
+*endif
+
+nlgeom,on
+
+KEYW,pr_sgui,1
+LSSOLVE,1,LoadStepCount,1
+KEYW,pr_sgui,0
+FINISH
+
+*msg,UI,'Solution is done!'
+%C
+
+view1w
+allsel
+eplot
+
+
+
+
+*if,SOLU_type,eq,0,then
+    ! Static
+    /input,'F:\Ansys\03 Design\30 Pontes Anchieta\01 APDL\_colTube post',mac
+    /input,'F:\Ansys\03 Design\30 Pontes Anchieta\01 APDL\_V1_memoIMGs',mac
+    !/input,'F:\Ansys\03 Design\30 Pontes Anchieta\01 APDL\_slab_deflects',mac
+    /input,'F:\Ansys\03 Design\30 Pontes Anchieta\01 APDL\_post pileSects',mac
+    /input,'F:\Ansys\03 Design\30 Pontes Anchieta\01 APDL\_post vr4 peakPile',mac
+    /input,'F:\Ansys\03 Design\30 Pontes Anchieta\01 APDL\_post pileGroup',mac
+
+!!    *if,MAT_Girder_type,eq,1,then
+        ! Composite steel-concrete results
+        BRIDGE_V1_POSTCOMPOSITE
+!!    *endif
+*endif
+
+
+! /input,'F:\Ansys\03 Design\30 Pontes Anchieta\01 APDL\_manual_inv_conc_beam_fix',mac
+
+
+/post1
+allsel
+esel,u,type,,3
+view1w
+windefa,1
+/device,font
+set,1
+/triad,off
+/edge,1,0
+/eshape,0
+/dscale,,1e2
+/view,1,0,-1,0
+esel,u,type,,3
+plnsol,u,x,2
+
+
+
+
+
+
+
+
+

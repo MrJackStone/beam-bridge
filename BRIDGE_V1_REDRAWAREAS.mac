@@ -1,0 +1,36 @@
+! BRIDGE_V1_REDRAWAREAS
+
+/eof
+cm,COMPA_original,area
+
+*get,ac,area,,count
+anum=0
+*do,nthArea,1,ac,1
+    anum=arnext(anum)
+
+    asel,s,area,,anum
+    lsla,s
+    *get,lc,line,,count
+
+    *get,lnum,area,anum,loop,1,line,nthLine
+
+
+    lnum=0
+
+    *do,nthLine,1,lc,1
+        *get,lnum,area,anum,loop,1,line,nthLine
+
+        lnum=lsnext(lnum)
+    *enddo
+
+    ksll,s
+    *get,loopCount,kp,,count
+
+
+
+
+
+
+
+*enddo
+

@@ -1,0 +1,176 @@
+! BRIDGE_V1_SMPCAP, nthSupport
+! BRIDGE_V1_SMPCAP, arg1
+
+xCenter=GEO_supportX(arg1)
+*if,GEO_deckRadius,eq,0,then
+    ! Straight deck:
+    xLeft=xCenter
+    xRight=xCenter
+
+    yCenter=0
+    yLeft=yCenter+GEO_columnY(1)
+    yRight=yCenter+GEO_columnY(2)
+
+    zAngle=0
+*else
+    ! Curved deck:
+    *afun,deg
+    chi_i=GEO_supportChi(arg1)
+
+    xLeft=(GEO_deckLength/2)-(GEO_deckRadius+GEO_columnY(1))*cos(chi_i)
+    xRight=(GEO_deckLength/2)-(GEO_deckRadius+GEO_columnY(2))*cos(chi_i)
+
+    yCenter=GEO_deckRadius*sin(chi_i)-GEO_chordOff
+    yLeft=(GEO_deckRadius+GEO_columnY(1))*sin(chi_i)-GEO_chordOff
+    yRight=(GEO_deckRadius+GEO_columnY(2))*sin(chi_i)-GEO_chordOff
+
+    zAngle=90-chi_i
+    *afun,rad
+*endif
+
+! Top and bottom Z coordinates of the frame
+nthFrameZTop=zFrameTop+GEO_frameTopOffset(arg1)
+nthFrameZBot=zFrameBot+GEO_frameBotOffset(arg1)
+
+CS_center=41+(10*arg1)
+CS_left=CS_center+1
+CS_right=CS_center+2
+
+cCS_name=strcat('CS_INFRA_C',chrval(arg1))
+lCS_name=strcat('CS_INFRA_L',chrval(arg1))
+rCS_name=strcat('CS_INFRA_R',chrval(arg1))
+
+%cCS_name%=CS_center
+%lCS_name%=CS_left
+%rCS_name%=CS_right
+
+csys  , 0
+local , CS_center , cart , xCenter , yCenter , nthFrameZBot , zAngle
+csys  , 0
+local , CS_left   , cart , xLeft   , yLeft   , nthFrameZBot , zAngle
+csys  , 0
+local , CS_right  , cart , xRight  , yRight  , nthFrameZBot , zAngle
+csys  , 0
+
+*if,GEO_capOpt,eq,0,then
+    ! Two pile caps connected by grade beam:
+
+    ! Left pile cap
+    csys,CS_left
+    wpcsys,,CS_left
+
+    KSEL,S,LOC,X,0
+    KSEL,R,LOC,Y,0
+    KSEL,R,LOC,Z,0
+    *get,KNum,KP,,NUM,MIN
+
+    ASEL,U,AREA,,ALL
+    BLC5,0,0,GEO_capWidth,GEO_capLength
+
+    ! Slice pile cap: YZ plane
+    *do,nthX,1,XSliceCount,1
+        xOff=GEO_xCapSlice(nthX)
+        wpoffs,xOff
+        wprota,,,90
+        asbw,ALL,,DELETE
+        wprota,,,-90
+        wpoffs,-xOff
+    *enddo
+
+    ! Slice pile cap: XZ plane
+    *do,nthY,1,YSliceCount,1
+        yOff=GEO_yCapSlice(nthY)
+        wpoffs,,yOff
+        wprota,,90
+        asbw,ALL,,DELETE
+        wprota,,-90
+        wpoffs,,-yOff
+    *enddo
+
+    cmpadd,'COMPA_LeftPileCaps'
+
+    ! Right pile cap
+    csys,CS_right
+    wpcsys,,CS_right
+
+    KSEL,S,LOC,X,0
+    KSEL,R,LOC,Y,0
+    KSEL,R,LOC,Z,0
+    *get,KNum,KP,,NUM,MIN
+
+    ASEL,U,AREA,,ALL
+    BLC5,0,0,GEO_capWidth,GEO_capLength
+
+    ! Slice pile cap: YZ plane
+    *do,nthX,1,XSliceCount,1
+        xOff=GEO_xCapSlice(nthX)
+        WPOFFS,xOff
+        WPROTA,,,90
+        ASBW,ALL,,DELETE
+        WPROTA,,,-90
+        WPOFFS,-xOff
+    *enddo
+
+    ! Slice pile cap: XZ plane
+    *do,nthY,1,YSliceCount,1
+        yOff=GEO_yCapSlice(nthY)
+        WPOFFS,,yOff
+        WPROTA,,90
+        ASBW,ALL,,DELETE
+        WPROTA,,-90
+        WPOFFS,,-yOff
+    *enddo
+
+    cmpadd,'COMPA_RightPileCaps'
+
+    ! Create grade beam
+    csys,CS_center
+    wpcsys,,CS_center
+    KSEL,S,LOC,X,0
+    KSEL,R,LOC,Y,yLeft+(GEO_capLength/2)
+    KSEL,R,LOC,Z,0
+    *get,KLeft,KP,,NUM,MIN
+    KSEL,S,LOC,X,0
+    KSEL,R,LOC,Y,yRight-(GEO_capLength/2)
+    KSEL,R,LOC,Z,0
+    *get,KRight,KP,,NUM,MIN
+    KSEL,S,KP,,KLeft
+    KSEL,A,KP,,KRight
+    LSEL,U,LINE,,ALL
+    L,KLeft,KRight
+    cmpadd,'COMPK_GradeBeam'
+    cmpadd,'COMPL_GradeBeam'
+
+    CMSEL,S,COMPA_PileCap
+    CMSEL,A,COMPA_LeftPileCaps
+    CMSEL,A,COMPA_RightPileCaps
+    CM,COMPA_PileCap,AREA
+
+*elseif,GEO_capOpt,eq,1,then
+    ! Single pile cap for both columns
+
+    ! Draw pile cap
+    csys,CS_center
+    wpcsys,,CS_center
+    asel,u,area,,all
+    blc5,0,0,GEO_capWidth,GEO_capLength
+
+    ! Slice cap
+    batch_sliceyz,'GEO_xCapSlice',1
+    batch_slicexz,'GEO_yCapSlice',1
+
+    *if,GEO_frameOpt,eq,1,then
+        ! Tubular pier column: slice at superstructure positions
+        batch_slicexz,'XZslice',1
+    *endif
+
+    cmsel,a,COMPA_centerPileCaps
+    cm,COMPA_centerPileCaps,area
+
+    cmsel,a,COMPA_PileCap
+    cm,COMPA_PileCap,area
+
+*endif
+
+
+
