@@ -158,6 +158,7 @@ cm,COMPA_ABT_pileCap,area
 cm,COMPA_ABT_appSlab,area
 cm,COMPL_ABT_piles,line
 cm,COMPL_ABT_lwPiles,line
+cm,COMPL_ABT_vxPiles,line
 cm,COMPK_ABT_base,kp
 cm,COMPK_ABT_pileTop,kp
 cm,COMPK_ABT_pileBase,kp
