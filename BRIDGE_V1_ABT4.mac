@@ -57,34 +57,15 @@ K06=KMXD+6
 K07=KMXD+7
 K08=KMXD+8
 
-! Columns
-K09=KMXD+9
-K10=KMXD+10
-K11=KMXD+11
-K12=KMXD+12
-
 ! Wings
-K13=KMXD+13
-K14=KMXD+14
 K15=KMXD+15
-K16=KMXD+16
-K17=KMXD+17
 K18=KMXD+18
-
-! Beam
-K19=KMXD+19
-K20=KMXD+20
 
 ! Pile cap
 K21=KMXD+21
 K22=KMXD+22
 K23=KMXD+23
 K24=KMXD+24
-! Pile cap (subtract middle for GEO_ABT_type=3)
-K21b=KMXD+25
-K22b=KMXD+26
-K23b=KMXD+27
-K24b=KMXD+28
 
 ! Approach slab
 KA=KMXD+29
@@ -97,56 +78,21 @@ KD=KMXD+32
 !!                                                                                                !!
 x01=0
 x05=GEO_ABT_length
-x13=x05+GEO_ABT_wingL
 xc =x01+GEO_ABT_appSlabL
-x23=x01+GEO_ABT_pileCapL
 x25a=x01+GEO_ABT_pileCapW/2
 x25b=x01-GEO_ABT_pileCapW/2
-! x02=x01 ; x03=x01 ; x04=x01
-! x06=x05 ; x07=x05 ; x08=x05
-! x09=x05 ; x10=x05 ; x11=x05
-! x12=x05 ; x14=x13 ; x15=x05
-! x16=x13 ; x17=x13 ; x18=x05
-! x19=x05 ; x20=x05 ; x21=x01
-! x22=x01 ; x24=x23
-! xa =x01 ; xb =x01 ; xd =xc
-x21b=x01+GEO_ABT_pileCapW
-x23b=x23
-! x22b=x21b ; x24b=x23b
 
 y01=GEO_ABT_yOffset-GEO_ABT_yc
 y02=y01+GEO_ABT_deckWidth
-y09=y01-GEO_ABT_colW
-y11=y02+GEO_ABT_colW
-! Wall-column:
 y25a=y02+((GEO_ABT_pileCapL-GEO_ABT_deckWidth)/2)
 y25b=y01-((GEO_ABT_pileCapL-GEO_ABT_deckWidth)/2)
-! y03=y01 ; y04=y02 ; y05=y01
-! y06=y02 ; y07=y01 ; y08=y02
-! y10=y09 ; y12=y11 ; y13=y01
-! y14=y01 ; y15=y01 ; y16=y02
-! y17=y02 ; y18=y02 ; y19=y01
-! y20=y02 ; y23=y21 ; y24=y22
-! ya =y01 ; yb =y02 ; yc =y01 ; yd =y02
-y21b=y21+GEO_ABT_pileCapW
-y22b=y22-GEO_ABT_pileCapW
-! y24b=y22b ; y23b=y21b
 
 z01=0
 z03=z01-GEO_ABT_height
 z05=z01+GEO_ABT_topOffset
 z13=z01+GEO_ABT_topOffset*((GEO_ABT_length+GEO_ABT_wingL)/GEO_ABT_length)
-z14=z13-GEO_ABT_wingHe
 z15=z05-GEO_ABT_wingHa
-z19=z15-GEO_ABT_beamH
 zc =z01+GEO_ABT_topOffset*(GEO_ABT_appSlabL/GEO_ABT_length)
-! z02=z01 ; z04=z03 ; z06=z05
-! z07=z03 ; z08=z03 ; z09=z05
-! z10=z03 ; z11=z05 ; z12=z03
-! z16=z13 ; z17=z14 ; z18=z15
-! z20=z19 ; z21=z03 ; z22=z03
-! z23=z03 ; z24=z03
-! za =z01 ; zb =z01 ; zd =zc
 
 ! Calculate coefficients for abutment pavement slope
 angCoef=(z05-z01)/(x05-x01)
