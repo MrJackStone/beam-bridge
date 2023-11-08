@@ -1,4 +1,4 @@
-! BRIDGE_V1_ABT, CS_local, geoArray, pos
+! BRIDGE_V1_ABT, CS_local, geoArray, [pos]
 ! BRIDGE_V1_ABT,     arg1,     arg2, arg3
 
 ! Available abutment types (GEO_ABT_type values):
@@ -10,10 +10,6 @@
 !!                                                                                                !!
 !! A. INPUT PARAMETERS                                                                            !!
 !!                                                                                                !!
-! pos=1: beginning (X=0)
-! pos=2: end (X=deckLength)
-! xdir=1 : local axis and global axis point in the same direction
-! xdir=-1: local axis points to negative global X
 csys,arg1
 
 !! A.1 ABUTMENT GEOMETRY                                                                          !!
