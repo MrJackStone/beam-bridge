@@ -119,23 +119,36 @@ ksll,s
 nummrg,kp
 
 !! B.4 Draw approach slab
+! Copy line pattern from transversal wall top
 cmsel,s,COMPA_ABT_TRV_wall
 lsla,s
+lsel,r,loc,x,0
+cm,COMPL_temp_trvWallTop,line
+lgen,2,all,,,0,0,0,,,0
+cmsel,u,COMPL_temp_trvWallTop
+cm,COMPL_temp_abtInterface,line
+
+! Gather/create keypoints at the approach slab's corners
+cmsel,s,COMPL_temp_abtInterface
 ksll,s
-asel,u,area,,all
 twLeftKP=kp(0,GEO_ABT_deckWidth/2,0)
 twRightKP=kp(0,-GEO_ABT_deckWidth/2,0)
 nextkp,'asLeftKP'
 k,asLeftKP,GEO_ABT_appSlabL,GEO_ABT_deckWidth/2,0
 nextkp,'asRightKP'
 k,asRightKP,GEO_ABT_appSlabL,-GEO_ABT_deckWidth/2,0
-a,twLeftKP,twRightKP,asRightKP,asLeftKP
-cm,COMPA_TEMP_appSlab,area
 
-! Connect approach slab to transversal wall
-cmsel,s,COMPA_TEMP_appSlab
-cmsel,a,COMPA_ABT_TRV_wall
-aglue,all
+! Draw new lines to close approach slab's perimeter
+lsel,u,line,,all
+l,twLeftKP,asLeftKP
+l,twRightKP,asRightKP
+l,asLeftKP,asRightKP
+cm,COMPL_temp_appSlab,line
+
+! Draw approach slab
+cmsel,s,COMPL_temp_appSlab
+al,COMPL_temp_appSlab
+cm,COMPA_TEMP_appSlab,area
 
 !!
 !! C. Slice to connect to superstructure
