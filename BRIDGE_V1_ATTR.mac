@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 ! BRIDGE_V1_ATTR
 
 *if,GEO_deckRadius,ne,0,then
