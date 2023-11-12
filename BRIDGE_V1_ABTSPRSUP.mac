@@ -1,5 +1,5 @@
-! BRIDGE_V1_ABTSPRSUP, deckWidth
-! BRIDGE_V1_ABTSPRSUP, arg1
+! BRIDGE_V1_ABTSPRSUP, deckWidth, abtType
+! BRIDGE_V1_ABTSPRSUP, arg1     , arg2
 
 cm,COMPN_valid,node
 
@@ -51,14 +51,20 @@ nn=0
 *do,nthNode,1,nc,1
     cmsel,s,COMPN_sup
     nn=ndnext(nn)
-    *if,rnc,gt,0,then
+
+    *if,arg2,eq,4,then
+      d,nn,uz,0
+    *else
+      *if,rnc,gt,0,then
         cmsel,s,COMPN_remoteSup
         nsel,a,node,,nn
         rn=nnear(nn)
         safe_cp,'UZ',rn,nn
-    *else
+      *else
         d,nn,uz,0
+      *endif
     *endif
+
 *enddo
 
 !    ! Beams
