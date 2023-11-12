@@ -162,6 +162,7 @@ cm,COMPL_ABT_vxPiles,line
 cm,COMPK_ABT_base,kp
 cm,COMPK_ABT_pileTop,kp
 cm,COMPK_ABT_pileBase,kp
+cm,COMPL_ABT_pileConnections,line
 
 ! First abutment (before X=0)
 asel,u,area,,all
