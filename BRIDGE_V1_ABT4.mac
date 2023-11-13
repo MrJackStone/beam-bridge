@@ -45,6 +45,7 @@ GEO_ABT_trvPileCols   = %arg2%(23)
 GEO_ABT_wingPileCols  = %arg2%(24)
 GEO_ABT_wingCapLength = %arg2%(25)
 GEO_ABT_wingCapWidth  = %arg2%(26)
+GEO_ABT_wingAngle     = %arg2%(27)
 
 !!
 !! B. Draw geometry
@@ -67,7 +68,7 @@ csys,arg1
 !! B.2 Left wing and its foundation
 csys,arg1
 csnext,'CS_leftWing'
-clocal,CS_leftWing,0,0,GEO_ABT_deckWidth/2,-GEO_ABT_height,wingAngle
+clocal,CS_leftWing,0,0,GEO_ABT_deckWidth/2,-GEO_ABT_height,GEO_ABT_wingAngle
 csys,CS_leftWing
 
 *del,left_wing_params,,nopr
@@ -90,7 +91,7 @@ csys,arg1
 !! B.2 Right wing and its foundation
 csys,arg1
 csnext,'CS_rightWing'
-clocal,CS_rightWing,0,0,-GEO_ABT_deckWidth/2,-GEO_ABT_height,-wingAngle
+clocal,CS_rightWing,0,0,-GEO_ABT_deckWidth/2,-GEO_ABT_height,-GEO_ABT_wingAngle
 csys,CS_rightWing
 
 *del,right_wing_params,,nopr
