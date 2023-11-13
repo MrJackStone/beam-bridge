@@ -176,6 +176,9 @@ ksel,u,kp,,all
       BRIDGE_V1_ABT4,CS_ABT1,'GEO_ABT1_geometry'
       ABT1_angCoef=0
       ABT1_linCoef=0
+      CS_ABT1_trv=CS_trvWall
+      CS_ABT1_lw=CS_leftWing
+      CS_ABT1_rw=CS_rightWing
     *else
       BRIDGE_V1_ABT,CS_ABT1,'GEO_ABT1_geometry',1
       ABT1_angCoef=angCoef
@@ -198,6 +201,9 @@ ksel,u,kp,,all
       BRIDGE_V1_ABT4,CS_ABT2,'GEO_ABT2_geometry'
       ABT2_angCoef=0
       ABT2_linCoef=0
+      CS_ABT2_trv=CS_trvWall
+      CS_ABT2_lw=CS_leftWing
+      CS_ABT2_rw=CS_rightWing
     *else
       BRIDGE_V1_ABT,CS_ABT2,'GEO_ABT2_geometry', 1
       ABT2_angCoef=angCoef
