@@ -1,37 +1,77 @@
-! BRIDGE_V1_ABTSPRSUP, deckWidth, abtType
-! BRIDGE_V1_ABTSPRSUP, arg1     , arg2
+! BRIDGE_V1_ABTSPRSUP , deckWidth , abtType , abtCS , trvCS , lwCS , rwCS
+! BRIDGE_V1_ABTSPRSUP , arg1      , arg2    , arg3  , arg4  , arg5 , arg6
 
 cm,COMPN_valid,node
 
-! Longitudinal walls and wings
-cmsel,s,COMPA_ABT_longWalls
-cmsel,a,COMPA_ABT_wings
-asel,r,loc,y,-arg1,0
-nsla,s,1
-cmsel,r,COMPN_valid
-sprsup,0,FEM_ABT_springL,0,MAT_ABT_Soil,REAL_ABT_kh,TYPE_LINK180,'COMPN_sup','COMPE_sup',1,5
-cmsel,s,COMPN_sup
-nrotat,all
-d,all,uy,0
+*if,arg2,eq,4,then
+  ! Wings
+  csys,arg3
+  cmsel,s,COMPA_ABT_longWalls
+  nsla,r,1
+  cm,COMPN_TEMP_wings,node
 
-cmsel,s,COMPA_ABT_longWalls
-cmsel,a,COMPA_ABT_wings
-asel,r,loc,y,0,arg1
-nsla,s,1
-cmsel,r,COMPN_valid
-sprsup,0,-FEM_ABT_springL,0,MAT_ABT_Soil,REAL_ABT_kh,TYPE_LINK180,'COMPN_sup','COMPE_sup',1,5
-cmsel,s,COMPN_sup
-nrotat,all
-d,all,uy,0
+  ! Left wing
+  csys,arg5
+  cmsel,s,COMPN_valid
+  cmsel,r,COMPN_TEMP_wings
+  nsel,r,loc,x,0,1e6
+  sprsup,0,-FEM_ABT_springL,0,MAT_ABT_Soil,REAL_ABT_kh,TYPE_LINK180,'COMPN_sup','COMPE_sup',1,4
+  cmsel,s,COMPN_sup
+  nrotat,all
+  d,all,uy,0,,,,ux
 
-! Transversal wall
-cmsel,s,COMPA_ABT_tranWall
-nsla,s,1
-cmsel,r,COMPN_valid
-sprsup,FEM_ABT_springL,0,0,MAT_ABT_Soil,REAL_ABT_kh,TYPE_LINK180,'COMPN_sup','COMPE_sup',1,6
-cmsel,s,COMPN_sup
-nrotat,all
-d,all,ux,0
+  ! Right wing
+  csys,arg6
+  cmsel,s,COMPN_valid
+  cmsel,r,COMPN_TEMP_wings
+  nsel,r,loc,x,0,1e6
+  sprsup,0,FEM_ABT_springL,0,MAT_ABT_Soil,REAL_ABT_kh,TYPE_LINK180,'COMPN_sup','COMPE_sup',1,4
+  cmsel,s,COMPN_sup
+  nrotat,all
+  d,all,uy,0,,,,ux
+
+  ! Transversal wall
+  csys,arg4
+  cmsel,s,COMPA_ABT_tranWall
+  nsla,s,1
+  cmsel,r,COMPN_valid
+  nsel,r,loc,x,0
+  sprsup,FEM_ABT_springL,0,0,MAT_ABT_Soil,REAL_ABT_kh,TYPE_LINK180,'COMPN_sup','COMPE_sup',1,5
+  cmsel,s,COMPN_sup
+  nrotat,all
+  d,all,ux,0
+
+*else
+  ! Longitudinal walls and wings
+  cmsel,s,COMPA_ABT_longWalls
+  cmsel,a,COMPA_ABT_wings
+  asel,r,loc,y,-arg1,0
+  nsla,s,1
+  cmsel,r,COMPN_valid
+  sprsup,0,FEM_ABT_springL,0,MAT_ABT_Soil,REAL_ABT_kh,TYPE_LINK180,'COMPN_sup','COMPE_sup',1,5
+  cmsel,s,COMPN_sup
+  nrotat,all
+  d,all,uy,0
+
+  cmsel,s,COMPA_ABT_longWalls
+  cmsel,a,COMPA_ABT_wings
+  asel,r,loc,y,0,arg1
+  nsla,s,1
+  cmsel,r,COMPN_valid
+  sprsup,0,-FEM_ABT_springL,0,MAT_ABT_Soil,REAL_ABT_kh,TYPE_LINK180,'COMPN_sup','COMPE_sup',1,5
+  cmsel,s,COMPN_sup
+  nrotat,all
+  d,all,uy,0
+
+  ! Transversal wall
+  cmsel,s,COMPA_ABT_tranWall
+  nsla,s,1
+  cmsel,r,COMPN_valid
+  sprsup,FEM_ABT_springL,0,0,MAT_ABT_Soil,REAL_ABT_kh,TYPE_LINK180,'COMPN_sup','COMPE_sup',1,6
+  cmsel,s,COMPN_sup
+  nrotat,all
+  d,all,ux,0
+*endif
 
 ! Approach slab
 cmsel,s,COMPA_ABT_appSlab
@@ -81,6 +121,3 @@ nn=0
 !    sprsup, FEM_ABT_springL,0,0,MAT_ABT_Soil,REAL_ABT_kh,TYPE_LINK180,'COMPN_sup','COMPE_sup',1,6
 !    cmsel,s,COMPN_sup
 !    d,all,ux,0
-
-
-
