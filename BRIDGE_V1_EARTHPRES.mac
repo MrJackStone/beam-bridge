@@ -30,7 +30,7 @@ allsel
 
 ! Calculate soil height above each node
 *del,LOAD_ABT1_h
-*voper,LOAD_ABT1_h,LOAD_ABT1_topLevel,sub,NLIST_z
+*voper,LOAD_ABT1_h,LOAD_ABT1_topLevel,sub,NLIST_z !! very conservative for ABT_TYPE=4
 
 *del,LOAD_ABT2_h
 *voper,LOAD_ABT2_h,LOAD_ABT2_topLevel,sub,NLIST_z
@@ -70,27 +70,45 @@ allsel
 *if,GEO_ABT1_status,eq,1,then
     ! Apply stress increases on first abutment
 
-    ! Longitudinal wall and wing (Y<0)
+    ! Longitudinal wall and wing (right side, Y<0)
     cmsel,s,COMPA_ABT_longWalls
     cmsel,a,COMPA_ABT_wings
     cmsel,r,COMPA_ABT_1
     csys,CS_ABT1
-    asel,r,loc,y,-GEO_deckWidth,0
+    asel,r,loc,y,-1e6,0
     csys,0
     nsla,s,1
-    nslcomp,'F_h','N_n','nc','LOAD_ABT1_Fh',-1
-    f, N_n(1:nc), fy, F_h(1:nc)
+    *if,GEO_ABT1_type,eq,4,then
+      *afun,deg
+      nslcomp,'F_h','N_n','nc','LOAD_ABT1_Fhx',-sin(GEO_ABT1_wingAngle)
+      nslcomp,'F_h','N_n','nc','LOAD_ABT1_Fhy',-cos(GEO_ABT1_wingAngle)
+      f, N_n(1:nc), fx, F_hx(1:nc)
+      f, N_n(1:nc), fy, F_hy(1:nc)
+      *afun,rad
+    *else
+      nslcomp,'F_h','N_n','nc','LOAD_ABT1_Fh',-1
+      f, N_n(1:nc), fy, F_h(1:nc)
+    *endif
 
-    ! Longitudinal wall and wing (Y>0)
+    ! Longitudinal wall and wing (left side, Y>0)
     cmsel,s,COMPA_ABT_longWalls
     cmsel,a,COMPA_ABT_wings
     cmsel,r,COMPA_ABT_1
     csys,CS_ABT1
-    asel,r,loc,y,0,GEO_deckWidth
+    asel,r,loc,y,0,1e6
     csys,0
     nsla,s,1
-    nslcomp,'F_h','N_n','nc','LOAD_ABT1_Fh',1
-    f, N_n(1:nc), fy, F_h(1:nc)
+    *if,GEO_ABT1_type,eq,4,then
+      *afun,deg
+      nslcomp,'F_h','N_n','nc','LOAD_ABT1_Fhx',-sin(GEO_ABT1_wingAngle)
+      nslcomp,'F_h','N_n','nc','LOAD_ABT1_Fhy',cos(GEO_ABT1_wingAngle)
+      f, N_n(1:nc), fx, F_hx(1:nc)
+      f, N_n(1:nc), fy, F_hy(1:nc)
+      *afun,rad
+    *else
+      nslcomp,'F_h','N_n','nc','LOAD_ABT1_Fh',1
+      f, N_n(1:nc), fy, F_h(1:nc)
+    *endif
 
     ! Transversal wall
     cmsel,s,COMPA_ABT_tranWall
@@ -144,27 +162,45 @@ allsel
 *if,GEO_ABT2_status,eq,1,then
     ! Apply stress increases on second abutment
 
-    ! Longitudinal wall and wing (Y<0)
+    ! Longitudinal wall and wing (right side, Y<0)
     cmsel,s,COMPA_ABT_longWalls
     cmsel,a,COMPA_ABT_wings
     cmsel,r,COMPA_ABT_2
     csys,CS_ABT2
-    asel,r,loc,y,-GEO_deckWidth,0
+    asel,r,loc,y,-1e6,0
     csys,0
     nsla,s,1
-    nslcomp,'F_h','N_n','nc','LOAD_ABT2_Fh',-1
-    f, N_n(1:nc), fy, F_h(1:nc)
+    *if,GEO_ABT2_type,eq,4,then
+      *afun,deg
+      nslcomp,'F_h','N_n','nc','LOAD_ABT2_Fhx',-sin(GEO_ABT2_wingAngle)
+      nslcomp,'F_h','N_n','nc','LOAD_ABT2_Fhy',-cos(GEO_ABT2_wingAngle)
+      f, N_n(1:nc), fx, F_hx(1:nc)
+      f, N_n(1:nc), fy, F_hy(1:nc)
+      *afun,rad
+    *else
+      nslcomp,'F_h','N_n','nc','LOAD_ABT2_Fh',-1
+      f, N_n(1:nc), fy, F_h(1:nc)
+    *endif
 
-    ! Longitudinal wall and wing (Y>0)
+    ! Longitudinal wall and wing (left side, Y>0)
     cmsel,s,COMPA_ABT_longWalls
     cmsel,a,COMPA_ABT_wings
     cmsel,r,COMPA_ABT_2
     csys,CS_ABT2
-    asel,r,loc,y,0,GEO_deckWidth
+    asel,r,loc,y,0,1e6
     csys,0
     nsla,s,1
-    nslcomp,'F_h','N_n','nc','LOAD_ABT2_Fh',1
-    f, N_n(1:nc), fy, F_h(1:nc)
+    *if,GEO_ABT2_type,eq,4,then
+      *afun,deg
+      nslcomp,'F_h','N_n','nc','LOAD_ABT2_Fhx',-sin(GEO_ABT2_wingAngle)
+      nslcomp,'F_h','N_n','nc','LOAD_ABT2_Fhy',cos(GEO_ABT2_wingAngle)
+      f, N_n(1:nc), fx, F_hx(1:nc)
+      f, N_n(1:nc), fy, F_hy(1:nc)
+      *afun,rad
+    *else
+      nslcomp,'F_h','N_n','nc','LOAD_ABT2_Fh',1
+      f, N_n(1:nc), fy, F_h(1:nc)
+    *endif
 
     ! Transversal wall
     cmsel,s,COMPA_ABT_tranWall
