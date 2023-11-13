@@ -236,6 +236,19 @@ cm,COMPN_ABT_2,node
 csys,CS_ABT2
 nrotat,all
 csys,0
+
+! Selection components: submerged and exposed elements
+cmsel,s,COMPE_ABT_1
+cmsel,a,COMPE_ABT_2
+cm,COMPE_temp,elem
+*if,GEO_waterHeight,GT,0,THEN
+  nsel,s,loc,z,zFrameBot,GEO_waterHeight-GEO_ABT1_height
+  esln,r,1
+  cmpadd,'COMPE_Submerged'
+*endif
+cmsel,s,COMPE_temp
+cmsel,u,COMPE_Submerged
+cmpadd,'COMPE_Exposed'
 !
 !
 !! 4.3.2 PILES                                                                                    !!

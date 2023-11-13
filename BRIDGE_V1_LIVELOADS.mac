@@ -38,6 +38,22 @@ ALLSEL
     *endif
 *endif
 
+! Water flow on submerged abutment elements
+cmsel,s,COMPE_ABT_1
+cmsel,a,COMPE_ABT_2
+cmsel,r,COMPE_Submerged
+cm,COMPE_temp_submerged,elem
+*get,ec,elem,,count
+*if,ec,gt,0,then
+  cmsel,s,COMPA_ABT_longWall
+  esla,s
+  nsle,s
+  nsel,r,loc,y,-1e6,0
+  cmsel,s,COMPE_temp_submerged
+  esln,r,1
+  sfe,all,1,pres,,-LOAD_waterFlow
+*endif
+
 ! Wind uniform load on exposed column elements
 *if,GEO_pierCount,gt,0,then
     CMSEL,S,COMPE_Exposed
