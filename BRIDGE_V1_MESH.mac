@@ -528,7 +528,10 @@ NodeNum=0
    NSEL,R,LOC,X,xVal
    NSEL,R,LOC,Y,yVal
    nsel,r,loc,z,zVal !! added on 20/03/2023 to filter only transversal wall nodes that interface with piles
-   *get,PCNode,NODE,,NUM,MIN
+   cmsel,s,COMPL_ABT_pileConnections
+   nsll,a,1
+   cmsel,u,COMPN_temp
+   PCNode=nnear(NodeNum)
    NSEL,A,NODE,,NodeNum
    safe_CP,'UX',PCNode,NodeNum
    safe_CP,'UY',PCNode,NodeNum
