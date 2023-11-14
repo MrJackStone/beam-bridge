@@ -45,10 +45,20 @@ cmsel,r,COMPE_Submerged
 cm,COMPE_temp_submerged,elem
 *get,ec,elem,,count
 *if,ec,gt,0,then
-  cmsel,s,COMPA_ABT_longWall
+  cmsel,s,COMPA_ABT_longWalls
   esla,s
   nsle,s
   nsel,r,loc,y,-1e6,0
+  cm,COMPN_temp_rightSide,node
+
+  cmsel,s,COMPN_ABT_1
+  cmsel,r,COMPN_temp_rightSide
+  cmsel,s,COMPE_temp_submerged
+  esln,r,1
+  sfe,all,1,pres,,LOAD_waterFlow
+
+  cmsel,s,COMPN_ABT_2
+  cmsel,r,COMPN_temp_rightSide
   cmsel,s,COMPE_temp_submerged
   esln,r,1
   sfe,all,1,pres,,-LOAD_waterFlow
