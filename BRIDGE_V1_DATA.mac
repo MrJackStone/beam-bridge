@@ -198,7 +198,7 @@ GEO_ABT1_topOffset=0
 GEO_ABT1_wings=0
 
 ! Wing length
-GEO_ABT1_wingL=2
+GEO_ABT1_wingL=7
 
 ! Wing height at abutment
 GEO_ABT1_wingHa=2
@@ -242,6 +242,14 @@ GEO_ABT1_pileFree=0
 !    [0] OFF (include longitudinal walls)
 !    [1] ON (supress longitudinal walls)
 GEO_ABT1_supressLW=1
+
+! Options for abutment type 4:
+GEO_ABT1_wingAngle=50
+GEO_ABT1_trvPileCols=2
+GEO_ABT1_wingPileCols=2
+GEO_ABT1_wingCapLength=7
+GEO_ABT1_wingCapWidth=2
+
 !
 !! 1.1.4.2 END                                                                                    !!
 ! Type:
@@ -266,7 +274,7 @@ GEO_ABT2_topOffset=0
 GEO_ABT2_wings=0
 
 ! Wing length
-GEO_ABT2_wingL=2
+GEO_ABT2_wingL=7
 
 ! Wing height at abutment
 GEO_ABT2_wingHa=2
@@ -310,6 +318,13 @@ GEO_ABT2_pileFree=0
 !    [0] OFF (include longitudinal walls)
 !    [1] ON (supress longitudinal walls)
 GEO_ABT2_supressLW=1
+
+! Options for abutment type 4:
+GEO_ABT2_wingAngle=50
+GEO_ABT2_trvPileCols=2
+GEO_ABT2_wingPileCols=2
+GEO_ABT2_wingCapLength=7
+GEO_ABT2_wingCapWidth=2
 !
 !
 !! 1.1.5 INFRASTRUCTURE                                                                           !!
