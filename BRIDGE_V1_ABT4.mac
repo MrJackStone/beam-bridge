@@ -54,13 +54,13 @@ GEO_ABT_wingAngle     = %arg2%(27)
 !! B.1 Transversal wall and its foundation
 csys,arg1
 csnext,'CS_trvWall'
-clocal,CS_trvWall,0,0,-GEO_ABT_deckWidth/2,-GEO_ABT_height,90
+clocal,CS_trvWall,0,0,-GEO_ABT_deckWidth/2,-GEO_ABT_height
 csys,CS_trvWall
 
 *del,transversal_wall_params,,nopr
 *dim,transversal_wall_params,,10
 transversal_wall_params(1) = GEO_ABT_deckWidth , GEO_ABT_height , GEO_ABT_height    , GEO_ABT_pileCapL    , GEO_ABT_pileCapW
-transversal_wall_params(6) = SEC_ABT_pileCap_h , GEO_ABT_pileL  , GEO_ABT_longPiles , GEO_ABT_trvPileCols , GEO_ABT_pileOff
+transversal_wall_params(6) = SEC_ABT_pileCap_h , GEO_ABT_pileL  , GEO_ABT_tranPiles , GEO_ABT_trvPileCols , GEO_ABT_pileOff
 
 sm_pilesup_retwall,CS_trvWall,'transversal_wall_params', 'ABT_TRV'
 csys,arg1
@@ -68,13 +68,13 @@ csys,arg1
 !! B.2 Left wing and its foundation
 csys,arg1
 csnext,'CS_leftWing'
-clocal,CS_leftWing,0,0,GEO_ABT_deckWidth/2,-GEO_ABT_height,GEO_ABT_wingAngle
+clocal,CS_leftWing,0,0,GEO_ABT_deckWidth/2,-GEO_ABT_height,GEO_ABT_wingAngle-90
 csys,CS_leftWing
 
 *del,left_wing_params,,nopr
 *dim,left_wing_params,,10
 left_wing_params(1) = GEO_ABT_wingL     , GEO_ABT_height , GEO_ABT_wingHa    , GEO_ABT_wingCapLength , GEO_ABT_wingCapWidth
-left_wing_params(6) = SEC_ABT_pileCap_h , GEO_ABT_pileL  , GEO_ABT_tranPiles , GEO_ABT_wingPileCols  , GEO_ABT_pileOff
+left_wing_params(6) = SEC_ABT_pileCap_h , GEO_ABT_pileL  , GEO_ABT_longPiles , GEO_ABT_wingPileCols  , GEO_ABT_pileOff
 
 sm_pilesup_retwall,CS_leftWing,'left_wing_params', 'ABT_LW'
 
@@ -91,13 +91,13 @@ csys,arg1
 !! B.2 Right wing and its foundation
 csys,arg1
 csnext,'CS_rightWing'
-clocal,CS_rightWing,0,0,-GEO_ABT_deckWidth/2,-GEO_ABT_height,-GEO_ABT_wingAngle
+clocal,CS_rightWing,0,0,-GEO_ABT_deckWidth/2,-GEO_ABT_height,-GEO_ABT_wingAngle-90
 csys,CS_rightWing
 
 *del,right_wing_params,,nopr
 *dim,right_wing_params,,10
-right_wing_params(1) = GEO_ABT_wingL     , wingHeight    , GEO_ABT_wingHa    , GEO_ABT_wingCapLength , GEO_ABT_wingCapWidth
-right_wing_params(6) = SEC_ABT_pileCap_h , GEO_ABT_pileL , GEO_ABT_tranPiles , GEO_ABT_wingPileCols  , GEO_ABT_pileOff
+right_wing_params(1) = GEO_ABT_wingL     , GEO_ABT_height, GEO_ABT_wingHa    , GEO_ABT_wingCapLength , GEO_ABT_wingCapWidth
+right_wing_params(6) = SEC_ABT_pileCap_h , GEO_ABT_pileL , GEO_ABT_longPiles , GEO_ABT_wingPileCols  , GEO_ABT_pileOff
 
 sm_pilesup_retwall,CS_rightWing,'right_wing_params', 'ABT_RW'
 
@@ -123,7 +123,7 @@ nummrg,kp
 ! Copy line pattern from transversal wall top
 cmsel,s,COMPA_ABT_TRV_wall
 lsla,s
-lsel,r,loc,x,0
+lsel,r,loc,z,0
 cm,COMPL_temp_trvWallTop,line
 lgen,2,all,,,0,0,0,,,0
 cmsel,u,COMPL_temp_trvWallTop
@@ -148,7 +148,9 @@ cm,COMPL_temp_appSlab,line
 
 ! Draw approach slab
 cmsel,s,COMPL_temp_appSlab
-al,COMPL_temp_appSlab
+cmsel,a,COMPL_temp_abtInterface
+ksll,s
+al,all
 cm,COMPA_TEMP_appSlab,area
 
 !!
@@ -216,30 +218,30 @@ cmsel,a,COMPK_ABT_RW_ref
 cmpadd,'COMPK_ABT_base'
 
 ! Piles
-cmsel,s,COMPA_ABT_TRV_piles
-cmpadd,'COMPA_ABT_twPiles'
-cmsel,s,COMPA_ABT_LW_piles
-cmsel,a,COMPA_ABT_RW_piles
+cmsel,s,COMPL_ABT_TRV_piles
+cmpadd,'COMPL_ABT_twPiles'
+cmsel,s,COMPL_ABT_LW_piles
+cmsel,a,COMPL_ABT_RW_piles
 cmpadd,'COMPL_ABT_lwPiles'
-cmsel,s,COMPA_ABT_twPiles
-cmsel,a,COMPA_ABT_lwPiles
-cmpadd,'COMPA_ABT_piles'
+cmsel,s,COMPL_ABT_twPiles
+cmsel,a,COMPL_ABT_lwPiles
+cmpadd,'COMPL_ABT_piles'
 
 ! Pile connections
-cmsel,s,COMPA_ABT_TRV_pileConnections
-cmsel,a,COMPA_ABT_LW_pileConnections
-cmsel,a,COMPA_ABT_RW_pileConnections
+cmsel,s,COMPL_ABT_TRV_pileConnections
+cmsel,a,COMPL_ABT_LW_pileConnections
+cmsel,a,COMPL_ABT_RW_pileConnections
 cmpadd,'COMPL_ABT_pileConnections'
 
 ! Pile ends
-cmsel,s,COMPA_ABT_TRV_pileTop
-cmsel,a,COMPA_ABT_LW_pileTop
-cmsel,a,COMPA_ABT_RW_pileTop
+cmsel,s,COMPK_ABT_TRV_pileTop
+cmsel,a,COMPK_ABT_LW_pileTop
+cmsel,a,COMPK_ABT_RW_pileTop
 cmpadd,'COMPK_ABT_pileTop'
 
-cmsel,s,COMPA_ABT_TRV_pileBot
-cmsel,a,COMPA_ABT_LW_pileBot
-cmsel,a,COMPA_ABT_RW_pileBot
+cmsel,s,COMPK_ABT_TRV_pileBot
+cmsel,a,COMPK_ABT_LW_pileBot
+cmsel,a,COMPK_ABT_RW_pileBot
 cmpadd,'COMPK_ABT_pileBase'
 
 ! Whole abutment
@@ -250,7 +252,7 @@ cmpadd,'COMPA_Abutment'
 
 lsla,s
 cmsel,a,COMPL_ABT_piles
-cmsel,a,COMPL_ABT_pileConnection
+cmsel,a,COMPL_ABT_pileConnections
 cmpadd,'COMPL_Abutment'
 
 ksll,s
