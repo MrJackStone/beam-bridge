@@ -14,8 +14,8 @@ cm,COMPN_valid,node
   csys,arg5
   cmsel,s,COMPN_valid
   cmsel,r,COMPN_TEMP_wings
-  nsel,r,loc,x,0,1e6
-  sprsup,0,-FEM_ABT_springL,0,MAT_ABT_Soil,REAL_ABT_kh,TYPE_LINK180,'COMPN_sup','COMPE_sup',1,4
+  nsel,r,loc,y,0,1e6
+  sprsup,FEM_ABT_springL,0,0,MAT_ABT_Soil,REAL_ABT_kh,TYPE_LINK180,'COMPN_sup','COMPE_sup',1,4
   cmsel,s,COMPN_sup
   nrotat,all
   d,all,uy,0,,,,ux
@@ -24,8 +24,8 @@ cm,COMPN_valid,node
   csys,arg6
   cmsel,s,COMPN_valid
   cmsel,r,COMPN_TEMP_wings
-  nsel,r,loc,x,0,1e6
-  sprsup,0,FEM_ABT_springL,0,MAT_ABT_Soil,REAL_ABT_kh,TYPE_LINK180,'COMPN_sup','COMPE_sup',1,4
+  nsel,r,loc,y,0,1e6
+  sprsup,-FEM_ABT_springL,0,0,MAT_ABT_Soil,REAL_ABT_kh,TYPE_LINK180,'COMPN_sup','COMPE_sup',1,4
   cmsel,s,COMPN_sup
   nrotat,all
   d,all,uy,0,,,,ux
@@ -36,7 +36,7 @@ cm,COMPN_valid,node
   nsla,s,1
   cmsel,r,COMPN_valid
   nsel,r,loc,x,0
-  sprsup,FEM_ABT_springL,0,0,MAT_ABT_Soil,REAL_ABT_kh,TYPE_LINK180,'COMPN_sup','COMPE_sup',1,5
+  sprsup,FEM_ABT_springL,0,0,MAT_ABT_Soil,REAL_ABT_kh,TYPE_LINK180,'COMPN_sup','COMPE_sup',1,6
   cmsel,s,COMPN_sup
   nrotat,all
   d,all,ux,0
