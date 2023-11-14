@@ -472,6 +472,7 @@ secdata,SEC_ABT_pile_d/2
 ! PILE CAP
 sectype,SEC_ABT_pileCap,shell,,'ABT_SLAB'
 secdata,SEC_ABT_pileCap_h,MAT_Abutment
+secoffset,top
 
 ! VERTICAL SOIL SPRINGS
 REAL_ABT_kv_area=(MAT_ABT_Soil_kv*FEM_ABT_springL)/MAT_ABT_Soil_E
