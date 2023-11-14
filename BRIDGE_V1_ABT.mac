@@ -131,8 +131,8 @@ x21b=x01+GEO_ABT_pileCapW
 x23b=x23
 ! x22b=x21b ; x24b=x23b
 
-y01=GEO_ABT_yOffset-GEO_ABT_yc
-y02=y01+GEO_ABT_deckWidth
+y01=GEO_ABT_yOffset-GEO_ABT_yc ! right wall
+y02=y01+GEO_ABT_deckWidth      ! left wall
 y09=y01-GEO_ABT_colW
 y11=y02+GEO_ABT_colW
 *if,GEO_ABT_type,eq,1,or,GEO_ABT_type,eq,2,then
@@ -761,10 +761,29 @@ cmpadd,'COMPL_Abutment'
 ksll,s
 cmpadd,'COMPK_Abutment'
 
+cmsel,s,COMPA_ABT_longWalls
+cmsel,a,COMPA_ABT_wings
+asel,r,loc,y,y01
+cmpadd,'COMPA_ABT_rightSide'
+
+cmsel,s,COMPA_ABT_longWalls
+cmsel,a,COMPA_ABT_wings
+asel,r,loc,y,y02
+cmpadd,'COMPA_ABT_leftSide'
+
 allsel
 cmsel,u,COMPA_prev
 cmsel,u,COMPL_prev
 cmsel,u,COMPK_prev
+
+!!
+!! G. Coordinate systems for local ESYS
+!!
+csys,arg1
+csnext,'CS_leftWall'
+clocal,CS_leftWall,cart,0,0,0,,90
+csnext,'CS_rightWall'
+clocal,CS_leftWall,cart,0,0,0,180,90
 
 ! COMPA_Abutment
 !
@@ -782,4 +801,6 @@ cmsel,u,COMPK_prev
 ! COMPK_ABT_base
 ! COMPK_ABT_pileTop
 ! COMPK_ABT_pileBase
-
+!
+! COMPA_ABT_rightSide
+! COMPA_ABT_leftSide

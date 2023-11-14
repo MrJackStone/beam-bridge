@@ -147,22 +147,24 @@ CM,COMPL_Pile,LINE
 asel,u,area,,all
 lsel,u,line,,all
 ksel,u,kp,,all
-cm,COMPA_Abutment,area
-cm,COMPA_ABT_walls,area
-cm,COMPA_ABT_tranWall,area
-cm,COMPA_ABT_longWalls,area
-cm,COMPA_ABT_columns,area
-cm,COMPA_ABT_wings,area
-cm,COMPA_ABT_beam,area
-cm,COMPA_ABT_pileCap,area
-cm,COMPA_ABT_appSlab,area
-cm,COMPL_ABT_piles,line
-cm,COMPL_ABT_lwPiles,line
-cm,COMPL_ABT_vxPiles,line
-cm,COMPK_ABT_base,kp
-cm,COMPK_ABT_pileTop,kp
-cm,COMPK_ABT_pileBase,kp
-cm,COMPL_ABT_pileConnections,line
+cm , COMPA_ABT_appSlab         , area
+cm , COMPA_ABT_beam            , area
+cm , COMPA_ABT_columns         , area
+cm , COMPA_ABT_leftSide        , area
+cm , COMPA_ABT_longWalls       , area
+cm , COMPA_ABT_pileCap         , area
+cm , COMPA_ABT_rightSide       , area
+cm , COMPA_ABT_tranWall        , area
+cm , COMPA_ABT_walls           , area
+cm , COMPA_ABT_wings           , area
+cm , COMPA_Abutment            , area
+cm , COMPK_ABT_base            , kp
+cm , COMPK_ABT_pileBase        , kp
+cm , COMPK_ABT_pileTop         , kp
+cm , COMPL_ABT_lwPiles         , line
+cm , COMPL_ABT_pileConnections , line
+cm , COMPL_ABT_piles           , line
+cm , COMPL_ABT_vxPiles         , line
 
 ! First abutment (before X=0)
 asel,u,area,,all
@@ -183,6 +185,8 @@ ksel,u,kp,,all
       BRIDGE_V1_ABT,CS_ABT1,'GEO_ABT1_geometry',1
       ABT1_angCoef=angCoef
       ABT1_linCoef=linCoef
+      CS_ABT1_lw=CS_leftWall
+      CS_ABT1_rw=CS_rightWall
     *endif
 *endif
 cm,COMPA_ABT_1,area
@@ -208,6 +212,8 @@ ksel,u,kp,,all
       BRIDGE_V1_ABT,CS_ABT2,'GEO_ABT2_geometry', 1
       ABT2_angCoef=angCoef
       ABT2_linCoef=linCoef
+      CS_ABT2_lw=CS_leftWall
+      CS_ABT2_rw=CS_rightWall
     *endif
 *endif
 cm,COMPA_ABT_2,area
