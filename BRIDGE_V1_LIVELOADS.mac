@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 ! BRIDGE_V1_LIVELOADS
 ! BRIDGE_V1_LIVELOADS
 
@@ -62,7 +61,7 @@ cm,COMPE_temp_submerged,elem
   cmsel,r,COMPN_temp_rightSide
   cmsel,s,COMPE_temp_submerged
   esln,r,1
-  sfe,all,1,pres,,-LOAD_waterFlow
+  sfe,all,1,pres,,LOAD_waterFlow
 *endif
 
 ! Wind uniform load on exposed column elements
