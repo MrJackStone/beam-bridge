@@ -177,33 +177,43 @@ cm,COMPN_ColTube,node
 !!                                                                                                !!
 ! Create CSYS to use as local element coordinate systems
 csys,CS_ABT1
+csnext,'ESYS_ABT1_tw'
 clocal,ESYS_ABT1_tw,cart,0,0,0,90,90
 
 csys,CS_ABT2
+csnext,'ESYS_ABT2_tw'
 clocal,ESYS_ABT2_tw,cart,0,0,0,90,90
 
 csys,CS_ABT1_lw
+csnext,'ESYS_ABT1_lw'
 clocal,ESYS_ABT1_lw,cart,0,0,0,90,90
 
 csys,CS_ABT1_lw
+csnext,'ESYS_ABT1_lc'
 clocal,ESYS_ABT1_lc,cart,0,0,0,90
 
 csys,CS_ABT1_rw
+csnext,'ESYS_ABT1_rw'
 clocal,ESYS_ABT1_rw,cart,0,0,0,-90,90
 
 csys,CS_ABT1_rw
+csnext,'ESYS_ABT1_rc'
 clocal,ESYS_ABT1_rc,cart,0,0,0,90,180
 
 csys,CS_ABT2_lw
+csnext,'ESYS_ABT2_lw'
 clocal,ESYS_ABT2_lw,cart,0,0,0,90,90
 
 csys,CS_ABT2_lw
+csnext,'ESYS_ABT2_lc'
 clocal,ESYS_ABT2_lc,cart,0,0,0,90
 
 csys,CS_ABT2_rw
+csnext,'ESYS_ABT2_rw'
 clocal,ESYS_ABT2_rw,cart,0,0,0,-90,90
 
 csys,CS_ABT2_rw
+csnext,'ESYS_ABT2_rc'
 clocal,ESYS_ABT2_rc,cart,0,0,0,90,180
 
 csys,0
