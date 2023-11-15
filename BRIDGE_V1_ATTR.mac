@@ -1029,10 +1029,10 @@ GEO_ABT2_geometry(21) = GEO_ABT2_pileFree     , GEO_ABT2_pileShort , GEO_ABT2_tr
 GEO_ABT2_geometry(26) = GEO_ABT2_wingCapWidth , GEO_ABT2_wingAngle
 
 ! Abutment extents
-GEO_ABT1_xMin=-(GEO_ABT1_length > GEO_ABT1_appSlabL * GEO_ABT1_appSlab)
+GEO_ABT1_xMin=-(GEO_ABT1_length>GEO_ABT1_appSlabL*GEO_ABT1_appSlab)
 GEO_ABT1_xMax=0
 GEO_ABT2_xMin=GEO_deckLength
-GEO_ABT2_xMax=GEO_deckLength+(GEO_ABT2_length > GEO_ABT2_appSlabL * GEO_ABT2_appSlab)
+GEO_ABT2_xMax=GEO_deckLength+(GEO_ABT2_length>GEO_ABT2_appSlabL*GEO_ABT2_appSlab)
 
 ! General span lengths
 GEO_genSpanCount=GEO_supportCount-1
