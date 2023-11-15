@@ -116,6 +116,10 @@ asel,u,area,,all
 sm_pilesup_retwall,CS_rightWing,'right_wing_params', 'ABT_RW'
 cmpadd,'COMPA_ABT_rightSide'
 
+! Reverse direction of wall area, so it points inwards relative to the abutment
+cmsel,s,COMPA_ABT_RW_wall
+areverse,all
+
 ! Delete first pile row (overlaps with transverwall wall's)
 *do,nthPileCol,1,GEO_ABT_wingPileCols,1
   cmsel,s,COMPL_ABT_RW_pile%nthPileCol%
