@@ -195,7 +195,17 @@ BRIDGE_V1_LONGSLICE
 cm,COMPA_TEMP_appSlab,area
 
 !!
-!! D. Interface output: create selection components
+!! D. Merge pile caps
+!!
+cmsel,s,COMPA_ABT_TRV_cap
+cmsel,a,COMPA_ABT_LW_cap
+aovlap,all
+cmsel,a,COMPA_ABT_RW_cap
+aovlap,all
+cm,COMPA_ABT_mergedCaps,area
+
+!!
+!! E. Interface output: create selection components
 !!
 ! Barrier lines
 lsel,u,line,,all
@@ -226,9 +236,10 @@ cmsel,a,COMPA_ABT_tranWall
 cmpadd,'COMPA_ABT_walls'
 
 ! Pile caps
-cmsel,s,COMPA_ABT_TRV_cap
-cmsel,a,COMPA_ABT_LW_cap
-cmsel,a,COMPA_ABT_RW_cap
+cmsel,s,COMPA_ABT_mergedCaps
+!cmsel,s,COMPA_ABT_TRV_cap
+!cmsel,a,COMPA_ABT_LW_cap
+!cmsel,a,COMPA_ABT_RW_cap
 cmpadd,'COMPA_ABT_pileCap'
 
 cmsel,s,COMPK_ABT_TRV_ref
