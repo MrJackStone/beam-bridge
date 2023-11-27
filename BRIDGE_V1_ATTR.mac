@@ -1375,12 +1375,3 @@ LOAD_vehicleTraffic=LOAD_dynImpact*LOAD_vehicleTraffic_k
 
 ! Time at the end of dead load introduction load step (dynamic analysis only)
 SOLU_dlTime=1
-
-
-
-
-
-
-
-
-
