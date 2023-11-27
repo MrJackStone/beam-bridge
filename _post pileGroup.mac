@@ -19,10 +19,18 @@ set,1
     *if,nthSup,eq,1,then
         ! First abutment
         x_j=x_i-GEO_ABT1_pileCapL
+        *if,GEO_ABT1_type,eq,4,then
+            x_i=x_i-GEO_ABT1_pileCapW/2
+            x_j=x_i+GEO_ABT1_pileCapW
+        *endif
 
     *elseif,nthSup,eq,GEO_genSpanCount,then
         ! Last abutment
         x_j=x_i+GEO_ABT2_pileCapL
+        *if,GEO_ABT2_type,eq,4,then
+            x_i=x_i-GEO_ABT2_pileCapW/2
+            x_j=x_i+GEO_ABT2_pileCapW
+        *endif
 
     *else
         ! Tubular pier columns
@@ -95,9 +103,13 @@ set,1
     *del,pile_m
     *del,pile_n
     *del,pile_v
+    *del,pile_x
+    *del,pile_y
     *dim,pile_m,,lc
     *dim,pile_n,,lc
     *dim,pile_v,,lc
+    *dim,pile_x,,lc
+    *dim,pile_y,,lc
     ln=0
     *do,nthLine,1,lc,1
         cmsel,s,%cmlName%
@@ -113,9 +125,17 @@ set,1
         pletab,'Q_obl'
         *get,v_mx,plnsol,,max
 
+        *get,ztop,node,,mxloc,z
+        nsel,r,loc,z,ztop
+        topNode=ndnext(0)
+        xtop=nx(topNode)
+        ytop=ny(topNode)
+
         pile_m(nthLine)=m_mx
         pile_n(nthLine)=n_mx
         pile_v(nthLine)=v_mx
+        pile_x(nthLine)=xtop
+        pile_y(nthLine)=ytop
     *enddo
 
 
@@ -125,9 +145,9 @@ set,1
         *vwrite,
         (' ')
         *vwrite,
-        ('            NSd              MSd                   VSd')
-        *vwrite,pile_n(1),pile_m(1),pile_v(1)
-        (F15.2,'  ',F15.2,'  ',F20.2)
+        ('              X                Y              NSd              MSd                   VSd')
+        *vwrite,pile_x(1),pile_y(1),pile_n(1),pile_m(1),pile_v(1)
+        (F15.4,'  ',F15.4,'  ',F15.2,'  ',F15.2,'  ',F20.2)
         *vwrite
         (' ')
         *vwrite
@@ -136,3 +156,4 @@ set,1
 
 
 *enddo
+
