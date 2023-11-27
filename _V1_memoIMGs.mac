@@ -325,7 +325,7 @@ cmsel,s,compa_slab
 esla,s
 nsle,s,active
 cm,vn,node
-/input,'F:\Ansys\03 Design\30 Pontes Anchieta\01 APDL\_slab_paths',mac
+/input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_slab_paths',mac
 
 *del,MPATHPLOT_ARR_pathNames
 *dim,MPATHPLOT_ARR_pathNames,char,GEO_genSpanCount*5
@@ -500,7 +500,7 @@ cmsel,s,compa_abt_appslab
 esla,s
 nsle,s,active
 cm,vn,node
-/input,'F:\Ansys\03 Design\30 Pontes Anchieta\01 APDL\_slab_paths',mac
+/input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_slab_paths',mac
 
 *del,MPATHPLOT_ARR_pathNames
 *dim,MPATHPLOT_ARR_pathNames,char,GEO_genSpanCount*5
