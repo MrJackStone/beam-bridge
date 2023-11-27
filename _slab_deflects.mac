@@ -1,0 +1,107 @@
+!/input,'F:\Ansys\03 Design\30 Pontes Anchieta\01 APDL\_slab_deflects',mac
+
+windefa,1
+/device,font
+wincln,1
+/udoc,1,cntr,right
+/plopts,info,3
+/plopts,leg3,1
+/gformat,f,10,4
+/annot,dele
+wntitle,'FLECHA LAJE TABULEIRO [mm]',1
+
+*do,nthSpan,1,GEO_girderCount-1,1
+    csA=CS_girders(nthSpan)
+    csB=CS_girders(nthSpan+1)
+    cmsel,s,COMPE_Slab
+    nsle,s,active
+
+    csys,csA
+    nsel,r,loc,y,0,1e9
+
+    csys,csB
+    nsel,r,loc,y,-1e9,0
+
+    esln,r,1
+    cm,COMPE_SlabSpan_S%nthSpan%,elem
+    cm,COMPN_SlabSpan_S%nthSpan%,node
+*enddo
+
+pathCount=50
+cmsel,s,COMPE_Slab
+nsle,s,active
+*get,xmin,node,,mnloc,x
+*get,xmax,node,,mxloc,x
+xstep=(xmax-xmin)/(pathCount-1)
+*del,x_path
+*dim,x_path,,pathCount
+*vfill,x_path,ramp,xmin,xstep
+
+*del,all_path_names
+*dim,all_path_names,char,(GEO_girderCount-1)*pathCount
+*del,all_path_labels
+*dim,all_path_labels,char,(GEO_girderCount-1)*pathCount
+pathIdx=0
+
+*do,nthSpan,1,GEO_girderCount-1,1
+    cmsel,s,COMPE_SlabSpan_S%nthSpan%
+    cmsel,s,COMPN_SlabSpan_S%nthSpan%
+
+    csA=CS_girders(nthSpan)
+    *get,csAy,cdsy,csA,loc,y
+    *get,csAxy,cdsy,csA,ang,xy
+
+    csB=CS_girders(nthSpan+1)
+    *get,csBy,cdsy,csB,loc,y
+    *get,csBxy,cdsy,csB,ang,xy
+
+
+    *do,nthPath,1,pathCount,1
+        x=x_path(nthPath)
+        *afun,deg
+        yA=csAy+x*tan(csAxy)
+        yB=csBy+x*tan(csBxy)
+        *afun,rad
+
+        pthName='S%nthSpan%_P%nthPath%'
+        pathIdx=pathIdx+1
+        all_path_names(pathIdx)=pthName
+        all_path_labels(pathIdx)='NET_UZ'
+
+        path,pthName,2,10,20
+        ppath,1,,x,yA,0
+        ppath,2,,x,yB,0
+        pdef,'UZ',u,z,1
+        pdef,'EMN_UZ',etab,'EMN_UZ',1
+        pdef,'EMX_UZ',etab,'EMX_UZ',1
+
+        pthrebase,'UZ',0,'NET_UZ', -1e3
+    *enddo
+*enddo
+
+cmsel,s,COMPE_Slab
+nsle,s,active
+/auto,1
+/angle,,0
+/view,1,1,1,1 !!0,0
+/eshape,0
+/edge,,1
+
+go2png,1200
+    eplot
+    /user,1
+    /noerase
+    cmsel,s,COMPE_girder
+    nsle,s,active
+    /eshape,1
+    /gline,,-1
+    !eplot
+    cmsel,s,COMPE_Slab
+    nsle,s,active
+    /eshape,0
+    /gline,,0
+    mpathplot,10,,'all_path_names','all_path_labels'
+endpng,'slab_deflections'
+/erase
+
+
