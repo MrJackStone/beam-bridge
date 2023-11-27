@@ -439,6 +439,56 @@ clims
 
 !!
 !!
+*do,i,1,GEO_genSpanCount*5,1
+    MPATHPLOT_ARR_pathNames(i)=pthNames(i)
+    MPATHPLOT_ARR_labels(i)='EAB_Q'
+*enddo
+
+allsel
+esel,u,type,,3
+cmsel,u,COMPE_pile
+nsle,s,active
+
+view1w
+windefa,1
+wincln,1
+/edge,1,0
+
+wntitle,'LAJES: FOR. CORTANTE [kN/m]'
+
+/view,1,-1,-1,1
+/angle,1,0
+/auto,1
+eplot
+/user,1
+cmsel,a,COMPE_pile
+
+cmsel,s,compa_slab
+esla,u
+
+/plopts,info,3
+/plopts,leg3,1
+/udoc,1,cntr,right
+/gformat,F,1,1
+
+! Shear force on superstructure slabs
+go2png,1200
+    /edge,1,1
+    eplot
+    /noerase
+    cmsel,s,compa_slab
+    esla,s
+    nsle,s,active
+    /udoc,1,cntr,right !!off
+    /edge,1,0
+    clims
+    pletab,'EAB_Q',1
+
+endpng,'IMG04c_slabQ'
+/erase
+clims
+!!
+!!
 !!
 !!
 !!
@@ -560,6 +610,56 @@ endpng,'IMG04d_approxMx_pos'
 /erase
 clims
 
+!!
+!!
+*do,i,1,GEO_genSpanCount*5,1
+    MPATHPLOT_ARR_pathNames(i)=pthNames(i)
+    MPATHPLOT_ARR_labels(i)='EAB_Q'
+*enddo
+
+allsel
+esel,u,type,,3
+cmsel,u,COMPE_pile
+nsle,s,active
+
+view1w
+windefa,1
+wincln,1
+/edge,1,0
+
+wntitle,'APROX: FOR. CORTANTE [kN/m]'
+
+/view,1,-1,-1,1
+/angle,1,0
+/auto,1
+eplot
+/user,1
+cmsel,a,COMPE_pile
+
+cmsel,s,compa_abt_appslab
+esla,u
+
+/plopts,info,3
+/plopts,leg3,1
+/udoc,1,cntr,right
+/gformat,F,1,1
+
+! Bending moments on superstructure slabs
+go2png,1200
+    /edge,1,1
+    eplot
+    /noerase
+    cmsel,s,compa_abt_appslab
+    esla,s
+    nsle,s,active
+    /udoc,1,cntr,right !!off
+    /edge,1,0
+    clims
+    pletab,'EAB_Q',1
+
+endpng,'IMG04e_approxQ'
+/erase
+clims
 
 
 
