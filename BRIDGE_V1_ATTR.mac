@@ -646,6 +646,9 @@ BRIDGE_V1_XTOCHI, 'GEO_midspanChi', 'GEO_midspanX'
 *endif
 
 ! Generate coordinate systems aligned with each skewed longitudinal line
+BRIDGE_V1_SKEWEDCSYS , 'CS_leftDeckEdge'  , GEO_deckOff_beg+GEO_deckWidth_beg , GEO_deckOff_end+GEO_deckWidth_end
+BRIDGE_V1_SKEWEDCSYS , 'CS_rightDeckEdge' , GEO_deckOff_beg                   , GEO_deckOff_end
+
 *del,CS_girders
 *dim,CS_girders,,GEO_girderCount
 *do,nthGirder,1,GEO_girderCount,1

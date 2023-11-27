@@ -53,8 +53,9 @@ ALLSEL
 ! Wind lateral load on the slabs
 CMSEL,S,COMPN_Slab
 *if,GEO_deckRadius,eq,0,then
-    !! <---* this needs revising *--->
-    NSEL,R,LOC,Y,-GEO_deckWidth/2
+    csys,CS_rightDeckEdge
+    nsel,r,loc,y,0
+    csys,0
 *else
     csys,CS_deck
     nsel,r,loc,x,GEO_deckRadius
