@@ -1857,6 +1857,97 @@ endpng,'IMG17_pileQ'
 /annot,dele
 
 
+!!
+!! Deflection on girders
+g_annobold , 1
+sadd , 'ELS_UGK'  , 'DW_UZ'   ,           , 1/1.4
+sadd , 'ELS_URA'  , 'EMN_UZ'  ,           , 1/1.4
+sadd , 'ELS_UQK'  , 'ELS_URA' , 'ELS_UGK' , 1     , -1
+sadd , 'ELS_UFQ'  , 'ELS_UGK' , 'ELS_UQK' , 1     , 0.6
+sadd , 'ELSF_Zmm' , 'ELS_UFQ' ,           , 1e3
+sadd , 'ELSA_Zmm' , 'ELS_UQK' ,           , 1e3
+
+cmsel,s,COMPE_girder
+cmsel,a,COMPE_slab
+nsle,s,active
+cm,COMPE_plot,elem
+cm,COMPN_plot,node
+
+pletab,'ELSF_Zmm'
+cntrlims,'deflMin','deflMax'
+sadd,'DFL_FQ_Z','ELSF_Zmm',,1,,-deflMax
+
+view1w
+wincln,1
+/pspec,,1
+wntitle,'FLECHA TOTAL LONGARINAS [mm]',1
+/pspec,,0
+wntitle,'(COMB. FREQUENTE)',1,,'R'
+/view,1,0,-1,0
+/angle,1,0
+/auto,1
+/eshape,1
+/triad,off
+/dscale,,100
+clims
+go2png,1200
+  pldisp,2
+  /user,1
+  /noerase
+  esel,inve
+  esel,u,type,,3
+  nsle,s,active
+  eplot
+  cmsel,s,COMPE_plot
+  cmsel,s,COMPN_plot
+  /udoc,1,cntr,off
+  plnsol,u,z
+  /plopts,leg3,on
+  /gformat,f,2,1
+  /udoc,1,cntr,right
+  /dscale,,off
+  cleanplot,'pletab','DFL_FQ_Z'
+endpng,'IMG18a_girderUZ'
+/erase
+/annot,dele
+
+!!
+pletab,'ELSA_Zmm'
+cntrlims,'deflMin','deflMax'
+sadd,'DFL_AT_Z','ELSA_Zmm',,1,,-deflMax
+
+view1w
+wincln,1
+/pspec,,1
+wntitle,'FLECHA ATIVA LONGARINAS [mm]',1
+/view,1,0,-1,0
+/angle,1,0
+/auto,1
+/eshape,1
+/triad,off
+/dscale,,100
+clims
+go2png,1200
+  pldisp,2
+  /user,1
+  /noerase
+  esel,inve
+  esel,u,type,,3
+  nsle,s,active
+  eplot
+  cmsel,s,COMPE_plot
+  cmsel,s,COMPN_plot
+  /udoc,1,cntr,off
+  plnsol,u,z
+  /plopts,leg3,on
+  /gformat,f,2,1
+  /udoc,1,cntr,right
+  /dscale,,off
+  cleanplot,'pletab','DFL_AT_Z'
+endpng,'IMG18b_girderUZ_atv'
+/erase
+/annot,dele
+
 
 
 
