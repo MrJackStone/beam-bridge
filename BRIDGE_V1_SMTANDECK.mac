@@ -43,6 +43,7 @@ batch_sliceyz,'GEO_midspanX'
 ! Perform longitudinal cuts on the deck (footpaths, girders, load trains)
 BRIDGE_V1_LONGSLICE
 
+!! Selection components                                                                           !!
 ! Create component with girder lines & keypoints
 lsel,u,line,,all
 *do,nthGirder,1,GEO_girderCount,1
