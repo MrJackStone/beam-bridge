@@ -144,6 +144,7 @@ cm,COMPN_colCap,node
 cm,COMPE_colCap,elem
 cm,COMPE_ColTube,elem
 cm,COMPN_ColTube,node
+cm,COMPE_Submerged,elem
 
 *if,GEO_pierCount,gt,0,then
 
