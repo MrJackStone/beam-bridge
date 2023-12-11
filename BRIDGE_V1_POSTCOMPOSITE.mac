@@ -1,5 +1,7 @@
 ! BRIDGE_V1_POSTCOMPOSITE
 
+resultsFolder='memo_imgs'
+
 secCount=101
 
 xPitch=GEO_deckLength/(secCount-1)
@@ -114,7 +116,7 @@ go2png,1200
     /device,vector,off
     cleanplot,'mpathplot','5','0'
     /type,,3
-endpng,'COMPOSITE_SLAB_My'
+endpng,'COMPOSITE_SLAB_My',,,,,resultsFolder
 /erase
 clims
 /annot,dele
@@ -163,7 +165,7 @@ go2png,1200
     /device,vector,off
     cleanplot,'mpathplot','5','0'
     /type,,3
-endpng,'COMPOSITE_SLAB_Qx'
+endpng,'COMPOSITE_SLAB_Qx',,,,,resultsFolder
 /erase
 clims
 /annot,dele

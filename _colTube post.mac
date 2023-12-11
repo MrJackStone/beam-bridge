@@ -748,7 +748,7 @@ takepic,'RES_LW1_ENV_horBendingMX',,,,,resultsFolder
 
 ! Combined shear forces (dqx181 & dqy181)
 pletab,'EAB_Q',1
-takepic,'RES_LW1_ENV_shear'
+takepic,'RES_LW1_ENV_shear',,,,,resultsFolder
 
 
 !!

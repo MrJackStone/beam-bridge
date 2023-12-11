@@ -1,3 +1,5 @@
+resultsFolder='memo_imgs'
+
 /annot,dele
 view1w
 
@@ -185,7 +187,7 @@ go2png,1200
     /udoc,3,cntr,right
     /gformat,f,1,2
     cleanplot,'pletab','EMM_UZ'
-endpng,'IMG18_peakPile'
+endpng,'IMG18_peakPile',,,,,resultsFolder
 /erase
 
 /annot,dele
@@ -331,7 +333,7 @@ go2png,1200
     /udoc,2,cntr,right
     /gformat,f,1,2
     pletab,'EMM_UZ'
-endpng,'IMG18_peakPile'
+endpng,'IMG18_peakPile',,,,,resultsFolder
 /erase
 
 /annot,dele
@@ -440,7 +442,7 @@ go2png,1200
 
     /window,1,off
     /window,2,on
-endpng,'IMG19_peakPileQ'
+endpng,'IMG19_peakPileQ',,,,,resultsFolder
 /erase
 
 /annot,dele
