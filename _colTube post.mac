@@ -1,5 +1,7 @@
 /post1
 
+resultsFolder='results'
+
 !!
 ! Components
 !asel,s,loc,y,GEO_deckWidth/2
@@ -167,52 +169,52 @@ eplot
 
     ! Vertical axial force (dny181)
     pletab,'DW_NY',1
-    takepic,'RES_PIER_DW_verAxial'
+    takepic,'RES_PIER_DW_verAxial',,,,,resultsFolder
 
     ! Horizontal axial force (dnx181)
     pletab,'DW_NX',1
-    takepic,'RES_PIER_DW_horAxial'
+    takepic,'RES_PIER_DW_horAxial',,,,,resultsFolder
 
     ! Bending moment (vertical normal stress) (dmx181)
     pletab,'DW_MX',1
-    takepic,'RES_PIER_DW_verBending'
+    takepic,'RES_PIER_DW_verBending',,,,,resultsFolder
 
     ! Bending moment (horizontal normal stress) (dmy181)
     pletab,'DW_MY',1
-    takepic,'RES_PIER_DW_horBending'
+    takepic,'RES_PIER_DW_horBending',,,,,resultsFolder
 
     ! Combined shear forces (dqx181 & dqy181)
     pletab,'DW_Q',1
-    takepic,'RES_PIER_DW_shear'
+    takepic,'RES_PIER_DW_shear',,,,,resultsFolder
 
 
     ! Vertical axial force (dny181)
     pletab,'EMN_NY',1
-    takepic,'RES_PIER_ENV_verCompression'
+    takepic,'RES_PIER_ENV_verCompression',,,,,resultsFolder
     pletab,'EMX_NY',1
     takepic,'RES_PIER_ENV_verTension'
 
     ! Horizontal axial force (dnx181)
     pletab,'EMN_NX',1
-    takepic,'RES_PIER_ENV_horCompression'
+    takepic,'RES_PIER_ENV_horCompression',,,,,resultsFolder
     pletab,'EMX_NX',1
-    takepic,'RES_PIER_ENV_horTension'
+    takepic,'RES_PIER_ENV_horTension',,,,,resultsFolder
 
     ! Bending moment (vertical normal stress) (dmx181)
     pletab,'EMN_MX',1
-    takepic,'RES_PIER_ENV_verBendingMN'
+    takepic,'RES_PIER_ENV_verBendingMN',,,,,resultsFolder
     pletab,'EMX_MX',1
-    takepic,'RES_PIER_ENV_verBendingMX'
+    takepic,'RES_PIER_ENV_verBendingMX',,,,,resultsFolder
 
     ! Bending moment (horizontal normal stress) (dmy181)
     pletab,'EMN_MY',1
-    takepic,'RES_PIER_ENV_horBendingMN'
+    takepic,'RES_PIER_ENV_horBendingMN',,,,,resultsFolder
     pletab,'EMX_MY',1
-    takepic,'RES_PIER_ENV_horBendingMX'
+    takepic,'RES_PIER_ENV_horBendingMX',,,,,resultsFolder
 
     ! Combined shear forces (dqx181 & dqy181)
     pletab,'EAB_Q',1
-    takepic,'RES_PIER_ENV_shear'
+    takepic,'RES_PIER_ENV_shear',,,,,resultsFolder
 
 
 
@@ -294,52 +296,52 @@ eplot
 
     ! Vertical axial force (dny181)
     pletab,'DW_NY',1
-    takepic,'RES_CCAP_DW_yAxial'
+    takepic,'RES_CCAP_DW_yAxial',,,,,resultsFolder
 
     ! Horizontal axial force (dnx181)
     pletab,'DW_NX',1
-    takepic,'RES_CCAP_DW_xAxial'
+    takepic,'RES_CCAP_DW_xAxial',,,,,resultsFolder
 
     ! Bending moment (vertical normal stress) (dmx181)
     pletab,'DW_MX',1
-    takepic,'RES_CCAP_DW_xBending'
+    takepic,'RES_CCAP_DW_xBending',,,,,resultsFolder
 
     ! Bending moment (horizontal normal stress) (dmy181)
     pletab,'DW_MY',1
-    takepic,'RES_CCAP_DW_yBending'
+    takepic,'RES_CCAP_DW_yBending',,,,,resultsFolder
 
     ! Combined shear forces (dqx181 & dqy181)
     pletab,'DW_Q',1
-    takepic,'RES_CCAP_DW_shear'
+    takepic,'RES_CCAP_DW_shear',,,,,resultsFolder
 
 
     ! Vertical axial force (dny181)
     pletab,'EMN_NY',1
-    takepic,'RES_CCAP_ENV_yCompression'
+    takepic,'RES_CCAP_ENV_yCompression',,,,,resultsFolder
     pletab,'EMX_NY',1
-    takepic,'RES_CCAP_ENV_yTension'
+    takepic,'RES_CCAP_ENV_yTension',,,,,resultsFolder
 
     ! Horizontal axial force (dnx181)
     pletab,'EMN_NX',1
-    takepic,'RES_CCAP_ENV_xCompression'
+    takepic,'RES_CCAP_ENV_xCompression',,,,,resultsFolder
     pletab,'EMX_NX',1
-    takepic,'RES_CCAP_ENV_xTension'
+    takepic,'RES_CCAP_ENV_xTension',,,,,resultsFolder
 
     ! Bending moment (vertical normal stress) (dmx181)
     pletab,'EMN_MX',1
-    takepic,'RES_CCAP_ENV_xBendingMN'
+    takepic,'RES_CCAP_ENV_xBendingMN',,,,,resultsFolder
     pletab,'EMX_MX',1
-    takepic,'RES_CCAP_ENV_xBendingMX'
+    takepic,'RES_CCAP_ENV_xBendingMX',,,,,resultsFolder
 
     ! Bending moment (horizontal normal stress) (dmy181)
     pletab,'EMN_MY',1
-    takepic,'RES_CCAP_ENV_yBendingMN'
+    takepic,'RES_CCAP_ENV_yBendingMN',,,,,resultsFolder
     pletab,'EMX_MY',1
-    takepic,'RES_CCAP_ENV_yBendingMX'
+    takepic,'RES_CCAP_ENV_yBendingMX',,,,,resultsFolder
 
     ! Combined shear forces (dqx181 & dqy181)
     pletab,'EAB_Q',1
-    takepic,'RES_CCAP_ENV_shear'
+    takepic,'RES_CCAP_ENV_shear',,,,,resultsFolder
 
 
 
@@ -362,52 +364,52 @@ eplot
 
     ! Vertical axial force (dny181)
     pletab,'DW_NY',1
-    takepic,'RES_PCAP_DW_yAxial'
+    takepic,'RES_PCAP_DW_yAxial',,,,,resultsFolder
 
     ! Horizontal axial force (dnx181)
     pletab,'DW_NX',1
-    takepic,'RES_PCAP_DW_xAxial'
+    takepic,'RES_PCAP_DW_xAxial',,,,,resultsFolder
 
     ! Bending moment (vertical normal stress) (dmx181)
     pletab,'DW_MX',1
-    takepic,'RES_PCAP_DW_xBending'
+    takepic,'RES_PCAP_DW_xBending',,,,,resultsFolder
 
     ! Bending moment (horizontal normal stress) (dmy181)
     pletab,'DW_MY',1
-    takepic,'RES_PCAP_DW_yBending'
+    takepic,'RES_PCAP_DW_yBending',,,,,resultsFolder
 
     ! Combined shear forces (dqx181 & dqy181)
     pletab,'DW_Q',1
-    takepic,'RES_PCAP_DW_shear'
+    takepic,'RES_PCAP_DW_shear',,,,,resultsFolder
 
 
     ! Vertical axial force (dny181)
     pletab,'EMN_NY',1
-    takepic,'RES_PCAP_ENV_yCompression'
+    takepic,'RES_PCAP_ENV_yCompression',,,,,resultsFolder
     pletab,'EMX_NY',1
-    takepic,'RES_PCAP_ENV_yTension'
+    takepic,'RES_PCAP_ENV_yTension',,,,,resultsFolder
 
     ! Horizontal axial force (dnx181)
     pletab,'EMN_NX',1
-    takepic,'RES_PCAP_ENV_xCompression'
+    takepic,'RES_PCAP_ENV_xCompression',,,,,resultsFolder
     pletab,'EMX_NX',1
-    takepic,'RES_PCAP_ENV_xTension'
+    takepic,'RES_PCAP_ENV_xTension',,,,,resultsFolder
 
     ! Bending moment (vertical normal stress) (dmx181)
     pletab,'EMN_MX',1
-    takepic,'RES_PCAP_ENV_xBendingMN'
+    takepic,'RES_PCAP_ENV_xBendingMN',,,,,resultsFolder
     pletab,'EMX_MX',1
-    takepic,'RES_PCAP_ENV_xBendingMX'
+    takepic,'RES_PCAP_ENV_xBendingMX',,,,,resultsFolder
 
     ! Bending moment (horizontal normal stress) (dmy181)
     pletab,'EMN_MY',1
-    takepic,'RES_PCAP_ENV_yBendingMN'
+    takepic,'RES_PCAP_ENV_yBendingMN',,,,,resultsFolder
     pletab,'EMX_MY',1
-    takepic,'RES_PCAP_ENV_yBendingMX'
+    takepic,'RES_PCAP_ENV_yBendingMX',,,,,resultsFolder
 
     ! Combined shear forces (dqx181 & dqy181)
     pletab,'EAB_Q',1
-    takepic,'RES_PCAP_ENV_shear'
+    takepic,'RES_PCAP_ENV_shear',,,,,resultsFolder
 
 *endif
 
@@ -453,19 +455,19 @@ eplot
 
 ! Bending moment
 plls,'M_obl','M_obl',0.5,,1
-takepic,'RES_PILE_M'
+takepic,'RES_PILE_M',,,,,resultsFolder
 
 ! Shear force
 plls,'Q_obl','Q_obl',0.5,,1
-takepic,'RES_PILE_Q'
+takepic,'RES_PILE_Q',,,,,resultsFolder
 
 ! Compression
 plls,'N_c','N_c',0.2,,1
-takepic,'RES_PILE_Nc'
+takepic,'RES_PILE_Nc',,,,,resultsFolder
 
 ! Tension
 plls,'N_t','N_t',1,,1
-takepic,'RES_PILE_Nt'
+takepic,'RES_PILE_Nt',,,,,resultsFolder
 
 
 *get,lc,line,,count
@@ -515,32 +517,32 @@ aplot
 
 ! Bending moment about X
 pletab,'DW_MX',1
-takepic,'RES_APSLB_DW_xBending'
+takepic,'RES_APSLB_DW_xBending',,,,,resultsFolder
 
 ! Bending moment about Y
 pletab,'DW_MY',1
-takepic,'RES_APSLB_DW_yBending'
+takepic,'RES_APSLB_DW_yBending',,,,,resultsFolder
 
 ! Combined shear forces (dqx181 & dqy181)
 pletab,'DW_Q',1
-takepic,'RES_APSLB_DW_shear'
+takepic,'RES_APSLB_DW_shear',,,,,resultsFolder
 
 
 ! Bending moment about X
 pletab,'EMN_MX',1
-takepic,'RES_APSLB_ENV_xBendingMN'
+takepic,'RES_APSLB_ENV_xBendingMN',,,,,resultsFolder
 pletab,'EMX_MX',1
-takepic,'RES_APSLB_ENV_xBendingMX'
+takepic,'RES_APSLB_ENV_xBendingMX',,,,,resultsFolder
 
 ! Bending moment about Y
 pletab,'EMN_MY',1
-takepic,'RES_APSLB_ENV_yBendingMN'
+takepic,'RES_APSLB_ENV_yBendingMN',,,,,resultsFolder
 pletab,'EMX_MY',1
-takepic,'RES_APSLB_ENV_yBendingMX'
+takepic,'RES_APSLB_ENV_yBendingMX',,,,,resultsFolder
 
 ! Combined shear forces (dqx181 & dqy181)
 pletab,'EAB_Q',1
-takepic,'RES_APSLB_ENV_shear'
+takepic,'RES_APSLB_ENV_shear',,,,,resultsFolder
 
 
 
@@ -564,52 +566,52 @@ aplot
 
 ! Vertical axial force (dny181)
 pletab,'DW_NY',1
-takepic,'RES_TW1_DW_verAxial'
+takepic,'RES_TW1_DW_verAxial',,,,,resultsFolder
 
 ! Horizontal axial force (dnx181)
 pletab,'DW_NX',1
-takepic,'RES_TW1_DW_horAxial'
+takepic,'RES_TW1_DW_horAxial',,,,,resultsFolder
 
 ! Bending moment (vertical normal stress) (dmx181)
 pletab,'DW_MX',1
-takepic,'RES_TW1_DW_verBending'
+takepic,'RES_TW1_DW_verBending',,,,,resultsFolder
 
 ! Bending moment (horizontal normal stress) (dmy181)
 pletab,'DW_MY',1
-takepic,'RES_TW1_DW_horBending'
+takepic,'RES_TW1_DW_horBending',,,,,resultsFolder
 
 ! Combined shear forces (dqx181 & dqy181)
 pletab,'DW_Q',1
-takepic,'RES_TW1_DW_shear'
+takepic,'RES_TW1_DW_shear',,,,,resultsFolder
 
 
 ! Vertical axial force (dny181)
 pletab,'EMN_NY',1
-takepic,'RES_TW1_ENV_verCompression'
+takepic,'RES_TW1_ENV_verCompression',,,,,resultsFolder
 pletab,'EMX_NY',1
-takepic,'RES_TW1_ENV_verTension'
+takepic,'RES_TW1_ENV_verTension',,,,,resultsFolder
 
 ! Horizontal axial force (dnx181)
 pletab,'EMN_NX',1
-takepic,'RES_TW1_ENV_horCompression'
+takepic,'RES_TW1_ENV_horCompression',,,,,resultsFolder
 pletab,'EMX_NX',1
-takepic,'RES_TW1_ENV_horTension'
+takepic,'RES_TW1_ENV_horTension',,,,,resultsFolder
 
 ! Bending moment (vertical normal stress) (dmx181)
 pletab,'EMN_MX',1
-takepic,'RES_TW1_ENV_verBendingMN'
+takepic,'RES_TW1_ENV_verBendingMN',,,,,resultsFolder
 pletab,'EMX_MX',1
-takepic,'RES_TW1_ENV_verBendingMX'
+takepic,'RES_TW1_ENV_verBendingMX',,,,,resultsFolder
 
 ! Bending moment (horizontal normal stress) (dmy181)
 pletab,'EMN_MY',1
-takepic,'RES_TW1_ENV_horBendingMN'
+takepic,'RES_TW1_ENV_horBendingMN',,,,,resultsFolder
 pletab,'EMX_MY',1
-takepic,'RES_TW1_ENV_horBendingMX'
+takepic,'RES_TW1_ENV_horBendingMX',,,,,resultsFolder
 
 ! Combined shear forces (dqx181 & dqy181)
 pletab,'EAB_Q',1
-takepic,'RES_TW1_ENV_shear'
+takepic,'RES_TW1_ENV_shear',,,,,resultsFolder
 
 
 !!
@@ -632,52 +634,52 @@ aplot
 
 ! Vertical axial force (dny181)
 pletab,'DW_NY',1
-takepic,'RES_TW2_DW_verAxial'
+takepic,'RES_TW2_DW_verAxial',,,,,resultsFolder
 
 ! Horizontal axial force (dnx181)
 pletab,'DW_NX',1
-takepic,'RES_TW2_DW_horAxial'
+takepic,'RES_TW2_DW_horAxial',,,,,resultsFolder
 
 ! Bending moment (vertical normal stress) (dmx181)
 pletab,'DW_MX',1
-takepic,'RES_TW2_DW_verBending'
+takepic,'RES_TW2_DW_verBending',,,,,resultsFolder
 
 ! Bending moment (horizontal normal stress) (dmy181)
 pletab,'DW_MY',1
-takepic,'RES_TW2_DW_horBending'
+takepic,'RES_TW2_DW_horBending',,,,,resultsFolder
 
 ! Combined shear forces (dqx181 & dqy181)
 pletab,'DW_Q',1
-takepic,'RES_TW2_DW_shear'
+takepic,'RES_TW2_DW_shear',,,,,resultsFolder
 
 
 ! Vertical axial force (dny181)
 pletab,'EMN_NY',1
-takepic,'RES_TW2_ENV_verCompression'
+takepic,'RES_TW2_ENV_verCompression',,,,,resultsFolder
 pletab,'EMX_NY',1
-takepic,'RES_TW2_ENV_verTension'
+takepic,'RES_TW2_ENV_verTension',,,,,resultsFolder
 
 ! Horizontal axial force (dnx181)
 pletab,'EMN_NX',1
-takepic,'RES_TW2_ENV_horCompression'
+takepic,'RES_TW2_ENV_horCompression',,,,,resultsFolder
 pletab,'EMX_NX',1
-takepic,'RES_TW2_ENV_horTension'
+takepic,'RES_TW2_ENV_horTension',,,,,resultsFolder
 
 ! Bending moment (vertical normal stress) (dmx181)
 pletab,'EMN_MX',1
-takepic,'RES_TW2_ENV_verBendingMN'
+takepic,'RES_TW2_ENV_verBendingMN',,,,,resultsFolder
 pletab,'EMX_MX',1
-takepic,'RES_TW2_ENV_verBendingMX'
+takepic,'RES_TW2_ENV_verBendingMX',,,,,resultsFolder
 
 ! Bending moment (horizontal normal stress) (dmy181)
 pletab,'EMN_MY',1
-takepic,'RES_TW2_ENV_horBendingMN'
+takepic,'RES_TW2_ENV_horBendingMN',,,,,resultsFolder
 pletab,'EMX_MY',1
-takepic,'RES_TW2_ENV_horBendingMX'
+takepic,'RES_TW2_ENV_horBendingMX',,,,,resultsFolder
 
 ! Combined shear forces (dqx181 & dqy181)
 pletab,'EAB_Q',1
-takepic,'RES_TW2_ENV_shear'
+takepic,'RES_TW2_ENV_shear',,,,,resultsFolder
 
 
 
@@ -701,48 +703,48 @@ aplot
 
 ! Vertical axial force (dny181)
 pletab,'DW_NY',1
-takepic,'RES_LW1_DW_verAxial'
+takepic,'RES_LW1_DW_verAxial',,,,,resultsFolder
 
 ! Horizontal axial force (dnx181)
 pletab,'DW_NX',1
-takepic,'RES_LW1_DW_horAxial'
+takepic,'RES_LW1_DW_horAxial',,,,,resultsFolder
 
 ! Bending moment (vertical normal stress) (dmx181)
 pletab,'DW_MX',1
-takepic,'RES_LW1_DW_verBending'
+takepic,'RES_LW1_DW_verBending',,,,,resultsFolder
 
 ! Bending moment (horizontal normal stress) (dmy181)
 pletab,'DW_MY',1
-takepic,'RES_LW1_DW_horBending'
+takepic,'RES_LW1_DW_horBending',,,,,resultsFolder
 
 ! Combined shear forces (dqx181 & dqy181)
 pletab,'DW_Q',1
-takepic,'RES_LW1_DW_shear'
+takepic,'RES_LW1_DW_shear',,,,,resultsFolder
 
 
 ! Vertical axial force (dny181)
 pletab,'EMN_NY',1
-takepic,'RES_LW1_ENV_verCompression'
+takepic,'RES_LW1_ENV_verCompression',,,,,resultsFolder
 pletab,'EMX_NY',1
-takepic,'RES_LW1_ENV_verTension'
+takepic,'RES_LW1_ENV_verTension',,,,,resultsFolder
 
 ! Horizontal axial force (dnx181)
 pletab,'EMN_NX',1
-takepic,'RES_LW1_ENV_horCompression'
+takepic,'RES_LW1_ENV_horCompression',,,,,resultsFolder
 pletab,'EMX_NX',1
-takepic,'RES_LW1_ENV_horTension'
+takepic,'RES_LW1_ENV_horTension',,,,,resultsFolder
 
 ! Bending moment (vertical normal stress) (dmx181)
 pletab,'EMN_MX',1
-takepic,'RES_LW1_ENV_verBendingMN'
+takepic,'RES_LW1_ENV_verBendingMN',,,,,resultsFolder
 pletab,'EMX_MX',1
-takepic,'RES_LW1_ENV_verBendingMX'
+takepic,'RES_LW1_ENV_verBendingMX',,,,,resultsFolder
 
 ! Bending moment (horizontal normal stress) (dmy181)
 pletab,'EMN_MY',1
-takepic,'RES_LW1_ENV_horBendingMN'
+takepic,'RES_LW1_ENV_horBendingMN',,,,,resultsFolder
 pletab,'EMX_MY',1
-takepic,'RES_LW1_ENV_horBendingMX'
+takepic,'RES_LW1_ENV_horBendingMX',,,,,resultsFolder
 
 ! Combined shear forces (dqx181 & dqy181)
 pletab,'EAB_Q',1
@@ -769,52 +771,52 @@ aplot
 
 ! Vertical axial force (dny181)
 pletab,'DW_NY',1
-takepic,'RES_LW2_DW_verAxial'
+takepic,'RES_LW2_DW_verAxial',,,,,resultsFolder
 
 ! Horizontal axial force (dnx181)
 pletab,'DW_NX',1
-takepic,'RES_LW2_DW_horAxial'
+takepic,'RES_LW2_DW_horAxial',,,,,resultsFolder
 
 ! Bending moment (vertical normal stress) (dmx181)
 pletab,'DW_MX',1
-takepic,'RES_LW2_DW_verBending'
+takepic,'RES_LW2_DW_verBending',,,,,resultsFolder
 
 ! Bending moment (horizontal normal stress) (dmy181)
 pletab,'DW_MY',1
-takepic,'RES_LW2_DW_horBending'
+takepic,'RES_LW2_DW_horBending',,,,,resultsFolder
 
 ! Combined shear forces (dqx181 & dqy181)
 pletab,'DW_Q',1
-takepic,'RES_LW2_DW_shear'
+takepic,'RES_LW2_DW_shear',,,,,resultsFolder
 
 
 ! Vertical axial force (dny181)
 pletab,'EMN_NY',1
-takepic,'RES_LW2_ENV_verCompression'
+takepic,'RES_LW2_ENV_verCompression',,,,,resultsFolder
 pletab,'EMX_NY',1
-takepic,'RES_LW2_ENV_verTension'
+takepic,'RES_LW2_ENV_verTension',,,,,resultsFolder
 
 ! Horizontal axial force (dnx181)
 pletab,'EMN_NX',1
-takepic,'RES_LW2_ENV_horCompression'
+takepic,'RES_LW2_ENV_horCompression',,,,,resultsFolder
 pletab,'EMX_NX',1
-takepic,'RES_LW2_ENV_horTension'
+takepic,'RES_LW2_ENV_horTension',,,,,resultsFolder
 
 ! Bending moment (vertical normal stress) (dmx181)
 pletab,'EMN_MX',1
-takepic,'RES_LW2_ENV_verBendingMN'
+takepic,'RES_LW2_ENV_verBendingMN',,,,,resultsFolder
 pletab,'EMX_MX',1
-takepic,'RES_LW2_ENV_verBendingMX'
+takepic,'RES_LW2_ENV_verBendingMX',,,,,resultsFolder
 
 ! Bending moment (horizontal normal stress) (dmy181)
 pletab,'EMN_MY',1
-takepic,'RES_LW2_ENV_horBendingMN'
+takepic,'RES_LW2_ENV_horBendingMN',,,,,resultsFolder
 pletab,'EMX_MY',1
-takepic,'RES_LW2_ENV_horBendingMX'
+takepic,'RES_LW2_ENV_horBendingMX',,,,,resultsFolder
 
 ! Combined shear forces (dqx181 & dqy181)
 pletab,'EAB_Q',1
-takepic,'RES_LW2_ENV_shear'
+takepic,'RES_LW2_ENV_shear',,,,,resultsFolder
 
 
 
@@ -838,52 +840,52 @@ aplot
 
 ! Vertical axial force (dny181)
 pletab,'DW_NY',1
-takepic,'RES_PCP1_DW_yAxial'
+takepic,'RES_PCP1_DW_yAxial',,,,,resultsFolder
 
 ! Horizontal axial force (dnx181)
 pletab,'DW_NX',1
-takepic,'RES_PCP1_DW_xAxial'
+takepic,'RES_PCP1_DW_xAxial',,,,,resultsFolder
 
 ! Bending moment (vertical normal stress) (dmx181)
 pletab,'DW_MX',1
-takepic,'RES_PCP1_DW_xBending'
+takepic,'RES_PCP1_DW_xBending',,,,,resultsFolder
 
 ! Bending moment (horizontal normal stress) (dmy181)
 pletab,'DW_MY',1
-takepic,'RES_PCP1_DW_yBending'
+takepic,'RES_PCP1_DW_yBending',,,,,resultsFolder
 
 ! Combined shear forces (dqx181 & dqy181)
 pletab,'DW_Q',1
-takepic,'RES_PCP1_DW_shear'
+takepic,'RES_PCP1_DW_shear',,,,,resultsFolder
 
 
 ! Vertical axial force (dny181)
 pletab,'EMN_NY',1
-takepic,'RES_PCP1_ENV_yCompression'
+takepic,'RES_PCP1_ENV_yCompression',,,,,resultsFolder
 pletab,'EMX_NY',1
-takepic,'RES_PCP1_ENV_yTension'
+takepic,'RES_PCP1_ENV_yTension',,,,,resultsFolder
 
 ! Horizontal axial force (dnx181)
 pletab,'EMN_NX',1
-takepic,'RES_PCP1_ENV_xCompression'
+takepic,'RES_PCP1_ENV_xCompression',,,,,resultsFolder
 pletab,'EMX_NX',1
-takepic,'RES_PCP1_ENV_xTension'
+takepic,'RES_PCP1_ENV_xTension',,,,,resultsFolder
 
 ! Bending moment (vertical normal stress) (dmx181)
 pletab,'EMN_MX',1
-takepic,'RES_PCP1_ENV_xBendingMN'
+takepic,'RES_PCP1_ENV_xBendingMN',,,,,resultsFolder
 pletab,'EMX_MX',1
-takepic,'RES_PCP1_ENV_xBendingMX'
+takepic,'RES_PCP1_ENV_xBendingMX',,,,,resultsFolder
 
 ! Bending moment (horizontal normal stress) (dmy181)
 pletab,'EMN_MY',1
-takepic,'RES_PCP1_ENV_yBendingMN'
+takepic,'RES_PCP1_ENV_yBendingMN',,,,,resultsFolder
 pletab,'EMX_MY',1
-takepic,'RES_PCP1_ENV_yBendingMX'
+takepic,'RES_PCP1_ENV_yBendingMX',,,,,resultsFolder
 
 ! Combined shear forces (dqx181 & dqy181)
 pletab,'EAB_Q',1
-takepic,'RES_PCP1_ENV_shear'
+takepic,'RES_PCP1_ENV_shear',,,,,resultsFolder
 
 
 
@@ -908,52 +910,52 @@ aplot
 
 ! Vertical axial force (dny181)
 pletab,'DW_NY',1
-takepic,'RES_PCP2_DW_yAxial'
+takepic,'RES_PCP2_DW_yAxial',,,,,resultsFolder
 
 ! Horizontal axial force (dnx181)
 pletab,'DW_NX',1
-takepic,'RES_PCP2_DW_xAxial'
+takepic,'RES_PCP2_DW_xAxial',,,,,resultsFolder
 
 ! Bending moment (vertical normal stress) (dmx181)
 pletab,'DW_MX',1
-takepic,'RES_PCP2_DW_xBending'
+takepic,'RES_PCP2_DW_xBending',,,,,resultsFolder
 
 ! Bending moment (horizontal normal stress) (dmy181)
 pletab,'DW_MY',1
-takepic,'RES_PCP2_DW_yBending'
+takepic,'RES_PCP2_DW_yBending',,,,,resultsFolder
 
 ! Combined shear forces (dqx181 & dqy181)
 pletab,'DW_Q',1
-takepic,'RES_PCP2_DW_shear'
+takepic,'RES_PCP2_DW_shear',,,,,resultsFolder
 
 
 ! Vertical axial force (dny181)
 pletab,'EMN_NY',1
-takepic,'RES_PCP2_ENV_yCompression'
+takepic,'RES_PCP2_ENV_yCompression',,,,,resultsFolder
 pletab,'EMX_NY',1
-takepic,'RES_PCP2_ENV_yTension'
+takepic,'RES_PCP2_ENV_yTension',,,,,resultsFolder
 
 ! Horizontal axial force (dnx181)
 pletab,'EMN_NX',1
-takepic,'RES_PCP2_ENV_xCompression'
+takepic,'RES_PCP2_ENV_xCompression',,,,,resultsFolder
 pletab,'EMX_NX',1
-takepic,'RES_PCP2_ENV_xTension'
+takepic,'RES_PCP2_ENV_xTension',,,,,resultsFolder
 
 ! Bending moment (vertical normal stress) (dmx181)
 pletab,'EMN_MX',1
-takepic,'RES_PCP2_ENV_xBendingMN'
+takepic,'RES_PCP2_ENV_xBendingMN',,,,,resultsFolder
 pletab,'EMX_MX',1
-takepic,'RES_PCP2_ENV_xBendingMX'
+takepic,'RES_PCP2_ENV_xBendingMX',,,,,resultsFolder
 
 ! Bending moment (horizontal normal stress) (dmy181)
 pletab,'EMN_MY',1
-takepic,'RES_PCP2_ENV_yBendingMN'
+takepic,'RES_PCP2_ENV_yBendingMN',,,,,resultsFolder
 pletab,'EMX_MY',1
-takepic,'RES_PCP2_ENV_yBendingMX'
+takepic,'RES_PCP2_ENV_yBendingMX',,,,,resultsFolder
 
 ! Combined shear forces (dqx181 & dqy181)
 pletab,'EAB_Q',1
-takepic,'RES_PCP2_ENV_shear'
+takepic,'RES_PCP2_ENV_shear',,,,,resultsFolder
 
 
 
