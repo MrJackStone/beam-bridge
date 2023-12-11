@@ -8,7 +8,7 @@ k3=kmaxD+3
 k4=kmaxD+4
 k,k1,0             ,GEO_deckOff_beg                  ,0
 k,k2,0             ,GEO_deckOff_beg+GEO_deckWidth_beg,0
-k,k3,GEO_deckLength,GEO_deckOff_end                  ,0
+k,k3,GEO_deckLength,GEO_deckOff_end                  ,0 !! TODO: Z needs to be different from 0 for sloped decks
 k,k4,GEO_deckLength,GEO_deckOff_end+GEO_deckWidth_end,0
 a,k1,k2,k4,k3
 
