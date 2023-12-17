@@ -575,8 +575,9 @@ cmsel,r,COMPK_ABT_base
 cm,COMPK_tWallBot,kp
 
 ! Keypoints at the top of each longitudinal pile
+ksel,u,kp,,all
+cm,COMPK_ABT_temp2
 *if,GEO_ABT_supressLW,ne,1,then
-    ksel,u,kp,,all
     x_i=firstZL
     *do,nthPile,1,GEO_ABT_longPiles,1
         ksel,a,loc,x,x_i
@@ -612,10 +613,11 @@ cm,COMPK_ABT_temp1,kp
 *else
   cmsel,r,COMPK_tWallBot
 *endif
-cm,COMPK_ABT_temp2,kp
-
-kgen,2,COMPK_ABT_temp2
 cmsel,u,COMPK_ABT_temp2
+cm,COMPK_ABT_temp3,kp
+
+kgen,2,COMPK_ABT_temp3
+cmsel,u,COMPK_ABT_temp3
 cm,COMPK_twPileTop,kp
 cmpadd,'COMPK_ABT_pileTop'
 
