@@ -45,7 +45,7 @@ nbackup
         cmsel,s,COMPA_ABT_tranWall
         cmsel,r,COMPA_ABT_1
         nsla,s,1
-        boussinesq,'LOAD_ABT1_F','LOAD_ABT1_nn','LOAD_ABT1_nc',-arg3, arg1, arg2, zVal, 'H', 'Z', 1
+        boussinesq,'LOAD_ABT1_F','LOAD_ABT1_nn','LOAD_ABT1_nc',arg3, arg1, arg2, zVal, 'H', 'Z', 1
         f,LOAD_ABT1_nn(1:LOAD_ABT1_nc),fx,LOAD_ABT1_F(1:LOAD_ABT1_nc)
 
         ! Pile cap

@@ -114,7 +114,7 @@ allsel
     cmsel,s,COMPA_ABT_tranWall
     cmsel,r,COMPA_ABT_1
     nsla,s,1
-    nslcomp,'F_h','N_n','nc','LOAD_ABT1_Fh',-1
+    nslcomp,'F_h','N_n','nc','LOAD_ABT1_Fh',1
     f, N_n(1:nc), fx, F_h(1:nc)
 
     ! Pile cap
@@ -130,7 +130,7 @@ allsel
         esll,s
         nsle,s,active
         cmsel,r,COMPN_ABT1_pileFree
-        nslcomp,'F_h','N_n','nc','LOAD_ABT1_Fh',-1
+        nslcomp,'F_h','N_n','nc','LOAD_ABT1_Fh',1
         f, N_n(1:nc), fx, F_h(1:nc)
 
         ! Pile curtain: longitudinal wall (Y<0)
