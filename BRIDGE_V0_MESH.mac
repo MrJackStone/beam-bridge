@@ -219,9 +219,6 @@ cmsel,s,COMPA_ABT_1
 *endif
 cm,COMPE_ABT_1,elem
 cm,COMPN_ABT_1,node
-csys,CS_ABT1
-local,csyiqr(0,14)+1,cart,0,0,0,-90-GEO_supportChi_0,0,0
-nrotat,all
 csys,0
 
 esel,u,elem,,all
@@ -233,8 +230,6 @@ cmsel,s,COMPA_ABT_2
 *endif
 cm,COMPE_ABT_2,elem
 cm,COMPN_ABT_2,node
-csys,CS_ABT2
-nrotat,all
 csys,0
 !
 !
@@ -617,8 +612,6 @@ cmsel,s,COMPN_PIER_piles
     cmsel,s,COMPN_ABT1_piles
     cmsel,a,COMPN_ABT1_HSoil
     cmsel,a,COMPN_ABT1_VSoil
-    csys,CS_ABT1
-    nrotat,all
     csys,0
 *endif
 
@@ -665,8 +658,6 @@ cmsel,s,COMPN_PIER_piles
     cmsel,s,COMPN_ABT2_piles
     cmsel,a,COMPN_ABT2_HSoil
     cmsel,a,COMPN_ABT2_VSoil
-    csys,CS_ABT2
-    nrotat,all
     csys,0
 *endif
 

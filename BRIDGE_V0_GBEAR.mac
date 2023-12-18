@@ -113,7 +113,6 @@ mat,MAT_Matrix
         nsel,a,node,,SBNode
         nsel,a,node,,SENode
         csys,0
-        nrotat,all
 
         ! Vertical connection between girder and frame girder
         *if,FEM_GirderConnection_UZ,EQ,0,THEN

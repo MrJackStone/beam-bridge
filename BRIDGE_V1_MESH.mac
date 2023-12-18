@@ -323,7 +323,6 @@ cm,COMPE_ABT_1,elem
 cm,COMPN_ABT_1,node
 csys,CS_ABT1
 local,csyiqr(0,14)+1,cart,0,0,0,-90-GEO_supportChi_0,0,0
-nrotat,all
 csys,0
 
 esel,u,elem,,all
@@ -336,7 +335,6 @@ cmsel,s,COMPA_ABT_2
 cm,COMPE_ABT_2,elem
 cm,COMPN_ABT_2,node
 csys,CS_ABT2
-nrotat,all
 csys,0
 
 ! Selection components: submerged and exposed elements
@@ -765,7 +763,6 @@ cmsel,u,COMPN_PILE_absentSoil
     cmsel,a,COMPN_ABT1_HSoil
     cmsel,a,COMPN_ABT1_VSoil
     csys,CS_ABT1
-    nrotat,all
     csys,0
 *endif
 
@@ -816,7 +813,6 @@ cmsel,u,COMPN_PILE_absentSoil
     cmsel,a,COMPN_ABT2_HSoil
     cmsel,a,COMPN_ABT2_VSoil
     csys,CS_ABT2
-    nrotat,all
     csys,0
 *endif
 

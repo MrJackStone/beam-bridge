@@ -10,7 +10,6 @@ nsla,s,1
 cmsel,r,COMPN_valid
 sprsup,0,FEM_ABT_springL,0,MAT_ABT_Soil,REAL_ABT_kh,TYPE_LINK180,'COMPN_sup','COMPE_sup',1,5
 cmsel,s,COMPN_sup
-nrotat,all
 d,all,uy,0
 
 cmsel,s,COMPA_ABT_longWalls
@@ -20,7 +19,6 @@ nsla,s,1
 cmsel,r,COMPN_valid
 sprsup,0,-FEM_ABT_springL,0,MAT_ABT_Soil,REAL_ABT_kh,TYPE_LINK180,'COMPN_sup','COMPE_sup',1,5
 cmsel,s,COMPN_sup
-nrotat,all
 d,all,uy,0
 
 ! Transversal wall
@@ -29,7 +27,6 @@ nsla,s,1
 cmsel,r,COMPN_valid
 sprsup,FEM_ABT_springL,0,0,MAT_ABT_Soil,REAL_ABT_kh,TYPE_LINK180,'COMPN_sup','COMPE_sup',1,6
 cmsel,s,COMPN_sup
-nrotat,all
 d,all,ux,0
 
 ! Approach slab
@@ -38,7 +35,6 @@ nsla,s,1
 cmsel,r,COMPN_valid
 sprsup,,,-FEM_ABT_springL,MAT_ABT_Soil,REAL_ABT_kv,TYPE_LINK180,'COMPN_sup','COMPE_sup',1,3
 cmsel,s,COMPN_sup
-nrotat,all
 cmsel,s,COMPA_ABT_pileCap
 nsla,s,1
 cmsel,r,COMPN_valid
