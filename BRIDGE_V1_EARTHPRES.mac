@@ -80,13 +80,13 @@ allsel
     nsla,s,1
     *if,GEO_ABT1_type,eq,4,then
       *afun,deg
-      nslcomp,'F_hx','N_n','nc','LOAD_ABT1_Fh',-sin(GEO_ABT1_wingAngle)
-      nslcomp,'F_hy','N_n','nc','LOAD_ABT1_Fh',-cos(GEO_ABT1_wingAngle)
+      nslcomp,'F_hx','N_n','nc','LOAD_ABT1_Fh',sin(GEO_ABT1_wingAngle)
+      nslcomp,'F_hy','N_n','nc','LOAD_ABT1_Fh',cos(GEO_ABT1_wingAngle)
       f, N_n(1:nc), fx, F_hx(1:nc)
       f, N_n(1:nc), fy, F_hy(1:nc)
       *afun,rad
     *else
-      nslcomp,'F_h','N_n','nc','LOAD_ABT1_Fh',-1
+      nslcomp,'F_h','N_n','nc','LOAD_ABT1_Fh',1
       f, N_n(1:nc), fy, F_h(1:nc)
     *endif
 
@@ -100,13 +100,13 @@ allsel
     nsla,s,1
     *if,GEO_ABT1_type,eq,4,then
       *afun,deg
-      nslcomp,'F_hx','N_n','nc','LOAD_ABT1_Fh',-sin(GEO_ABT1_wingAngle)
-      nslcomp,'F_hy','N_n','nc','LOAD_ABT1_Fh',cos(GEO_ABT1_wingAngle)
+      nslcomp,'F_hx','N_n','nc','LOAD_ABT1_Fh',sin(GEO_ABT1_wingAngle)
+      nslcomp,'F_hy','N_n','nc','LOAD_ABT1_Fh',-cos(GEO_ABT1_wingAngle)
       f, N_n(1:nc), fx, F_hx(1:nc)
       f, N_n(1:nc), fy, F_hy(1:nc)
       *afun,rad
     *else
-      nslcomp,'F_h','N_n','nc','LOAD_ABT1_Fh',1
+      nslcomp,'F_h','N_n','nc','LOAD_ABT1_Fh',-1
       f, N_n(1:nc), fy, F_h(1:nc)
     *endif
 
@@ -141,7 +141,7 @@ allsel
         csys,CS_ABT1
         nsel,r,loc,y,0,-1e6
         csys,0
-        nslcomp,'F_h','N_n','nc','LOAD_ABT1_Fh',-1
+        nslcomp,'F_h','N_n','nc','LOAD_ABT1_Fh',1
         f, N_n(1:nc), fy, F_h(1:nc)
 
         ! Pile curtain: longitudinal wall (Y>0)
@@ -152,7 +152,7 @@ allsel
         csys,CS_ABT1
         nsel,r,loc,y,0,1e6
         csys,0
-        nslcomp,'F_h','N_n','nc','LOAD_ABT1_Fh',1
+        nslcomp,'F_h','N_n','nc','LOAD_ABT1_Fh',-1
         f, N_n(1:nc), fy, F_h(1:nc)
 
     *endif
