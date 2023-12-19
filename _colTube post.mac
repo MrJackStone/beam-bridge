@@ -40,6 +40,9 @@ etable,'UZ',U,Z
 etable,'DW_UX',U,X
 etable,'DW_UY',U,Y
 etable,'DW_UZ',U,Z
+sadd,'DW_UX','DW_UX',,1
+sadd,'DW_UY','DW_UY',,1
+sadd,'DW_UZ','DW_UZ',,1
 
 ! SHELL181
 defetabs,181,,1,0
