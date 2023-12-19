@@ -189,6 +189,9 @@ GEO_ABT1_length=1.3
 ! Height
 GEO_ABT1_height=4.3
 
+! Width
+GEO_ABT1_width=4.2
+
 ! Height increment at the end of the abutment (wall/wing interface)
 GEO_ABT1_topOffset=0
 
@@ -263,6 +266,9 @@ GEO_ABT2_length=1.3
 
 ! Height
 GEO_ABT2_height=4.3
+
+! Width
+GEO_ABT2_width=4.2
 
 ! Height increment at the end of the abutment (wall/wing interface)
 GEO_ABT2_topOffset=0
