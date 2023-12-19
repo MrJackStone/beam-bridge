@@ -108,6 +108,18 @@ KB=KMXD+30
 KC=KMXD+31
 KD=KMXD+32
 
+! Left overhang
+KE=KMXD+33
+KF=KMXD+34
+KG=KMXD+35
+KH=KMXD+36
+
+! Right overhang
+KI=KMXD+37
+KJ=KMXD+38
+KK=KMXD+39
+KL=KMXD+40
+
 
 !
 !
@@ -158,6 +170,8 @@ y11=y02+GEO_ABT_colW
 y21b=y21+GEO_ABT_pileCapW
 y22b=y22-GEO_ABT_pileCapW
 ! y24b=y22b ; y23b=y21b
+y26=y02+(GEO_ABT_deckWidth-GEO_ABT_width)/2
+y27=y01-(GEO_ABT_deckWidth-GEO_ABT_width)/2
 
 z01=0
 z03=z01-GEO_ABT_height
@@ -327,6 +341,33 @@ asel,u,area,,all
 *endif
 
 cmpadd,'COMPA_ABT_appSlab'
+
+! Draw left overhang
+*if,GEO_ABT_deckWidth,ne,GEO_ABT_width,then
+  asel,u,area,,all
+  k , KE , x01 , y02 , z01
+  k , KF , x01 , y26 , z01
+  k , KG , x05 , y02 , z05
+  k , KH , x05 , y26 , z05
+
+  a, KE, KG, KH, KF
+  cmpadd,'COMPA_ABT_leftOverhang'
+
+  ! Draw right overhang
+  asel,u,area,,all
+  k , KI , x01 , y27 , z01
+  k , KJ , x01 , y01 , z01
+  k , KK , x05 , y27 , z05
+  k , KL , x05 , y01 , z05
+
+  a, KI, KK, KL, KJ
+  cmpadd,'COMPA_ABT_rightOverhang'
+
+  cmsel,s,COMPA_ABT_leftOverhang
+  cmsel,a,COMPA_ABT_rightOverhang
+  cmpadd,'COMPA_ABT_overhangs'
+*endif
+
 !
 !
 !
@@ -439,6 +480,37 @@ cmpadd,'COMPA_ABT_appSlab'
     wpcsys,,arg1
 *endif
 
+! Slice overhangs
+*if,GEO_ABT_deckWidth,ne,GEO_ABT_width,then
+  cmsel,s,COMPA_ABT_leftOverhang
+  cmsel,u,COMPA_prev
+  kwplan,,K03,K04,K01
+  wpoffs,,,firstZL
+  *do,nthPile,1,GEO_ABT_longPiles,1
+    asbw,all,,delete
+    wpoffs,,,deltaZL
+  *enddo
+  cmpadd,'COMPA_ABT_leftOverhang'
+  cmsel,a,COMPA_ABT_rightOverhang
+  cmpadd,'COMPA_ABT_overhangs'
+  wpcsys,,arg1
+*endif
+
+*if,GEO_ABT_deckWidth,ne,GEO_ABT_width,then
+  cmsel,s,COMPA_ABT_rightOverhang
+  cmsel,u,COMPA_prev
+  kwplan,,K03,K04,K01
+  wpoffs,,,firstZL
+  *do,nthPile,1,GEO_ABT_longPiles,1
+    asbw,all,,delete
+    wpoffs,,,deltaZL
+  *enddo
+  cmpadd,'COMPA_ABT_rightOverhang'
+  cmsel,a,COMPA_ABT_leftOverhang
+  cmpadd,'COMPA_ABT_overhangs'
+  wpcsys,,arg1
+*endif
+
 !! C.2.2 TRANSVERSAL PILES                                                                        !!
 ! Slice transversal wall
 *if,GEO_ABT_type,eq,4,then
@@ -541,6 +613,7 @@ cmpadd,'COMPA_ABT_walls'
 cmsel,s,COMPA_ABT_pileCap
 cmsel,a,COMPA_ABT_walls
 cmsel,a,COMPA_ABT_columns
+cmsel,a,COMPA_ABT_overhangs
 cmsel,u,COMPA_prev
 lsla,s
 ksll,s
@@ -755,6 +828,7 @@ cmsel,a,COMPA_ABT_wings
 cmsel,a,COMPA_ABT_beam
 cmsel,a,COMPA_ABT_pileCap
 cmsel,a,COMPA_ABT_appSlab
+cmsel,a,COMPA_ABT_overhangs
 cmpadd,'COMPA_Abutment'
 
 lsla,s

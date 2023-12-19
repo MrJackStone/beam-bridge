@@ -25,6 +25,7 @@ SFE,ALL,2,PRES,,LOAD_pav
 *if,GEO_ABT1_status,eq,1,or,GEO_ABT2_status,eq,1,then
     ! Pavement over approach slabs
     cmsel,s,COMPE_ABT_appSlab
+    cmsel,a,COMPE_ABT_overhangs
     nsle,s,active
     sfe,all,2,pres,,LOAD_pav
 
@@ -41,7 +42,3 @@ SFE,ALL,2,PRES,,LOAD_pav
     ! Earth pressures
     BRIDGE_V1_EARTHPRES,0
 *endif
-
-
-
-

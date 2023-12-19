@@ -308,6 +308,10 @@ aatt,MAT_Abutment,,TYPE_SHELL181,ESYS_ABT2_rc,SEC_ABT_pileCap
 cmsel,s,COMPA_ABT_appSlab
 aatt,MAT_Approach,,TYPE_SHELL181,,SEC_ABT_appSlab
 
+! Overhangs
+cmsel,s,COMPA_ABT_overhangs
+aatt,MAT_Abutment,,TYPE_SHELL181,,SEC_ABT_appSlab
+
 ! Mesh areas
 cmsel,s,COMPA_Abutment
 aesize,all,FEM_ABT_esize
@@ -425,6 +429,13 @@ esla,s
 nsle,s
 cm,COMPE_ABT_appSlab,elem
 cm,COMPN_ABT_appSlab,node
+
+! Overhangs
+cmsel,s,COMPA_ABT_overhangs
+esla,s
+nsle,s
+cm,COMPE_ABT_overhangs,elem
+cm,COMPN_ABT_overhangs,node
 
 ! Left footpath slab elements
 cmsel,s,COMPA_ABT_LeftFootpath
