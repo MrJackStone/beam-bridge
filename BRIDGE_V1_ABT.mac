@@ -41,6 +41,7 @@ GEO_ABT_supressLW = %arg2%(19)
 GEO_ABT_curtainL  = %arg2%(20)
 GEO_ABT_pileFree  = %arg2%(21)
 GEO_ABT_pileShort = %arg2%(22)
+GEO_ABT_width     = %arg2%(28)
 
 GEO_ABT_pileCap=1
 *if,GEO_ABT_type,eq,2,then
@@ -131,8 +132,8 @@ x21b=x01+GEO_ABT_pileCapW
 x23b=x23
 ! x22b=x21b ; x24b=x23b
 
-y01=GEO_ABT_yOffset-GEO_ABT_yc ! right wall
-y02=y01+GEO_ABT_deckWidth      ! left wall
+y01=-(GEO_ABT_width/2) ! right wall
+y02=y01+GEO_ABT_width  ! left wall
 y09=y01-GEO_ABT_colW
 y11=y02+GEO_ABT_colW
 *if,GEO_ABT_type,eq,1,or,GEO_ABT_type,eq,2,then
@@ -144,8 +145,8 @@ y11=y02+GEO_ABT_colW
     y22=y02+(GEO_ABT_pileCapW/2)
 *elseif,GEO_ABT_type,eq,4,then
     ! Wall-column:
-    y25a=y02+((GEO_ABT_pileCapL-GEO_ABT_deckWidth)/2)
-    y25b=y01-((GEO_ABT_pileCapL-GEO_ABT_deckWidth)/2)
+    y25a=y02+((GEO_ABT_pileCapL-GEO_ABT_width)/2)
+    y25b=y01-((GEO_ABT_pileCapL-GEO_ABT_width)/2)
 *endif
 ! y03=y01 ; y04=y02 ; y05=y01
 ! y06=y02 ; y07=y01 ; y08=y02
@@ -343,7 +344,7 @@ cmpadd,'COMPA_ABT_appSlab'
   asbw,all,,delete
   wprota,,,90
   asbw,all,,delete
-  wpoffs,,,GEO_ABT_deckWidth
+  wpoffs,,,GEO_ABT_width
   asbw,all,,delete
 
   cmpadd,'COMPA_ABT_pileCap'
@@ -443,15 +444,15 @@ cmpadd,'COMPA_ABT_appSlab'
 *if,GEO_ABT_type,eq,4,then
   ! Wall-column:
   deltaZT=(GEO_ABT_pileCapL-2*GEO_ABT_pileOff)/(GEO_ABT_tranPiles-1)
-  firstZT=GEO_ABT_pileOff-((GEO_ABT_pileCapL-GEO_ABT_deckWidth)/2)
+  firstZT=GEO_ABT_pileOff-((GEO_ABT_pileCapL-GEO_ABT_width)/2)
 
 *else
   ! Abutment types 1 through 3:
   *if,GEO_ABT_longPiles,gt,0,then
-    deltaZT=GEO_ABT_deckWidth/(GEO_ABT_tranPiles+1)
+    deltaZT=GEO_ABT_width/(GEO_ABT_tranPiles+1)
     firstZT=0
   *else
-    deltaZT=(GEO_ABT_deckWidth-2*GEO_ABT_pileOff)/(GEO_ABT_tranPiles-1)
+    deltaZT=(GEO_ABT_width-2*GEO_ABT_pileOff)/(GEO_ABT_tranPiles-1)
     firstZT=GEO_ABT_pileOff
   *endif
 *endif
@@ -778,9 +779,9 @@ cmsel,u,COMPA_prev
 cmsel,u,COMPL_prev
 cmsel,u,COMPK_prev
 
-!!
-!! G. Coordinate systems for local ESYS
-!!
+!!                                                                                                !!
+!! G. Coordinate systems for local ESYS                                                           !!
+!!                                                                                                !!
 csys,arg1
 csnext,'CS_leftWall'
 clocal,CS_leftWall,cart,0,0,0,,90
