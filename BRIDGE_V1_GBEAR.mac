@@ -278,5 +278,3 @@ cm,COMPN_Bearing,node
         safe_CP,'UZ',nn,ns
     *enddo
 *endif
-
-
