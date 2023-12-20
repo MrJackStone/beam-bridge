@@ -1,0 +1,37 @@
+! BRIDGE_V1_FEMCROSSBEAM
+! BRIDGE_V1_FEMCROSSBEAM
+
+csys,0
+type,TYPE_BEAM188
+secnum,SEC_CROSSBEAM
+mat,MAT_FRAMEGIRDER
+esys,CS_base
+
+*do,nthSpan,1,GEO_supportCount,1
+  xSup=GEO_supportX(nthSpan)
+
+  cmsel,s,COMPL_GIRDER_1
+  cmsel,a,COMPL_GIRDER_%GEO_girderCount%
+  nsll,s,1
+  nsel,r,loc,x,xSup
+  *get,yMin,node,,mnloc,y
+  *get,yMax,node,,mxloc,y
+
+  cmsel,s,COMPA_slab
+  nsla,s,1
+  nsel,r,loc,x,xSup
+  nsel,r,loc,y,yMin,yMax
+  cm,COMPN_refSlab,node
+
+  nComp='COMPN_CROSSBEAM_%nthSpan%'
+  eComp='COMPE_CROSSBEAM_%nthSpan%'
+
+  beamcopy,0,0,0,'Y',nComp, eComp
+
+  cpintf,ux
+  cpintf,uy
+  cpintf,uz
+  cpintf,rotx
+  cpintf,roty
+  cpintf,rotz
+*enddo

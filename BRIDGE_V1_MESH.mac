@@ -43,6 +43,15 @@ CM,COMPE_Girder,ELEM
 NSLE,S,ACTIVE
 CM,COMPN_Girder,NODE
 
+! Create cross-beams (between girders)
+BRIDGE_V1_FEMCROSSBEAM
+esel,s,type,,TYPE_BEAM188
+nsle,s
+cmsel,u,COMPN_Girder
+cmsel,u,COMPE_Girder
+cm,COMPN_crossBeam,node
+cm,COMPE_crossBeam,elem
+
 ! Create gerber cantilever beams and consoles
 *if,GEO_gerberStatus,eq,1,then
     cmsel,s,COMPL_Gerber

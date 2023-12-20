@@ -79,6 +79,7 @@ MAT_ABT_Soil=11
 MAT_Spring=12
 MAT_Matrix=13
 MAT_Gerber=14
+MAT_CrossBeam=15
 
 ! Element types
 TYPE_BEAM188=1
@@ -119,6 +120,7 @@ SEC_COLCAP=26
 SEC_PSOIL_num=27
 SEC_GERBER=28
 SEC_CONSOLE=29
+SEC_CROSSBEAM=30
 
 ! Coordinate systems
 CS_base=11
@@ -315,6 +317,11 @@ SECDATA,FRAMEGIRDER_b,FRAMEGIRDER_h
 *if,SEC_offset,EQ,1,THEN
    SECOFFSET,USER,,-FRAMEGIRDER_h/2
 *endif
+!
+!! 2.1.3.7 Cross beam                                                                             !!
+sectype,SEC_CROSSBEAM,beam,rect,'CRSBEAM',2
+secdata,CROSSBEAM_b,CROSSBEAM_h
+secoffset,user,,CROSSBEAM_h/2
 !
 !! 2.1.3.7 PILE CAPS                                                                              !!
 SECTYPE,SEC_PILECAP_num,SHELL,,PILECAP_name

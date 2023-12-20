@@ -430,6 +430,10 @@ GERBER_h=2.8
 CONSOLE_b=1.1
 CONSOLE_h=0.75
 
+!! 1.2.1.5 Cross beam                                                                             !!
+CROSSBEAM_b=0.3
+CROSSBEAM_h=0.7
+
 
 !! 1.2.2 MESOSTRUCTURE                                                                            !!
 !!                                                                                                !!
