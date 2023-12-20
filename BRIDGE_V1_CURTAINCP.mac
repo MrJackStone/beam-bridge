@@ -143,7 +143,3 @@ ln=0
         safe_cp,'UY',nref,nn
     *enddo
 *enddo
-
-
-
-
