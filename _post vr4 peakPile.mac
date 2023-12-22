@@ -2,31 +2,32 @@ resultsFolder='memo_imgs'
 
 /annot,dele
 view1w
+clims
 
 cmsel,s,compl_abt_piles
 cm,compl_temp,line
-*get,lc,line,,count
-*del,F_all
-*del,Fk_min_all
-*del,Fk_max_all
-*del,Q_all
-*del,Qk_min_all
-*del,Qk_max_all
-*del,U_all
-*del,L_all
-*del,Len_all
-*dim,F_all,,lc
-*dim,Fk_min_all,,lc
-*dim,Fk_max_all,,lc
-*dim,Q_all,,lc
-*dim,Qk_min_all,,lc
-*dim,Qk_max_all,,lc
-*dim,M_all,,lc
-*dim,Mk_min_all,,lc
-*dim,Mk_max_all,,lc
-*dim,U_all,,lc
-*dim,L_all,,lc
-*dim,Len_all,,lc
+*get , lc         , line ,      , count
+*del , F_all      ,      , nopr
+*del , Fk_min_all ,      , nopr
+*del , Fk_max_all ,      , nopr
+*del , Q_all      ,      , nopr
+*del , Qk_min_all ,      , nopr
+*del , Qk_max_all ,      , nopr
+*del , U_all      ,      , nopr
+*del , L_all      ,      , nopr
+*del , Len_all    ,      , nopr
+*dim , F_all      ,      , lc
+*dim , Fk_min_all ,      , lc
+*dim , Fk_max_all ,      , lc
+*dim , Q_all      ,      , lc
+*dim , Qk_min_all ,      , lc
+*dim , Qk_max_all ,      , lc
+*dim , M_all      ,      , lc
+*dim , Mk_min_all ,      , lc
+*dim , Mk_max_all ,      , lc
+*dim , U_all      ,      , lc
+*dim , L_all      ,      , lc
+*dim , Len_all    ,      , lc
 ln=0
 *do,nthL,1,lc,1
     cmsel,s,compl_temp
