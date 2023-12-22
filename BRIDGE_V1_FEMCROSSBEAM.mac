@@ -28,10 +28,24 @@ esys,CS_base
 
   beamcopy,0,0,0,'Y',nComp, eComp
 
-  cpintf,ux
-  cpintf,uy
-  cpintf,uz
-  cpintf,rotx
-  cpintf,roty
-  cpintf,rotz
+  cmsel,s,COMPN_CROSSBEAM_%nthSpan%
+  *get,nc,node,,count
+  cbNode=0
+  *do,nthNode,1,nc,1
+    cmsel,s,COMPN_CROSSBEAM_%nthSpan%
+    cbNode=ndnext(cbNode)
+
+    cmsel,s,COMPN_refSlab
+    slabNode=nnear(cbNode)
+
+    nsel,s,node,,cbNode
+    nsel,a,node,,slabNode
+
+    safe_cp , 'UX'   , slabNode , cbNode
+    safe_cp , 'UY'   , slabNode , cbNode
+    safe_cp , 'UZ'   , slabNode , cbNode
+    safe_cp , 'ROTX' , slabNode , cbNode
+    safe_cp , 'ROTY' , slabNode , cbNode
+    safe_cp , 'ROTZ' , slabNode , cbNode
+  *enddo
 *enddo
