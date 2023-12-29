@@ -1199,14 +1199,30 @@ nthPier=0
 *endif
 
 ! Apply impact coefficient to dynamic loads
-*if,SOLU_type,eq,0,then
+*get,parType,parm,LOAD_railcarCount,type
+*if,parType,ne,0,then
+  *if,SOLU_type,eq,0,then
     ! Static analysis
     udlLength=GEO_deckLength
-*elseif,SOLU_type,eq,1,then
+  *elseif,SOLU_type,eq,1,then
     ! Dynamic analysis
     udlLength=0
+  *endif
+*else
+  *if,LOAD_railcarCount,le,0,then
+    LOAD_railcarCount=0
+  *endif
+  udlLength=LOAD_railcarCount
 *endif
-loadtrain, LOAD_ltName,1,0,LOAD_dynImpact, udlLength ! Output: LOADTRAIN_VAR_count; LOADTRAIN_ARR_positions; LOADTRAIN_ARR_loads
+
+*get,parType,parm,LOAD_locRep,type
+*if,parType,ne,0,then
+  LOAD_locRep=1
+*elseif,LOAD_locRep,le,0,then
+  LOAD_locRep=1
+*endif
+
+loadtrain, LOAD_ltName,LOAD_locRep,0,LOAD_dynImpact, udlLength ! Output: LOADTRAIN_VAR_count; LOADTRAIN_ARR_positions; LOADTRAIN_ARR_loads
 LOAD_plCount=LOADTRAIN_VAR_count
 *del,LOAD_plDist
 *vfun,LOAD_plDist,copy,LOADTRAIN_ARR_positions

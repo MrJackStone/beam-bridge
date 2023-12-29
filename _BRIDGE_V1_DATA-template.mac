@@ -636,6 +636,12 @@ LOAD_psi2=0.4
 ! Load train name
 LOAD_ltName='TB-450'
 
+! Locomotive repetitions
+LOAD_locRep=2
+
+! Number of follower railway cars
+LOAD_railcarCount=4
+
 ! Load train design speed (km/h)
 LOAD_speed=80
 
