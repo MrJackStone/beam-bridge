@@ -42,6 +42,7 @@ GEO_ABT_curtainL  = %arg2%(20)
 GEO_ABT_pileFree  = %arg2%(21)
 GEO_ABT_pileShort = %arg2%(22)
 GEO_ABT_width     = %arg2%(28)
+GEO_ABT_thinDepth = %arg2%(29)
 
 GEO_ABT_pileCap=1
 *if,GEO_ABT_type,eq,2,then
@@ -181,6 +182,7 @@ z14=z13-GEO_ABT_wingHe
 z15=z05-GEO_ABT_wingHa
 z19=z15-GEO_ABT_beamH
 zc =z01+GEO_ABT_topOffset*(GEO_ABT_appSlabL/GEO_ABT_length)
+z25=z01-GEO_ABT_thinDepth
 ! z02=z01 ; z04=z03 ; z06=z05
 ! z07=z03 ; z08=z03 ; z09=z05
 ! z10=z03 ; z11=z05 ; z12=z03
@@ -221,16 +223,16 @@ k , K08 , x05 , y02 , z03
 
 asel,u,area,,all
 a, K01, K02, K04, K03
-cmpadd,'COMPA_ABT_tranWall'
 
 *if,GEO_ABT_supressLW,ne,1,then
-    asel,u,area,,all
     a, K01, K03, K07, K05
     a, K02, K06, K08, K04
-    cmpadd,'COMPA_ABT_longWalls'
 *endif
 
-cmsel,a,COMPA_ABT_tranWall
+wpcsys,-1,arg1
+kwpave,K01
+asbw,all,,delete
+
 cmpadd,'COMPA_ABT_walls'
 
 
@@ -817,6 +819,8 @@ cmpadd,'COMPL_Barrier'
 cmsel,s,COMPA_ABT_walls
 asel,r,loc,x,x01
 cmpadd,'COMPA_ABT_tranWall'
+asel,r,loc,z,z01,z25
+cmpadd,'COMPA_ABT_thinTranWall'
 cmsel,s,COMPA_ABT_walls
 cmsel,u,COMPA_ABT_tranWall
 cmpadd,'COMPA_ABT_longWalls'
