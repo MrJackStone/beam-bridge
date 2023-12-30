@@ -155,6 +155,7 @@ cm , COMPA_ABT_longWalls       , area
 cm , COMPA_ABT_pileCap         , area
 cm , COMPA_ABT_rightSide       , area
 cm , COMPA_ABT_tranWall        , area
+cm , COMPA_ABT_thinTranWall    , area
 cm , COMPA_ABT_walls           , area
 cm , COMPA_ABT_wings           , area
 cm , COMPA_Abutment            , area

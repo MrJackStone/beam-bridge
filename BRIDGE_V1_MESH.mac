@@ -232,12 +232,22 @@ csys,0
 !!                                                                                                !!
 ! Transversal walls
 cmsel,s,COMPA_ABT_tranWall
+cmsel,u,COMPA_ABT_thinTranWall
 cmsel,r,COMPA_ABT_1
 aatt,MAT_Abutment,,TYPE_SHELL181,ESYS_ABT1_tw,SEC_ABT_tranWall
 
+cmsel,s,COMPA_ABT_thinTranWall
+cmsel,s,COMPA_ABT_1
+aatt,MAT_Abutment,,TYPE_SHELL181,ESYS_ABT1_tw,SEC_ABT_thinTranWall
+
 cmsel,s,COMPA_ABT_tranWall
+cmsel,u,COMPA_ABT_thinTranWall
 cmsel,r,COMPA_ABT_2
-aatt,MAT_Abutment,,TYPE_SHELL182,ESYS_ABT2_tw,SEC_ABT_tranWall
+aatt,MAT_Abutment,,TYPE_SHELL181,ESYS_ABT2_tw,SEC_ABT_tranWall
+
+cmsel,s,COMPA_ABT_thinTranWall
+cmsel,s,COMPA_ABT_2
+aatt,MAT_Abutment,,TYPE_SHELL181,ESYS_ABT2_tw,SEC_ABT_thinTranWall
 
 ! Longitudinal walls
 cmsel,s,COMPA_ABT_longWalls
