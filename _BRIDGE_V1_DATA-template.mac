@@ -195,6 +195,9 @@ GEO_ABT1_width=4.2
 ! Height increment at the end of the abutment (wall/wing interface)
 GEO_ABT1_topOffset=0
 
+! Depth of thin segment of transversal wall
+GEO_ABT1_thinTranWallDepth=2
+
 ! Wing status
 !    [0] OFF
 !    [1] ON
@@ -272,6 +275,9 @@ GEO_ABT2_width=4.2
 
 ! Height increment at the end of the abutment (wall/wing interface)
 GEO_ABT2_topOffset=0
+
+! Depth of thin segment of transversal wall
+GEO_ABT2_thinTranWallDepth=2
 
 ! Wing status
 !    [0] OFF
@@ -476,6 +482,9 @@ SEC_ABT_longWall_t=0.6
 
 ! Transversal wall thickness
 SEC_ABT_tranWall_t=1.3
+
+! Thickness of thin segment of transversal wall
+SEC_ABT_thinTranWall_t=0.4
 
 ! Column width
 SEC_ABT_col_W=0.4
