@@ -23,6 +23,11 @@
     SOLU_nsubst=20
 *endif
 
+*get,parType,parm,SEC_ABT_thinTranWall_t,type
+*if,parType,ne,0,then
+  SEC_ABT_thinTranWall_t=SEC_ABT_tranWall_t
+*endif
+
 !!                                                                                                !!
 !!                                                                                                !!
 !! 2. PREPARATION                                                                                 !!
@@ -121,6 +126,7 @@ SEC_PSOIL_num=27
 SEC_GERBER=28
 SEC_CONSOLE=29
 SEC_CROSSBEAM=30
+SEC_ABT_thinTranWall=31
 
 ! Coordinate systems
 CS_base=11
@@ -451,9 +457,13 @@ RMORE,                0,  0,  0,  0,  0,   0  ! C73 - C78
 sectype,SEC_ABT_longWall,shell,,'ABT_LW'
 secdata,SEC_ABT_longWall_t,MAT_Abutment
 
-! TRANSVERSAL WALL
+! TRANSVERSAL WALL (thick)
 sectype,SEC_ABT_tranWall,shell,,'ABT_TW'
 secdata,SEC_ABT_tranWall_t,MAT_Abutment
+
+! TRANSVERSAL WALL (thin)
+sectype,SEC_ABT_thinTranWall,shell,,'ABT_TTW'
+secdata,SEC_ABT_thinTranWall_t,MAT_Abutment
 
 ! BEAM
 sectype,SEC_ABT_beam,shell,,'ABT_BEAM'
@@ -1019,24 +1029,34 @@ pileWidth=SEC_ABT_pile_d-2*GEO_ABT_pileOvlap
     GEO_ABT2_pileCapL=GEO_ABT2_length+(GEO_ABT2_pileCapW/2)
 *endif
 
+! Thin transversal wall depth
+*get,parType,parm,GEO_ABT1_thinTranWallDepth,type
+*if,parType,ne,0,then
+  GEO_ABT1_thinTranWallDepth=0
+*endif
+*get,parType,parm,GEO_ABT2_thinTranWallDepth,type
+*if,parType,ne,0,then
+  GEO_ABT2_thinTranWallDepth=0
+*endif
+
 ! Create abutment geometry arrays
 *del,GEO_ABT1_geometry
-*dim,GEO_ABT1_geometry,,28
+*dim,GEO_ABT1_geometry,,29
 GEO_ABT1_geometry(1)  = GEO_ABT1_type         , GEO_deckWidth_beg  , GEO_deckOff_beg      , GEO_ABT1_yc           , GEO_ABT1_appSlab
 GEO_ABT1_geometry(6)  = GEO_ABT1_appSlabL     , GEO_ABT1_height    , GEO_ABT1_length      , GEO_ABT1_longPiles    , GEO_ABT1_pileCapL
 GEO_ABT1_geometry(11) = GEO_ABT1_pileCapW     , GEO_ABT1_pileL     , GEO_ABT1_topOffset   , GEO_ABT1_tranPiles    , GEO_ABT1_wings
 GEO_ABT1_geometry(16) = GEO_ABT1_wingHa       , GEO_ABT1_wingL     , GEO_ABT1_pileAngle   , GEO_ABT1_supressLW    , GEO_ABT1_curtainL
 GEO_ABT1_geometry(21) = GEO_ABT1_pileFree     , GEO_ABT1_pileShort , GEO_ABT1_trvPileCols , GEO_ABT1_wingPileCols , GEO_ABT1_wingCapLength
-GEO_ABT1_geometry(26) = GEO_ABT1_wingCapWidth , GEO_ABT1_wingAngle , GEO_ABT1_width
+GEO_ABT1_geometry(26) = GEO_ABT1_wingCapWidth , GEO_ABT1_wingAngle , GEO_ABT1_width       , GEO_ABT1_thinTranWallDepth
 
 *del,GEO_ABT2_geometry
-*dim,GEO_ABT2_geometry,,28
+*dim,GEO_ABT2_geometry,,29
 GEO_ABT2_geometry(1)  = GEO_ABT2_type         , GEO_deckWidth_end  , GEO_deckOff_end      , GEO_ABT2_yc           , GEO_ABT2_appSlab
 GEO_ABT2_geometry(6)  = GEO_ABT2_appSlabL     , GEO_ABT2_height    , GEO_ABT2_length      , GEO_ABT2_longPiles    , GEO_ABT2_pileCapL
 GEO_ABT2_geometry(11) = GEO_ABT2_pileCapW     , GEO_ABT2_pileL     , GEO_ABT2_topOffset   , GEO_ABT2_tranPiles    , GEO_ABT2_wings
 GEO_ABT2_geometry(16) = GEO_ABT2_wingHa       , GEO_ABT2_wingL     , GEO_ABT2_pileAngle   , GEO_ABT2_supressLW    , GEO_ABT2_curtainL
 GEO_ABT2_geometry(21) = GEO_ABT2_pileFree     , GEO_ABT2_pileShort , GEO_ABT2_trvPileCols , GEO_ABT2_wingPileCols , GEO_ABT2_wingCapLength
-GEO_ABT2_geometry(26) = GEO_ABT2_wingCapWidth , GEO_ABT2_wingAngle , GEO_ABT2_width
+GEO_ABT2_geometry(26) = GEO_ABT2_wingCapWidth , GEO_ABT2_wingAngle , GEO_ABT2_width       , GEO_ABT2_thinTranWallDepth
 
 ! Abutment extents
 GEO_ABT1_xMin=-(GEO_ABT1_length>GEO_ABT1_appSlabL*GEO_ABT1_appSlab)
