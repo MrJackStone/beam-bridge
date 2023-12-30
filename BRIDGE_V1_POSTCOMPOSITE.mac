@@ -18,6 +18,7 @@ qxOverallPeak=0
 
 cmsel,s,COMPE_Slab
 nsle,s,active
+clims
 
 *get,yMin,node,,mnloc,y
 *get,yMax,node,,mxloc,y
@@ -25,8 +26,8 @@ nsle,s,active
 *do,nthLS,1,LoadStepCount,1
 
     subset,nthLS
-    cshell_my
-    cshell_qx
+    cshell_my,1
+    cshell_qx,1
 
 
     *do,nthSec,1,secCount,1
@@ -50,7 +51,7 @@ nsle,s,active
             myPeakLS=nthLS
         *endif
 
-        ! Mat shear force (along transversal direction)
+        ! Map shear force (along transversal direction)
         pdef,'QX',etab,'SHELL_QX'
         pcalc,intg,'QX_CUM','QX','S',1
         *get,qxCumMax,path,,max,'QX_CUM'
@@ -76,6 +77,7 @@ nsle,s,active
 
 ! Plot peak MY
 subset,myPeakLS
+cshell_my,1
 
 *do,nthSec,1,secCount,1
     ! Calculate cross-section position
@@ -125,6 +127,7 @@ clims
 
 ! Plot peak QX
 subset,qxPeakLS
+cshell_qx,1
 
 *do,nthSec,1,secCount,1
     ! Calculate cross-section position
