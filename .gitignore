@@ -3,3 +3,5 @@ _Legacy/
 *.dwl
 *.dwl2
 *.bak
+
+/**/_scratch*
