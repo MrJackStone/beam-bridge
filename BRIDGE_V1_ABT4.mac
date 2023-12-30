@@ -1,9 +1,9 @@
 ! BRIDGE_V1_ABT4, CS_local, geoArray
 ! BRIDGE_V1_ABT4,     arg1,     arg2
 
-!!
-!! Documentation:
-!!
+!!                                                                                                !!
+!! Documentation:                                                                                 !!
+!!                                                                                                !!
 ! Interface input objects:
 !   SEC_ABT_pileCap_h
 !   GEO_ABT_pileOff
@@ -14,6 +14,7 @@
 !   COMPA_ABT_longWalls
 !   COMPA_ABT_pileCap
 !   COMPA_ABT_tranWall
+!   COMPA_ABT_thinTranWall
 !   COMPA_ABT_walls
 !   COMPA_Abutment
 !   COMPK_ABT_base
@@ -27,9 +28,9 @@
 !   COMPL_Abutment
 !   COMPL_Barrier
 
-!!
-!! A. Abutment geometry
-!!
+!!                                                                                                !!
+!! A. Abutment geometry                                                                           !!
+!!                                                                                                !!
 ! Load geometric parameters
 GEO_ABT_deckWidth     = %arg2%(2)
 GEO_ABT_appSlabL      = %arg2%(6)
@@ -46,10 +47,11 @@ GEO_ABT_wingPileCols  = %arg2%(24)
 GEO_ABT_wingCapLength = %arg2%(25)
 GEO_ABT_wingCapWidth  = %arg2%(26)
 GEO_ABT_wingAngle     = %arg2%(27)
+GEO_ABT_thinDepth     = %arg2%(29)
 
-!!
-!! B. Draw geometry
-!!
+!!                                                                                                !!
+!! B. Draw geometry                                                                               !!
+!!                                                                                                !!
 ! Store previous selection
 abackup
 lbackup
@@ -62,7 +64,7 @@ arestore
 lrestore
 krestore
 
-!! B.1 Transversal wall and its foundation
+!! B.1 Transversal wall and its foundation                                                        !!
 csys,arg1
 csnext,'CS_trvWall'
 clocal,CS_trvWall,0,0,-GEO_ABT_deckWidth/2,-GEO_ABT_height
@@ -76,7 +78,7 @@ transversal_wall_params(6) = SEC_ABT_pileCap_h , GEO_ABT_pileL  , GEO_ABT_tranPi
 sm_pilesup_retwall,CS_trvWall,'transversal_wall_params', 'ABT_TRV'
 csys,arg1
 
-!! B.2 Left wing and its foundation
+!! B.2 Left wing and its foundation                                                               !!
 csys,arg1
 csnext,'CS_leftWing'
 clocal,CS_leftWing,0,0,GEO_ABT_deckWidth/2,-GEO_ABT_height,GEO_ABT_wingAngle-90
@@ -87,7 +89,7 @@ csys,CS_leftWing
 left_wing_params(1) = GEO_ABT_wingL     , GEO_ABT_height , GEO_ABT_wingHa    , GEO_ABT_wingCapLength , GEO_ABT_wingCapWidth
 left_wing_params(6) = SEC_ABT_pileCap_h , GEO_ABT_pileL  , GEO_ABT_longPiles , GEO_ABT_wingPileCols  , GEO_ABT_pileOff
 
-asel,u,area,,all
+asel,none
 sm_pilesup_retwall,CS_leftWing,'left_wing_params', 'ABT_LW'
 cmpadd,'COMPA_ABT_leftSide'
 
@@ -101,7 +103,7 @@ cmpadd,'COMPA_ABT_leftSide'
 
 csys,arg1
 
-!! B.2 Right wing and its foundation
+!! B.2 Right wing and its foundation                                                              !!
 csys,arg1
 csnext,'CS_rightWing'
 clocal,CS_rightWing,0,0,-GEO_ABT_deckWidth/2,-GEO_ABT_height,-GEO_ABT_wingAngle-90
@@ -112,7 +114,7 @@ csys,CS_rightWing
 right_wing_params(1) = GEO_ABT_wingL     , GEO_ABT_height, GEO_ABT_wingHa    , GEO_ABT_wingCapLength , GEO_ABT_wingCapWidth
 right_wing_params(6) = SEC_ABT_pileCap_h , GEO_ABT_pileL , GEO_ABT_longPiles , GEO_ABT_wingPileCols  , GEO_ABT_pileOff
 
-asel,u,area,,all
+asel,none
 sm_pilesup_retwall,CS_rightWing,'right_wing_params', 'ABT_RW'
 cmpadd,'COMPA_ABT_rightSide'
 
@@ -130,7 +132,7 @@ areverse,all
 
 csys,arg1
 
-!! B.3 Join walls
+!! B.3 Join walls                                                                                 !!
 cmsel,s,COMPA_ABT_TRV_wall
 cmsel,a,COMPA_ABT_LW_wall
 cmsel,a,COMPA_ABT_RW_wall
@@ -138,7 +140,28 @@ lsla,s
 ksll,s
 nummrg,kp
 
-!! B.4 Draw approach slab
+!! B.4 Slice transversal wall at thickness change                                                 !!
+*if,GEO_ABT_thinDepth,gt,0,then
+  csys,CS_trvWall
+  wpcsys,-1,CS_trvWall
+  wpoffs,,,GEO_ABT_height-GEO_ABT_thinDepth
+
+  cmsel,s,COMPA_ABT_TRV_wall
+  asbw,all,,delete
+  cm,COMPA_ABT_TRV_wall,area
+
+  asel,r,loc,z,GEO_ABT_height-GEO_ABT_thinDepth,GEO_ABT_height
+  cm,COMPA_ABT_TRV_thinWall,area
+
+  csys,arg1
+
+*else
+  asel,none
+  cm,COMPA_ABT_TRV_thinWall,area
+
+*endif
+
+!! B.5 Draw approach slab                                                                         !!
 ! Copy line pattern from transversal wall top
 cmsel,s,COMPA_ABT_TRV_wall
 lsla,s
@@ -172,9 +195,9 @@ ksll,s
 al,all
 cm,COMPA_TEMP_appSlab,area
 
-!!
-!! C. Slice to connect to superstructure
-!!
+!!                                                                                                !!
+!! C. Slice to connect to superstructure                                                          !!
+!!                                                                                                !!
 ! Slice transversal wall and pile cap
 cmsel,s,COMPA_ABT_TRV_wall
 cmsel,a,COMPA_ABT_TRV_cap
@@ -194,19 +217,37 @@ cmsel,s,COMPA_TEMP_appSlab
 BRIDGE_V1_LONGSLICE
 cm,COMPA_TEMP_appSlab,area
 
-!!
-!! D. Merge pile caps
-!!
+!!                                                                                                !!
+!! D. Merge pile caps                                                                             !!
+!!                                                                                                !!
 cmsel,s,COMPA_ABT_TRV_cap
 cmsel,a,COMPA_ABT_LW_cap
 aovlap,all
+cm,COMPA_leftSideComplement,area
+
 cmsel,a,COMPA_ABT_RW_cap
 aovlap,all
 cm,COMPA_ABT_mergedCaps,area
 
-!!
-!! E. Interface output: create selection components
-!!
+! Collect left/right side cap areas to rebuild degenerated components later
+cmsel,u,COMPA_leftSideComplement
+cm,COMPA_rightSideComplement,area
+
+cmsel,s,COMPA_leftSideComplement
+cmsel,r,COMPA_rightSideComplement
+cm,COMPA_intersection,area
+
+cmsel,s,COMPA_leftSideComplement
+cmsel,u,COMPA_intersection
+cm,COMPA_leftSideComplement,area
+
+cmsel,s,COMPA_rightSideComplement
+cmsel,u,COMPA_intersection
+cm,COMPA_rightSideComplement,area
+
+!!                                                                                                !!
+!! E. Interface output: create selection components                                               !!
+!!                                                                                                !!
 ! Barrier lines
 lsel,u,line,,all
 *if,LOAD_barrierStatus,EQ,1,THEN
@@ -221,6 +262,12 @@ lsel,u,line,,all
 *endif
 cmpadd,'COMPL_Barrier'
 
+! Sides
+cmsel,s,COMPA_leftSideComplement
+cmpadd,'COMPA_leftSide'
+cmsel,s,COMPA_rightSideComplement
+cmpadd,'COMPA_ABT_rightSide'
+
 ! Approach slab
 cmsel,s,COMPA_TEMP_appSlab
 cmpadd,'COMPA_ABT_appSlab'
@@ -234,12 +281,11 @@ cmpadd,'COMPA_ABT_tranWall'
 cmsel,s,COMPA_ABT_longWalls
 cmsel,a,COMPA_ABT_tranWall
 cmpadd,'COMPA_ABT_walls'
+cmsel,s,COMPA_ABT_TRV_thinWall
+cmpadd,'COMPA_ABT_thinTranWall'
 
 ! Pile caps
 cmsel,s,COMPA_ABT_mergedCaps
-!cmsel,s,COMPA_ABT_TRV_cap
-!cmsel,a,COMPA_ABT_LW_cap
-!cmsel,a,COMPA_ABT_RW_cap
 cmpadd,'COMPA_ABT_pileCap'
 
 cmsel,s,COMPK_ABT_TRV_ref
