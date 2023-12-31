@@ -191,6 +191,9 @@ eplot
     BRIDGE_V1_POSTAPSLBDFL,1
     BRIDGE_V1_POSTAPSLBDFL,2
 
+    BRIDGE_V1_POSTTWALDFL,1
+    BRIDGE_V1_POSTTWALDFL,2
+
 !!    *if,MAT_Girder_type,eq,1,then
         ! Composite steel-concrete results
         BRIDGE_V1_POSTCOMPOSITE

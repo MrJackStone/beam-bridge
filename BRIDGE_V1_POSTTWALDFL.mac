@@ -1,5 +1,5 @@
-! BRIDGE_V1_POSTAPSLBDFL, abtNum
-! BRIDGE_V1_POSTAPSLBDFL, arg1
+! BRIDGE_V1_POSTTWALDFL, abtNum
+! BRIDGE_V1_POSTTWALDFL, arg1
 
 !! Initial configs                                                                                !!
 windefa,1
@@ -10,9 +10,9 @@ windefa,1
 /gformat,f,10,2
 /annot,dele
 
-pathCount=10
+pathCount=5
 
-cmsel,s,COMPA_ABT_appSlab
+cmsel,s,COMPA_ABT_tranwall
 cmsel,r,COMPA_ABT_%arg1%
 esla,s
 nsle,s,active
@@ -23,8 +23,8 @@ csys,CS_ABT%arg1%
 csys,0
 
 yStep=(yMax-yMin)/(pathCount-1)
-xLocal1=0
-xLocal2=GEO_ABT%arg1%_appSlabL
+zLocal1=0
+zLocal2=-GEO_ABT%arg1%_height
 
 *del , path_names  ,      , nopr
 *dim , path_names  , char , pathCount
@@ -34,35 +34,30 @@ xLocal2=GEO_ABT%arg1%_appSlabL
 !! Create paths                                                                                   !!
 *do,nthPath,1,pathCount,1
   yLocal=yMin+yStep*(nthPath-1)
-  loc2glo,xLocal1,yLocal,0,CS_ABT%arg1%,'x1g','y1g','z1g'
-  loc2glo,xLocal2,yLocal,0,CS_ABT%arg1%,'x2g','y2g','z2g'
+  loc2glo,0,yLocal,zLocal1,CS_ABT%arg1%,'x1g','y1g','z1g'
+  loc2glo,0,yLocal,zLocal2,CS_ABT%arg1%,'x2g','y2g','z2g'
 
-  pathName='APS_P%nthPath%'
+  pathName='TRW_P%nthPath%'
   path_names(nthPath)=pathName
-  path_labels(nthPath)='NET_UZ'
+  path_labels(nthPath)='NET_UX'
 
   path,pathName,2,30,50
-  *if,arg1,eq,1,then
-    ppath,1,,x1g,y1g,z1g
-    ppath,2,,x2g,y2g,z2g
-  *elseif,arg1,eq,2,then
-    ppath,1,,x2g,y2g,z2g
-    ppath,2,,x1g,y1g,z1g
-  *endif
-  pdef,'UZ',u,z,avg
+  ppath,1,,x1g,y1g,z1g
+  ppath,2,,x2g,y2g,z2g
+  pdef,'UX',u,x,avg
 *enddo
 
 !! Calculate path envelopes                                                                       !!
-*del,slab_envelope,,nopr
-*dim,slab_envelope,char,2,pathCount
+*del,twall_envelope,,nopr
+*dim,twall_envelope,char,2,pathCount
 *do,nthPath,1,pathCount,1
-  slab_envelope(1,nthPath)=path_names(nthPath)
-  slab_envelope(2,nthPath)=path_labels(nthPath)
+  twall_envelope(1,nthPath)=path_names(nthPath)
+  twall_envelope(2,nthPath)=path_labels(nthPath)
 *enddo
 
-pthenv,'CLEAR','slab_envelope'
+pthenv,'CLEAR','twall_envelope'
 
-cmsel,s,COMPA_ABT_appSlab
+cmsel,s,COMPA_ABT_tranwall
 cmsel,r,COMPA_ABT_%arg1%
 esla,s
 nsle,s,active
@@ -72,13 +67,13 @@ nsle,s,active
   subset,nthLS,last
 
   *do,nthPath,1,pathCount,1
-    pathName='APS_P%nthPath%'
+    pathName='TRW_P%nthPath%'
     path,pathName
-    pdef,'UZ',u,z,avg
-    pthrebase,'UZ',0,'NET_UZ',1e3/1.4
+    pdef,'UX',u,x,avg
+    pthrebase,'UX',2,'NET_UX',1e3/1.4
   *enddo
 
-  pthenv,'UPDATE','slab_envelope'
+  pthenv,'UPDATE','twall_envelope'
 *enddo
 
 !! Plot path envelopes                                                                            !!
@@ -90,30 +85,37 @@ nsle,s,active
 *do,nthPath,1,pathCount,1
   envelope_path_names(nthPath*2-1)  = path_names(nthPath)
   envelope_path_names(nthPath*2)    = path_names(nthPath)
-  envelope_path_labels(nthPath*2-1) = 'NET_UZ+'
-  envelope_path_labels(nthPath*2)   = 'NET_UZ-'
+  envelope_path_labels(nthPath*2-1) = 'NET_UX+'
+  envelope_path_labels(nthPath*2)   = 'NET_UX-'
 *enddo
 
 view1w
 wincln,1
-/view,1,1,1,1
+
+*if,arg1,eq,1,then
+  /view,1,1,1,1
+*elseif,arg1,eq,2,then
+  /view,1,-1,-1,1
+*endif
+
+/angle,1,0
 /udoc,1,cntr,right
 /plopts,info,3
 /plopts,leg3,1
-wntitle , 'ENCONTRO 0%arg1%:'     , 1 , 0
-wntitle , 'LAJE DE APROX.'   , 1 , 0 , 'C'
-wntitle , 'FLECHA RARA [mm]' , 1 , 1 , 'R'
+wntitle , 'ENCONTRO 0%arg1%:'  , 1 , 0
+wntitle , 'PAREDE TRANSVERSAL' , 1 , 0 , 'C'
+wntitle , 'FLECHA RARA [mm]'   , 1 , 1 , 'R'
 /triad,off
 /eshape,1
 /udoc,1,cntr,right
 /edge,1,0
-cmsel,s,COMPA_ABT_appSlab
+cmsel,s,COMPA_ABT_tranwall
 cmsel,r,COMPA_ABT_%arg1%
 /auto,1
 aplot
 /user,1
 cmsel,s,COMPA_ABT_%arg1%
-cmsel,u,COMPA_ABT_appSlab
+cmsel,u,COMPA_ABT_tranwall
 esla,s
 nsle,s,active
 
@@ -126,7 +128,7 @@ go2png,1200
   esll,a
   nsle,s,active
   eplot
-  cmsel,s,COMPA_ABT_appSlab
+  cmsel,s,COMPA_ABT_tranwall
   cmsel,r,COMPA_ABT_%arg1%
   esla,s
   nsle,s,active
@@ -135,7 +137,7 @@ go2png,1200
   /edge,1,0
   eplot
   mpathplot,3,,'envelope_path_names','envelope_path_labels'
-endpng,'ABT%arg1%_APPSLAB_deflects',,,,,'memo_imgs'
+endpng,'ABT%arg1%_TRANWALL_deflects',,,,,'memo_imgs'
 /erase
 /annot,dele
 clims
