@@ -12,8 +12,8 @@ wincln,1
 /plopts,leg3,1
 /gformat,f,10,2
 /annot,dele
-wntitle,'FLECHA LAJE TABULEIRO [mm]',1
 
+!! Create element/node selection components for each 'span'                                       !!
 *do,nthSpan,1,GEO_girderCount-1,1
     csA=CS_girders(nthSpan)
     csB=CS_girders(nthSpan+1)
@@ -59,6 +59,7 @@ esln,r,1
 cm,COMPE_SlabSpab_SL,elem
 cm,COMPN_SlabSpab_SL,node
 
+!! Create paths                                                                                   !!
 pathCount=50
 cmsel,s,COMPE_Slab
 nsle,s,active
@@ -69,10 +70,11 @@ xstep=(xmax-xmin)/(pathCount-1)
 *dim,x_path,,pathCount
 *vfill,x_path,ramp,xmin,xstep
 
+totalPathCount=(GEO_girderCount+1)*pathCount
 *del,all_path_names
-*dim,all_path_names,char,(GEO_girderCount+1)*pathCount
+*dim,all_path_names,char,totalPathCount
 *del,all_path_labels
-*dim,all_path_labels,char,(GEO_girderCount+1)*pathCount
+*dim,all_path_labels,char,totalPathCount
 pathIdx=0
 
 *do,nthSpan,1,GEO_girderCount-1,1
@@ -100,14 +102,10 @@ pathIdx=0
         all_path_names(pathIdx)=pthName
         all_path_labels(pathIdx)='NET_UZ'
 
-        path,pthName,2,10,20
+        path,pthName,2,30,20
         ppath,1,,x,yA,0
         ppath,2,,x,yB,0
         pdef,'UZ',u,z,1
-        pdef,'EMN_UZ',etab,'EMN_UZ',1
-        pdef,'EMX_UZ',etab,'EMX_UZ',1
-
-        pthrebase,'UZ',0,'NET_UZ', 1e3
     *enddo
 *enddo
 
@@ -135,14 +133,10 @@ csB=CS_girders(1)
   all_path_names(pathIdx)=pthName
   all_path_labels(pathIdx)='NET_UZ'
 
-  path,pthName,2,10,20
+  path,pthName,2,30,20
   ppath,1,,x,yA,0
   ppath,2,,x,yB,0
   pdef,'UZ',u,z,1
-  pdef,'EMN_UZ',etab,'EMN_UZ',1
-  pdef,'EMX_UZ',etab,'EMX_UZ',1
-
-  pthrebase,'UZ',2,'NET_UZ', 1e3
 *enddo
 
 ! Left overhang paths
@@ -169,38 +163,118 @@ csB=CS_leftDeckEdge
   all_path_names(pathIdx)=pthName
   all_path_labels(pathIdx)='NET_UZ'
 
-  path,pthName,2,10,20
+  path,pthName,2,30,20
   ppath,1,,x,yA,0
   ppath,2,,x,yB,0
   pdef,'UZ',u,z,1
-  pdef,'EMN_UZ',etab,'EMN_UZ',1
-  pdef,'EMX_UZ',etab,'EMX_UZ',1
+*enddo
 
-  pthrebase,'UZ',1,'NET_UZ', 1e3
+!! Calculate path envelopes                                                                       !!
+*del,slab_envelope,,nopr
+*dim,slab_envelope,char,2,totalPathCount
+*do,nthPath,1,totalPathCount,1
+  slab_envelope(1,nthPath)=all_path_names(nthPath)
+  slab_envelope(2,nthPath)=all_path_labels(nthPath)
+*enddo
+
+pthenv,'CLEAR','slab_envelope'
+
+*do,nthLS,1,LoadStepCount,1
+
+  cmsel,s,COMPE_Slab
+  nsle,s,active
+  subset,nthLS,last
+
+  ! Inner spans
+  *do,nthSpan,1,GEO_girderCount-1,1
+    cmsel,s,COMPE_SlabSpan_S%nthSpan%
+    cmsel,s,COMPN_SlabSpan_S%nthSpan%
+    *do,nthPath,1,pathCount,1
+      pthName='S%nthSpan%_P%nthPath%'
+      path,pthName
+      pdef,'UZ',u,z,1
+      pthrebase,'UZ',0,'NET_UZ', 1e3
+    *enddo
+  *enddo
+
+  ! Right overhang paths
+  cmsel,s,COMPE_SlabSpab_SR
+  cmsel,s,COMPN_SlabSpab_SR
+  *do,nthPath,1,pathCount,1
+    pthName='SR_P%nthPath%'
+    path,pthName
+    pdef,'UZ',u,z,1
+    pthrebase,'UZ',2,'NET_UZ', 1e3
+  *enddo
+
+  ! Left overhang paths
+  cmsel,s,COMPE_SlabSpab_SL
+  cmsel,s,COMPN_SlabSpab_SL
+  *do,nthPath,1,pathCount,1
+    pthName='SL_P%nthPath%'
+    path,pthName
+    pdef,'UZ',u,z,1
+    pthrebase,'UZ',1,'NET_UZ', 1e3
+  *enddo
+
+  pthenv,'UPDATE','slab_envelope'
+*enddo
+
+!! Plot path items                                                                                !!
+*del,max_envelope_labels,,nopr
+*dim,max_envelope_labels,char,totalPathCount
+*del,min_envelope_labels,,nopr
+*dim,min_envelope_labels,char,totalPathCount
+*do,nthPath,1,totalPathCount,1
+  max_envelope_labels(nthPath)='NET_UZ+'
+  min_envelope_labels(nthPath)='NET_UZ-'
 *enddo
 
 cmsel,s,COMPE_Slab
 nsle,s,active
-/auto,1
-/angle,,0
+/window,all,dele
+/window,1,-1,1.67,0,1
+/window,2,-1,1.67,-1,0
+/auto,all
+/angle,all,0
 ! /view,1,1,1,1
 /view,1,1,0,0
+/view,2,1,0,0
 /eshape,0
-/edge,,1
+/edge,all,1
+
+/annot,dele
+wntitle , 'LAJE TABULEIRO'   , 1 , 0
+wntitle , 'FLECHA MAX. [mm]' , 1 , 1 , 'R'
+wntitle , 'LAJE TABULEIRO'   , 2 , 0
+wntitle , 'FLECHA MIN. [mm]' , 2 , 1 , 'R'
 
 go2png,1200
-    eplot
-    /user,1
-    /noerase
-    cmsel,s,COMPE_girder
-    nsle,s,active
-    /eshape,1
-    /gline,,-1
-    eplot
-    cmsel,s,COMPE_Slab
-    nsle,s,active
-    /eshape,0
-    /gline,,0
-    mpathplot,10,,'all_path_names','all_path_labels'
+  /window,1,on
+  /window,2,on
+  cmsel,s,COMPE_Slab
+  cmsel,a,COMPE_girder
+  nsle,s,active
+  /eshape,1
+  /gline,all,-1
+  eplot
+  /user,all
+  /noerase
+  cmsel,s,COMPE_Slab
+  nsle,s,active
+  /eshape,0
+  ! /gline,all,0
+
+  /window,1,on
+  /window,2,off
+  mpathplot,5,,'all_path_names','max_envelope_labels'
+
+  /window,1,off
+  /window,2,on
+  mpathplot,5,,'all_path_names','min_envelope_labels'
+
+  /gline,all,0
+
 endpng,'slab_deflections',,,,,'memo_imgs'
 /erase
+/annot,dele
