@@ -237,7 +237,7 @@ cmsel,r,COMPA_ABT_1
 aatt,MAT_Abutment,,TYPE_SHELL181,ESYS_ABT1_tw,SEC_ABT_tranWall
 
 cmsel,s,COMPA_ABT_thinTranWall
-cmsel,s,COMPA_ABT_1
+cmsel,r,COMPA_ABT_1
 aatt,MAT_Abutment,,TYPE_SHELL181,ESYS_ABT1_tw,SEC_ABT_thinTranWall
 
 cmsel,s,COMPA_ABT_tranWall
@@ -246,7 +246,7 @@ cmsel,r,COMPA_ABT_2
 aatt,MAT_Abutment,,TYPE_SHELL181,ESYS_ABT2_tw,SEC_ABT_tranWall
 
 cmsel,s,COMPA_ABT_thinTranWall
-cmsel,s,COMPA_ABT_2
+cmsel,r,COMPA_ABT_2
 aatt,MAT_Abutment,,TYPE_SHELL181,ESYS_ABT2_tw,SEC_ABT_thinTranWall
 
 ! Longitudinal walls
@@ -361,15 +361,19 @@ csys,CS_ABT2
 csys,0
 
 ! Selection components: submerged and exposed elements
-cmsel,s,COMPE_ABT_1
-cmsel,a,COMPE_ABT_2
-cm,COMPE_temp,elem
-*if,GEO_waterHeight,GT,0,THEN
+*if,GEO_waterHeight,gt,0,then
+  cmsel,s,COMPE_ABT_1
   nsel,s,loc,z,zFrameBot,GEO_waterHeight-GEO_ABT1_height
-  esln,r,1
+  esln,r
+  cmpadd,'COMPE_Submerged'
+
+  cmsel,s,COMPE_ABT_2
+  nsel,s,loc,z,zFrameBot,GEO_waterHeight-GEO_ABT2_height
+  esln,r
   cmpadd,'COMPE_Submerged'
 *endif
-cmsel,s,COMPE_temp
+cmsel,s,COMPE_ABT_1
+cmsel,a,COMPE_ABT_2
 cmsel,u,COMPE_Submerged
 cmpadd,'COMPE_Exposed'
 !
