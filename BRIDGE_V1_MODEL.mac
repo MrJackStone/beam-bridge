@@ -188,10 +188,14 @@ eplot
     /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_post pileGroup',mac
     ! /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_pilePlast',mac
 
+    BRIDGE_V1_POSTAPSLBDFL,1
+    BRIDGE_V1_POSTAPSLBDFL,2
+
 !!    *if,MAT_Girder_type,eq,1,then
         ! Composite steel-concrete results
         BRIDGE_V1_POSTCOMPOSITE
 !!    *endif
+
 *endif
 
 
