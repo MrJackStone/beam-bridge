@@ -180,7 +180,7 @@ GEO_ABT_pileOvlap=0
 !    [1] Box (pile cap slab + transversal wall + longitudinal wall)
 !    [2] Block-beam (pile cap block-beam + transversal wall)
 !    [3] Pile curtain (piles as retention walls)
-!    [4] Transversal retainment wall with angled wings
+!    [4] Wall-column with angled wings (pile caps + transversal wall + wings)
 GEO_ABT1_type=4
 
 ! Length
@@ -261,7 +261,7 @@ GEO_ABT1_wingCapWidth=2
 !    [1] Box (pile cap slab + transversal wall + longitudinal wall)
 !    [2] Block-beam (pile cap block-beam + transversal wall)
 !    [3] Pile curtain (piles as retention walls)
-!    [4] Transversal retainment wall with angled wings
+!    [4] Wall-column with angled wings (pile caps + transversal wall + wings)
 GEO_ABT2_type=4
 
 ! Length
@@ -867,3 +867,10 @@ LOAD_transOption=0
 LOAD_longScenario=0
 
 BRIDGE_V1_MODEL
+
+
+
+
+
+
+! BRIDGE_V1_CHANGELOG
