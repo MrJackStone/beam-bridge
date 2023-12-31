@@ -1,12 +1,16 @@
 !/input,'F:\Ansys\03 Design\30 Pontes Anchieta\01 APDL\_slab_deflects',mac
 
 windefa,1
-/device,font
+/device,font,3,Arial,1000,0,-64,0,0,,,
+/device,font,1,Arial,1000,0,-42,0,0,,,
+/device,text,1,100
+/tspec,15,1.5,4,0,0
+/annot,dele
 wincln,1
 /udoc,1,cntr,right
 /plopts,info,3
 /plopts,leg3,1
-/gformat,f,10,4
+/gformat,f,10,2
 /annot,dele
 wntitle,'FLECHA LAJE TABULEIRO [mm]',1
 
@@ -27,6 +31,34 @@ wntitle,'FLECHA LAJE TABULEIRO [mm]',1
     cm,COMPN_SlabSpan_S%nthSpan%,node
 *enddo
 
+! Right overhang
+cmsel,s,COMPE_Slab
+nsle,s,active
+
+csys,CS_rightDeckEdge
+nsel,r,loc,y,0,1e9
+
+csys,CS_girders(1)
+nsel,r,loc,y,-1e9,0
+
+esln,r,1
+cm,COMPE_SlabSpab_SR,elem
+cm,COMPN_SlabSpab_SR,node
+
+! Left overhang
+cmsel,s,COMPE_Slab
+nsle,s,active
+
+csys,CS_leftDeckEdge
+nsel,r,loc,y,0,-1e9
+
+csys,CS_girders(GEO_girderCount)
+nsel,r,loc,y,0,1e9
+
+esln,r,1
+cm,COMPE_SlabSpab_SL,elem
+cm,COMPN_SlabSpab_SL,node
+
 pathCount=50
 cmsel,s,COMPE_Slab
 nsle,s,active
@@ -38,9 +70,9 @@ xstep=(xmax-xmin)/(pathCount-1)
 *vfill,x_path,ramp,xmin,xstep
 
 *del,all_path_names
-*dim,all_path_names,char,(GEO_girderCount-1)*pathCount
+*dim,all_path_names,char,(GEO_girderCount+1)*pathCount
 *del,all_path_labels
-*dim,all_path_labels,char,(GEO_girderCount-1)*pathCount
+*dim,all_path_labels,char,(GEO_girderCount+1)*pathCount
 pathIdx=0
 
 *do,nthSpan,1,GEO_girderCount-1,1
@@ -75,15 +107,84 @@ pathIdx=0
         pdef,'EMN_UZ',etab,'EMN_UZ',1
         pdef,'EMX_UZ',etab,'EMX_UZ',1
 
-        pthrebase,'UZ',0,'NET_UZ', -1e3
+        pthrebase,'UZ',0,'NET_UZ', 1e3
     *enddo
+*enddo
+
+! Right overhang paths
+cmsel,s,COMPE_SlabSpab_SR
+cmsel,s,COMPN_SlabSpab_SR
+
+csA=CS_rightDeckEdge
+*get,csAy,cdsy,csA,loc,y
+*get,csAxy,cdsy,csA,ang,xy
+
+csB=CS_girders(1)
+*get,csBy,cdsy,csB,loc,y
+*get,csBxy,cdsy,csB,ang,xy
+
+*do,nthPath,1,pathCount,1
+  x=x_path(nthPath)
+  *afun,deg
+  yA=csAy+x*tan(csAxy)
+  yB=csBy+x*tan(csBxy)
+  *afun,rad
+
+  pthName='SR_P%nthPath%'
+  pathIdx=pathIdx+1
+  all_path_names(pathIdx)=pthName
+  all_path_labels(pathIdx)='NET_UZ'
+
+  path,pthName,2,10,20
+  ppath,1,,x,yA,0
+  ppath,2,,x,yB,0
+  pdef,'UZ',u,z,1
+  pdef,'EMN_UZ',etab,'EMN_UZ',1
+  pdef,'EMX_UZ',etab,'EMX_UZ',1
+
+  pthrebase,'UZ',2,'NET_UZ', 1e3
+*enddo
+
+! Left overhang paths
+cmsel,s,COMPE_SlabSpab_SL
+cmsel,s,COMPN_SlabSpab_SL
+
+csA=CS_girders(GEO_girderCount)
+*get,csAy,cdsy,csA,loc,y
+*get,csAxy,cdsy,csA,ang,xy
+
+csB=CS_leftDeckEdge
+*get,csBy,cdsy,csB,loc,y
+*get,csBxy,cdsy,csB,ang,xy
+
+*do,nthPath,1,pathCount,1
+  x=x_path(nthPath)
+  *afun,deg
+  yA=csAy+x*tan(csAxy)
+  yB=csBy+x*tan(csBxy)
+  *afun,rad
+
+  pthName='SL_P%nthPath%'
+  pathIdx=pathIdx+1
+  all_path_names(pathIdx)=pthName
+  all_path_labels(pathIdx)='NET_UZ'
+
+  path,pthName,2,10,20
+  ppath,1,,x,yA,0
+  ppath,2,,x,yB,0
+  pdef,'UZ',u,z,1
+  pdef,'EMN_UZ',etab,'EMN_UZ',1
+  pdef,'EMX_UZ',etab,'EMX_UZ',1
+
+  pthrebase,'UZ',1,'NET_UZ', 1e3
 *enddo
 
 cmsel,s,COMPE_Slab
 nsle,s,active
 /auto,1
 /angle,,0
-/view,1,1,1,1 !!0,0
+! /view,1,1,1,1
+/view,1,1,0,0
 /eshape,0
 /edge,,1
 
@@ -95,13 +196,11 @@ go2png,1200
     nsle,s,active
     /eshape,1
     /gline,,-1
-    !eplot
+    eplot
     cmsel,s,COMPE_Slab
     nsle,s,active
     /eshape,0
     /gline,,0
     mpathplot,10,,'all_path_names','all_path_labels'
-endpng,'slab_deflections'
+endpng,'slab_deflections',,,,,'memo_imgs'
 /erase
-
-
