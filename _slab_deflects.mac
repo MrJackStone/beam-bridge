@@ -193,7 +193,9 @@ pthenv,'CLEAR','slab_envelope'
       pthName='S%nthSpan%_P%nthPath%'
       path,pthName
       pdef,'UZ',u,z,1
-      pthrebase,'UZ',0,'NET_UZ', 1e3
+      pdef,'DW_UZ',etab,'DW_UZ',1
+      pthrebase , 'UZ'    , 0 , 'NET_UZ'   , 1e3/1.4
+      pthrebase , 'DW_UZ' , 0 , 'NETDW_UZ' , 1e3/1.4
     *enddo
   *enddo
 
@@ -204,7 +206,9 @@ pthenv,'CLEAR','slab_envelope'
     pthName='SR_P%nthPath%'
     path,pthName
     pdef,'UZ',u,z,1
-    pthrebase,'UZ',2,'NET_UZ', 1e3
+    pdef,'DW_UZ',etab,'DW_UZ',1
+    pthrebase , 'UZ'    , 2 , 'NET_UZ'   , 1e3/1.4
+    pthrebase , 'DW_UZ' , 2 , 'NETDW_UZ' , 1e3/1.4
   *enddo
 
   ! Left overhang paths
@@ -214,7 +218,9 @@ pthenv,'CLEAR','slab_envelope'
     pthName='SL_P%nthPath%'
     path,pthName
     pdef,'UZ',u,z,1
-    pthrebase,'UZ',1,'NET_UZ', 1e3
+    pdef,'DW_UZ',etab,'DW_UZ',1
+    pthrebase , 'UZ'    , 1 , 'NET_UZ'   , 1e3/1.4
+    pthrebase , 'DW_UZ' , 1 , 'NETDW_UZ' , 1e3/1.4
   *enddo
 
   pthenv,'UPDATE','slab_envelope'
@@ -225,11 +231,15 @@ pthenv,'CLEAR','slab_envelope'
 *dim,max_envelope_labels,char,totalPathCount
 *del,min_envelope_labels,,nopr
 *dim,min_envelope_labels,char,totalPathCount
+*del,dw_envelope_labels,,nopr
+*dim,dw_envelope_labels,char,totalPathCount
 *do,nthPath,1,totalPathCount,1
-  max_envelope_labels(nthPath)='NET_UZ+'
-  min_envelope_labels(nthPath)='NET_UZ-'
+  max_envelope_labels(nthPath) = 'NET_UZ+'
+  min_envelope_labels(nthPath) = 'NET_UZ-'
+  dw_envelope_labels(nthPath)  = 'NETDW_UZ'
 *enddo
 
+! Deflection (RARA)
 cmsel,s,COMPE_Slab
 nsle,s,active
 /window,all,dele
@@ -237,17 +247,18 @@ nsle,s,active
 /window,2,-1,1.67,-1,0
 /auto,all
 /angle,all,0
-! /view,1,1,1,1
 /view,1,1,0,0
 /view,2,1,0,0
 /eshape,0
 /edge,all,1
 
-/annot,dele
-wntitle , 'LAJE TABULEIRO'   , 1 , 0
-wntitle , 'FLECHA MAX. [mm]' , 1 , 1 , 'R'
-wntitle , 'LAJE TABULEIRO'   , 2 , 0
-wntitle , 'FLECHA MIN. [mm]' , 2 , 1 , 'R'
+/annot  , dele
+wntitle , 'LAJE DO TABULEIRO:' , 1 , 0
+wntitle , 'FLECHA MAX. [mm]'   , 1 , 0 , 'C'
+wntitle , '(COMB. RARA)'       , 1 , 1 , 'R'
+wntitle , 'LAJE DO TABULEIRO:' , 2 , 0
+wntitle , 'FLECHA MIN. [mm]'   , 2 , 0 , 'C'
+wntitle , '(COMB. RARA)'       , 2 , 1 , 'R'
 
 go2png,1200
   /window,1,on
@@ -263,7 +274,6 @@ go2png,1200
   cmsel,s,COMPE_Slab
   nsle,s,active
   /eshape,0
-  ! /gline,all,0
 
   /window,1,on
   /window,2,off
