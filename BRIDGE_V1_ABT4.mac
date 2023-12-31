@@ -150,15 +150,7 @@ nummrg,kp
   asbw,all,,delete
   cm,COMPA_ABT_TRV_wall,area
 
-  asel,r,loc,z,GEO_ABT_height-GEO_ABT_thinDepth,GEO_ABT_height
-  cm,COMPA_ABT_TRV_thinWall,area
-
   csys,arg1
-
-*else
-  asel,none
-  cm,COMPA_ABT_TRV_thinWall,area
-
 *endif
 
 !! B.5 Draw approach slab                                                                         !!
@@ -211,6 +203,18 @@ cm,COMPA_ABT_TRV_wall,area
 asel,inve
 cmsel,r,COMPA_ABT_temp
 cm,COMPA_ABT_TRV_cap,area
+
+! Build thin transversal wall region component
+*if,GEO_ABT_thinDepth,gt,0,then
+  csys,CS_trvWall
+  cmsel,s,COMPA_ABT_TRV_wall
+  asel,r,loc,z,GEO_ABT_height-GEO_ABT_thinDepth,GEO_ABT_height
+  cm,COMPA_ABT_TRV_thinWall,area
+  csys,arg1
+*else
+  asel,none
+  cm,COMPA_ABT_TRV_thinWall,area
+*endif
 
 ! Slice approach slab
 cmsel,s,COMPA_TEMP_appSlab
