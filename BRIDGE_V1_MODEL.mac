@@ -1,4 +1,5 @@
 /output,outfile,out
+init
 
 ! APDL development info
 APDL_name    = 'BRIDGE'
@@ -161,6 +162,7 @@ SAVE,,,,ALL
 
 nlgeom,on
 
+/uis,abort,off
 KEYW,pr_sgui,1
 LSSOLVE,1,LoadStepCount,1
 KEYW,pr_sgui,0
