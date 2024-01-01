@@ -187,6 +187,7 @@ go2png,1200
     /focus,3,1e6,,,1
     /udoc,3,cntr,right
     /gformat,f,1,2
+    clims
     cleanplot,'pletab','EMM_UZ'
 endpng,'IMG18_peakPile',,,,,resultsFolder
 /erase
