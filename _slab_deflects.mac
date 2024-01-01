@@ -288,3 +288,7 @@ go2png,1200
 endpng,'slab_deflections',,,,,'memo_imgs'
 /erase
 /annot,dele
+clims
+view4w
+/gline,all,0
+view1w
