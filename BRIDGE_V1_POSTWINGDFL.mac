@@ -1,0 +1,172 @@
+! BRIDGE_V1_POSTWINGDFL, abtNum
+! BRIDGE_V1_POSTWINGDFL, arg1
+
+!! Initial configs                                                                                !!
+windefa,1
+/device,font,3,Arial,1000,0,-64,0,0,,,
+/device,font,1,Arial,1000,0,-42,0,0,,,
+/device,text,1,100
+/tspec,15,1.5,4,0,0
+/gformat,f,10,2
+/annot,dele
+
+pathCount=5
+
+topHeight  = GEO_ABT%arg1%_height
+heelHeight = GEO_ABT%arg1%_wingHa
+wallLength = GEO_ABT%arg1%_wingL
+linCoef    = topHeight
+angCoef    = (heelHeight-topHeight)/wallLength
+
+cmsel,s,COMPA_ABT_longWalls
+cmsel,r,COMPA_ABT_%arg1%
+esla,s
+nsle,s,active
+
+yStep=wallLength/(pathCount-1)
+zLocalBot=0
+
+*del , path_names  ,      , nopr
+*dim , path_names  , char , pathCount*2
+*del , path_labels ,      , nopr
+*dim , path_labels , char , pathCount*2
+
+!! Create paths                                                                                   !!
+*do,nthPath,1,pathCount,1
+  yLocal=yStep*(nthPath-1)
+  zLocalTop=angCoef*yLocal+linCoef
+  loc2glo,0,yLocal,zLocalBot,CS_ABT%arg1%_lw,'x1g','y1g','z1g'
+  loc2glo,0,yLocal,zLocalTop,CS_ABT%arg1%_lw,'x2g','y2g','z2g'
+
+  pathName='WNG_P%nthPath%'
+  path_names(nthPath)=pathName
+  path_labels(nthPath)='NET_U'
+
+  path,pathName,2,30,50
+  ppath,1,,x1g,y1g,z1g
+  ppath,2,,x2g,y2g,z2g
+  pdef,'UX',u,x,avg
+*enddo
+
+zerothIdx=nthPath
+
+*do,nthPath,1,pathCount,1
+  yLocal=yStep*(nthPath-1)
+  zLocalTop=angCoef*yLocal+linCoef
+  loc2glo,0,yLocal,zLocalBot,CS_ABT%arg1%_rw,'x1g','y1g','z1g'
+  loc2glo,0,yLocal,zLocalTop,CS_ABT%arg1%_rw,'x2g','y2g','z2g'
+
+  pathIdx=zerothIdx+nthPath
+  pathName='WNG_P%pathIdx%'
+  path_names(pathIdx)=pathName
+  path_labels(pathIdx)='NET_U'
+
+  path,pathName,2,30,50
+  ppath,1,,x1g,y1g,z1g
+  ppath,2,,x2g,y2g,z2g
+  pdef,'UX',u,x,avg
+*enddo
+
+!! Calculate path envelopes                                                                       !!
+*del,wing_envelope,,nopr
+*dim,wing_envelope,char,2,pathCount*2
+*do,nthPath,1,pathCount*2,1
+  wing_envelope(1,nthPath)=path_names(nthPath)
+  wing_envelope(2,nthPath)=path_labels(nthPath)
+*enddo
+
+pthenv,'CLEAR','wing_envelope'
+
+cmsel,s,COMPA_ABT_longWalls
+cmsel,r,COMPA_ABT_%arg1%
+esla,s
+nsle,s,active
+
+*do,nthLS,1,LoadStepCount,1
+
+  subset,nthLS,last
+
+  *do,nthPath,1,pathCount*2,1
+    pathName='WNG_P%nthPath%'
+    path,pathName
+    pdef  , 'UX' , u     , x     , avg
+    pdef  , 'UY' , u     , y     , avg
+    pcalc , exp  , 'USQ' , 'UX'  , 'UY' , 2   , 2
+    pcalc , exp  , 'U'   , 'USQ' ,      , 0.5
+    *if,nthPath,eq,1,or,nthPath,eq,pathCount+1,then
+      dflType=0
+    *else
+      dflType=1
+    *endif
+    pthrebase,'U',dflType,'NET_U',1e3/1.4
+  *enddo
+
+  pthenv,'UPDATE','wing_envelope'
+*enddo
+
+!! Plot path envelopes                                                                            !!
+*del , envelope_path_names  ,      , nopr
+*dim , envelope_path_names  , char , pathCount*2*2
+*del , envelope_path_labels ,      , nopr
+*dim , envelope_path_labels , char , pathCount*2*2
+
+*do,nthPath,1,pathCount*2,1
+  envelope_path_names(nthPath*2-1)  = path_names(nthPath)
+  envelope_path_names(nthPath*2)    = path_names(nthPath)
+  envelope_path_labels(nthPath*2-1) = 'NET_U+'
+  envelope_path_labels(nthPath*2)   = 'NET_U-'
+*enddo
+
+view1w
+wincln,1
+
+*if,arg1,eq,1,then
+  /view,1,1,0,0
+*elseif,arg1,eq,2,then
+  /view,1,-1,0,0
+*endif
+
+/angle,1,0
+/udoc,1,cntr,right
+/plopts,info,3
+/plopts,leg3,1
+/pspec,0,0,1
+wntitle , 'ENCONTRO 0%arg1%:' , 1 , 0
+wntitle , 'ALA OBLQ.'         , 1 , 0 , 'C'
+wntitle , 'FLECHA RARA [mm]'  , 1 , 1 , 'R'
+/triad,off
+/eshape,1
+/udoc,1,cntr,right
+/edge,1,0
+cmsel,s,COMPA_ABT_longWalls
+cmsel,r,COMPA_ABT_%arg1%
+/auto,1
+aplot
+/user,1
+cmsel,s,COMPA_ABT_%arg1%
+cmsel,u,COMPA_ABT_longWalls
+esla,s
+nsle,s,active
+
+go2png,1200
+  /device,vector,on
+  eplot
+  /noerase
+  cmsel,s,COMPL_ABT_piles
+  cmsel,r,COMPL_ABT_%arg1%
+  esll,a
+  nsle,s,active
+  eplot
+  cmsel,s,COMPA_ABT_longWalls
+  cmsel,r,COMPA_ABT_%arg1%
+  esla,s
+  nsle,s,active
+  /device,vector,off
+  /eshape,0
+  /edge,1,0
+  eplot
+  mpathplot,3,,'envelope_path_names','envelope_path_labels'
+endpng,'ABT%arg1%_WING_deflects',,,,,'memo_imgs'
+/erase
+/annot,dele
+clims

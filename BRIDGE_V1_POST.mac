@@ -1,0 +1,36 @@
+! BRIDGE_V1_POST
+
+
+/uis,msgpop,3
+/output,outpost,out
+
+*if,SOLU_type,eq,0,then
+  ! Static
+  /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_colTube post',mac
+  /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_V1_memoIMGs',mac
+  /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_slab_deflects',mac
+  /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_post pileSects',mac
+  /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_post vr4 peakPile',mac
+  /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_post pileGroup',mac
+  ! /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_pilePlast',mac
+
+  BRIDGE_V1_POSTAPSLBDFL,1
+  BRIDGE_V1_POSTAPSLBDFL,2
+
+  BRIDGE_V1_POSTTWALDFL,1
+  BRIDGE_V1_POSTTWALDFL,2
+
+  BRIDGE_V1_POSTWINGDFL,1
+  BRIDGE_V1_POSTWINGDFL,2
+
+  BRIDGE_V1_POSTABTCAP , 1 , 'MX' , 'MOMENTO FLETOR (MX)' , 'kNm/m'
+  BRIDGE_V1_POSTABTCAP , 1 , 'MY' , 'MOMENTO FLETOR (MY)' , 'kNm/m'
+  BRIDGE_V1_POSTABTCAP , 1 , 'Q'  , 'F. CORTANTE'         , 'kN/m'
+  BRIDGE_V1_POSTABTCAP , 2 , 'MX' , 'MOMENTO FLETOR (MX)' , 'kNm/m'
+  BRIDGE_V1_POSTABTCAP , 2 , 'MY' , 'MOMENTO FLETOR (MY)' , 'kNm/m'
+  BRIDGE_V1_POSTABTCAP , 2 , 'Q'  , 'F. CORTANTE'         , 'kN/m'
+
+  ! Composite steel-concrete results
+  BRIDGE_V1_POSTCOMPOSITE
+
+*endif

@@ -175,47 +175,7 @@ view1w
 allsel
 eplot
 
-
-
-
-*if,SOLU_type,eq,0,then
-    ! Static
-    /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_colTube post',mac
-    /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_V1_memoIMGs',mac
-    /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_slab_deflects',mac
-    /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_post pileSects',mac
-    /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_post vr4 peakPile',mac
-    /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_post pileGroup',mac
-    ! /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_pilePlast',mac
-
-    BRIDGE_V1_POSTAPSLBDFL,1
-    BRIDGE_V1_POSTAPSLBDFL,2
-
-    BRIDGE_V1_POSTTWALDFL,1
-    BRIDGE_V1_POSTTWALDFL,2
-
-!!    *if,MAT_Girder_type,eq,1,then
-        ! Composite steel-concrete results
-        BRIDGE_V1_POSTCOMPOSITE
-!!    *endif
-
-*endif
-
+! Post-process
+BRIDGE_V1_POST
 
 ! /input,'F:\Ansys\03 Design\30 Pontes Anchieta\01 APDL\_manual_inv_conc_beam_fix',mac
-
-
-/post1
-allsel
-esel,u,type,,3
-view1w
-windefa,1
-/device,font
-set,1
-/triad,off
-/edge,1,0
-/eshape,0
-/dscale,,1e2
-/view,1,0,-1,0
-esel,u,type,,3
-plnsol,u,x,2
