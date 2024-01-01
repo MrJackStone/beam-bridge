@@ -11,6 +11,7 @@
   /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_slab_deflects',mac
   /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_post pileSects',mac
   /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_post vr4 peakPile',mac
+  /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_post_each_pile',mac
   /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_post pileGroup',mac
 
   /pspec,0,0,1
@@ -48,6 +49,7 @@
   ! Composite steel-concrete results
   BRIDGE_V1_POSTCOMPOSITE
 
+  ! /output
   ! /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_pilePlast',mac
 
 *endif
