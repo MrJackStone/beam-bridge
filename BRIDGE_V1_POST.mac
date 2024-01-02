@@ -8,13 +8,15 @@
   ! Static
   /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_colTube post',mac
   /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_V1_memoIMGs',mac
+
+  /pspec,0,0,1
   /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_slab_deflects',mac
+
   /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_post pileSects',mac
   /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_post vr4 peakPile',mac
   /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_post_each_pile',mac
   /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_post pileGroup',mac
 
-  /pspec,0,0,1
 
   ! BRIDGE_V1_POSTTWALL , etable   , subtitle                      , imgName
   BRIDGE_V1_POSTTWALL   , 'EAB_MX' , 'MOMENTO FLETOR (MX) [kNm/m]' , 'TRAN_MX'
@@ -26,7 +28,7 @@
   ! BRIDGE_V1_POSTWINGS , etable , subtitle , imgName
   BRIDGE_V1_POSTWINGS   , 'EAB_MX' , 'MOMENTO FLETOR (MX) [kNm/m]' , 'WINGS_MX'
   BRIDGE_V1_POSTWINGS   , 'EAB_MY' , 'MOMENTO FLETOR (MY) [kNm/m]' , 'WINGS_MY'
-  BRIDGE_V1_POSTWINGS   , 'EAB_Q'  , 'F. CORTANTE [kN/m]'          , 'WINGS_Q'
+  BRIDGE_V1_POSTWINGS   , 'EAB_Q'  , 'F. CORTANTE [kN/m]'          , 'WINGS_Q', !0.55
   BRIDGE_V1_POSTWINGS   , 'EAB_NX' , 'F. NORMAL (NX) [kN/m]'       , 'WINGS_NX'
   BRIDGE_V1_POSTWINGS   , 'EAB_NY' , 'F. NORMAL (NY) [kN/m]'       , 'WINGS_NY'
 

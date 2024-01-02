@@ -601,6 +601,8 @@ go2png,1200
     cmsel,s,compa_abt_appslab
     esla,s
     nsle,s,active
+    nsel,u,loc,x,0,-0.5
+    nsel,u,loc,x,GEO_deckLength,GEO_deckLength+0.5
     /udoc,1,cntr,right !!off
     /edge,1,0
     clims

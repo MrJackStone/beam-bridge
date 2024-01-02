@@ -1,5 +1,5 @@
-! BRIDGE_V1_POSTWINGS , etable , subtitle , imgName
-! BRIDGE_V1_POSTWINGS , arg1   , arg2     , arg3
+! BRIDGE_V1_POSTWINGS , etable , subtitle , imgName , etabScaleFactor
+! BRIDGE_V1_POSTWINGS , arg1   , arg2     , arg3    , arg4
 
 etabName=arg1
 
@@ -40,6 +40,7 @@ wntitle,arg2,2,1,'R'
 
 axanno,1
 axanno,2
+clims
 
 go2png,1200
   /window,1,on
@@ -79,7 +80,7 @@ go2png,1200
   cmsel,s,COMPA_ABT_1
   esla,r
   nsle,s
-  cleanplot,'pletab',etabName,'1'
+  cleanplot,'pletab',etabName,'1',,,,,,arg4,1
 
   /window,1,off
   /window,2,on
@@ -87,11 +88,10 @@ go2png,1200
   cmsel,s,COMPA_ABT_2
   esla,r
   nsle,s
-  cleanplot,'pletab',etabName,'1'
+  cleanplot,'pletab',etabName,'1',,,,,,arg4,2
 
 endpng,arg3,,,,,'memo_imgs'
 /erase
 /annot,dele
 clims
 view1w
-
