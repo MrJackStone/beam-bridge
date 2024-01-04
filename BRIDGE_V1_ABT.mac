@@ -121,6 +121,15 @@ KJ=KMXD+38
 KK=KMXD+39
 KL=KMXD+40
 
+! Left wing overhang
+KM=KMXD+41
+KN=KMXD+42
+
+! Right wing overhang
+KO=KMXD+43
+KP=KMXD+44
+
+
 
 !
 !
@@ -265,6 +274,25 @@ cmpadd,'COMPA_ABT_walls'
     a, K06, K16, K17, K18
 
     cmpadd,'COMPA_ABT_wings'
+
+    *if,GEO_ABT_deckWidth,ne,GEO_ABT_width,then
+      k , KM , x05 , y27 , z13
+      k , KN , x13 , y27 , z13
+      k , KO , x05 , y26 , z13
+      k , KP , x13 , y26 , z13
+
+      asel,none
+      a , K05 , KM  , KN , K13
+      cmpadd,'COMPA_ABT_leftOverhang'
+
+      asel,none
+      a , K06 , K16 , KP , KO
+      cmpadd,'COMPA_ABT_rightOverhang'
+
+      cmsel,s,COMPA_ABT_leftOverhang
+      cmsel,a,COMPA_ABT_rightOverhang
+      cmpadd,'COMPA_ABT_overhangs'
+    *endif
 
 *else
 
