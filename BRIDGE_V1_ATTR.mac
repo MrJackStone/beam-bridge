@@ -1244,11 +1244,11 @@ nthPier=0
 
 loadtrain, LOAD_ltName,LOAD_locRep,0,LOAD_dynImpact, udlLength ! Output: LOADTRAIN_VAR_count; LOADTRAIN_ARR_positions; LOADTRAIN_ARR_loads
 LOAD_plCount=LOADTRAIN_VAR_count
-*del,LOAD_plDist
-*vfun,LOAD_plDist,copy,LOADTRAIN_ARR_positions
-*del,LOAD_plValue
-*vfun,LOAD_plValue,copy,LOADTRAIN_ARR_loads
-*del,LOAD_ltLength
+*del,LOAD_plDist,,nopr
+*del,LOAD_plValue,,nopr
+*del,LOAD_ltLength,,nopr
+*vfun , LOAD_plDist  , copy , LOADTRAIN_ARR_positions
+*vfun , LOAD_plValue , copy , LOADTRAIN_ARR_loads
 LOAD_ltLength=LOADTRAIN_VAR_length
 
 ! Calculate horizontal forces
@@ -1285,7 +1285,7 @@ LOAD_vehicleTraffic=LOAD_dynImpact*LOAD_vehicleTraffic_k
 *if,LOAD_combination,EQ,1,THEN
    ! Ultimate load: load train as main
    ! Live loads
-   *voper,LOADTRAIN_ARR_loads,LOAD_gammaQ,MULT,LOADTRAIN_ARR_loads
+   *voper,LOAD_plValue,LOAD_gammaQ,MULT,LOAD_plValue
    LOAD_vehicleTraffic    = LOAD_vehicleTraffic*LOAD_gammaQ*LOAD_psi0
    LOAD_pedestrianTraffic = LOAD_pedestrianTraffic_k*LOAD_gammaQ*LOAD_psi0
    LOAD_waterFlow         = LOAD_waterFlow_k*LOAD_gammaQ*LOAD_psi0
@@ -1299,7 +1299,7 @@ LOAD_vehicleTraffic=LOAD_dynImpact*LOAD_vehicleTraffic_k
 *elseif,LOAD_combination,EQ,2,THEN
    ! Ultimate load: wind/tide as main
    ! Live loads
-   *voper,LOADTRAIN_ARR_loads,LOAD_gammaQ*LOAD_psi0,MULT,LOADTRAIN_ARR_loads
+   *voper,LOAD_plValue,LOAD_gammaQ*LOAD_psi0,MULT,LOAD_plValue
    LOAD_vehicleTraffic    = LOAD_vehicleTraffic*LOAD_gammaQ
    LOAD_pedestrianTraffic = LOAD_pedestrianTraffic_k*LOAD_gammaQ
    LOAD_waterFlow         = LOAD_waterFlow_k*LOAD_gammaQ*LOAD_psi0
@@ -1313,7 +1313,7 @@ LOAD_vehicleTraffic=LOAD_dynImpact*LOAD_vehicleTraffic_k
 *elseif,LOAD_combination,EQ,3,THEN
    ! Service load ("quase-permanente")
    ! Live loads
-   *voper,LOADTRAIN_ARR_loads,LOAD_psi2,MULT,LOADTRAIN_ARR_loads
+   *voper,LOAD_plValue,LOAD_psi2,MULT,LOAD_plValue
    LOAD_vehicleTraffic    = LOAD_vehicleTraffic*LOAD_psi2
    LOAD_pedestrianTraffic = LOAD_pedestrianTraffic_k*LOAD_psi2
    LOAD_waterFlow         = LOAD_waterFlow_k*LOAD_psi2
@@ -1327,7 +1327,7 @@ LOAD_vehicleTraffic=LOAD_dynImpact*LOAD_vehicleTraffic_k
 *elseif,LOAD_combination,EQ,4,THEN
    ! Service load ("rara"): load train as main
    ! Live loads
-   *voper,LOADTRAIN_ARR_loads,1,MULT,LOADTRAIN_ARR_loads
+   *voper,LOAD_plValue,1,MULT,LOAD_plValue
    LOAD_vehicleTraffic    = LOAD_vehicleTraffic*LOAD_psi1
    LOAD_pedestrianTraffic = LOAD_pedestrianTraffic_k*LOAD_psi1
    LOAD_waterFlow         = LOAD_waterFlow_k*LOAD_psi1
@@ -1341,7 +1341,7 @@ LOAD_vehicleTraffic=LOAD_dynImpact*LOAD_vehicleTraffic_k
 *elseif,LOAD_combination,EQ,5,THEN
    ! Service load ("rara"): wind/tide as main
    ! Live loads
-   *voper,LOADTRAIN_ARR_loads,LOAD_psi1,MULT,LOADTRAIN_ARR_loads
+   *voper,LOAD_plValue,LOAD_psi1,MULT,LOAD_plValue
    LOAD_vehicleTraffic    = LOAD_vehicleTraffic*LOAD_psi1
    LOAD_pedestrianTraffic = LOAD_pedestrianTraffic_k*LOAD_psi1
    LOAD_waterFlow         = LOAD_waterFlow_k*1
@@ -1355,7 +1355,7 @@ LOAD_vehicleTraffic=LOAD_dynImpact*LOAD_vehicleTraffic_k
 *elseif,LOAD_combination,EQ,6,THEN
    ! Dead loads (characteristic values)
    ! Live loads
-   *voper,LOADTRAIN_ARR_loads,0,MULT,LOADTRAIN_ARR_loads
+   *voper,LOAD_plValue,0,MULT,LOAD_plValue
    LOAD_vehicleTraffic    = 0
    LOAD_pedestrianTraffic = 0
    LOAD_waterFlow         = 0
@@ -1369,7 +1369,7 @@ LOAD_vehicleTraffic=LOAD_dynImpact*LOAD_vehicleTraffic_k
 *elseif,LOAD_combination,EQ,7,THEN
    ! Live loads (characteristic values)
    ! Live loads
-   *voper,LOADTRAIN_ARR_loads,1,MULT,LOADTRAIN_ARR_loads
+   *voper,LOAD_plValue,1,MULT,LOAD_plValue
    LOAD_vehicleTraffic    = LOAD_vehicleTraffic
    LOAD_pedestrianTraffic = LOAD_pedestrianTraffic_k
    LOAD_waterFlow         = LOAD_waterFlow_k
@@ -1383,7 +1383,7 @@ LOAD_vehicleTraffic=LOAD_dynImpact*LOAD_vehicleTraffic_k
 *elseif,LOAD_combination,EQ,8,THEN
    ! Fatigue analysis ("combinação frequente de fadiga, K.2.1")
    ! Live loads
-   *voper,LOADTRAIN_ARR_loads,LOAD_psi1,MULT,LOADTRAIN_ARR_loads
+   *voper,LOAD_plValue,LOAD_psi1,MULT,LOAD_plValue
    LOAD_vehicleTraffic    = LOAD_vehicleTraffic*LOAD_psi1
    LOAD_pedestrianTraffic = LOAD_pedestrianTraffic_k*LOAD_psi1
    LOAD_waterFlow         = LOAD_waterFlow_k*LOAD_psi1
