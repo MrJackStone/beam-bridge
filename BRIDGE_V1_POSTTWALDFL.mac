@@ -1,5 +1,5 @@
-! BRIDGE_V1_POSTTWALDFL, abtNum
-! BRIDGE_V1_POSTTWALDFL, arg1
+! BRIDGE_V1_POSTTWALDFL , abtNum , dflType
+! BRIDGE_V1_POSTTWALDFL , arg1   , arg2
 
 !! Initial configs                                                                                !!
 windefa,1
@@ -70,7 +70,7 @@ nsle,s,active
     pathName='TRW_P%nthPath%'
     path,pathName
     pdef,'UX',u,x,avg
-    pthrebase,'UX',2,'NET_UX',1e3/1.4
+    pthrebase,'UX',arg2,'NET_UX',1e3/1.4 !! type 0 or 2
   *enddo
 
   pthenv,'UPDATE','twall_envelope'
