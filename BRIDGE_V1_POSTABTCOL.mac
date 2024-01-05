@@ -1,0 +1,354 @@
+! BRIDGE_V1_POSTABTCOL
+
+! Initial configs                                                                                !!
+windefa,1
+/device,font,3,Arial,1000,0,-64,0,0,,,
+/device,font,1,Arial,1000,0,-42,0,0,,,
+/device,text,1,100
+/tspec,15,1.5,4,0,0
+/gformat,f,2,1
+/annot,dele
+
+! Create paths
+cmsel,s,COMPA_ABT_1
+cmsel,r,COMPA_ABT_tranWall
+esla,s
+nsle,s,active
+loc2glo , 0 , 0 , 0                , CS_ABT1 , 'x1g' , 'y1g' , 'z1g'
+loc2glo , 0 , 0 , -GEO_ABT1_height , CS_ABT1 , 'x2g' , 'y2g' , 'z2g'
+path,'COL1',2,30,20
+ppath,1,,x1g,y1g,z1g
+ppath,2,,x2g,y2g,z2g
+pdef,'UX',u,x,avg
+
+cmsel,s,COMPA_ABT_2
+cmsel,r,COMPA_ABT_tranWall
+esla,s
+nsle,s,active
+loc2glo , 0 , 0 , 0                , CS_ABT2 , 'x1g' , 'y1g' , 'z1g'
+loc2glo , 0 , 0 , -GEO_ABT2_height , CS_ABT2 , 'x2g' , 'y2g' , 'z2g'
+path,'COL2',2,30,20
+ppath,1,,x1g,y1g,z1g
+ppath,2,,x2g,y2g,z2g
+pdef,'UX',u,x,avg
+
+! Calculate envelopes
+*del,envelope,,nopr
+*dim,envelope,char,4,2
+envelope(1,1)='COL1'
+envelope(2,1)='N'
+envelope(3,1)='M'
+envelope(4,1)='Q'
+envelope(1,2)='COL2'
+envelope(2,2)='N'
+envelope(3,2)='M'
+envelope(4,2)='Q'
+
+pthenv,'CLEAR','envelope'
+
+cmsel,s,COMPA_ABT_tranWall
+esla,s
+nsle,s,active
+
+*do,nthLS,1,LoadStepCount,1
+  subset,nthLS,last
+
+  cshell_ny,1
+  cshell_mx,1
+  cshell_qy,1
+
+  path,'COL1'
+  scanpath,'etab','SHELL_NY',0,'P1',-1,'N'
+  scanpath,'etab','SHELL_MX',0,'P1',-1,'M'
+  scanpath,'etab','SHELL_QY',0,'P1',-1,'Q'
+
+  path,'COL2'
+  scanpath,'etab','SHELL_NY',0,'P1',-1,'N'
+  scanpath,'etab','SHELL_MX',0,'P1',-1,'M'
+  scanpath,'etab','SHELL_QY',0,'P1',-1,'Q'
+
+  pthenv,'UPDATE','envelope'
+*enddo
+
+
+! Plot: axial force
+*del , abt1_paths ,      , nopr
+*del , abt2_paths ,      , nopr
+*del , n_labels   ,      , nopr
+*del , m_labels   ,      , nopr
+*del , q_labels   ,      , nopr
+*dim , abt1_paths , char , 2
+*dim , abt2_paths , char , 2
+*dim , n_labels   , char , 2
+*dim , m_labels   , char , 2
+*dim , q_labels   , char , 2
+
+abt1_paths(1) = 'COL1','COL1'
+abt2_paths(1) = 'COL2','COL2'
+
+n_labels(1)   = 'N+','N-'
+m_labels(1)   = 'M+','M-'
+q_labels(1)   = 'Q+','Q-'
+
+/window,dele,all
+/annot,dele
+/window,1,on
+/window,2,on
+wincln,1
+wincln,2
+/udoc,1,cntr,right
+/udoc,2,cntr,right
+/plopts,leg3,on
+/plopts,info,0
+/window , 1 , -1 , 1.67 , 0  , 1
+/window , 2 , -1 , 1.67 , -1 , 0
+/edge,all,1
+/view,1,1,0,0
+/view,2,-1,0,0
+/angle,all,0
+/dscale,all,off
+/eshape,0
+/triad,off
+/auto,all
+cmsel,s,COMPE_ABT_1
+cmsel,a,COMPE_ABT_2
+eplot
+/user,all
+
+wntitle , 'ENCONTRO 01: PILAR' , 1 , 0
+wntitle , 'F. NORMAL [kN]'     , 1 , 1 , 'R'
+
+wntitle , 'ENCONTRO 02: PILAR' , 2 , 0
+wntitle , 'F. NORMAL [kN]'     , 2 , 1 , 'R'
+
+go2png,1200
+  /window,1,on
+  /window,2,off
+  /auto,1
+  cmsel,s,COMPA_ABT_1
+  esla,s
+  nsle,s,active
+  /eshape,1
+  eplot
+  /noerase
+  /user,1
+  cmsel,s,COMPL_ABT_1
+  esll,a
+  nsle,s,active
+  eplot
+  /eshape,0
+
+  /window,1,off
+  /window,2,on
+  /auto,2
+  cmsel,s,COMPA_ABT_2
+  esla,s
+  nsle,s,active
+  /eshape,1
+  eplot
+  /user,2
+  cmsel,s,COMPL_ABT_2
+  esll,a
+  nsle,s,active
+  eplot
+  /eshape,0
+
+  /plopts,info,3
+
+  /window,1,on
+  /window,2,off
+  cmsel,s,COMPE_temp
+  cmsel,s,COMPA_ABT_1
+  esla,r
+  nsle,s
+  mpathplot,10,,'abt1_paths','n_labels'
+
+  /window,1,off
+  /window,2,on
+  cmsel,s,COMPE_temp
+  cmsel,s,COMPA_ABT_2
+  esla,r
+  nsle,s
+  mpathplot,10,,'abt2_paths','n_labels'
+
+endpng,'ABT_COLUMN_N',,,,,'memo_imgs'
+/erase
+/annot,dele
+clims
+view1w
+
+! Plot: bending moment
+/window,dele,all
+/annot,dele
+/window,1,on
+/window,2,on
+wincln,1
+wincln,2
+/udoc,1,cntr,right
+/udoc,2,cntr,right
+/plopts,leg3,on
+/plopts,info,0
+/window , 1 , -1 , 1.67 , 0  , 1
+/window , 2 , -1 , 1.67 , -1 , 0
+/edge,all,1
+/view,1,1,0,0
+/view,2,-1,0,0
+/angle,all,0
+/dscale,all,off
+/eshape,0
+/triad,off
+/auto,all
+cmsel,s,COMPE_ABT_1
+cmsel,a,COMPE_ABT_2
+eplot
+/user,all
+
+wntitle , 'ENCONTRO 01: PILAR'   , 1 , 0
+wntitle , 'MOMENTO FLETOR [kNm]' , 1 , 1 , 'R'
+
+wntitle , 'ENCONTRO 02: PILAR'   , 2 , 0
+wntitle , 'MOMENTO FLETOR [kNm]' , 2 , 1 , 'R'
+
+go2png,1200
+  /window,1,on
+  /window,2,off
+  /auto,1
+  cmsel,s,COMPA_ABT_1
+  esla,s
+  nsle,s,active
+  /eshape,1
+  eplot
+  /noerase
+  /user,1
+  cmsel,s,COMPL_ABT_1
+  esll,a
+  nsle,s,active
+  eplot
+  /eshape,0
+
+  /window,1,off
+  /window,2,on
+  /auto,2
+  cmsel,s,COMPA_ABT_2
+  esla,s
+  nsle,s,active
+  /eshape,1
+  eplot
+  /user,2
+  cmsel,s,COMPL_ABT_2
+  esll,a
+  nsle,s,active
+  eplot
+  /eshape,0
+
+  /plopts,info,3
+
+  /window,1,on
+  /window,2,off
+  cmsel,s,COMPE_temp
+  cmsel,s,COMPA_ABT_1
+  esla,r
+  nsle,s
+  mpathplot,10,,'abt1_paths','m_labels'
+
+  /window,1,off
+  /window,2,on
+  cmsel,s,COMPE_temp
+  cmsel,s,COMPA_ABT_2
+  esla,r
+  nsle,s
+  mpathplot,10,,'abt2_paths','m_labels'
+
+endpng,'ABT_COLUMN_M',,,,,'memo_imgs'
+/erase
+/annot,dele
+clims
+view1w
+
+! Plot: shear force
+/window,dele,all
+/annot,dele
+/window,1,on
+/window,2,on
+wincln,1
+wincln,2
+/udoc,1,cntr,right
+/udoc,2,cntr,right
+/plopts,leg3,on
+/plopts,info,0
+/window , 1 , -1 , 1.67 , 0  , 1
+/window , 2 , -1 , 1.67 , -1 , 0
+/edge,all,1
+/view,1,1,0,0
+/view,2,-1,0,0
+/angle,all,0
+/dscale,all,off
+/eshape,0
+/triad,off
+/auto,all
+cmsel,s,COMPE_ABT_1
+cmsel,a,COMPE_ABT_2
+eplot
+/user,all
+
+wntitle , 'ENCONTRO 01: PILAR' , 1 , 0
+wntitle , 'F. CORTANTE [kN]'   , 1 , 1 , 'R'
+
+wntitle , 'ENCONTRO 02: PILAR' , 2 , 0
+wntitle , 'F. CORTANTE [kN]'   , 2 , 1 , 'R'
+
+go2png,1200
+  /window,1,on
+  /window,2,off
+  /auto,1
+  cmsel,s,COMPA_ABT_1
+  esla,s
+  nsle,s,active
+  /eshape,1
+  eplot
+  /noerase
+  /user,1
+  cmsel,s,COMPL_ABT_1
+  esll,a
+  nsle,s,active
+  eplot
+  /eshape,0
+
+  /window,1,off
+  /window,2,on
+  /auto,2
+  cmsel,s,COMPA_ABT_2
+  esla,s
+  nsle,s,active
+  /eshape,1
+  eplot
+  /user,2
+  cmsel,s,COMPL_ABT_2
+  esll,a
+  nsle,s,active
+  eplot
+  /eshape,0
+
+  /plopts,info,3
+
+  /window,1,on
+  /window,2,off
+  cmsel,s,COMPE_temp
+  cmsel,s,COMPA_ABT_1
+  esla,r
+  nsle,s
+  mpathplot,10,,'abt1_paths','q_labels'
+
+  /window,1,off
+  /window,2,on
+  cmsel,s,COMPE_temp
+  cmsel,s,COMPA_ABT_2
+  esla,r
+  nsle,s
+  mpathplot,10,,'abt2_paths','q_labels'
+
+endpng,'ABT_COLUMN_Q',,,,,'memo_imgs'
+/erase
+/annot,dele
+clims
+view1w
