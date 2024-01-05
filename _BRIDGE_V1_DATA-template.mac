@@ -633,7 +633,7 @@ LOAD_g_k=9.81
 ! Dead load factor
 LOAD_gammaG=1.4
 ! Live load factor
-LOAD_gammaQ=1.5
+LOAD_gammaQ=1.4
 ! Live load reduction coefficients
 LOAD_psi0=0.7
 LOAD_psi1=0.6
