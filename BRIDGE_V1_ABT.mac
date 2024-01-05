@@ -314,7 +314,7 @@ cmpadd,'COMPA_ABT_walls'
 
 
 ! Draw pile cap
-asel,u,area,,all
+asel,none
 *if,GEO_ABT_type,eq,1,then
   ! Box
   k , K21 , x01 , y21 , z03
@@ -324,6 +324,7 @@ asel,u,area,,all
 
   a, K03, K04, K08, K07
   a, K21, K22, K24, K23
+  aovlap,all
 
 *elseif,GEO_ABT_type,eq,3,then
   ! Pile curtain
