@@ -10,6 +10,7 @@ etabName=arg1
 /tspec,15,1.5,4,0,0
 /gformat,f,2,1
 /annot,dele
+/erase
 clims
 
 cmsel,s,COMPA_ABT_tranwall
