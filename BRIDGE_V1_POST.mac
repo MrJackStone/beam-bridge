@@ -78,6 +78,8 @@
   BRIDGE_V1_POSTABTOVHANG , 2 , 'MX' , 'MOMENTO FLETOR' , 'kNm/m' , 0.7
   BRIDGE_V1_POSTABTOVHANG , 2 , 'Q'  , 'F. CORTANTE'    , 'kN/m'  , 0.7
 
+  BRIDGE_V1_POSTABTBEAM
+
   ! Composite steel-concrete results
   BRIDGE_V1_POSTCOMPOSITE
 
