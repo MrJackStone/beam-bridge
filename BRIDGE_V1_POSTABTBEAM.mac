@@ -1,57 +1,91 @@
 ! BRIDGE_V1_POSTABTBEAM
 
+!! Collect result envelope                                                                        !!
+beamArea    = GEO_ABT_beamH*SEC_ABT_beam_W
+beamModulus = (SEC_ABT_beam_W*GEO_ABT_beamH**2)/6
+
 cmsel,s,COMPA_ABT_beam
 cmsel,r,COMPA_ABT_1
 esla,s
 nsle,s,active
+ndbbox,'xmin',,'ymin','ymax','zmin','zmax'
+beam1Top1=node(xmin,ymin,zmax)
+beam1Top2=node(xmin,ymax,zmax)
+beam1Bot1=node(xmin,ymin,zmin)
+beam1Bot2=node(xmin,ymax,zmin)
 
+cmsel,s,COMPA_ABT_beam
+cmsel,r,COMPA_ABT_2
+esla,s
+nsle,s,active
+ndbbox,'xmin',,'ymin','ymax','zmin','zmax'
+beam2Top1=node(xmin,ymin,zmax)
+beam2Top2=node(xmin,ymax,zmax)
+beam2Bot1=node(xmin,ymin,zmin)
+beam2Bot2=node(xmin,ymax,zmin)
+
+cmsel,s,COMPA_ABT_beam
+esla,s
+nsle,s,active
 etable , 'M11'   , smisc , 4
 etable , 'SM_11' , smisc , 34
 etable , 'SM_12' , smisc , 36
 
-beamArea    = GEO_ABT_beamH*SEC_ABT_beam_W
-beamModulus = (SEC_ABT_beam_W*GEO_ABT_beamH**2)/6
+*del,beam_1_envelope,,nopr
+*del,beam_2_envelope,,nopr
+
+*do,nthLS,1,LoadStepCount,1
+  subset,nthLS,last
+  etable,refl
+  pth2beam,beam1Top1,beam1Top2,beam1Bot1,beam1Bot2,'BEAM1',0,20,beamModulus,beamArea,0,'beam_1_envelope'
+  pth2beam,beam2Top1,beam2Top2,beam2Bot1,beam2Bot2,'BEAM2',0,20,beamModulus,beamArea,0,'beam_2_envelope'
+*enddo
+
+!! Plot beam results                                                                              !!
+cmsel,s,COMPA_ABT_1
+cmsel,u,COMPA_ABT_beam
+esla,s
+nsle,s,active
+
+/view,1,-1,0,0
+/view,2,1,0,0
+/eshape,1
+/device,vector,on
+/auto,all
+
+cmsel,s,COMPA_ABT_1
+cmsel,r,COMPA_ABT_beam
+esla,s
+nsle,s,active
+/window,1,on
+/window,2,off
+eplot
+/noerase
+/user,1
+/eshape,0
+/edge,,1
+eplot
+mpathplot,5,,'beam1_paths','mp_labels'
+
+/window,1,off
+/window,2,on
+cmsel,s,COMPA_ABT_2
+cmsel,r,COMPA_ABT_beam
+esla,s
+nsle,s,active
+eplot
+/user,2
 
 
-ndbbox,'xmin',,'ymin','ymax','zmin','zmax'
-topNode1=node(xmin,ymin,zmax)
-topNode2=node(xmin,ymax,zmax)
-botNode1=node(xmin,ymin,zmin)
-botNode2=node(xmin,ymax,zmin)
-pth2beam,topNode1,topNode2,botNode1,botNode2,'BEAM1',0,20,beamModulus,beamArea,0,'beam_1_envelope'
 
-! pth2beam , topNode1 , topNode2 , botNode1 , botNode2 , pathNameRoot , dflKey , pathDiv , W           , A        , avgKey , lcEnv
-! pth2beam , arg1     , arg2     , arg3     , arg4     , arg5         , arg6   , arg7    , arg8        , arg9     , ar10   , ar11
 
-! Description:
-! Calculates beam internal reactions based on SHELL181 stresses. Results are stored in a load case
-! envelope table, each quantity in a column, in the order presented below. The local coordinate
-! systems of the SHELL181 elements must be oriented such that the local X axis is aligned with the
-! virtual beam's axis.
-!
-! This subroutine has the following requirements:
-!
-!    • an element table named 'M11' (containing data from SMISC,4) must be defined (necessary to
-!      calculate off-plane bending moment values)
-!    • an element table named 'SM_11' (containing data from SMISC,34) must be defined (necessary to
-!      calculate in-plane bending moment and axial force values)
-!    • an element table named 'SM_12' (containing data from SMISC,36) must be defined (necessary to
-!      calculate in-plane shear force values)
-!    • all the virtual beam's nodes and (SHELL181) elements must be currently selected
 
-! Arguments:
-! arg1: topNode1      -  node number marking beginning of the top face of the beam
-! arg2: topNode2      -  node number marking end of the top face of the beam
-! arg3: botNode1      -  node number marking beginning of the bottom face of the beam
-! arg4: botNode2      -  node number marking end of the bottom face of the beam
-! arg5: pathNameRoot  -  string used as path name prefix for inner calculations and as path name for
-!                        result envelopes
-!                        (recommended length: 6 characters; maximum length: 8 characters)
-! arg6: dflKey        -  deflection multiplier (+1 or -1), to fix plot direction
-! arg7: pathDiv       -  number of path divisions
-! arg8: W             -  cross-sectional maximum elastic bending module
-! arg9: A             -  cross-sectional area
-! ar10: avgKey        -  average key
-!                           [0] AVG  (default)
-!                           [1] NOAV
-! ar11: lcEnv         -  parameter name of table containing results envelope
+
+
+
+
+
+
+
+
+
