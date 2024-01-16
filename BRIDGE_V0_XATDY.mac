@@ -1,7 +1,0 @@
-! BRIDGE_V0_XATDY, xParm,   x,   dy
-! BRIDGE_V0_XATDY, arg1, arg2, arg3
-
-bridge_v0_xtochi,'tmp_chi',arg2
-*afun,deg
-%arg1%=arg2+arg3*sin(tmp_chi-90)
-*afun,rad
