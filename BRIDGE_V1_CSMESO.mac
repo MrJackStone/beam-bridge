@@ -33,6 +33,7 @@ exists=0
         *afun,rad
     *endif
 
+    ! TODO: get rid of this hardcoded 40, check for CSYS conflicts elsewhere
     CS_num=40+(10*arg1)
     %CS_name%=CS_num
     csys,0

@@ -59,10 +59,11 @@ SEC_PSOIL_area=(MAT_Soil_kp*FEM_springL)/MAT_Soil_E
 SEC_SPRING_k=1E10
 
 ! Mesostructure types
-CTE_MESO_frame=1
-CTE_MESO_tube=2
-CTE_MESO_tcolumn=3
-CTE_MESO_abutment=4
+CTE_MESO_frame    = 1
+CTE_MESO_tube     = 2
+CTE_MESO_beamcap  = 3
+CTE_MESO_tcolumn  = 4
+CTE_MESO_abutment = 5
 !
 !
 !
@@ -704,23 +705,21 @@ arrconcat,'CS_slice','CS_girders','CS_loadTrains','CS_barriers','CS_leftFootpath
 !
 !! 2.2.2 MESOSTRUCTURE  **** this needs revising ***                                              !!
 !!                                                                                                !!
-! Check width of the frame
-leftGirderY=GEO_girderY_beg(GEO_girderCount)
-rightGirderY=GEO_girderY_beg(1)
-minFrameWidth=rightGirderY-leftGirderY
-*if,GEO_frameWidth,LT,minFrameWidth,THEN
-   GEO_frameWidth=minFrameWidth
-   *msg,GEO_frameWidth
-WARNING: Frame width incompatible with girder layout. GEO_FRAMEWIDTH increased to %G.
-*endif
+
+! TODO: check temporarily removed (has to be redesigned for skewed multi-span bridges)
+! ! Check width of the frame
+! leftGirderY=GEO_girderY_beg(GEO_girderCount)
+! rightGirderY=GEO_girderY_beg(1)
+! minFrameWidth=rightGirderY-leftGirderY
+! *if,GEO_frameWidth,LT,minFrameWidth,THEN
+!    GEO_frameWidth=minFrameWidth
+!    *msg,GEO_frameWidth
+! WARNING: Frame width incompatible with girder layout. GEO_FRAMEWIDTH increased to %G.
+! *endif
 
 ! Calculate length of the left & right frame girder cantilevers
 GEO_frameGirderLeft=(GEO_frameWidth-GEO_columnSpacing)/2
 GEO_frameGirderRight=GEO_frameGirderLeft
-
-! Calculate beginning and end Y coordinates of the frame girder
-yBeg=(-GEO_columnSpacing/2)-GEO_frameGirderLeft
-yEnd=(GEO_columnSpacing/2)+GEO_frameGirderRight
 
 ! Calculate column length
 *if,SEC_offset,EQ,1,THEN
@@ -739,24 +738,54 @@ yEnd=(GEO_columnSpacing/2)+GEO_frameGirderRight
 ! Calculate the vertical position of the base of the columns
 zFrameBot=zFrameTop-GEO_colLength
 
-! Calculate Y coordinates of the frame girder keypoints
-*del,tempArr
-*dim,tempArr,,4
-tempArr(1)=yBeg, yEnd, -GEO_columnSpacing/2, GEO_columnSpacing/2
-arrjoin, 'yCoords','GEO_girderY_beg', 'tempArr'
-arruniq, 'yCoords', 'GEO_frameGirderY', 1
-*get,FGKcount,PARM,GEO_frameGirderY,DIM,X
+! TODO: array parameter GEO_columnY has been replaced with GEO_columnY_<supportNum>.
+!       Account for this change in the rest of the code.
 
-! Column Y coordinates
-*del,GEO_columnY
-*dim,GEO_columnY,ARRAY,2
-*if,GEO_frameOpt,eq,0,then
-    ! Column-beam frame
-    GEO_columnY(1)=-GEO_columnSpacing/2,GEO_columnSpacing/2
-*elseif,GEO_frameOpt,eq,1,then
-    ! Tubular pier column
-    GEO_columnY(1)=-GEO_deckWidth/2,GEO_deckWidth/2  !! this needs to become an array...
-*endif
+! Calculate key Y coordinates for frame girders
+! TODO: this does not contemplate tubular pier columns
+yCenterBeg     = GEO_deckOff_beg+(GEO_deckWidth_beg/2)
+yCenterEnd     = GEO_deckOff_end+(GEO_deckWidth_end/2)
+yCenterDelta   = yCenterEnd-yCenterBeg
+deckWidthDelta = GEO_deckWidth_end-GEO_deckWidth_beg
+
+*do,nthFrame,1,GEO_supportCount,1
+
+  ! Get X-coordinate at this support
+  xSupport            = GEO_supportX(nthFrame)
+  skewnessScaleFactor = xSupport/GEO_deckLength
+
+  ! Calculate deck width
+  deckWidth=deckWidthDelta*skewnessScaleFactor+GEO_deckWidth_beg
+
+  ! Calculate Y center
+  yCenter=yCenterDelta*skewnessScaleFactor+yCenterBeg
+
+  ! Calculate frame girder ends Y coordinates
+  *del,GEO_frameGirderEndsY_%nthFrame%,,nopr
+  *dim,GEO_frameGirderEndsY_%nthFrame%,,2
+  GEO_frameGirderEndsY_%nthFrame%(1)=yCenter-(deckWidth/2), yCenter+(deckWidth/2)
+
+  ! Calculate column Y coordinates
+  *del,GEO_columnY_%nthFrame%,,nopr
+  *dim,GEO_columnY_%nthFrame%,,2
+  GEO_columnY_%nthFrame%(1)=yCenter-(GEO_columnSpacing/2), yCenter+(GEO_columnSpacing/2)
+
+  ! Calculate girder Y
+  *del,girder_y,,nopr
+  *vfact,1,1-skewnessScaleFactor,skewnessScaleFactor
+  *voper,girder_y,GEO_girderY_beg,add,GEO_girderY_end
+
+  ! Compose key-Y location array with the following positions:
+  !    left & right columns
+  !    left & right extremities
+  !    girder intersections
+  arrjoin,'y_coords','girder_y','GEO_frameGirderEndsY_%nthFrame%','GEO_columnY_%nthFrame%'
+  arruniq,'y_coords','GEO_frameGirderY_%nthFrame%',1
+
+  ! TODO: Currently using deck width at support as frame width.
+  !       For a permanent solution, frame width has to be given at each support.
+
+*enddo
 
 ! Check compatibility between water level and column height
 *if,GEO_waterHeight,GE,GEO_colLength,THEN
@@ -960,6 +989,7 @@ arruniq,'xCoords','GEO_xCapSlice',1
 *get,XSliceCount,PARM,GEO_xCapSlice,DIM,X
 
 ! Calculate positions in which to slice the pile cap along the XZ plane
+! TODO: this is gonna be a bitch to fix...
 *if,GEO_pileOpt,eq,0,then
     arrjoin,'yCoords','GEO_yTubeSlice','zero'
 *elseif,GEO_pileOpt,eq,1,then
@@ -1146,7 +1176,7 @@ nthPier=0
 *enddo
 
 ! Determine type of mesostructure at each support
-*del,GEO_mesoType
+*del,GEO_mesoType,,nopr
 *dim,GEO_mesoType,,GEO_supportCount
 *if,GEO_frameOpt,eq,0,then
     ! Column-girder frame
@@ -1154,6 +1184,9 @@ nthPier=0
 *elseif,GEO_frameOpt,eq,1,then
     ! Tubular pier column
     *vfill,GEO_mesoType,ramp,CTE_MESO_tube,0
+*elseif,GEO_frameOpt,eq,2,then
+    ! Tubular pier column
+    *vfill,GEO_mesoType,ramp,CTE_MESO_beamcap,0
 *endif
 *if,GEO_gerberStatus,eq,1,then
     *do,nthSupport,1,GEO_supportCount,1

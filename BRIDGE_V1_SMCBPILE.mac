@@ -1,0 +1,37 @@
+! BRIDGE_V1_SMCBPILE, supportIdx
+! BRIDGE_V1_SMCBPILE, arg1
+
+csys,0
+
+pileLength=GEO_pileLengths(arg1)
+
+! Get keypoints at the column-pile transition for all columns of this frame
+cmsel,s,COMPK_FrameBottom
+cmsel,r,COMPK_FRAME_%arg1%
+cm,COMPK_temp,kp
+cmpadd,'COMPK_columnPileTransition'
+
+! Create piles
+*get,kc,kp,,count
+colKP=0
+*do,nthColumn,1,kc,1
+  cmsel,s,COMPK_temp
+  colKP=kpnext(colKP)
+
+  xCol=kx(colKP)
+  yCol=ky(colKP)
+  zCol=kz(colKP)
+  zBottom=zTransition-pileLength
+
+  nextkp,'botKP'
+  k,botKP,xCol,yCol,zBottom
+
+  lstr,botKP,colKP
+
+  ksel,s,kp,,botKP
+  cmpadd,'COMPK_Support'
+
+  ksel,s,kp,,colKP
+  cmpadd,'COMPK_PileTop'
+
+*enddo

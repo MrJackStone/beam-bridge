@@ -8,8 +8,8 @@ xCenter=GEO_supportX(arg1)
     xRight=xCenter
 
     yCenter=0
-    yLeft=yCenter+GEO_columnY(1)
-    yRight=yCenter+GEO_columnY(2)
+    yLeft=yCenter+GEO_columnY_%arg1%(1)
+    yRight=yCenter+GEO_columnY_%arg1%(2)
 
     zAngle=0
 *else
@@ -17,12 +17,12 @@ xCenter=GEO_supportX(arg1)
     *afun,deg
     chi_i=GEO_supportChi(arg1)
 
-    xLeft=(GEO_deckLength/2)-(GEO_deckRadius+GEO_columnY(1))*cos(chi_i)
-    xRight=(GEO_deckLength/2)-(GEO_deckRadius+GEO_columnY(2))*cos(chi_i)
+    xLeft=(GEO_deckLength/2)-(GEO_deckRadius+GEO_columnY_%arg1%(1))*cos(chi_i)
+    xRight=(GEO_deckLength/2)-(GEO_deckRadius+GEO_columnY_%arg1%(2))*cos(chi_i)
 
     yCenter=GEO_deckRadius*sin(chi_i)-GEO_chordOff
-    yLeft=(GEO_deckRadius+GEO_columnY(1))*sin(chi_i)-GEO_chordOff
-    yRight=(GEO_deckRadius+GEO_columnY(2))*sin(chi_i)-GEO_chordOff
+    yLeft=(GEO_deckRadius+GEO_columnY_%arg1%(1))*sin(chi_i)-GEO_chordOff
+    yRight=(GEO_deckRadius+GEO_columnY_%arg1%(2))*sin(chi_i)-GEO_chordOff
 
     zAngle=90-chi_i
     *afun,rad

@@ -41,7 +41,7 @@ cmpadd,'COMPL_FrameGirder'
 LSEL,U,LINE,,ALL
 *do,nthCol,1,2,1
     ! Create bottom keypoint
-    yVal=GEO_columnY(nthCol)
+    yVal=GEO_columnY_%arg1%(nthCol)
     *get,KMaxD,KP,,NUM,MAXD
     KBot=KMaxD+1
     K,KBot,0,yVal,nthFrameZBot

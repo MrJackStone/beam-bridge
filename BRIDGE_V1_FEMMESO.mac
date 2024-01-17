@@ -36,6 +36,38 @@ mesoType=GEO_mesoType(arg1)
 
     csys,0
 
+  *elseif,mesoType,eq,CTE_MESO_beamcap,then
+    ! Column-girder frame:
+
+    lcmName=strcat('COMPL_FRAME_',chrval(arg1))
+
+    ! Activate coordinate system
+    BRIDGE_V1_CSMESO, arg1
+
+    ! Mesh frame girder
+    esel,u,elem,,all
+    nsel,u,node,,all
+    cmsel,s,%lcmName%
+    cmsel,r,COMPL_FrameGirder
+    orient,TYPE_BEAM188,MAT_FrameGirder,SEC_FrameGirder_num,,,1,FEM_ElementSize
+    lmesh,all
+    nsle,r,active
+    cmpadd,'COMPE_FrameGirder'
+    cmpadd,'COMPN_FrameGirder'
+
+    ! Mesh columns using pile section
+    esel,none
+    nsel,none
+    cmsel,s,%lcmName%
+    cmsel,r,COMPL_Column
+    orient,TYPE_BEAM188,MAT_Column,SEC_Pile_num,-1,,,FEM_ElementSize
+    lmesh,all
+    nsle,r,active
+    cmpadd,'COMPE_Column'
+    cmpadd,'COMPN_Column'
+
+    csys,0
+
 *elseif,mesoType,eq,CTE_MESO_tube,or,mesoType,eq,CTE_MESO_tColumn,then
     ! Tubular pier column:
 

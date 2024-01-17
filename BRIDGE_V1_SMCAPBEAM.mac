@@ -1,0 +1,54 @@
+! BRIDGE_V1_SMCAPBEAM , nthSupport
+! BRIDGE_V1_SMCAPBEAM , arg1
+
+BRIDGE_V1_CSMESO, arg1
+
+! Z coordinate at the top of the frame
+zTop    = zFrameTop+GEO_frameTopOffset(arg1)
+zBottom = zTop-GEO_frameHeight
+yLeft   = GEO_columnY_%arg1%(1)
+yRight  = GEO_columnY_%arg1%(2)
+
+! Create frame girder
+ksel,none
+lsel,none
+*get,FGKcount,parm,GEO_frameGirderY_%arg1%,dim,x
+nextkp,'girder_kps',FGKcount
+k,girder_kps(1),0,GEO_frameGirderY_%arg1%(1),zTop
+*do,nthKP,2,FGKcount,1
+  k,girder_kps(nthKP),0,GEO_frameGirderY_%arg1%(nthKP),zTop
+  lstr,girder_kps(nthKP-1),girder_kps(nthKP)
+*enddo
+cmpadd,'COMPK_FrameGirder'
+cmpadd,'COMPL_FrameGirder'
+
+! Create columns
+KLeft  = kp(0,yLeft,zTop)
+KRight = kp(0,yRight,zTop)
+ksel,s,kp,,KLeft
+ksel,a,kp,,KRight
+lsel,none
+
+*if,GEO_frameHeight,gt,0,then
+  nextkp,'bot_kps',2
+  k , bot_kps(1) , 0 , yLeft  , zBottom
+  k , bot_kps(2) , 0 , yRight , zBottom
+  lstr , bot_kps(1) , kLeft
+  lstr , bot_kps(2) , kRight
+  cmpadd,'COMPK_Column'
+  cmpadd,'COMPL_Column'
+  cmsel,u,COMPK_FrameGirder
+*endif
+
+! Create additional selection components
+cmpadd,'COMPK_FrameBottom'
+
+cmsel,s,COMPK_Column
+cmsel,s,COMPL_Column
+cmsel,a,COMPK_FrameGirder
+cmsel,a,COMPL_FrameGirder
+cmpadd,'COMPK_FRAME_%arg1%'
+cmpadd,'COMPL_FRAME_%arg1%'
+
+! Clean up
+csys,0

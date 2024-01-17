@@ -74,6 +74,9 @@ CM,COMPK_FrameBottom,KP
     *elseif,mesoType,eq,CTE_MESO_tube,or,mesoType,eq,CTE_MESO_tcolumn,then
         ! Tubular pier column:
         BRIDGE_V1_SMCTUBE, nthSupport
+    *elseif,mesoType,eq,CTE_MESO_beamcap,then
+        ! Cap-beam frame:
+        BRIDGE_V1_SMCAPBEAM, nthSupport
     *endif
 
 *enddo
@@ -96,7 +99,7 @@ CM,COMPA_PileCap,AREA
 
 *do,nthSupport,1,GEO_supportCount,1
     mesoType=GEO_mesoType(nthSupport)
-    *if,mesoType,ne,CTE_MESO_abutment,then
+    *if,mesoType,ne,CTE_MESO_abutment,and,mesoType,ne,CTE_MESO_beamcap,then
         BRIDGE_V1_SMPCAP,nthSupport
     *endif
 *enddo
@@ -127,7 +130,9 @@ cm,COMPK_PileTop,kp
 
 *do,nthSupport,1,GEO_supportCount,1
     mesoType=GEO_mesoType(nthSupport)
-    *if,mesoType,ne,CTE_MESO_abutment,then
+    *if,mesoType,eq,CTE_MESO_beamcap,then
+        BRIDGE_V1_SMCBPILE,nthSupport
+    *elseif,mesoType,ne,CTE_MESO_abutment,then
         BRIDGE_V1_SMPILE,nthSupport
     *endif
 *enddo
