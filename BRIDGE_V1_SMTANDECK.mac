@@ -13,11 +13,13 @@ k,k4,GEO_deckLength,GEO_deckOff_end+GEO_deckWidth_end,0
 a,k1,k2,k4,k3
 
 ! Cut spans
-*do,nthSupport,2,GEO_supportCount-1,1
+*do,nthSupport,1,GEO_supportCount,1
     allsel
     xCoord=GEO_supportX(nthSupport)
     zCoord=GEO_frameTopOffset(nthSupport)
-    wpsliceyz,xCoord,1
+    *if,nthSupport,gt,1,and,nthSupport,lt,GEO_supportCount,then
+      wpsliceyz,xCoord,1
+    *endif
     *if,zCoord,ne,0,then
         ksel,r,loc,x,xCoord
         kmodif,all,,,zCoord
@@ -35,7 +37,7 @@ batch_sliceyz,'GEO_midspanX'
 *endif
 
 ! Cut at tubular column faces
-*if,GEO_pierCount,gt,0,then
+*if,GEO_pierCount,gt,0,and,GEO_frameOpt,eq,1,then
     batch_sliceyz,'GEO_pierX_i'
     batch_sliceyz,'GEO_pierX_j'
 *endif
