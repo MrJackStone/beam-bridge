@@ -73,6 +73,7 @@ sadd , 'M_k'  , 'M_obl' ,  , 1/1.4
 sadd , 'Q_zk' , 'Q_z'   ,  , 1/1.4
 
 cmsel,s,compl_abt_piles
+cmsel,a,compl_pile
 cm,compl_temp,line
 *get,lc,line,,count
 
