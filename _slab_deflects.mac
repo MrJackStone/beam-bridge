@@ -97,14 +97,30 @@ pathIdx=0
         yB=csBy+x*tan(csBxy)
         *afun,rad
 
+        ! Determine on which span the section lies
+        *do,mthSpan,1,GEO_spanCount,1
+          xi=GEO_supportX(mthSpan)
+          xj=GEO_supportX(mthSpan+1)
+          *if,x,ge,xi,and,x,le,xj,then
+            activeSpan=mthSpan
+            *exit
+          *endif
+        *enddo
+
+        ! Calculate Z coordinate
+        zi=zFrameTop+GEO_frameTopOffset(activeSpan)
+        zj=zFrameTop+GEO_frameTopOffset(activeSpan+1)
+        spanLength=GEO_spanlengths(activeSpan)
+        zCoord=(zj-zi)*((x-xi)/spanLength)+zi
+
         pthName='S%nthSpan%_P%nthPath%'
         pathIdx=pathIdx+1
         all_path_names(pathIdx)=pthName
         all_path_labels(pathIdx)='NET_UZ'
 
         path,pthName,2,30,20
-        ppath,1,,x,yA,0
-        ppath,2,,x,yB,0
+        ppath,1,,x,yA,zCoord
+        ppath,2,,x,yB,zCoord
         pdef,'UZ',u,z,1
     *enddo
 *enddo
@@ -128,14 +144,30 @@ csB=CS_girders(1)
   yB=csBy+x*tan(csBxy)
   *afun,rad
 
+  ! Determine on which span the section lies
+  *do,nthSpan,1,GEO_spanCount,1
+    xi=GEO_supportX(nthSpan)
+    xj=GEO_supportX(nthSpan+1)
+    *if,x,ge,xi,and,x,le,xj,then
+      activeSpan=nthSpan
+      *exit
+    *endif
+  *enddo
+
+  ! Calculate Z coordinate
+  zi=zFrameTop+GEO_frameTopOffset(activeSpan)
+  zj=zFrameTop+GEO_frameTopOffset(activeSpan+1)
+  spanLength=GEO_spanlengths(activeSpan)
+  zCoord=(zj-zi)*((x-xi)/spanLength)+zi
+
   pthName='SR_P%nthPath%'
   pathIdx=pathIdx+1
   all_path_names(pathIdx)=pthName
   all_path_labels(pathIdx)='NET_UZ'
 
   path,pthName,2,30,20
-  ppath,1,,x,yA,0
-  ppath,2,,x,yB,0
+  ppath,1,,x,yA,zCoord
+  ppath,2,,x,yB,zCoord
   pdef,'UZ',u,z,1
 *enddo
 
@@ -158,14 +190,30 @@ csB=CS_leftDeckEdge
   yB=csBy+x*tan(csBxy)
   *afun,rad
 
+  ! Determine on which span the section lies
+  *do,nthSpan,1,GEO_spanCount,1
+    xi=GEO_supportX(nthSpan)
+    xj=GEO_supportX(nthSpan+1)
+    *if,x,ge,xi,and,x,le,xj,then
+      activeSpan=nthSpan
+      *exit
+    *endif
+  *enddo
+
+  ! Calculate Z coordinate
+  zi=zFrameTop+GEO_frameTopOffset(activeSpan)
+  zj=zFrameTop+GEO_frameTopOffset(activeSpan+1)
+  spanLength=GEO_spanlengths(activeSpan)
+  zCoord=(zj-zi)*((x-xi)/spanLength)+zi
+
   pthName='SL_P%nthPath%'
   pathIdx=pathIdx+1
   all_path_names(pathIdx)=pthName
   all_path_labels(pathIdx)='NET_UZ'
 
   path,pthName,2,30,20
-  ppath,1,,x,yA,0
-  ppath,2,,x,yB,0
+  ppath,1,,x,yA,zCoord
+  ppath,2,,x,yB,zCoord
   pdef,'UZ',u,z,1
 *enddo
 
