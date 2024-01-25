@@ -464,12 +464,14 @@ esel,none
 *do,nthGirder,1,GEO_girderCount,1
   girderCS=CS_girders(nthGirder)
   csys,girderCS
-  nsel,a,loc,y,-GIRDER_bfs/2,GIRDER_bfs/2
+  nsel,a,loc,y,-(SLAB_t+GIRDER_bfs/2),(SLAB_t+GIRDER_bfs/2)
   esln,a
   csys,0
 *enddo
 cmsel,r,COMPE_slab
 cmsel,r,COMPN_slab
+cmsel,a,COMPE_slabIgnore
+cmsel,a,COMPN_slabIgnore
 cm,COMPE_slabIgnore,elem
 cm,COMPN_slabIgnore,node
 
