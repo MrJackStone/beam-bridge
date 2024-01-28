@@ -3,6 +3,10 @@
 
 BRIDGE_V1_CSMESO, arg1
 
+allsel
+cm,COMPK_prev,kp
+cm,COMPL_prev,line
+
 ! Z coordinate at the top of the frame
 zTop    = zFrameTop+GEO_frameTopOffset(arg1)
 zBottom = zTop-GEO_frameHeight
@@ -47,6 +51,8 @@ cmsel,s,COMPK_Column
 cmsel,s,COMPL_Column
 cmsel,a,COMPK_FrameGirder
 cmsel,a,COMPL_FrameGirder
+cmsel,u,COMPK_prev
+cmsel,u,COMPL_prev
 cmpadd,'COMPK_FRAME_%arg1%'
 cmpadd,'COMPL_FRAME_%arg1%'
 
