@@ -59,15 +59,16 @@ sabs
 sadd,'ZEROS','UX','UX',1,-1
 
 *del,ETNames
-*dim,ETNames,CHAR,19
+*dim,ETNames,CHAR,21
 ETNames(1)=  'MX', 'MY',  'NX',  'NY',  'QX',  'QY',  'UX',  'UY',  'UZ'
 ETNames(10)= 'Ni', 'Nj', 'QZi', 'QZj', 'QYi', 'QYj', 'MYi', 'MYj', 'MZi', 'MZj'
+ETNames(20)= 'TQi', 'TQj'
 
 etenv,2,LoadStepCount,'ETNames'
 
 *del,env_etnames
-*dim,env_etnames,char,19*4
-*do,nthET,1,19,1
+*dim,env_etnames,char,21*4
+*do,nthET,1,21,1
     baseName=ETNames(nthET)
     env_etnames(nthET*4-3)=strcat('EMN_',baseName)
     env_etnames(nthET*4-2)=strcat('EMX_',baseName)
@@ -75,7 +76,7 @@ etenv,2,LoadStepCount,'ETNames'
     env_etnames(nthET*4-0)=strcat('DW_',baseName)
 *enddo
 
-*do,i,1,19*4,1
+*do,i,1,21*4,1
     et_name=env_etnames(i)
     str_length=strleng(et_name)
     start_pos=str_length-1
@@ -99,33 +100,32 @@ etenv,2,LoadStepCount,'ETNames'
 smax,'EAB_Q','EAB_QX','EAB_QY'
 
 ! BEAM188 max oblique bending moment
-smax,'M_y','EAB_MYi','EAB_MYj'
-smax,'M_z','EAB_MZi','EAB_MZj'
-sexp,'MY_sq','M_y',,2
-sexp,'MZ_sq','M_z',,2
-sadd,'M_sq','MY_sq','MZ_sq'
-sexp,'M_obl','M_sq',,0.5
+smax , 'M_y'   , 'EAB_MYi' , 'EAB_MYj'
+smax , 'M_z'   , 'EAB_MZi' , 'EAB_MZj'
+sexp , 'MY_sq' , 'M_y'     ,           , 2
+sexp , 'MZ_sq' , 'M_z'     ,           , 2
+sadd , 'M_sq'  , 'MY_sq'   , 'MZ_sq'
+sexp , 'M_obl' , 'M_sq'    ,           , 0.5
 
 ! BEAM188 max oblique shear force
-smax,'Q_y','EAB_QYi','EAB_QYj'
-smax,'Q_z','EAB_QZi','EAB_QZj'
-sexp,'QY_sq','Q_y',,2
-sexp,'QZ_sq','Q_z',,2
-sadd,'Q_sq','QY_sq','QZ_sq'
-sexp,'Q_obl','Q_sq',,0.5
+smax , 'Q_y'   , 'EAB_QYi' , 'EAB_QYj'
+smax , 'Q_z'   , 'EAB_QZi' , 'EAB_QZj'
+sexp , 'QY_sq' , 'Q_y'     ,           , 2
+sexp , 'QZ_sq' , 'Q_z'     ,           , 2
+sadd , 'Q_sq'  , 'QY_sq'   , 'QZ_sq'
+sexp , 'Q_obl' , 'Q_sq'    ,           , 0.5
 
 ! BEAM188 max tension and compression
-smin, 'N_c0', 'EMN_Ni' , 'EMN_Nj'
-smin, 'N_c' , 'N_c0'    , 'ZEROS'
-smax, 'N_t0', 'EMX_Ni' , 'EMX_Nj'
-smax, 'N_t' , 'N_t0'    , 'ZEROS'
+smin , 'N_c0' , 'EMN_Ni' , 'EMN_Nj'
+smin , 'N_c'  , 'N_c0'   , 'ZEROS'
+smax , 'N_t0' , 'EMX_Ni' , 'EMX_Nj'
+smax , 'N_t'  , 'N_t0'   , 'ZEROS'
 
 ! Displacements in mm
-sadd,'EMM_UX','EAB_UX',,1e3
-sadd,'EMM_UY','EAB_UY',,1e3
-sadd,'EMM_UZ','EMN_UZ',,1e3
-
-
+sadd , 'EMM_UX' , 'EAB_UX' ,  , 1e3
+sadd , 'EMM_UY' , 'EAB_UY' ,  , 1e3
+sadd , 'EMM_UZ' , 'EMN_UZ' ,  , 1e3
+/eof
 ! Window layout
 /window,all,dele
 /window,1,-1,1.4,-1,0
