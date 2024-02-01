@@ -5,9 +5,11 @@ windefa,1
 /device,font,1,Arial,1000,0,-42,0,0,,,
 /device,text,1,100
 /tspec,15,1.5,4,0,0
+/pspec,0,0,1
 /annot,dele
 wincln,1
 /udoc,1,cntr,right
+/udoc,2,cntr,right
 /plopts,info,3
 /plopts,leg3,1
 /gformat,f,10,2
@@ -97,14 +99,30 @@ pathIdx=0
         yB=csBy+x*tan(csBxy)
         *afun,rad
 
+        ! Determine on which span the section lies
+        *do,mthSpan,1,GEO_spanCount,1
+          xi=GEO_supportX(mthSpan)
+          xj=GEO_supportX(mthSpan+1)
+          *if,x,ge,xi,and,x,le,xj,then
+            activeSpan=mthSpan
+            *exit
+          *endif
+        *enddo
+
+        ! Calculate Z coordinate
+        zi=zFrameTop+GEO_frameTopOffset(activeSpan)
+        zj=zFrameTop+GEO_frameTopOffset(activeSpan+1)
+        spanLength=GEO_spanlengths(activeSpan)
+        zCoord=(zj-zi)*((x-xi)/spanLength)+zi
+
         pthName='S%nthSpan%_P%nthPath%'
         pathIdx=pathIdx+1
         all_path_names(pathIdx)=pthName
         all_path_labels(pathIdx)='NET_UZ'
 
         path,pthName,2,30,20
-        ppath,1,,x,yA,0
-        ppath,2,,x,yB,0
+        ppath,1,,x,yA,zCoord
+        ppath,2,,x,yB,zCoord
         pdef,'UZ',u,z,1
     *enddo
 *enddo
@@ -128,14 +146,30 @@ csB=CS_girders(1)
   yB=csBy+x*tan(csBxy)
   *afun,rad
 
+  ! Determine on which span the section lies
+  *do,nthSpan,1,GEO_spanCount,1
+    xi=GEO_supportX(nthSpan)
+    xj=GEO_supportX(nthSpan+1)
+    *if,x,ge,xi,and,x,le,xj,then
+      activeSpan=nthSpan
+      *exit
+    *endif
+  *enddo
+
+  ! Calculate Z coordinate
+  zi=zFrameTop+GEO_frameTopOffset(activeSpan)
+  zj=zFrameTop+GEO_frameTopOffset(activeSpan+1)
+  spanLength=GEO_spanlengths(activeSpan)
+  zCoord=(zj-zi)*((x-xi)/spanLength)+zi
+
   pthName='SR_P%nthPath%'
   pathIdx=pathIdx+1
   all_path_names(pathIdx)=pthName
   all_path_labels(pathIdx)='NET_UZ'
 
   path,pthName,2,30,20
-  ppath,1,,x,yA,0
-  ppath,2,,x,yB,0
+  ppath,1,,x,yA,zCoord
+  ppath,2,,x,yB,zCoord
   pdef,'UZ',u,z,1
 *enddo
 
@@ -158,14 +192,30 @@ csB=CS_leftDeckEdge
   yB=csBy+x*tan(csBxy)
   *afun,rad
 
+  ! Determine on which span the section lies
+  *do,nthSpan,1,GEO_spanCount,1
+    xi=GEO_supportX(nthSpan)
+    xj=GEO_supportX(nthSpan+1)
+    *if,x,ge,xi,and,x,le,xj,then
+      activeSpan=nthSpan
+      *exit
+    *endif
+  *enddo
+
+  ! Calculate Z coordinate
+  zi=zFrameTop+GEO_frameTopOffset(activeSpan)
+  zj=zFrameTop+GEO_frameTopOffset(activeSpan+1)
+  spanLength=GEO_spanlengths(activeSpan)
+  zCoord=(zj-zi)*((x-xi)/spanLength)+zi
+
   pthName='SL_P%nthPath%'
   pathIdx=pathIdx+1
   all_path_names(pathIdx)=pthName
   all_path_labels(pathIdx)='NET_UZ'
 
   path,pthName,2,30,20
-  ppath,1,,x,yA,0
-  ppath,2,,x,yB,0
+  ppath,1,,x,yA,zCoord
+  ppath,2,,x,yB,zCoord
   pdef,'UZ',u,z,1
 *enddo
 
@@ -239,6 +289,14 @@ pthenv,'CLEAR','slab_envelope'
   dw_envelope_labels(nthPath)  = 'NETDW_UZ'
 *enddo
 
+*del,deltaZ,,nopr
+z1=zFrameTop+GEO_frameTopOffset(1)
+z2=zFrameTop+GEO_frameTopOffset(GEO_supportCount)
+deltaZ=z2-z1
+deckSlopeAngle=atan(deltaZ/GEO_deckLength)
+xView=cos(deckSlopeAngle)
+zView=sin(deckSlopeAngle)
+
 ! Deflection (RARA)
 cmsel,s,COMPE_Slab
 nsle,s,active
@@ -247,8 +305,8 @@ nsle,s,active
 /window,2,-1,1.67,-1,0
 /auto,all
 /angle,all,0
-/view,1,1,0,0
-/view,2,1,0,0
+/view,1,xView,0,zView
+/view,2,xView,0,zView
 /eshape,0
 /edge,all,1
 

@@ -1,0 +1,170 @@
+! BRIDGE_V1_POSTFRG, react
+! BRIDGE_V1_POSTFRG, arg1
+
+
+/device,font,3,Arial,1000,0,-64,0,0,,,
+/device,font,1,Arial,1000,0,-42,0,0,,,
+/device,text,1,100
+/tspec,15,1.5,4,0,0
+/gformat,f,2,1
+/annot,dele
+
+*if,upcase(arg1),eq,'MY',then
+  key='MY'
+  name1='MOMENTO FLETOR (NEG.)'
+  name2='MOMENTO FLETOR (POS.)'
+  unit='kNm'
+*elseif,upcase(arg1),eq,'QZ',then
+  key='QZ'
+  unit='kN'
+  name1='FOR. CORTANTE'
+  name2='FOR. CORTANTE'
+*endif
+
+cmsel,s,compl_frame_2
+esll,s
+nsle,s,active
+cm,compe_bg1,elem
+cm,compn_bg1,node
+
+cmsel,s,compl_frame_3
+esll,s
+nsle,s,active
+cm,compe_bg2,elem
+cm,compn_bg2,node
+
+cmsel,s,compl_framegirder
+esll,s
+nsle,s,active
+cmsel,r,compe_bg1
+cmsel,r,compn_bg1
+cm,compe_fg1,elem
+cm,compn_fg1,node
+
+cmsel,s,compl_framegirder
+esll,s
+nsle,s,active
+cmsel,r,compe_bg2
+cmsel,r,compn_bg2
+cm,compe_fg2,elem
+cm,compn_fg2,node
+
+/window , all , dele
+/window , 1   , -1   , 1.67 , -0.85 , 0.075
+/window , 2   , -1   , 1.67 , 0.075  , 1
+/window , 3   , -1   , 1.67 , -1   , -0.95
+/window , 3   , off
+/view,all,1,0,0
+/auto,all
+/focus,3,1e6,1e6
+wincln,1
+wincln,2
+wincln,3
+
+/plopts,leg3,on
+/plopts,info,3
+/udoc,1,cntr,right
+/udoc,2,cntr,right
+
+wntitle , 'PORT. 1'        , 1 , 1 , 'C'
+wntitle , 'PORT. 2'        , 2 , 1 , 'C'
+wntitle , 'TRAVESSAS'      , 3 , 0 ,
+wntitle , '%name1%'        , 3 , 0 , 'C'
+wntitle , 'ELU-N [%unit%]' , 3 , 1 , 'R'
+
+go2png,1200
+  /window,1,on
+  /window,2,off
+  cmsel,s,compe_fg1
+  cmsel,s,compn_fg1
+  /auto,1
+  eplot
+  /noerase
+  /user,1
+  cmsel,s,compe_bg1
+  cmsel,s,compn_bg1
+  /eshape,1
+  eplot
+  /eshape,0
+  cmsel,s,compe_fg1
+  cmsel,s,compn_fg1
+  plls,emx_%key%i,emx_%key%j,,1
+
+  /window,1,off
+  /window,2,on
+  cmsel,s,compe_fg2
+  cmsel,s,compn_fg2
+  /auto,2
+  eplot
+  /user,2
+  cmsel,s,compe_bg2
+  cmsel,s,compn_bg2
+  /eshape,1
+  eplot
+  /eshape,0
+  cmsel,s,compe_fg2
+  cmsel,s,compn_fg2
+  plls,emx_%key%i,emx_%key%j
+endpng,'FRAMEGIRDER_%key%max',,,,,memoImgsFolder
+/erase
+/annot,dele
+
+/window , all , dele
+/window , 1   , -1   , 1.67 , -0.85 , 0.075
+/window , 2   , -1   , 1.67 , 0.075  , 1
+/window , 3   , -1   , 1.67 , -1   , -0.95
+/window , 3   , off
+/view,all,1,0,0
+/auto,all
+/focus,3,1e6,1e6
+wincln,1
+wincln,2
+wincln,3
+
+/plopts,leg3,on
+/plopts,info,3
+/udoc,1,cntr,right
+/udoc,2,cntr,right
+
+wntitle , 'PORT. 1'               , 1 , 1 , 'C'
+wntitle , 'PORT. 2'               , 2 , 1 , 'C'
+wntitle , 'TRAVESSAS'             , 3 , 0 ,
+wntitle , '%name2%' , 3 , 0 , 'C'
+wntitle , 'ELU-N [%unit%]'           , 3 , 1 , 'R'
+
+go2png,1200
+  /window,1,on
+  /window,2,off
+  cmsel,s,compe_fg1
+  cmsel,s,compn_fg1
+  /auto,1
+  eplot
+  /noerase
+  /user,1
+  cmsel,s,compe_bg1
+  cmsel,s,compn_bg1
+  /eshape,1
+  eplot
+  /eshape,0
+  cmsel,s,compe_fg1
+  cmsel,s,compn_fg1
+  plls,emn_%key%i,emn_%key%j,,1
+
+  /window,1,off
+  /window,2,on
+  cmsel,s,compe_fg2
+  cmsel,s,compn_fg2
+  /auto,2
+  eplot
+  /user,2
+  cmsel,s,compe_bg2
+  cmsel,s,compn_bg2
+  /eshape,1
+  eplot
+  /eshape,0
+  cmsel,s,compe_fg2
+  cmsel,s,compn_fg2
+  plls,emn_%key%i,emn_%key%j
+endpng,'FRAMEGIRDER_%key%min',,,,,memoImgsFolder
+/erase
+/annot,dele

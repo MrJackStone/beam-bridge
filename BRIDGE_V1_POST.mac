@@ -1,6 +1,6 @@
 ! BRIDGE_V1_POST
 
-
+/post1
 /uis,msgpop,3
 /output,outpost,out
 
@@ -80,6 +80,8 @@
 
   ! Composite steel-concrete results
   BRIDGE_V1_POSTCOMPOSITE
+
+  BRIDGE_V1_POSTABTBEAM
 
   ! /output
   ! /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_pilePlast',mac

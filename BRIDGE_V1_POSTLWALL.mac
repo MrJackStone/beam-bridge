@@ -39,7 +39,6 @@ wntitle , arg3               , 3 , 1 , 'R'
 *endif
 
 /angle,all,0
-/udoc,all,cntr,bottom
 /plopts,info,3
 /plopts,leg3,1
 /triad,off

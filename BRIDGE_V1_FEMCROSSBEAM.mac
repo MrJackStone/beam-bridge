@@ -1,6 +1,8 @@
 ! BRIDGE_V1_FEMCROSSBEAM
 ! BRIDGE_V1_FEMCROSSBEAM
 
+! TODO: zero length element bug
+/eof
 csys,0
 type,TYPE_BEAM188
 secnum,SEC_CROSSBEAM

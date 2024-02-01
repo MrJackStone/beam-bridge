@@ -34,11 +34,27 @@ clims
         ! Calculate cross-section position
         xCoord=xPitch*(nthSec-1)
 
+        ! Determine on which span the section lies
+        *do,nthSpan,1,GEO_spanCount,1
+          xi=GEO_supportX(nthSpan)
+          xj=GEO_supportX(nthSpan+1)
+          *if,xCoord,ge,xi,and,xCoord,le,xj,then
+            activeSpan=nthSpan
+            *exit
+          *endif
+        *enddo
+
+        ! Calculate Z coordinate
+        zi=zFrameTop+GEO_frameTopOffset(activeSpan)
+        zj=zFrameTop+GEO_frameTopOffset(activeSpan+1)
+        spanLength=GEO_spanlengths(activeSpan)
+        zCoord=(zj-zi)*((xCoord-xi)/spanLength)+zi
+
         ! Create cross-sectional path
         pthName=strcat('SS_',chrval(nthSec))
         path,%pthName%,2,,100
-        ppath,1,,xCoord,yMin,0
-        ppath,2,,xCoord,yMax,0
+        ppath,1,,xCoord,yMin,zCoord
+        ppath,2,,xCoord,yMax,zCoord
 
         ! Map bending moment (about transversal direction)
         pdef,'MY',etab,'SHELL_MY'
@@ -80,21 +96,16 @@ subset,myPeakLS
 cshell_my,1
 
 *do,nthSec,1,secCount,1
-    ! Calculate cross-section position
-    xCoord=xPitch*(nthSec-1)
+  ! Activate cross-sectional path
+  pthName=strcat('SS_',chrval(nthSec))
+  path,%pthName%
 
-    ! Create cross-sectional path
-    pthName=strcat('SS_',chrval(nthSec))
-    path,%pthName%,2,,100
-    ppath,1,,xCoord,yMin,0
-    ppath,2,,xCoord,yMax,0
+  ! Map bending moment (about transversal direction)
+  pdef  , 'MY' , etab     , 'SHELL_MY'
+  pcalc , intg , 'MY_CUM' , 'MY'       , 'S' , 1
 
-    ! Map bending moment (about transversal direction)
-    pdef,'MY',etab,'SHELL_MY'
-    pcalc,intg,'MY_CUM','MY','S',1
-
-    MPATHPLOT_ARR_pathNames(nthSec)=pthName
-    MPATHPLOT_ARR_labels(nthSec)='MY_CUM'
+  MPATHPLOT_ARR_pathNames(nthSec)=pthName
+  MPATHPLOT_ARR_labels(nthSec)='MY_CUM'
 *enddo
 
 view1w
@@ -111,13 +122,13 @@ wntitle,'LAJE - MOMENTO ACUM. [kNm]',1
 eplot
 /user,1
 go2png,1200
-    /device,vector,on
-    /type,,0
-    eplot
-    /noerase
-    /device,vector,off
-    cleanplot,'mpathplot','5','0'
-    /type,,3
+  /device,vector,on
+  /type,,0
+  eplot
+  /noerase
+  /device,vector,off
+  cleanplot,'mpathplot','5','0'
+  /type,,3
 endpng,'COMPOSITE_SLAB_My',,,,,resultsFolder
 /erase
 clims
@@ -130,21 +141,16 @@ subset,qxPeakLS
 cshell_qx,1
 
 *do,nthSec,1,secCount,1
-    ! Calculate cross-section position
-    xCoord=xPitch*(nthSec-1)
+  ! Activate cross-sectional path
+  pthName=strcat('SS_',chrval(nthSec))
+  path,%pthName%
 
-    ! Create cross-sectional path
-    pthName=strcat('SS_',chrval(nthSec))
-    path,%pthName%,2,,100
-    ppath,1,,xCoord,yMin,0
-    ppath,2,,xCoord,yMax,0
+  ! Map bending moment (about transversal direction)
+  pdef  , 'QX' , etab     , 'SHELL_QX'
+  pcalc , intg , 'QX_CUM' , 'QX'       , 'S' , 1
 
-    ! Map bending moment (about transversal direction)
-    pdef,'QX',etab,'SHELL_QX'
-    pcalc,intg,'QX_CUM','QX','S',1
-
-    MPATHPLOT_ARR_pathNames(nthSec)=pthName
-    MPATHPLOT_ARR_labels(nthSec)='QX_CUM'
+  MPATHPLOT_ARR_pathNames(nthSec)=pthName
+  MPATHPLOT_ARR_labels(nthSec)='QX_CUM'
 *enddo
 
 view1w
@@ -161,13 +167,13 @@ wntitle,'LAJE - CORTANTE ACUM. [kN]',1
 eplot
 /user,1
 go2png,1200
-    /device,vector,on
-    /type,,0
-    eplot
-    /noerase
-    /device,vector,off
-    cleanplot,'mpathplot','5','0'
-    /type,,3
+  /device,vector,on
+  /type,,0
+  eplot
+  /noerase
+  /device,vector,off
+  cleanplot,'mpathplot','5','0'
+  /type,,3
 endpng,'COMPOSITE_SLAB_Qx',,,,,resultsFolder
 /erase
 clims

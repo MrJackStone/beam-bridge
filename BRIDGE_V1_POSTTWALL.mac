@@ -11,7 +11,9 @@ etabName=arg1
 /gformat,f,2,1
 /annot,dele
 /erase
+view4w
 clims
+erase
 
 cmsel,s,COMPA_ABT_tranwall
 esla,s

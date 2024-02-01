@@ -391,6 +391,18 @@ clims
     MPATHPLOT_ARR_labels(i)='EPOS_MX'
 *enddo
 
+nsel,none
+esel,none
+*do,nthSupport,1,GEO_supportCount,1
+  xSupport=GEO_supportX(nthSupport)
+  nsel,a,loc,x,xSupport-0.5,xSupport+0.5
+  esln,a
+*enddo
+cmsel,r,COMPE_slab
+cmsel,r,COMPN_slab
+cm,COMPE_slabIgnore,elem
+cm,COMPN_slabIgnore,node
+
 allsel
 esel,u,type,,3
 cmsel,u,COMPE_pile
@@ -412,6 +424,7 @@ cmsel,a,COMPE_pile
 
 cmsel,s,compa_slab
 esla,u
+cmsel,a,COMPE_slabIgnore
 
 /plopts,info,3
 /plopts,leg3,1
@@ -425,6 +438,7 @@ go2png,1200
     /noerase
     cmsel,s,compa_slab
     esla,s
+    cmsel,u,COMPE_slabIgnore
     nsle,s,active
     /udoc,1,cntr,right !!off
     /edge,1,0
@@ -444,6 +458,22 @@ clims
     MPATHPLOT_ARR_pathNames(i)=pthNames(i)
     MPATHPLOT_ARR_labels(i)='EAB_Q'
 *enddo
+
+nsel,none
+esel,none
+*do,nthGirder,1,GEO_girderCount,1
+  girderCS=CS_girders(nthGirder)
+  csys,girderCS
+  nsel,a,loc,y,-(SLAB_t+GIRDER_bfs/2),(SLAB_t+GIRDER_bfs/2)
+  esln,a
+  csys,0
+*enddo
+cmsel,r,COMPE_slab
+cmsel,r,COMPN_slab
+cmsel,a,COMPE_slabIgnore
+cmsel,a,COMPN_slabIgnore
+cm,COMPE_slabIgnore,elem
+cm,COMPN_slabIgnore,node
 
 allsel
 esel,u,type,,3
@@ -466,9 +496,10 @@ cmsel,a,COMPE_pile
 
 cmsel,s,compa_slab
 esla,u
+cmsel,a,COMPE_slabIgnore
 
 /plopts,info,3
-/plopts,leg3,1
+/plopts,leg3,on
 /udoc,1,cntr,right
 /gformat,F,1,1
 
@@ -479,6 +510,7 @@ go2png,1200
     /noerase
     cmsel,s,compa_slab
     esla,s
+    cmsel,u,COMPE_slabIgnore
     nsle,s,active
     ! nsel,u,loc,x,0,0.5
     ! nsel,u,loc,x,GEO_deckLength,GEO_deckLength-0.5

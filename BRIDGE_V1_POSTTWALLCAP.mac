@@ -1,4 +1,4 @@
-! BRIDGE_V1_POSTABTBEAM
+! BRIDGE_V1_POSTTWALLCAP
 
 
 !! Display settings                                                                               !!
@@ -10,48 +10,57 @@
 /annot,dele
 
 !! Collect result envelope                                                                        !!
-beamArea    = GEO_ABT_beamH*SEC_ABT_beam_W
-beamModulus = (SEC_ABT_beam_W*GEO_ABT_beamH**2)/6
-
-cmsel,s,COMPA_ABT_beam
-cmsel,r,COMPA_ABT_1
+cmsel,s,COMPA_ABT_1
+cmsel,r,COMPA_ABT_tranWall
 esla,s
+esel,r,sec,,SEC_ABT_tranWall
 nsle,s,active
 ndbbox,'xmin',,'ymin','ymax','zmin','zmax'
-beam1Top1=node(xmin,ymin,zmax)
-beam1Top2=node(xmin,ymax,zmax)
-beam1Bot1=node(xmin,ymin,zmin)
-beam1Bot2=node(xmin,ymax,zmin)
+cap1Top1=node(xmin,ymin,zmax)
+cap1Top2=node(xmin,ymax,zmax)
+cap1Bot1=node(xmin,ymin,zmin)
+cap1Bot2=node(xmin,ymax,zmin)
+cap1Height=zmax-zmin
 
-cmsel,s,COMPA_ABT_beam
-cmsel,r,COMPA_ABT_2
+beam1Area    = cap1Height*SEC_ABT_tranWall_t
+beam1Modulus = (SEC_ABT_tranWall_t*cap1Height**2)/6
+
+cmsel,s,COMPA_ABT_2
+cmsel,r,COMPA_ABT_tranWall
 esla,s
+esel,r,sec,,SEC_ABT_tranWall
 nsle,s,active
 ndbbox,'xmin',,'ymin','ymax','zmin','zmax'
-beam2Top1=node(xmin,ymin,zmax)
-beam2Top2=node(xmin,ymax,zmax)
-beam2Bot1=node(xmin,ymin,zmin)
-beam2Bot2=node(xmin,ymax,zmin)
+cap2Top1=node(xmin,ymin,zmax)
+cap2Top2=node(xmin,ymax,zmax)
+cap2Bot1=node(xmin,ymin,zmin)
+cap2Bot2=node(xmin,ymax,zmin)
+cap2Height=zmax-zmin
 
-cmsel,s,COMPA_ABT_beam
+beam2Area    = cap1Height*SEC_ABT_tranWall_t
+beam2Modulus = (SEC_ABT_tranWall_t*cap1Height**2)/6
+
+cmsel,s,COMPA_ABT_tranWall
 esla,s
+esel,r,sec,,SEC_ABT_tranWall
 nsle,s,active
 etable , 'M11'   , smisc , 4
 etable , 'SM_11' , smisc , 34
 etable , 'SM_12' , smisc , 36
 
-*del,beam_1_envelope,,nopr
-*del,beam_2_envelope,,nopr
+*del,cap_1_envelope,,nopr
+*del,cap_2_envelope,,nopr
 
+! *do,nthLS,1,1,1
 *do,nthLS,1,LoadStepCount,1
   subset,nthLS,last
   etable,refl
-  pth2beam,beam1Top1,beam1Top2,beam1Bot1,beam1Bot2,'BEAM1',0,20,beamModulus,beamArea,0,'beam_1_envelope'
-  pth2beam,beam2Top1,beam2Top2,beam2Bot1,beam2Bot2,'BEAM2',0,20,beamModulus,beamArea,0,'beam_2_envelope'
+  pth2beam,cap1Top1,cap1Top2,cap1Bot1,cap1Bot2,'CAP1',0,20,beam1Modulus,beam1Area,0,'cap_1_envelope'
+  pth2beam,cap2Top1,cap2Top2,cap2Bot1,cap2Bot2,'CAP2',0,20,beam2Modulus,beam2Area,0,'cap_2_envelope'
 *enddo
 
 ! Scale results (kN, mm)
-path,'BEAM1'
+path,'CAP1'
 pcalc , add , 'MP_MAX'  , 'MP_MAX'  ,  , 1e-3
 pcalc , add , 'MP_MIN'  , 'MP_MIN'  ,  , 1e-3
 pcalc , add , 'MB_MAX'  , 'MB_MAX'  ,  , 1e-3
@@ -65,7 +74,7 @@ pcalc , add , 'DXT_MAX' , 'DXT_MAX' ,  , 1e3
 pcalc , add , 'DZT_MIN' , 'DZT_MIN' ,  , 1e3
 pcalc , add , 'DZT_MAX' , 'DZT_MAX' ,  , 1e3
 
-path,'BEAM2'
+path,'CAP2'
 pcalc , add , 'MP_MAX'  , 'MP_MAX'  ,  , 1e-3
 pcalc , add , 'MP_MIN'  , 'MP_MIN'  ,  , 1e-3
 pcalc , add , 'MB_MAX'  , 'MB_MAX'  ,  , 1e-3
@@ -80,12 +89,12 @@ pcalc , add , 'DZT_MIN' , 'DZT_MIN' ,  , 1e3/1.4
 pcalc , add , 'DZT_MAX' , 'DZT_MAX' ,  , 1e3/1.4
 
 !! Plot beam results                                                                              !!
-*del , beam1_paths ,      , nopr
-*del , beam2_paths ,      , nopr
-*dim , beam1_paths , char , 2
-*dim , beam2_paths , char , 2
-beam1_paths(1)='BEAM1','BEAM1'
-beam2_paths(1)='BEAM2','BEAM2'
+*del , cap1_paths ,      , nopr
+*del , cap2_paths ,      , nopr
+*dim , cap1_paths , char , 2
+*dim , cap2_paths , char , 2
+cap1_paths(1)='CAP1','CAP1'
+cap2_paths(1)='CAP2','CAP2'
 
 *del , mp_labels ,      , nopr
 *dim , mp_labels , char , 2
@@ -117,7 +126,7 @@ wincln,3
 /pspec,0,1,1
 wntitle,' ',1,1
 wntitle,' ',2,1
-wntitle , 'VIGA CINTA'          , 3 , 0
+wntitle , 'VIGA BLOCO'          , 3 , 0
 /pspec,0,0,1
 wntitle , 'MOMENTO FLETOR (MZ)' , 3 , 0 , 'C'
 wntitle , 'ELU-Normal [kNm]'    , 3 , 1 , 'R'
@@ -138,8 +147,9 @@ axanno,1
 axanno,2
 
 cmsel,s,COMPA_ABT_1
-cmsel,r,COMPA_ABT_beam
+cmsel,r,COMPA_ABT_tranWall
 esla,s
+esel,r,sec,,SEC_ABT_tranWall
 nsle,s,active
 
 go2png,1200
@@ -147,8 +157,8 @@ go2png,1200
   /window,2,off
 
   cmsel,s,COMPA_ABT_1
-  cmsel,u,COMPA_ABT_beam
   esla,s
+  esel,u,sec,,SEC_ABT_tranWall
   nsle,s,active
   /device,vector,on
   /type,1,4
@@ -160,15 +170,16 @@ go2png,1200
   /user,1
 
   cmsel,s,COMPA_ABT_1
-  cmsel,r,COMPA_ABT_beam
+  cmsel,r,COMPA_ABT_tranWall
   esla,s
+  esel,r,sec,,SEC_ABT_tranWall
   nsle,s,active
   /eshape,0
   /edge,1,1
   eplot
 
   /plopts,info,3
-  mpathplot,3,,'beam1_paths','mp_labels'
+  mpathplot,5,,'cap1_paths','mp_labels'
   /plopts,info,0
 
 
@@ -176,8 +187,8 @@ go2png,1200
   /window,2,on
 
   cmsel,s,COMPA_ABT_2
-  cmsel,u,COMPA_ABT_beam
   esla,s
+  esel,u,sec,,SEC_ABT_tranWall
   nsle,s,active
   /device,vector,on
   /type,2,4
@@ -188,18 +199,20 @@ go2png,1200
   /user,2
 
   cmsel,s,COMPA_ABT_2
-  cmsel,r,COMPA_ABT_beam
+  cmsel,r,COMPA_ABT_tranWall
   esla,s
+  esel,r,sec,,SEC_ABT_tranWall
   nsle,s,active
   /eshape,0
   /edge,2,1
   eplot
 
   /plopts,info,3
-  mpathplot,3,,'beam2_paths','mp_labels'
+  mpathplot,5,,'cap2_paths','mp_labels'
   /plopts,info,0
 
-endpng,'ABT_BEAM_MP',,,,,'memo_imgs'
+endpng,'ABT_CAP_MP',,,,,'memo_imgs'
+! endpng,'ABT_CAP_MP_DW',,,,,'memo_imgs'
 /erase
 /annot,dele
 clims
@@ -216,7 +229,7 @@ wincln,3
 /pspec,0,1,1
 wntitle,' ',1,1
 wntitle,' ',2,1
-wntitle , 'VIGA CINTA'          , 3 , 0
+wntitle , 'VIGA BLOCO'          , 3 , 0
 /pspec,0,0,1
 wntitle , 'MOMENTO FLETOR (MY)' , 3 , 0 , 'C'
 wntitle , 'ELU-Normal [kNm]'    , 3 , 1 , 'R'
@@ -237,8 +250,9 @@ axanno,1
 axanno,2
 
 cmsel,s,COMPA_ABT_1
-cmsel,r,COMPA_ABT_beam
+cmsel,r,COMPA_ABT_tranWall
 esla,s
+esel,r,sec,,SEC_ABT_tranWall
 nsle,s,active
 
 go2png,1200
@@ -246,8 +260,8 @@ go2png,1200
   /window,2,off
 
   cmsel,s,COMPA_ABT_1
-  cmsel,u,COMPA_ABT_beam
   esla,s
+  esel,u,sec,,SEC_ABT_tranWall
   nsle,s,active
   /device,vector,on
   /type,1,4
@@ -259,15 +273,16 @@ go2png,1200
   /user,1
 
   cmsel,s,COMPA_ABT_1
-  cmsel,r,COMPA_ABT_beam
+  cmsel,r,COMPA_ABT_tranWall
   esla,s
+  esel,r,sec,,SEC_ABT_tranWall
   nsle,s,active
   /eshape,0
   /edge,1,1
   eplot
 
   /plopts,info,3
-  mpathplot,3,,'beam1_paths','mb_labels'
+  mpathplot,5,,'cap1_paths','mb_labels'
   /plopts,info,0
 
 
@@ -275,8 +290,8 @@ go2png,1200
   /window,2,on
 
   cmsel,s,COMPA_ABT_2
-  cmsel,u,COMPA_ABT_beam
   esla,s
+  esel,u,sec,,SEC_ABT_tranWall
   nsle,s,active
   /device,vector,on
   /type,2,4
@@ -287,18 +302,20 @@ go2png,1200
   /user,2
 
   cmsel,s,COMPA_ABT_2
-  cmsel,r,COMPA_ABT_beam
+  cmsel,r,COMPA_ABT_tranWall
   esla,s
+  esel,r,sec,,SEC_ABT_tranWall
   nsle,s,active
   /eshape,0
   /edge,2,1
   eplot
 
   /plopts,info,3
-  mpathplot,3,,'beam2_paths','mb_labels'
+  mpathplot,5,,'cap2_paths','mb_labels'
   /plopts,info,0
 
-endpng,'ABT_BEAM_MB',,,,,'memo_imgs'
+endpng,'ABT_CAP_MB',,,,,'memo_imgs'
+! endpng,'ABT_CAP_MB_DW',,,,,'memo_imgs'
 /erase
 /annot,dele
 clims
@@ -315,7 +332,7 @@ wincln,3
 /pspec,0,1,1
 wntitle,' ',1,1
 wntitle,' ',2,1
-wntitle , 'VIGA CINTA'      , 3 , 0
+wntitle , 'VIGA BLOCO'      , 3 , 0
 /pspec,0,0,1
 wntitle , 'F. AXIAL'        , 3 , 0 , 'C'
 wntitle , 'ELU-Normal [kN]' , 3 , 1 , 'R'
@@ -336,8 +353,9 @@ axanno,1
 axanno,2
 
 cmsel,s,COMPA_ABT_1
-cmsel,r,COMPA_ABT_beam
+cmsel,r,COMPA_ABT_tranWall
 esla,s
+esel,r,sec,,SEC_ABT_tranWall
 nsle,s,active
 
 go2png,1200
@@ -345,8 +363,8 @@ go2png,1200
   /window,2,off
 
   cmsel,s,COMPA_ABT_1
-  cmsel,u,COMPA_ABT_beam
   esla,s
+  esel,u,sec,,SEC_ABT_tranWall
   nsle,s,active
   /device,vector,on
   /type,1,4
@@ -358,15 +376,16 @@ go2png,1200
   /user,1
 
   cmsel,s,COMPA_ABT_1
-  cmsel,r,COMPA_ABT_beam
+  cmsel,r,COMPA_ABT_tranWall
   esla,s
+  esel,r,sec,,SEC_ABT_tranWall
   nsle,s,active
   /eshape,0
   /edge,1,1
   eplot
 
   /plopts,info,3
-  mpathplot,3,,'beam1_paths','n_labels'
+  mpathplot,5,,'cap1_paths','n_labels'
   /plopts,info,0
 
 
@@ -374,8 +393,8 @@ go2png,1200
   /window,2,on
 
   cmsel,s,COMPA_ABT_2
-  cmsel,u,COMPA_ABT_beam
   esla,s
+  esel,u,sec,,SEC_ABT_tranWall
   nsle,s,active
   /device,vector,on
   /type,2,4
@@ -386,18 +405,20 @@ go2png,1200
   /user,2
 
   cmsel,s,COMPA_ABT_2
-  cmsel,r,COMPA_ABT_beam
+  cmsel,r,COMPA_ABT_tranWall
   esla,s
+  esel,r,sec,,SEC_ABT_tranWall
   nsle,s,active
   /eshape,0
   /edge,2,1
   eplot
 
   /plopts,info,3
-  mpathplot,3,,'beam2_paths','n_labels'
+  mpathplot,5,,'cap2_paths','n_labels'
   /plopts,info,0
 
-endpng,'ABT_BEAM_N',,,,,'memo_imgs'
+endpng,'ABT_CAP_N',,,,,'memo_imgs'
+! endpng,'ABT_CAP_N_DW',,,,,'memo_imgs'
 /erase
 /annot,dele
 clims
@@ -414,7 +435,7 @@ wincln,3
 /pspec,0,1,1
 wntitle,' ',1,1
 wntitle,' ',2,1
-wntitle , 'VIGA CINTA'      , 3 , 0
+wntitle , 'VIGA BLOCO'      , 3 , 0
 /pspec,0,0,1
 wntitle , 'F. CORTANTE'     , 3 , 0 , 'C'
 wntitle , 'ELU-Normal [kN]' , 3 , 1 , 'R'
@@ -435,8 +456,9 @@ axanno,1
 axanno,2
 
 cmsel,s,COMPA_ABT_1
-cmsel,r,COMPA_ABT_beam
+cmsel,r,COMPA_ABT_tranWall
 esla,s
+esel,r,sec,,SEC_ABT_tranWall
 nsle,s,active
 
 go2png,1200
@@ -444,8 +466,8 @@ go2png,1200
   /window,2,off
 
   cmsel,s,COMPA_ABT_1
-  cmsel,u,COMPA_ABT_beam
   esla,s
+  esel,u,sec,,SEC_ABT_tranWall
   nsle,s,active
   /device,vector,on
   /type,1,4
@@ -457,15 +479,16 @@ go2png,1200
   /user,1
 
   cmsel,s,COMPA_ABT_1
-  cmsel,r,COMPA_ABT_beam
+  cmsel,r,COMPA_ABT_tranWall
   esla,s
+  esel,r,sec,,SEC_ABT_tranWall
   nsle,s,active
   /eshape,0
   /edge,1,1
   eplot
 
   /plopts,info,3
-  mpathplot,3,,'beam1_paths','v_labels'
+  mpathplot,5,,'cap1_paths','v_labels'
   /plopts,info,0
 
 
@@ -473,8 +496,8 @@ go2png,1200
   /window,2,on
 
   cmsel,s,COMPA_ABT_2
-  cmsel,u,COMPA_ABT_beam
   esla,s
+  esel,u,sec,,SEC_ABT_tranWall
   nsle,s,active
   /device,vector,on
   /type,2,4
@@ -485,18 +508,20 @@ go2png,1200
   /user,2
 
   cmsel,s,COMPA_ABT_2
-  cmsel,r,COMPA_ABT_beam
+  cmsel,r,COMPA_ABT_tranWall
   esla,s
+  esel,r,sec,,SEC_ABT_tranWall
   nsle,s,active
   /eshape,0
   /edge,2,1
   eplot
 
   /plopts,info,3
-  mpathplot,3,,'beam2_paths','v_labels'
+  mpathplot,5,,'cap2_paths','v_labels'
   /plopts,info,0
 
-endpng,'ABT_BEAM_V',,,,,'memo_imgs'
+endpng,'ABT_CAP_V',,,,,'memo_imgs'
+! endpng,'ABT_CAP_V_DW',,,,,'memo_imgs'
 /erase
 /annot,dele
 clims
@@ -514,7 +539,7 @@ wincln,3
 /pspec,0,1,1
 wntitle,' ',1,1
 wntitle,' ',2,1
-wntitle , 'VIGA CINTA'    , 3 , 0
+wntitle , 'VIGA BLOCO'    , 3 , 0
 /pspec,0,0,1
 wntitle , 'FLECHA (UZ)'   , 3 , 0 , 'C'
 wntitle , 'ELS-Rara [mm]' , 3 , 1 , 'R'
@@ -535,8 +560,9 @@ axanno,1
 axanno,2
 
 cmsel,s,COMPA_ABT_1
-cmsel,r,COMPA_ABT_beam
+cmsel,r,COMPA_ABT_tranWall
 esla,s
+esel,r,sec,,SEC_ABT_tranWall
 nsle,s,active
 
 go2png,1200
@@ -544,8 +570,8 @@ go2png,1200
   /window,2,off
 
   cmsel,s,COMPA_ABT_1
-  cmsel,u,COMPA_ABT_beam
   esla,s
+  esel,u,sec,,SEC_ABT_tranWall
   nsle,s,active
   /device,vector,on
   /type,1,4
@@ -557,15 +583,16 @@ go2png,1200
   /user,1
 
   cmsel,s,COMPA_ABT_1
-  cmsel,r,COMPA_ABT_beam
+  cmsel,r,COMPA_ABT_tranWall
   esla,s
+  esel,r,sec,,SEC_ABT_tranWall
   nsle,s,active
   /eshape,0
   /edge,1,1
   eplot
 
   /plopts,info,3
-  mpathplot,3,,'beam1_paths','ux_labels'
+  mpathplot,5,,'cap1_paths','ux_labels'
   /plopts,info,0
 
 
@@ -573,8 +600,8 @@ go2png,1200
   /window,2,on
 
   cmsel,s,COMPA_ABT_2
-  cmsel,u,COMPA_ABT_beam
   esla,s
+  esel,u,sec,,SEC_ABT_tranWall
   nsle,s,active
   /device,vector,on
   /type,2,4
@@ -585,18 +612,20 @@ go2png,1200
   /user,2
 
   cmsel,s,COMPA_ABT_2
-  cmsel,r,COMPA_ABT_beam
+  cmsel,r,COMPA_ABT_tranWall
   esla,s
+  esel,r,sec,,SEC_ABT_tranWall
   nsle,s,active
   /eshape,0
   /edge,2,1
   eplot
 
   /plopts,info,3
-  mpathplot,3,,'beam2_paths','ux_labels'
+  mpathplot,5,,'cap2_paths','ux_labels'
   /plopts,info,0
 
-endpng,'ABT_BEAM_UX',,,,,'memo_imgs'
+endpng,'ABT_CAP_UX',,,,,'memo_imgs'
+! endpng,'ABT_CAP_UX_DW',,,,,'memo_imgs'
 /erase
 /annot,dele
 clims
@@ -614,7 +643,7 @@ wincln,3
 /pspec,0,1,1
 wntitle,' ',1,1
 wntitle,' ',2,1
-wntitle , 'VIGA CINTA'    , 3 , 0
+wntitle , 'VIGA BLOCO'    , 3 , 0
 /pspec,0,0,1
 wntitle , 'FLECHA (UY)'   , 3 , 0 , 'C'
 wntitle , 'ELS-Rara [mm]' , 3 , 1 , 'R'
@@ -635,8 +664,9 @@ axanno,1
 axanno,2
 
 cmsel,s,COMPA_ABT_1
-cmsel,r,COMPA_ABT_beam
+cmsel,r,COMPA_ABT_tranWall
 esla,s
+esel,r,sec,,SEC_ABT_tranWall
 nsle,s,active
 
 go2png,1200
@@ -644,8 +674,8 @@ go2png,1200
   /window,2,off
 
   cmsel,s,COMPA_ABT_1
-  cmsel,u,COMPA_ABT_beam
   esla,s
+  esel,u,sec,,SEC_ABT_tranWall
   nsle,s,active
   /device,vector,on
   /type,1,4
@@ -657,15 +687,16 @@ go2png,1200
   /user,1
 
   cmsel,s,COMPA_ABT_1
-  cmsel,r,COMPA_ABT_beam
+  cmsel,r,COMPA_ABT_tranWall
   esla,s
+  esel,r,sec,,SEC_ABT_tranWall
   nsle,s,active
   /eshape,0
   /edge,1,1
   eplot
 
   /plopts,info,3
-  mpathplot,3,,'beam1_paths','uz_labels'
+  mpathplot,5,,'cap1_paths','uz_labels'
   /plopts,info,0
 
 
@@ -673,8 +704,8 @@ go2png,1200
   /window,2,on
 
   cmsel,s,COMPA_ABT_2
-  cmsel,u,COMPA_ABT_beam
   esla,s
+  esel,u,sec,,SEC_ABT_tranWall
   nsle,s,active
   /device,vector,on
   /type,2,4
@@ -685,18 +716,20 @@ go2png,1200
   /user,2
 
   cmsel,s,COMPA_ABT_2
-  cmsel,r,COMPA_ABT_beam
+  cmsel,r,COMPA_ABT_tranWall
   esla,s
+  esel,r,sec,,SEC_ABT_tranWall
   nsle,s,active
   /eshape,0
   /edge,2,1
   eplot
 
   /plopts,info,3
-  mpathplot,3,,'beam2_paths','uz_labels'
+  mpathplot,5,,'cap2_paths','uz_labels'
   /plopts,info,0
 
-endpng,'ABT_BEAM_UY',,,,,'memo_imgs'
+endpng,'ABT_CAP_UY',,,,,'memo_imgs'
+! endpng,'ABT_CAP_UY_DW',,,,,'memo_imgs'
 /erase
 /annot,dele
 clims

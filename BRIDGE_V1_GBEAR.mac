@@ -46,6 +46,10 @@ mat,MAT_Matrix
         ! Column-girder frame:
         cmsel,s,COMPN_FrameGirder
         begAbt=0
+    *elseif,mesoType_beg,eq,CTE_MESO_beamcap,then
+        ! Cap-beam frame:
+        cmsel,s,COMPN_FrameGirder
+        begAbt=0
     *elseif,mesoType_beg,eq,CTE_MESO_tube,then
         ! Tubular pier column:
         cmsel,s,COMPN_ColCap
@@ -66,6 +70,10 @@ mat,MAT_Matrix
     mesoType_end=GEO_mesoType(nthSpan+1)
     *if,mesoType_end,eq,CTE_MESO_frame,then
         ! Column-girder frame:
+        cmsel,s,COMPN_FrameGirder
+        endAbt=0
+    *elseif,mesoType_end,eq,CTE_MESO_beamcap,then
+        ! Cap-beam frame:
         cmsel,s,COMPN_FrameGirder
         endAbt=0
     *elseif,mesoType_end,eq,CTE_MESO_tube,then

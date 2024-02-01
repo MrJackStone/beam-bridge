@@ -85,6 +85,7 @@ GEO_barrierHeight=0.9
 ! Pier type:
 !    [0] Frame (two columns + girder)
 !    [1] Tubular
+!    [2] Cap-beam directly supported by piles
 GEO_frameOpt=0
 
 ! Height of the frame (base value)
@@ -867,10 +868,3 @@ LOAD_transOption=0
 LOAD_longScenario=0
 
 BRIDGE_V1_MODEL
-
-
-
-
-
-
-! BRIDGE_V1_CHANGELOG
