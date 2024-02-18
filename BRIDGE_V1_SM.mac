@@ -121,20 +121,22 @@ ASLL,S
 NUMMRG,KP
 
 ! Create piles
-KSEL,U,KP,,ALL
-LSEL,U,LINE,,ALL
-CM,COMPK_Pile,KP
-CM,COMPL_Pile,LINE
-cm,COMPK_Support,kp
-cm,COMPK_PileTop,kp
+ksel , none
+lsel , none
+cm   , COMPK_Pile    , kp
+cm   , COMPL_Pile    , line
+cm   , COMPK_Support , kp
+cm   , COMPK_PileTop , kp
 
 *do,nthSupport,1,GEO_supportCount,1
-    mesoType=GEO_mesoType(nthSupport)
-    *if,mesoType,eq,CTE_MESO_beamcap,then
-        BRIDGE_V1_SMCBPILE,nthSupport
-    *elseif,mesoType,ne,CTE_MESO_abutment,then
-        BRIDGE_V1_SMPILE,nthSupport
-    *endif
+  lsel,none
+  mesoType=GEO_mesoType(nthSupport)
+  *if,mesoType,eq,CTE_MESO_beamcap,then
+    BRIDGE_V1_SMCBPILE,nthSupport
+  *elseif,mesoType,ne,CTE_MESO_abutment,then
+    BRIDGE_V1_SMPILE,nthSupport
+  *endif
+  cm,COMPL_SUP%nthSupport%_piles,line
 *enddo
 
 cmsel,s,COMPK_PileTop
@@ -176,9 +178,9 @@ cm , COMPA_ABT_rightOverhang   , area
 cm , COMPA_ABT_overhangs       , area
 
 ! First abutment (before X=0)
-asel,u,area,,all
-lsel,u,line,,all
-ksel,u,kp,,all
+asel,none
+lsel,none
+ksel,none
 *if,GEO_ABT1_status,eq,1,then
     GEO_ABT1_zAB=GEO_frameTopOffset(1)
     csys,0
@@ -201,11 +203,13 @@ ksel,u,kp,,all
 cm,COMPA_ABT_1,area
 cm,COMPL_ABT_1,line
 cm,COMPK_ABT_1,kp
+cmsel,r,COMPL_ABT_piles
+cm,COMPL_SUP1_piles,line
 
 ! Second abutment (after X=L)
-asel,u,area,,all
-lsel,u,line,,all
-ksel,u,kp,,all
+asel,none
+lsel,none
+ksel,none
 *if,GEO_ABT2_status,eq,1,then
     GEO_ABT2_zAB=GEO_frameTopOffset(GEO_supportCount)
     csys,0
@@ -228,6 +232,8 @@ ksel,u,kp,,all
 cm,COMPA_ABT_2,area
 cm,COMPL_ABT_2,line
 cm,COMPK_ABT_2,kp
+cmsel,r,COMPL_ABT_piles
+cm,COMPL_SUP%GEO_supportCount%_piles,line
 
 csys,0
 
