@@ -1,0 +1,61 @@
+! BRIDGE_V1_TSCHEBOTARIOFF
+! BRIDGE_V1_TSCHEBOTARIOFF
+
+
+! Initialize selection components
+lsel,none
+esel,none
+cm,COMPL_tschebotarioff,line
+cm,COMPE_tschebotarioff,elem
+
+! Get number of zones (supports) affected by Tschebotarioff effect
+*get,zoneCount,parm,LOAD_TSCHEBOTARIOFF_data,dim,y
+
+! Apply Tschebotarioff load to all piles in each of the affected zones (supports)
+*do,nthZone,1,zoneCount,1
+  ! Get Tschebotarioff's attributes
+  supportIndex = LOAD_TSCHEBOTARIOFF_data(1,nthZone)
+  topDepth     = LOAD_TSCHEBOTARIOFF_data(2,nthZone)
+  botDepth     = LOAD_TSCHEBOTARIOFF_data(3,nthZone)
+  peakPressure = LOAD_TSCHEBOTARIOFF_data(4,nthZone)
+  loadKey      = LOAD_TSCHEBOTARIOFF_data(5,nthZone)
+
+  *if,supportIndex,eq,0,cycle
+
+  ! Select applicable piles
+  cmsel,s,COMPL_SUP%supportIndex%_piles
+  esll,s
+  nsle,s,active
+
+  ! Calculate affected depth in the context of the local pile group
+  *get,localZero,node,,mxloc,z
+  localTopZ  = localZero-topDepth
+  localBotZ  = localZero-botDepth
+  halfHeight = (localTopZ-localBotZ)/2
+  zCenter    = (localTopZ+localBotZ)/2
+
+  ! Select affected pile elements
+  nsel,r,loc,z,localTopZ,localBotZ
+  esln,r,1,active
+  *get,ec,elem,,count
+
+  ! Apply Tschebotarioff's trapezoidal-shaped pressure diagram to elements
+  enum=0
+  *do,nthElem,1,ec,1
+    enum=elnext(enum)
+    nsle,s,active
+    n1=nelem(enum,1)
+    n2=nelem(enum,2)
+    n1Offset=abs(nz(n1)-zCenter)
+    n2Offset=abs(nz(n2)-zCenter)
+
+    n1Pres=peakPressure*(1-(n1Offset/halfHeight))
+    n2Pres=peakPressure*(1-(n2Offset/halfHeight))
+    sfbeam,enum,loadKey,pres,n1Pres,n2Pres
+  *enddo
+
+  ! Add loaded piles to selection components
+  cmpadd,'COMPL_tschebotarioff'
+  cmpadd,'COMPE_tschebotarioff'
+
+*enddo

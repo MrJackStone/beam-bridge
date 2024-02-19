@@ -732,7 +732,27 @@ LOAD_waterFlow_k=0
 LOAD_columnWind_k=0 !2e3
 
 
-!! 1.5.5 LOAD SCENARIOS                                                                           !!
+!! 1.5.5 INFRASTRUCTURE LOADS                                                                     !!
+!!                                                                                                !!
+! Tschebotarioff effect on piles:
+!    [0] Off
+!    [1] On
+LOAD_TSCHEBOTARIOFF_status=1
+
+! Tschebotarioff's attributes, formatted as follows:
+!        󱞬 zone index
+!    (1, i): support index
+!    (2, i): depth at the top of the Tschebotarioff layer
+!    (3, i): depth at the bottom of the Tschebotarioff layer
+!    (4, i): maximum pressure (N/m), at the center of the layer
+!    (5, i): load key (see BEAM188)
+*del,LOAD_TSCHEBOTARIOFF_data,,nopr
+*dim,LOAD_TSCHEBOTARIOFF_data,,5,GEO_supportCount
+LOAD_TSCHEBOTARIOFF_data(1,1) = 1 , 2 , 6 , -22e3 , 1
+LOAD_TSCHEBOTARIOFF_data(1,2) = 2 , 4 , 7 , 15e3  , 1
+
+
+!! 1.5.6 LOAD SCENARIOS                                                                           !!
 !!                                                                                                !!
 ! Type of load combination
 !    [1] Ultimate load (ELU): load train as main

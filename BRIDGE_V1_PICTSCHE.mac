@@ -1,0 +1,68 @@
+! BRIDGE_V1_PICTSCHE
+! BRIDGE_V1_PICTSCHE
+
+
+! Extract min/max pressure values
+minPressure=1e100
+maxPressure=0
+*get,zoneCount,parm,LOAD_TSCHEBOTARIOFF_data,dim,y
+*do,nthZone,1,zoneCount,1
+  peakPressure = LOAD_TSCHEBOTARIOFF_data(4,nthZone)
+  minPressure=(minPressure<abs(peakPressure))
+  maxPressure=(maxPressure>abs(peakPressure))
+*enddo
+
+num2str,'minPresStr',minPressure*1e-3,'F',1
+num2str,'maxPresStr',maxPressure*1e-3,'F',1
+*if,minPresStr,eq,maxPresStr,then
+  scale='%maxPresStr% kN/m'
+*else
+  scale='%minPresStr% ~ %maxPresStr% kN/m'
+*endif
+
+! Prepare display
+view1w
+wincln,1
+boldfont,1
+wintitle,1,'PILES:','TSCHEBOTARIOFF EFFECT',scale,,1,13
+
+! Prepare view
+/view,1,0.8,1,-0.5
+/angle,1,0
+/eshape,0
+/edge,1,1
+/auto,1
+cmsel,s,COMPE_tschebotarioff
+asel,all
+ksel,none
+esla,a
+eplot
+/user,1
+esel,s,type,,TYPE_BEAM188
+esel,a,type,,TYPE_BEAM181
+
+! Plot pressure on piles
+go2png,1200
+  /device,vector,on
+  eplot
+  /noerase
+  cmsel,s,COMPL_tschebotarioff
+  esll,s
+  nsle,s,active
+  /psf,pres,norm,2,1,on
+  eplot
+  /eshape,1
+  /psf,pres,norm,0,0,on
+  eplot
+endpng,'TSCHEBOTARIOFF',,,,,'bcs'
+
+! Clean up
+/erase
+/annot,dele
+/device,vector,off
+/eshape,0
+/psf,pres,norm,0,0,on
+/auto,1
+boldfont,0
+windefa,1
+allsel

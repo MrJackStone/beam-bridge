@@ -1,5 +1,5 @@
 /output,outfile,out
-init
+init,'BRIDGE_V1_DEFAULTS'
 
 ! APDL development info
 APDL_name    = 'BRIDGE'
@@ -11,13 +11,13 @@ APDL_contact = 'ansysMAPDL@gmail.com'
 ! Turn off automatic screen updating
 /prep7
 /nopr
-IMMED,0
+immed,0
 view4w
 /vup,all,z
 view1w
-/uis,REPLOT,0
-/dv3d,DELS
-/uis,MSGPOP,3
+/uis,replot,0
+/dv3d,dels
+/uis,msgpop,3
 /nerr,-5
 
 ! Take time
