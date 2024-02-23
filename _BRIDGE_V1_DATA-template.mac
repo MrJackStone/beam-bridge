@@ -746,10 +746,13 @@ LOAD_TSCHEBOTARIOFF_status=1
 !    (3, i): depth at the bottom of the Tschebotarioff layer
 !    (4, i): maximum pressure (N/m), at the center of the layer
 !    (5, i): load key (see BEAM188)
+!    (6, i): load shape:
+!              [0] constant pressure (de Beer)
+!              [1] triangular pressure (Tschebotarioff)
 *del,LOAD_TSCHEBOTARIOFF_data,,nopr
-*dim,LOAD_TSCHEBOTARIOFF_data,,5,GEO_supportCount
-LOAD_TSCHEBOTARIOFF_data(1,1) = 1 , 2 , 6 , -22e3 , 1
-LOAD_TSCHEBOTARIOFF_data(1,2) = 2 , 4 , 7 , 15e3  , 1
+*dim,LOAD_TSCHEBOTARIOFF_data,,6,GEO_supportCount
+LOAD_TSCHEBOTARIOFF_data(1,1) = 1 , 0 , 2 , -30e3 , 1, 0
+LOAD_TSCHEBOTARIOFF_data(1,2) = 2 , 0 , 2 ,  30e3 , 1, 0
 
 
 !! 1.5.6 LOAD SCENARIOS                                                                           !!

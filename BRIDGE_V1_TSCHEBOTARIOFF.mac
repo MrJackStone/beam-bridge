@@ -14,11 +14,12 @@ cm,COMPE_tschebotarioff,elem
 ! Apply Tschebotarioff load to all piles in each of the affected zones (supports)
 *do,nthZone,1,zoneCount,1
   ! Get Tschebotarioff's attributes
-  supportIndex = LOAD_TSCHEBOTARIOFF_data(1,nthZone)
-  topDepth     = LOAD_TSCHEBOTARIOFF_data(2,nthZone)
-  botDepth     = LOAD_TSCHEBOTARIOFF_data(3,nthZone)
-  peakPressure = LOAD_TSCHEBOTARIOFF_data(4,nthZone)
-  loadKey      = LOAD_TSCHEBOTARIOFF_data(5,nthZone)
+  supportIndex  = LOAD_TSCHEBOTARIOFF_data(1,nthZone)
+  topDepth      = LOAD_TSCHEBOTARIOFF_data(2,nthZone)
+  botDepth      = LOAD_TSCHEBOTARIOFF_data(3,nthZone)
+  peakPressure  = LOAD_TSCHEBOTARIOFF_data(4,nthZone)
+  loadKey       = LOAD_TSCHEBOTARIOFF_data(5,nthZone)
+  pressureShape = LOAD_TSCHEBOTARIOFF_data(6,nthZone)
 
   *if,supportIndex,eq,0,cycle
 
@@ -39,7 +40,7 @@ cm,COMPE_tschebotarioff,elem
   esln,r,1,active
   *get,ec,elem,,count
 
-  ! Apply Tschebotarioff's trapezoidal-shaped pressure diagram to elements
+  ! Apply pressure diagram to elements
   enum=0
   *do,nthElem,1,ec,1
     enum=elnext(enum)
@@ -49,8 +50,15 @@ cm,COMPE_tschebotarioff,elem
     n1Offset=abs(nz(n1)-zCenter)
     n2Offset=abs(nz(n2)-zCenter)
 
-    n1Pres=peakPressure*(1-(n1Offset/halfHeight))
-    n2Pres=peakPressure*(1-(n2Offset/halfHeight))
+    ! Calculate pressure values based on pressure diagram shape
+    *if,pressureShape,eq,0,then
+      n1Pres=peakPressure
+      n2Pres=peakPressure
+    *elseif,pressureShape,eq,1,then
+      n1Pres=peakPressure*(1-(n1Offset/halfHeight))
+      n2Pres=peakPressure*(1-(n2Offset/halfHeight))
+    *endif
+
     sfbeam,enum,loadKey,pres,n1Pres,n2Pres
   *enddo
 
