@@ -93,6 +93,8 @@ CMSEL,S,COMPN_RockSupport
     sprsup,,,-FEM_springL,MAT_Soil,SEC_PSOIL_num,TYPE_LINK180,'COMPN_PileEndSup','COMPE_PileEndSup',0,3
     cmsel,s,COMPN_PileEndSup
     d,COMPN_PileEndSup,uz,0
+    cmsel,s,COMPN_RockSupport
+    d,all,rotz
     /solu
 *endif
 !
