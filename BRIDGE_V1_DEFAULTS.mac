@@ -1,5 +1,9 @@
 ! BRIDGE_V1_DEFAULTS
 
 
+MAT_Soil_absentOpt = 0
+SOLU_type          = 0
+SOLU_nsubst        = 20
+
 LOAD_TSCHEBOTARIOFF_status=0
 *del,LOAD_TSCHEBOTARIOFF_data,,nopr

@@ -6,23 +6,6 @@
     GEO_chordOff=0
 *endif
 
-! Solution type (default: static)
-*get,parType,parm,SOLU_type,type
-*if,parType,ne,0,then
-    SOLU_type=0
-*else
-    *if,SOLU_type,ne,0,and,SOLU_type,ne,1,then
-        SOLU_type=0
-    *endif
-*endif
-
-*get,parType,parm,SOLU_nsubst,type
-*if,parType,ne,0,then
-    SOLU_nsubst=20
-*elseif,SOLU_nsubst,le,0,then
-    SOLU_nsubst=20
-*endif
-
 *get,parType,parm,SEC_ABT_thinTranWall_t,type
 *if,parType,ne,0,then
   SEC_ABT_thinTranWall_t=SEC_ABT_tranWall_t
@@ -44,7 +27,7 @@ mkdirs,1
 pi=acos(-1)
 
 ! Element size for pile soil springs
-FEM_springL=0.5
+FEM_springL=0.1
 
 ! Element size for abutment springs (soil)
 FEM_ABT_springL=0.5*(FEM_ABT_esize**2)
@@ -198,11 +181,6 @@ MP,PRXY,MAT_Soil,MAT_Soil_Poisson
     tbdata,,MAT_Soil_sadm*MAT_Soil_sigScale
 *endif
 
-*get,parType,parm,MAT_Soil_absentOpt,type
-*if,parType,ne,0,then
-    MAT_Soil_absentOpt=0
-*endif
-!
 !! 2.1.1.12 SOIL (INSIDE ABUTMENTS)                                                               !!
 MAT_ABT_Soil_E=1e9
 MP,EX,MAT_ABT_Soil,MAT_ABT_Soil_E
