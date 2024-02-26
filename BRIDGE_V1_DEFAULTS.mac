@@ -5,5 +5,15 @@ MAT_Soil_absentOpt = 0
 SOLU_type          = 0
 SOLU_nsubst        = 20
 
+GEO_gerberStatus=0
+*del,GEO_gerberL
+*dim,GEO_gerberL,,1
+GEO_gerberL(1)=0
+
+GERBER_b  = 1
+GERBER_h  = 1
+CONSOLE_b = 1
+CONSOLE_h = 1
+
 LOAD_TSCHEBOTARIOFF_status=0
 *del,LOAD_TSCHEBOTARIOFF_data,,nopr

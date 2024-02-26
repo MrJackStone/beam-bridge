@@ -251,11 +251,11 @@ GEO_ABT1_pileFree=0
 GEO_ABT1_supressLW=1
 
 ! Options for abutment type 4:
-GEO_ABT1_wingAngle=50
-GEO_ABT1_trvPileCols=2
-GEO_ABT1_wingPileCols=2
-GEO_ABT1_wingCapLength=7
-GEO_ABT1_wingCapWidth=2
+GEO_ABT1_wingAngle     = 50
+GEO_ABT1_trvPileCols   = 2
+GEO_ABT1_wingPileCols  = 2
+GEO_ABT1_wingCapLength = 7
+GEO_ABT1_wingCapWidth  = 2
 
 !! 1.1.4.2 END                                                                                    !!
 ! Type:
@@ -332,11 +332,11 @@ GEO_ABT2_pileFree=0
 GEO_ABT2_supressLW=1
 
 ! Options for abutment type 4:
-GEO_ABT2_wingAngle=50
-GEO_ABT2_trvPileCols=2
-GEO_ABT2_wingPileCols=2
-GEO_ABT2_wingCapLength=7
-GEO_ABT2_wingCapWidth=2
+GEO_ABT2_wingAngle     = 50
+GEO_ABT2_trvPileCols   = 2
+GEO_ABT2_wingPileCols  = 2
+GEO_ABT2_wingCapLength = 7
+GEO_ABT2_wingCapWidth  = 2
 
 
 !! 1.1.5 INFRASTRUCTURE                                                                           !!
@@ -861,11 +861,6 @@ FEM_PileELength=0.2
 
 ! Element size for abutment shells
 FEM_ABT_esize=0.2
-
-! Plot slab paths & internal reactions
-!    [0] Do not plot
-!    [1] Plot paths
-FEM_PlotPaths=1
 
 ! Number of substeps
 SOLU_nsubst=20
