@@ -1,0 +1,326 @@
+cmsel,s,compe_girder
+nsle,s,active
+
+view1w
+windefa,1
+wincln,1
+/edge,1,0
+
+wntitle,'MOM. FLETOR NAS LONGARINAS [kNm]'
+
+/view,1,-1,-1,1
+/angle,1,0
+/auto,1
+/eshape,0
+allsel
+cmsel,s,compa_slab
+esel,u,type,,3
+esla,u
+cmsel,u,COMPE_pile !!
+eplot
+/user,1
+cmsel,a,COMPE_pile !!
+
+! /plopts,info,3
+/plopts,leg3,on
+/udoc,1,cntr,right
+/gformat,F,1,1
+
+! Bending moments on beams
+go2png,1200
+  /edge,1,1
+  eplot
+  /noerase
+
+  cmsel,s,compe_girder
+  nsle,s,active
+  /udoc,1,cntr,right
+  /edge,1,0
+  plls,'EMN_MYi','EMN_MYj',0.63,,1
+
+  /device,vector,on
+  /type,1,3
+  /edge,1,1
+  !esel,s,type,,2
+  cmsel,s,compa_slab
+  esla,s
+  eplot
+
+
+endpng,'IMG05a_girderMy',,,,,memoImgsFolder
+/erase
+/device,vector,off
+/type,1,3
+
+!!
+cmsel,s,compe_girder
+nsle,s,active
+
+view1w
+windefa,1
+wincln,1
+/edge,1,0
+
+wntitle,'MOM. FLETOR NAS LONGARINAS [kNm]'
+/anum,,1
+/tspec,15,1,4
+/tlabel,1,-0.98,'(CARGAS PERMANENTES)'
+
+/view,1,-1,-1,1
+/angle,1,0
+/auto,1
+/eshape,0
+allsel
+cmsel,s,compa_slab
+esel,u,type,,3
+esla,u
+cmsel,u,COMPE_pile !!
+eplot
+/user,1
+cmsel,a,COMPE_pile !!
+
+! /plopts,info,3
+/plopts,leg3,on
+/udoc,1,cntr,right
+/gformat,F,1,1
+
+! Bending moments on beams
+go2png,1200
+  /edge,1,1
+  eplot
+  /noerase
+
+  cmsel,s,compe_girder
+  nsle,s,active
+  /udoc,1,cntr,right
+  /edge,1,0
+  plls,'DW_MYi','DW_MYj',0.63,,1
+
+  /device,vector,on
+  /type,1,3
+  /edge,1,1
+  !esel,s,type,,2
+  cmsel,s,compa_slab
+  esla,s
+  eplot
+
+
+endpng,'IMG05b_girderMy_perm',,,,,memoImgsFolder
+/erase
+/device,vector,off
+/type,1,3
+
+
+!!
+view1w
+windefa,1
+wincln,1
+/edge,1,0
+
+wntitle,'T. NORMAL NAS LONGARINAS [kN]'
+
+/view,1,-1,-1,1
+/angle,1,0
+/auto,1
+/eshape,0
+allsel
+cmsel,s,compa_slab
+esel,u,type,,3
+esla,u
+cmsel,u,COMPE_pile !!
+eplot
+/user,1
+cmsel,a,COMPE_pile !!
+
+! /plopts,info,3
+/plopts,leg3,on
+/udoc,1,cntr,right
+/gformat,F,1,1
+
+! Axial tensile force on beams
+go2png,1200
+  /edge,1,1
+  eplot
+  /noerase
+
+  cmsel,s,compe_girder
+  nsle,s,active
+  /udoc,1,cntr,right
+  /edge,1,0
+  plls,'N_t','N_t',0.63,,1
+
+  /device,vector,on
+  /type,1,3
+  /edge,1,1
+  !esel,s,type,,2
+  cmsel,s,compa_slab
+  esla,s
+  eplot
+
+
+endpng,'IMG05b_girderNt',,,,,memoImgsFolder
+/erase
+/device,vector,off
+/type,1,3
+
+
+!!
+view1w
+windefa,1
+wincln,1
+/edge,1,0
+
+wntitle,'C. NORMAL NAS LONGARINAS [kN]'
+
+/view,1,-1,-1,1
+/angle,1,0
+/auto,1
+/eshape,0
+allsel
+cmsel,s,compa_slab
+esel,u,type,,3
+esla,u
+cmsel,u,COMPE_pile !!
+eplot
+/user,1
+cmsel,a,COMPE_pile !!
+
+! /plopts,info,3
+/plopts,leg3,on
+/udoc,1,cntr,right
+/gformat,F,1,1
+
+! Axial compressive force on beams
+go2png,1200
+  /edge,1,1
+  eplot
+  /noerase
+
+  cmsel,s,compe_girder
+  nsle,s,active
+  /udoc,1,cntr,right
+  /edge,1,0
+  plls,'N_c','N_c',0.63,,1
+
+  /device,vector,on
+  /type,1,3
+  /edge,1,1
+  !esel,s,type,,2
+  cmsel,s,compa_slab
+  esla,s
+  eplot
+
+
+endpng,'IMG05c_girderNc',,,,,memoImgsFolder
+/erase
+/device,vector,off
+/type,1,3
+
+
+!!
+view1w
+windefa,1
+wincln,1
+/edge,1,0
+
+wntitle,'F.CORTANTE NAS LONGARINAS [kN]'
+
+/view,1,-1,-1,1
+/angle,1,0
+/auto,1
+/eshape,0
+allsel
+cmsel,s,compa_slab
+esel,u,type,,3
+esla,u
+cmsel,u,COMPE_pile !!
+eplot
+/user,1
+cmsel,a,COMPE_pile !!
+
+! /plopts,info,3
+/plopts,leg3,on
+/udoc,1,cntr,right
+/gformat,F,1,1
+
+! Bending moments on beams
+go2png,1200
+  /edge,1,1
+  eplot
+  /noerase
+
+  cmsel,s,compe_girder
+  nsle,s,active
+  /udoc,1,cntr,right
+  /edge,1,0
+  plls,'EAB_QZi','EAB_QZj',0.63,,1
+
+  /device,vector,on
+  /type,1,3
+  /edge,1,1
+  !esel,s,type,,2
+  cmsel,s,compa_slab
+  esla,s
+  eplot
+
+
+endpng,'IMG05d_girderQ',,,,,memoImgsFolder
+/erase
+/device,vector,off
+/type,1,3
+
+
+!!
+view1w
+windefa,1
+wincln,1
+/edge,1,0
+
+wntitle,'F. CORTANTE NAS LONGARINAS [kN]'
+/anum,,1
+/tspec,15,1,4
+/tlabel,1,-0.98,'(CARGAS PERMANENTES)'
+
+/view,1,-1,-1,1
+/angle,1,0
+/auto,1
+/eshape,0
+allsel
+cmsel,s,compa_slab
+esel,u,type,,3
+esla,u
+cmsel,u,COMPE_pile !!
+eplot
+/user,1
+cmsel,a,COMPE_pile !!
+
+! /plopts,info,3
+/plopts,leg3,on
+/udoc,1,cntr,right
+/gformat,F,1,1
+
+! Bending moments on beams
+go2png,1200
+  /edge,1,1
+  eplot
+  /noerase
+
+  cmsel,s,compe_girder
+  nsle,s,active
+  /udoc,1,cntr,right
+  /edge,1,0
+  plls,'DW_QZi','DW_QZj',0.63,,1
+
+  /device,vector,on
+  /type,1,3
+  /edge,1,1
+  !esel,s,type,,2
+  cmsel,s,compa_slab
+  esla,s
+  eplot
+
+
+endpng,'IMG05e_girderQ_perm',,,,,memoImgsFolder
+/erase
+/device,vector,off
+/type,1,3

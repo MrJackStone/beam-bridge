@@ -1,0 +1,89 @@
+*if,GEO_pierCount,gt,0,then
+  /annot,dele
+
+  allsel
+  esel,u,type,,3
+
+  view1w
+  windefa,1
+  wincln,1
+  /view,1,-1,-1,-1
+  /auto,1
+  eplot
+  /user,1
+
+
+  !!
+  wntitle,'M. FLETOR NOS BLOCOS [kNm/m]'
+
+  go2png,1200
+
+    *if,GEO_frameOpt,eq,0,then
+      ! Column-girder frame
+      cmsel,s,compa_pilecap
+    *elseif,GEO_frameOpt,eq,1,then
+      ! Tubular pier column
+      cmsel,s,compa_centerpilecaps
+    *endif
+    esla,s
+    nsle,s,active
+
+    /udoc,1,cntr,right
+    /plopts,leg3,on
+    ! /plopts,info,3
+    /gformat,f,1,1
+
+    ! Vertical axial force (compression)
+    pletab,'EMN_MX',1
+    /noerase
+
+    /device,vector,on
+    allsel
+    esel,u,type,,3
+    nsle,s,active
+    eplot
+    /device,vector,off
+
+  endpng,'IMG13_capMX',,,,,memoImgsFolder
+  /erase
+  /annot,dele
+
+  !!
+  wntitle,'F. CORTANTE NOS BLOCOS [kN/m]'
+
+  go2png,1200
+
+    *if,GEO_frameOpt,eq,0,then
+      ! Column-girder frame
+      cmsel,s,compa_pilecap
+    *elseif,GEO_frameOpt,eq,1,then
+      ! Tubular pier column
+      cmsel,s,compa_centerpilecaps
+    *endif
+    esla,s
+    nsle,s,active
+
+    /udoc,1,cntr,right
+    /plopts,leg3,on
+    ! /plopts,info,3
+    /gformat,f,1,1
+
+    ! Vertical axial force (compression)
+    pletab,'EAB_Q',1
+    /noerase
+
+    /device,vector,on
+    allsel
+    esel,u,type,,3
+    nsle,s,active
+    eplot
+    /device,vector,off
+
+  endpng,'IMG14_capQ',,,,,memoImgsFolder
+  /erase
+  /annot,dele
+
+*endif
+
+
+

@@ -1,0 +1,207 @@
+/annot,dele
+
+/window,all,dele
+/window,1,-1,0.335,-0.92,1
+/window,2,0.335,1.67,-0.92,1
+/view,1,-1,1,1
+/view,2,1,1,1
+wincln,1
+wincln,2
+/plopts,leg3,on
+! /plopts,info,3
+/udoc,1,cntr,right
+/udoc,2,cntr,right
+/edge,1,1
+/edge,2,1
+
+wntitle,'F. AXIAL VERTICAL [kN/m]'
+
+/anum,,7
+p4gon,-1,-0.92,0.335,-0.84
+/anum,,1
+/tspec,15,1,4
+/tlabel,-0.60,-0.90,'(a) ENCONTRO 01'
+
+
+/anum,,7
+p4gon,0.335,-0.92,1.67,-0.84
+/anum,,1
+/tspec,15,1,4
+/tlabel,0.70,-0.90,'(b) ENCONTRO 02'
+
+
+go2png,1200
+  /window,1,on
+  /window,2,off
+  /auto,1
+  *if,GEO_ABT1_status,eq,1,then
+    cmsel,s,compa_abt_1
+    cmsel,u,compa_abt_appslab
+    esla,s
+    nsle,s,active
+  *else
+    allsel
+  *endif
+  pletab,'EMN_NY',1
+  /noerase
+  /window,1,off
+
+  /window,2,on
+  /auto,2
+  *if,GEO_ABT2_status,eq,1,then
+    cmsel,s,compa_abt_2
+    cmsel,u,compa_abt_appslab
+    esla,s
+    nsle,s,active
+  *else
+    allsel
+  *endif
+  pletab,'EMN_NY',1
+endpng,'IMG10_abtNY',,,,,memoImgsFolder
+/erase
+/annot,dele
+
+!!
+wntitle,'M. FLETOR MX [kNm/m]'
+
+/anum,,7
+p4gon,-1,-0.92,0.335,-0.84
+/anum,,1
+/tspec,15,1,4
+/tlabel,-0.60,-0.90,'(a) ENCONTRO 01'
+
+
+/anum,,7
+p4gon,0.335,-0.92,1.67,-0.84
+/anum,,1
+/tspec,15,1,4
+/tlabel,0.70,-0.90,'(b) ENCONTRO 02'
+
+
+go2png,1200
+  /window,1,on
+  /window,2,off
+  /auto,1
+  *if,GEO_ABT1_status,eq,1,then
+    cmsel,s,compa_abt_1
+    cmsel,u,compa_abt_appslab
+    esla,s
+    nsle,s,active
+  *else
+    allsel
+  *endif
+  pletab,'EMN_MX',1
+  /noerase
+  /window,1,off
+
+  /window,2,on
+  /auto,2
+  *if,GEO_ABT2_status,eq,1,then
+    cmsel,s,compa_abt_2
+    cmsel,u,compa_abt_appslab
+    esla,s
+    nsle,s,active
+  *else
+    allsel
+  *endif
+  pletab,'EMN_MX',1
+endpng,'IMG11a_abtMX',,,,,memoImgsFolder
+/erase
+/annot,dele
+
+!!
+wntitle,'M. FLETOR MY [kNm/m]'
+
+/anum,,7
+p4gon,-1,-0.92,0.335,-0.84
+/anum,,1
+/tspec,15,1,4
+/tlabel,-0.60,-0.90,'(a) ENCONTRO 01'
+
+/anum,,7
+p4gon,0.335,-0.92,1.67,-0.84
+/anum,,1
+/tspec,15,1,4
+/tlabel,0.70,-0.90,'(b) ENCONTRO 02'
+
+go2png,1200
+  /window,1,on
+  /window,2,off
+  /auto,1
+  *if,GEO_ABT1_status,eq,1,then
+    cmsel,s,compa_abt_1
+    cmsel,u,compa_abt_appslab
+    esla,s
+    nsle,s,active
+  *else
+    allsel
+  *endif
+  pletab,'EMN_MY',1
+  /noerase
+  /window,1,off
+
+  /window,2,on
+  /auto,2
+  *if,GEO_ABT2_status,eq,1,then
+    cmsel,s,compa_abt_2
+    cmsel,u,compa_abt_appslab
+    esla,s
+    nsle,s,active
+  *else
+    allsel
+  *endif
+  pletab,'EMN_MY',1
+endpng,'IMG11b_abtMY',,,,,memoImgsFolder
+/erase
+/annot,dele
+
+!!
+wntitle,'F. CORTANTE [kN/m]'
+
+/anum,,7
+p4gon,-1,-0.92,0.335,-0.84
+/anum,,1
+/tspec,15,1,4
+/tlabel,-0.60,-0.90,'(a) ENCONTRO 01'
+
+
+/anum,,7
+p4gon,0.335,-0.92,1.67,-0.84
+/anum,,1
+/tspec,15,1,4
+/tlabel,0.70,-0.90,'(b) ENCONTRO 02'
+
+
+go2png,1200
+  /window,1,on
+  /window,2,off
+  /auto,1
+  *if,GEO_ABT1_status,eq,1,then
+    cmsel,s,compa_abt_1
+    cmsel,u,compa_abt_appslab
+    esla,s
+    nsle,s,active
+  *else
+    allsel
+  *endif
+  pletab,'EAB_Q',1
+  /noerase
+  /window,1,off
+
+  /window,2,on
+  /auto,2
+  *if,GEO_ABT2_status,eq,1,then
+    cmsel,s,compa_abt_2
+    cmsel,u,compa_abt_appslab
+    esla,s
+    nsle,s,active
+  *else
+    allsel
+  *endif
+  pletab,'EAB_Q',1
+endpng,'IMG12_abtQ',,,,,memoImgsFolder
+/erase
+/annot,dele
+
+
+
