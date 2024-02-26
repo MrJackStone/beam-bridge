@@ -98,8 +98,8 @@ view1w
 wincln,1
 /view,1,1,1,1
 /udoc,1,cntr,right
-/plopts,info,3
-/plopts,leg3,1
+! /plopts,info,3
+/plopts,leg3,on
 wntitle , 'ENCONTRO 0%arg1%:'     , 1 , 0
 wntitle , 'LAJE DE APROX.'   , 1 , 0 , 'C'
 wntitle , 'FLECHA RARA [mm]' , 1 , 1 , 'R'

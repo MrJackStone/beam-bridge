@@ -54,8 +54,8 @@ ksll,s
 /auto,2
 /udoc,1,cntr,right
 /udoc,2,cntr,right
-/plopts,info,3
-/plopts,leg3,1
+! /plopts,info,3
+/plopts,leg3,on
 /type,1,3
 /type,2,3
 /dscale,all,off

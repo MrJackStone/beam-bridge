@@ -359,7 +359,7 @@ cmsel,a,COMPE_pile
 cmsel,s,compa_slab
 esla,u
 
-/plopts,info,3
+! /plopts,info,3
 /plopts,leg3,1
 /udoc,1,cntr,right
 /gformat,F,1,1
@@ -426,8 +426,8 @@ cmsel,s,compa_slab
 esla,u
 cmsel,a,COMPE_slabIgnore
 
-/plopts,info,3
-/plopts,leg3,1
+! /plopts,info,3
+/plopts,leg3,on
 /udoc,1,cntr,right
 /gformat,F,1,1
 
@@ -498,7 +498,7 @@ cmsel,s,compa_slab
 esla,u
 cmsel,a,COMPE_slabIgnore
 
-/plopts,info,3
+! /plopts,info,3
 /plopts,leg3,on
 /udoc,1,cntr,right
 /gformat,F,1,1
@@ -566,8 +566,8 @@ cmsel,a,COMPE_pile
 cmsel,s,compa_abt_appslab
 esla,u
 
-/plopts,info,3
-/plopts,leg3,1
+! /plopts,info,3
+/plopts,leg3,on
 /udoc,1,cntr,right
 /gformat,F,1,1
 
@@ -620,8 +620,8 @@ cmsel,a,COMPE_pile
 cmsel,s,compa_abt_appslab
 esla,u
 
-/plopts,info,3
-/plopts,leg3,1
+! /plopts,info,3
+/plopts,leg3,on
 /udoc,1,cntr,right
 /gformat,F,1,1
 
@@ -676,8 +676,8 @@ cmsel,a,COMPE_pile
 cmsel,s,compa_abt_appslab
 esla,u
 
-/plopts,info,3
-/plopts,leg3,1
+! /plopts,info,3
+/plopts,leg3,on
 /udoc,1,cntr,right
 /gformat,F,1,1
 
@@ -732,8 +732,8 @@ eplot
 /user,1
 cmsel,a,COMPE_pile !!
 
-/plopts,info,3
-/plopts,leg3,1
+! /plopts,info,3
+/plopts,leg3,on
 /udoc,1,cntr,right
 /gformat,F,1,1
 
@@ -790,8 +790,8 @@ eplot
 /user,1
 cmsel,a,COMPE_pile !!
 
-/plopts,info,3
-/plopts,leg3,1
+! /plopts,info,3
+/plopts,leg3,on
 /udoc,1,cntr,right
 /gformat,F,1,1
 
@@ -843,8 +843,8 @@ eplot
 /user,1
 cmsel,a,COMPE_pile !!
 
-/plopts,info,3
-/plopts,leg3,1
+! /plopts,info,3
+/plopts,leg3,on
 /udoc,1,cntr,right
 /gformat,F,1,1
 
@@ -896,8 +896,8 @@ eplot
 /user,1
 cmsel,a,COMPE_pile !!
 
-/plopts,info,3
-/plopts,leg3,1
+! /plopts,info,3
+/plopts,leg3,on
 /udoc,1,cntr,right
 /gformat,F,1,1
 
@@ -949,8 +949,8 @@ eplot
 /user,1
 cmsel,a,COMPE_pile !!
 
-/plopts,info,3
-/plopts,leg3,1
+! /plopts,info,3
+/plopts,leg3,on
 /udoc,1,cntr,right
 /gformat,F,1,1
 
@@ -1005,8 +1005,8 @@ eplot
 /user,1
 cmsel,a,COMPE_pile !!
 
-/plopts,info,3
-/plopts,leg3,1
+! /plopts,info,3
+/plopts,leg3,on
 /udoc,1,cntr,right
 /gformat,F,1,1
 
@@ -1073,7 +1073,7 @@ endpng,'IMG05e_girderQ_perm',,,,,memoImgsFolder
 
             /udoc,1,cntr,right
             /plopts,leg3,on
-            /plopts,info,3
+            ! /plopts,info,3
             /gformat,f,1,1
 
             ! Vertical axial force (compression)
@@ -1103,7 +1103,7 @@ endpng,'IMG05e_girderQ_perm',,,,,memoImgsFolder
 
             /udoc,1,cntr,right
             /plopts,leg3,on
-            /plopts,info,3
+            ! /plopts,info,3
             /gformat,f,1,1
 
             ! Vertical axial force (compression)
@@ -1133,7 +1133,7 @@ endpng,'IMG05e_girderQ_perm',,,,,memoImgsFolder
 
             /udoc,1,cntr,right
             /plopts,leg3,on
-            /plopts,info,3
+            ! /plopts,info,3
             /gformat,f,1,1
 
             ! Vertical axial force (compression)
@@ -1163,7 +1163,7 @@ endpng,'IMG05e_girderQ_perm',,,,,memoImgsFolder
 
             /udoc,1,cntr,right
             /plopts,leg3,on
-            /plopts,info,3
+            ! /plopts,info,3
             /gformat,f,1,1
 
             ! Vertical axial force (compression)
@@ -1206,7 +1206,7 @@ endpng,'IMG05e_girderQ_perm',,,,,memoImgsFolder
 
             /udoc,1,cntr,right
             /plopts,leg3,on
-            /plopts,info,3
+            ! /plopts,info,3
             /gformat,f,1,1
 
             ! Vertical axial force (compression)
@@ -1247,7 +1247,7 @@ endpng,'IMG05e_girderQ_perm',,,,,memoImgsFolder
 
             /udoc,1,cntr,right
             /plopts,leg3,on
-            /plopts,info,3
+            ! /plopts,info,3
             /gformat,f,1,1
 
             ! Y bending moment
@@ -1296,7 +1296,7 @@ endpng,'IMG05e_girderQ_perm',,,,,memoImgsFolder
 
             /udoc,1,cntr,right
             /plopts,leg3,on
-            /plopts,info,3
+            ! /plopts,info,3
             /gformat,f,1,1
 
             ! Z-Shear force
@@ -1338,7 +1338,7 @@ endpng,'IMG05e_girderQ_perm',,,,,memoImgsFolder
 
             /udoc,1,cntr,right
             /plopts,leg3,on
-            /plopts,info,3
+            ! /plopts,info,3
             /gformat,f,1,1
 
             ! Vertical axial force (compression)
@@ -1375,7 +1375,7 @@ endpng,'IMG05e_girderQ_perm',,,,,memoImgsFolder
 
             /udoc,1,cntr,right
             /plopts,leg3,on
-            /plopts,info,3
+            ! /plopts,info,3
             /gformat,f,1,1
 
             ! Y bending moment
@@ -1420,7 +1420,7 @@ endpng,'IMG05e_girderQ_perm',,,,,memoImgsFolder
 
             /udoc,1,cntr,right
             /plopts,leg3,on
-            /plopts,info,3
+            ! /plopts,info,3
             /gformat,f,1,1
 
             ! Z-Shear force
@@ -1468,7 +1468,7 @@ endpng,'IMG05e_girderQ_perm',,,,,memoImgsFolder
 wincln,1
 wincln,2
 /plopts,leg3,on
-/plopts,info,3
+! /plopts,info,3
 /udoc,1,cntr,right
 /udoc,2,cntr,right
 /edge,1,1
@@ -1704,7 +1704,7 @@ endpng,'IMG12_abtQ',,,,,memoImgsFolder
 
         /udoc,1,cntr,right
         /plopts,leg3,on
-        /plopts,info,3
+        ! /plopts,info,3
         /gformat,f,1,1
 
         ! Vertical axial force (compression)
@@ -1739,7 +1739,7 @@ endpng,'IMG12_abtQ',,,,,memoImgsFolder
 
         /udoc,1,cntr,right
         /plopts,leg3,on
-        /plopts,info,3
+        ! /plopts,info,3
         /gformat,f,1,1
 
         ! Vertical axial force (compression)
@@ -1782,8 +1782,8 @@ esel,u,type,,3
 eplot
 /user,1
 
-/plopts,info,3
-/plopts,leg3,1
+! /plopts,info,3
+/plopts,leg3,on
 /udoc,1,cntr,right
 /gformat,F,1,1
 

@@ -39,8 +39,8 @@ wntitle , arg3               , 3 , 1 , 'R'
 *endif
 
 /angle,all,0
-/plopts,info,3
-/plopts,leg3,1
+! /plopts,info,3
+/plopts,leg3,on
 /triad,off
 /eshape,1
 /udoc,all,cntr,bottom
