@@ -39,7 +39,7 @@ esla,a
 eplot
 /user,1
 esel,s,type,,TYPE_BEAM188
-esel,a,type,,TYPE_BEAM181
+esel,a,type,,TYPE_SHELL181
 
 ! Plot pressure on piles
 go2png,1200
