@@ -5,8 +5,9 @@ lsclear,all
 lsread,displayLS
 /eshape,0
 
-/window,all,dele
-/window,1,-1,1.67,-1,1
+view1w
+wincln,1
+/annot,dele
 /vup,all,z
 /view,1,0,-1,0
 /angle,1,0,xs
@@ -18,7 +19,6 @@ esel,u,type,,3
 eplot
 
 /user,1
-
 
 cm,compe_color,elem
 /color,cm,'DGRA',compe_color
@@ -33,30 +33,19 @@ eplot
 takepic,'IMG01_loadSideView',1200,,,,memoImgsFolder
 
 
-
-
-
 !!
 !!
-!!
-!!
-!!
+view2w
+wincln,1
+wincln,2
 /annot,dele
+/view,1,-1,1,1
+/view,2,1,1,1
+/edge,1,0
+/edge,2,0
 
-/anum,,7
-/pspec,0,1,1
-p4gon,-1,-1,0.335,-0.92
-/anum,,1
-/tspec,15,1,4
-/tlabel,-0.98,-0.98,'(a) ENCONTRO 01'
-
-
-/anum,,7
-/pspec,0,1,1
-p4gon,0.335,-1,1.67,-0.92
-/anum,,1
-/tspec,15,1,4
-/tlabel,0.337,-0.98,'(b) ENCONTRO 02'
+wintitle,1,' ','ENCONTRO 01',' ',,1,13
+wintitle,2,' ','ENCONTRO 02',' ',,1,13
 
 *if,geo_abt1_status,eq,1,then
   cmsel,s,compa_abt_1
@@ -76,13 +65,8 @@ p4gon,0.335,-1,1.67,-0.92
   cm,compn_tmp,node
   cm,compe_tmp,elem
 *endif
-/window,all,dele
-/window,1,-1,0.335,-1,1
-/window,2,0.335,1.67,-1,1
-/view,1,-1,1,1
-/view,2,1,1,1
-/edge,1,0
-/edge,2,0
+
+/window,1,on
 /window,2,off
 /auto,1
 eplot
@@ -91,6 +75,7 @@ eplot
 /vscale,2,0.5
 /hbc,1,1
 /color,f,red
+
 go2png,1200
   *if,geo_abt1_status,eq,1,and,geo_abt1_type,eq,3,then
     /eshape,1

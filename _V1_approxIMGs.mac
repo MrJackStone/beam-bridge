@@ -21,8 +21,6 @@ nsle,s,active
 view1w
 windefa,1
 wincln,1
-/edge,1,0
-
 wntitle,'APROX: MOM. FLETOR (-) [kNm/m]'
 
 /view,1,-1,-1,1
@@ -30,32 +28,26 @@ wntitle,'APROX: MOM. FLETOR (-) [kNm/m]'
 /auto,1
 eplot
 /user,1
-cmsel,a,COMPE_pile
 
+cmsel,a,COMPE_pile
 cmsel,s,compa_abt_appslab
 esla,u
 
-! /plopts,info,3
 /plopts,leg3,on
 /udoc,1,cntr,right
 /gformat,F,1,1
+/edge,1,1
 
 ! Bending moments on superstructure slabs
 go2png,1200
-  /edge,1,1
   eplot
   /noerase
   cmsel,s,compa_abt_appslab
   esla,s
   nsle,s,active
-  /udoc,1,cntr,right !!off
   /edge,1,0
   clims
-  pletab,'ENEG_MX',1
-
-  !!/udoc,1,cntr,right
-  !!mpathplot,20
-
+  cleanplot,'pletab','ENEG_MX','1'
 endpng,'IMG04c_approxMx_neg',,,,,memoImgsFolder
 /erase
 clims
@@ -75,8 +67,6 @@ nsle,s,active
 view1w
 windefa,1
 wincln,1
-/edge,1,0
-
 wntitle,'APROX: MOM. FLETOR (+) [kNm/m]'
 
 /view,1,-1,-1,1
@@ -84,19 +74,18 @@ wntitle,'APROX: MOM. FLETOR (+) [kNm/m]'
 /auto,1
 eplot
 /user,1
-cmsel,a,COMPE_pile
 
+cmsel,a,COMPE_pile
 cmsel,s,compa_abt_appslab
 esla,u
 
-! /plopts,info,3
 /plopts,leg3,on
 /udoc,1,cntr,right
 /gformat,F,1,1
+/edge,1,1
 
 ! Bending moments on superstructure slabs
 go2png,1200
-  /edge,1,1
   eplot
   /noerase
   cmsel,s,compa_abt_appslab
@@ -104,14 +93,9 @@ go2png,1200
   nsle,s,active
   nsel,u,loc,x,0,-0.5
   nsel,u,loc,x,GEO_deckLength,GEO_deckLength+0.5
-  /udoc,1,cntr,right !!off
   /edge,1,0
   clims
-  pletab,'EPOS_MX',1
-
-  !!/udoc,1,cntr,right
-  !!mpathplot,20
-
+  cleanplot,'pletab','EPOS_MX','1'
 endpng,'IMG04d_approxMx_pos',,,,,memoImgsFolder
 /erase
 clims
@@ -131,8 +115,6 @@ nsle,s,active
 view1w
 windefa,1
 wincln,1
-/edge,1,0
-
 wntitle,'APROX: FOR. CORTANTE [kN/m]'
 
 /view,1,-1,-1,1
@@ -140,19 +122,18 @@ wntitle,'APROX: FOR. CORTANTE [kN/m]'
 /auto,1
 eplot
 /user,1
-cmsel,a,COMPE_pile
 
+cmsel,a,COMPE_pile
 cmsel,s,compa_abt_appslab
 esla,u
 
-! /plopts,info,3
 /plopts,leg3,on
 /udoc,1,cntr,right
 /gformat,F,1,1
+/edge,1,1
 
 ! Shear force on superstructure slabs
 go2png,1200
-  /edge,1,1
   eplot
   /noerase
   cmsel,s,compa_abt_appslab
@@ -162,11 +143,9 @@ go2png,1200
   nsel,u,loc,x,GEO_deckLength,GEO_deckLength+0.5
   nsel,u,loc,x,-GEO_ABT1_appSlabL
   nsel,u,loc,x,GEO_deckLength+GEO_ABT2_appSlabL
-  /udoc,1,cntr,right !!off
   /edge,1,0
   clims
-  pletab,'EAB_Q',1
-
+  cleanplot,'pletab','EAB_Q','1'
 endpng,'IMG04e_approxQ',,,,,memoImgsFolder
 /erase
 clims

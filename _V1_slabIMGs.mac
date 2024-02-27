@@ -29,8 +29,6 @@ nsle,s,active
 view1w
 windefa,1
 wincln,1
-/edge,1,0
-
 wntitle,'LAJES: MOM. FLETOR (-) [kNm/m]'
 
 /view,1,-1,-1,1
@@ -38,34 +36,29 @@ wntitle,'LAJES: MOM. FLETOR (-) [kNm/m]'
 /auto,1
 eplot
 /user,1
-cmsel,a,COMPE_pile
 
+cmsel,a,COMPE_pile
 cmsel,s,compa_slab
 esla,u
 
-! /plopts,info,3
-/plopts,leg3,1
+/plopts,leg3,on
 /udoc,1,cntr,right
 /gformat,F,1,1
+/edge,1,1
 
 ! Bending moments on superstructure slabs
 go2png,1200
-  /edge,1,1
   eplot
   /noerase
   cmsel,s,compa_slab
   esla,s
   nsle,s,active
-  /udoc,1,cntr,right !!off
   /edge,1,0
   clims
-  pletab,'ENEG_MX',1
-
-  !!/udoc,1,cntr,right
-  !!mpathplot,20
-
+  cleanplot,'pletab','ENEG_MX','1'
 endpng,'IMG04a_slabMx_neg',,,,,memoImgsFolder
 /erase
+/annot,dele
 clims
 
 !!
@@ -95,8 +88,6 @@ nsle,s,active
 view1w
 windefa,1
 wincln,1
-/edge,1,0
-
 wntitle,'LAJES: MOM. FLETOR (+) [kNm/m]'
 
 /view,1,-1,-1,1
@@ -104,34 +95,28 @@ wntitle,'LAJES: MOM. FLETOR (+) [kNm/m]'
 /auto,1
 eplot
 /user,1
-cmsel,a,COMPE_pile
 
+cmsel,a,COMPE_pile
 cmsel,s,compa_slab
 esla,u
 cmsel,a,COMPE_slabIgnore
 
-! /plopts,info,3
 /plopts,leg3,on
 /udoc,1,cntr,right
 /gformat,F,1,1
+/edge,1,1
 
 ! Bending moments on superstructure slabs
 go2png,1200
-  /edge,1,1
   eplot
   /noerase
   cmsel,s,compa_slab
   esla,s
   cmsel,u,COMPE_slabIgnore
   nsle,s,active
-  /udoc,1,cntr,right !!off
   /edge,1,0
   clims
-  pletab,'EPOS_MX',1
-
-  !!/udoc,1,cntr,right
-  !!mpathplot,20
-
+  cleanplot,'pletab','EPOS_MX','1'
 endpng,'IMG04b_slabMx_pos',,,,,memoImgsFolder
 /erase
 clims
@@ -167,8 +152,6 @@ nsle,s,active
 view1w
 windefa,1
 wincln,1
-/edge,1,0
-
 wntitle,'LAJES: FOR. CORTANTE [kN/m]'
 
 /view,1,-1,-1,1
@@ -176,20 +159,19 @@ wntitle,'LAJES: FOR. CORTANTE [kN/m]'
 /auto,1
 eplot
 /user,1
-cmsel,a,COMPE_pile
 
+cmsel,a,COMPE_pile
 cmsel,s,compa_slab
 esla,u
 cmsel,a,COMPE_slabIgnore
 
-! /plopts,info,3
 /plopts,leg3,on
 /udoc,1,cntr,right
 /gformat,F,1,1
+/edge,1,1
 
 ! Shear force on superstructure slabs
 go2png,1200
-  /edge,1,1
   eplot
   /noerase
   cmsel,s,compa_slab
@@ -198,11 +180,9 @@ go2png,1200
   nsle,s,active
   ! nsel,u,loc,x,0,0.5
   ! nsel,u,loc,x,GEO_deckLength,GEO_deckLength-0.5
-  /udoc,1,cntr,right !!off
   /edge,1,0
   clims
-  pletab,'EAB_Q',1
-
+  cleanplot,'pletab','EAB_Q','1'
 endpng,'IMG04c_slabQ',,,,,memoImgsFolder
 /erase
 clims
