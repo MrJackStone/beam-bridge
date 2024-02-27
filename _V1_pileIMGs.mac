@@ -22,41 +22,41 @@ eplot
 wntitle,'F. AXIAL NAS ESTACAS [kN]'
 
 go2png,1200
-/edge,1,1
-eplot
-/noerase
+  /edge,1,1
+  eplot
+  /noerase
 
-cmsel,s,compl_pile
-cmsel,a,compl_abt_piles
-esll,s
-nsle,s,active
-/edge,1,0
-/vup,1,x
-/angle,1,-60,zs
-/gline,,-1
-/udoc,1,cntr,off
-plls,'N_c','N_c',0.21,,1
-/gline,,0
+  cmsel,s,compl_pile
+  cmsel,a,compl_abt_piles
+  esll,s
+  nsle,s,active
+  /edge,1,0
+  /vup,1,x
+  /angle,1,-60,zs
+  /gline,,-1
+  /udoc,1,cntr,off
+  plls,'N_c','N_c',0.21,,1
+  /gline,,0
 
-/type,1,3
-/edge,1,1
-esel,s,type,,2
-eplot
-/vup,1,z
-/angle,1,0,zs
+  /type,1,3
+  /edge,1,1
+  esel,s,type,,2
+  eplot
+  /vup,1,z
+  /angle,1,0,zs
 
-cmsel,s,compl_pile
-cmsel,a,compl_abt_piles
-esll,s
-nsle,s,active
-*get,fcx_auto,graph,1,focus,x
-*get,fcy_auto,graph,1,focus,y
-*get,fcz_auto,graph,1,focus,z
-/focus,1,1e6
-/udoc,1,cntr,right
-plls,'N_c','N_c',0.1,,1
-/focus,1,fcx_auto,fcy_auto,fcz_auto
-esel,s,type,,2
+  cmsel,s,compl_pile
+  cmsel,a,compl_abt_piles
+  esll,s
+  nsle,s,active
+  *get,fcx_auto,graph,1,focus,x
+  *get,fcy_auto,graph,1,focus,y
+  *get,fcz_auto,graph,1,focus,z
+  /focus,1,1e6
+  /udoc,1,cntr,right
+  plls,'N_c','N_c',0.1,,1
+  /focus,1,fcx_auto,fcy_auto,fcz_auto
+  esel,s,type,,2
 
 endpng,'IMG15_pileN',,,,,memoImgsFolder
 /erase
@@ -66,28 +66,28 @@ endpng,'IMG15_pileN',,,,,memoImgsFolder
 wntitle,'MOM. FLETOR NAS ESTACAS [kNm]'
 
 go2png,1200
-/edge,1,1
-esel,s,type,,2
-eplot
-/noerase
+  /edge,1,1
+  esel,s,type,,2
+  eplot
+  /noerase
 
-cmsel,s,compl_pile
-cmsel,a,compl_abt_piles
-esll,s
-nsle,s,active
-/edge,1,0
-/vup,1,x
-/angle,1,-60,zs
-/gline,,-1
-plls,'M_obl','M_obl',0.52,,1
-/gline,,0
+  cmsel,s,compl_pile
+  cmsel,a,compl_abt_piles
+  esll,s
+  nsle,s,active
+  /edge,1,0
+  /vup,1,x
+  /angle,1,-60,zs
+  /gline,,-1
+  plls,'M_obl','M_obl',0.52,,1
+  /gline,,0
 
-/type,1,3
-/edge,1,1
-esel,s,type,,2
-eplot
-/vup,1,z
-/angle,1,0,zs
+  /type,1,3
+  /edge,1,1
+  esel,s,type,,2
+  eplot
+  /vup,1,z
+  /angle,1,0,zs
 
 endpng,'IMG16_pileM',,,,,memoImgsFolder
 /erase
@@ -97,27 +97,27 @@ endpng,'IMG16_pileM',,,,,memoImgsFolder
 wntitle,'F. CORTANTE NAS ESTACAS [kN]'
 
 go2png,1200
-/edge,1,1
-eplot
-/noerase
+  /edge,1,1
+  eplot
+  /noerase
 
-cmsel,s,compl_pile
-cmsel,a,compl_abt_piles
-esll,s
-nsle,s,active
-/edge,1,0
-/vup,1,x
-/angle,1,-60,zs
-/gline,,-1
-plls,'Q_obl','Q_obl',0.52,,1
-/gline,,0
+  cmsel,s,compl_pile
+  cmsel,a,compl_abt_piles
+  esll,s
+  nsle,s,active
+  /edge,1,0
+  /vup,1,x
+  /angle,1,-60,zs
+  /gline,,-1
+  plls,'Q_obl','Q_obl',0.52,,1
+  /gline,,0
 
-/type,1,3
-/edge,1,1
-esel,s,type,,2
-eplot
-/vup,1,z
-/angle,1,0,zs
+  /type,1,3
+  /edge,1,1
+  esel,s,type,,2
+  eplot
+  /vup,1,z
+  /angle,1,0,zs
 
 endpng,'IMG17_pileQ',,,,,memoImgsFolder
 /erase

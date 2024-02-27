@@ -1,0 +1,226 @@
+/prep7
+displayLS=nint(LoadStepCount/2)
+allsel
+lsclear,all
+lsread,displayLS
+/eshape,0
+
+/window,all,dele
+/window,1,-1,1.67,-1,1
+/vup,all,z
+/view,1,0,-1,0
+/angle,1,0,xs
+/angle,1,0,ys
+/angle,1,0,zs
+/auto,1
+/edge,1,1
+esel,u,type,,3
+eplot
+
+/user,1
+
+
+cm,compe_color,elem
+/color,cm,'DGRA',compe_color
+/color,f,11
+/hbc,1,0
+clims,-1,1
+
+/pbc,f,,1
+/vscale,1,0.5
+eplot
+
+takepic,'IMG01_loadSideView',1200,,,,memoImgsFolder
+
+
+
+
+
+!!
+!!
+!!
+!!
+!!
+/annot,dele
+
+/anum,,7
+/pspec,0,1,1
+p4gon,-1,-1,0.335,-0.92
+/anum,,1
+/tspec,15,1,4
+/tlabel,-0.98,-0.98,'(a) ENCONTRO 01'
+
+
+/anum,,7
+/pspec,0,1,1
+p4gon,0.335,-1,1.67,-0.92
+/anum,,1
+/tspec,15,1,4
+/tlabel,0.337,-0.98,'(b) ENCONTRO 02'
+
+*if,geo_abt1_status,eq,1,then
+  cmsel,s,compa_abt_1
+  cmsel,u,compa_abt_appslab
+  esla,s
+  nsle,s,active
+  cm,compn_tmp,node
+  cm,compe_tmp,elem
+  *if,geo_abt1_type,eq,3,then
+    cmsel,s,compn_abt1_pilefree
+    esln,s
+    cmsel,a,compn_tmp
+    cmsel,a,compe_tmp
+  *endif
+*else
+  allsel
+  cm,compn_tmp,node
+  cm,compe_tmp,elem
+*endif
+/window,all,dele
+/window,1,-1,0.335,-1,1
+/window,2,0.335,1.67,-1,1
+/view,1,-1,1,1
+/view,2,1,1,1
+/edge,1,0
+/edge,2,0
+/window,2,off
+/auto,1
+eplot
+/user,1
+/vscale,1,0.5
+/vscale,2,0.5
+/hbc,1,1
+/color,f,red
+go2png,1200
+  *if,geo_abt1_status,eq,1,and,geo_abt1_type,eq,3,then
+    /eshape,1
+    /pbc,f,,0
+    cmsel,s,compn_abt1_pilerestrained
+    esln,s
+    esel,u,type,,3
+    /device,vector,on
+    eplot
+    /noerase
+    /device,vector,off
+    /pbc,f,,1
+    cmsel,s,compn_abt1_pilefree
+    esln,s
+    eplot
+    /eshape,0
+  *endif
+  cmsel,s,compe_tmp
+  cmsel,s,compn_tmp
+  eplot
+  /noerase
+  /window,1,off
+  /window,2,on
+  /hbc,2,1
+  /type,2,3
+  /auto,2
+  /udoc,2,cntr,off
+  /udoc,2,type,off
+  /udoc,2,typ2,off
+  /udoc,2,inum,off
+  /udoc,2,misc,off
+  /udoc,2,surf,off
+  /udoc,2,body,off
+  /udoc,2,bcdc,off
+  *if,geo_abt2_status,eq,1,then
+    /pbc,f,,0
+    cmsel,s,compa_abt_2
+    cmsel,u,compa_abt_appslab
+    esla,s
+    nsle,s,active
+    cm,compn_tmp,node
+    cm,compe_tmp,elem
+    eplot
+    /pbc,f,,1
+  *endif
+  /user,2
+  *if,geo_abt2_status,eq,1,and,geo_abt2_type,eq,3,then
+    /eshape,1
+    /pbc,f,,0
+    cmsel,s,compn_abt2_pilerestrained
+    esln,s
+    esel,u,type,,3
+    /device,vector,on
+    eplot
+    /device,vector,off
+    /pbc,f,,1
+    cmsel,s,compn_abt2_pilefree
+    esln,s
+    eplot
+    /eshape,0
+  *endif
+  *if,geo_abt2_status,eq,1,then
+    esel,u,elem,,all
+    *if,geo_abt2_type,eq,3,then
+      cmsel,s,compn_abt2_pilefree
+      esln,s
+    *endif
+    cmsel,a,compn_tmp
+    cmsel,a,compe_tmp
+  *else
+    allsel
+  *endif
+  eplot
+endpng,'IMG02_abtLoads',,,,,memoImgsFolder
+/erase
+
+
+
+
+
+
+!!
+!!
+!!
+!!
+!!
+esel,s,type,,3
+cm,compe_scolor,elem
+/color,cm,oran,compe_scolor
+allsel
+cmsel,u,compe_scolor
+cm,compe_color,elem
+/color,cm,dgra,compe_color
+allsel
+
+/pbc,f,,0
+/psf,pres,norm,0
+/window,all,dele
+view1w
+windefa,1
+view4w
+wincln,1
+wincln,2
+wincln,3
+wincln,4
+allsel
+/eshape,0
+/auto,all
+eplot
+/user,all
+
+
+/window,1,-1,1.67,0.5,1
+/window,2,-1,1.67,0,0.5
+/window,3,-1,0,-1,0
+/window,4,0,1.67,-1,0
+
+/view,1,0,0,1
+/view,2,0,-1,0
+/view,3,1,0,0
+/view,4,-1,-1,1
+/angle,1,90
+/angle,2,0
+/angle,3,0
+/angle,4,0
+/auto,all
+
+/edge,all,0
+
+eplot
+
+takepic,'IMG03_mesh',,,,,memoImgsFolder
+

@@ -59,252 +59,12 @@ memoImgsFolder='memo_imgs'
 /udoc,1,bcdc,off
 
 
-!!
-!!
-!!
-!!
-!!
-
-/prep7
 
 !!
 !!
-!!
-!!
-!!
 
-displayLS=nint(LoadStepCount/2)
-allsel
-lsclear,all
-lsread,displayLS
-/eshape,0
+/input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_V1_bcIMGs',mac
 
-/window,all,dele
-/window,1,-1,1.67,-1,1
-/vup,all,z
-/view,1,0,-1,0
-/angle,1,0,xs
-/angle,1,0,ys
-/angle,1,0,zs
-/auto,1
-/edge,1,1
-esel,u,type,,3
-eplot
-
-/user,1
-
-
-cm,compe_color,elem
-/color,cm,'DGRA',compe_color
-/color,f,11
-/hbc,1,0
-clims,-1,1
-
-/pbc,f,,1
-/vscale,1,0.5
-eplot
-
-takepic,'IMG01_loadSideView',1200,,,,memoImgsFolder
-
-
-
-
-
-!!
-!!
-!!
-!!
-!!
-/annot,dele
-
-/anum,,7
-/pspec,0,1,1
-p4gon,-1,-1,0.335,-0.92
-/anum,,1
-/tspec,15,1,4
-/tlabel,-0.98,-0.98,'(a) ENCONTRO 01'
-
-
-/anum,,7
-/pspec,0,1,1
-p4gon,0.335,-1,1.67,-0.92
-/anum,,1
-/tspec,15,1,4
-/tlabel,0.337,-0.98,'(b) ENCONTRO 02'
-
-*if,geo_abt1_status,eq,1,then
-    cmsel,s,compa_abt_1
-    cmsel,u,compa_abt_appslab
-    esla,s
-    nsle,s,active
-    cm,compn_tmp,node
-    cm,compe_tmp,elem
-    *if,geo_abt1_type,eq,3,then
-        cmsel,s,compn_abt1_pilefree
-        esln,s
-        cmsel,a,compn_tmp
-        cmsel,a,compe_tmp
-    *endif
-*else
-    allsel
-    cm,compn_tmp,node
-    cm,compe_tmp,elem
-*endif
-/window,all,dele
-/window,1,-1,0.335,-1,1
-/window,2,0.335,1.67,-1,1
-/view,1,-1,1,1
-/view,2,1,1,1
-/edge,1,0
-/edge,2,0
-/window,2,off
-/auto,1
-eplot
-/user,1
-/vscale,1,0.5
-/vscale,2,0.5
-/hbc,1,1
-/color,f,red
-go2png,1200
-    *if,geo_abt1_status,eq,1,and,geo_abt1_type,eq,3,then
-        /eshape,1
-        /pbc,f,,0
-        cmsel,s,compn_abt1_pilerestrained
-        esln,s
-        esel,u,type,,3
-        /device,vector,on
-        eplot
-        /noerase
-        /device,vector,off
-        /pbc,f,,1
-        cmsel,s,compn_abt1_pilefree
-        esln,s
-        eplot
-        /eshape,0
-    *endif
-    cmsel,s,compe_tmp
-    cmsel,s,compn_tmp
-    eplot
-    /noerase
-    /window,1,off
-    /window,2,on
-    /hbc,2,1
-    /type,2,3
-    /auto,2
-    /udoc,2,cntr,off
-    /udoc,2,type,off
-    /udoc,2,typ2,off
-    /udoc,2,inum,off
-    /udoc,2,misc,off
-    /udoc,2,surf,off
-    /udoc,2,body,off
-    /udoc,2,bcdc,off
-    *if,geo_abt2_status,eq,1,then
-        /pbc,f,,0
-        cmsel,s,compa_abt_2
-        cmsel,u,compa_abt_appslab
-        esla,s
-        nsle,s,active
-        cm,compn_tmp,node
-        cm,compe_tmp,elem
-        eplot
-        /pbc,f,,1
-    *endif
-    /user,2
-    *if,geo_abt2_status,eq,1,and,geo_abt2_type,eq,3,then
-        /eshape,1
-        /pbc,f,,0
-        cmsel,s,compn_abt2_pilerestrained
-        esln,s
-        esel,u,type,,3
-        /device,vector,on
-        eplot
-        /device,vector,off
-        /pbc,f,,1
-        cmsel,s,compn_abt2_pilefree
-        esln,s
-        eplot
-        /eshape,0
-    *endif
-    *if,geo_abt2_status,eq,1,then
-        esel,u,elem,,all
-        *if,geo_abt2_type,eq,3,then
-            cmsel,s,compn_abt2_pilefree
-            esln,s
-        *endif
-        cmsel,a,compn_tmp
-        cmsel,a,compe_tmp
-    *else
-        allsel
-    *endif
-    eplot
-endpng,'IMG02_abtLoads',,,,,memoImgsFolder
-/erase
-
-
-
-
-
-
-!!
-!!
-!!
-!!
-!!
-esel,s,type,,3
-cm,compe_scolor,elem
-/color,cm,oran,compe_scolor
-allsel
-cmsel,u,compe_scolor
-cm,compe_color,elem
-/color,cm,dgra,compe_color
-allsel
-
-/pbc,f,,0
-/psf,pres,norm,0
-/window,all,dele
-view1w
-windefa,1
-view4w
-wincln,1
-wincln,2
-wincln,3
-wincln,4
-allsel
-/eshape,0
-/auto,all
-eplot
-/user,all
-
-
-/window,1,-1,1.67,0.5,1
-/window,2,-1,1.67,0,0.5
-/window,3,-1,0,-1,0
-/window,4,0,1.67,-1,0
-
-/view,1,0,0,1
-/view,2,0,-1,0
-/view,3,1,0,0
-/view,4,-1,-1,1
-/angle,1,90
-/angle,2,0
-/angle,3,0
-/angle,4,0
-/auto,all
-
-/edge,all,0
-
-eplot
-
-takepic,'IMG03_mesh',,,,,memoImgsFolder
-
-
-
-!!
-!!
-!!
-!!
-!!
 !!
 !!
 
@@ -312,18 +72,9 @@ takepic,'IMG03_mesh',,,,,memoImgsFolder
 
 !!
 !!
-!!
-!!
-!!
-!!
-!!
 
 /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_V1_approxIMGs',mac
 
-!!
-!!
-!!
-!!
 !!
 !!
 
@@ -331,17 +82,9 @@ takepic,'IMG03_mesh',,,,,memoImgsFolder
 
 !!
 !!
-!!
-!!
-!!
-!!
 
 /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_V1_frameIMGs',mac
 
-!!
-!!
-!!
-!!
 !!
 !!
 
@@ -349,17 +92,9 @@ takepic,'IMG03_mesh',,,,,memoImgsFolder
 
 !!
 !!
-!!
-!!
-!!
-!!
 
 /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_V1_piercapsIMGs',mac
 
-!!
-!!
-!!
-!!
 !!
 !!
 
@@ -367,155 +102,5 @@ takepic,'IMG03_mesh',,,,,memoImgsFolder
 
 !!
 !!
-!!
-!!
-!!
-!!
 
-!! Deflection on girders
-g_annobold , 1
-! sadd , 'ELS_UGK'  , 'DW_UZ'   ,           , 1/1.4
-! sadd , 'ELS_URA'  , 'EMN_UZ'  ,           , 1/1.4
-! sadd , 'ELS_UQK'  , 'ELS_URA' , 'ELS_UGK' , 1     , -1
-! sadd , 'ELS_UFQ'  , 'ELS_UGK' , 'ELS_UQK' , 1     , 0.6
-! sadd , 'ELSF_Zmm' , 'ELS_UFQ' ,           , 1e3
-! sadd , 'ELSA_Zmm' , 'ELS_UQK' ,           , 1e3
-
-cmsel,s,COMPE_girder
-cmsel,a,COMPE_slab
-nsle,s,active
-cm,COMPE_plot,elem
-cm,COMPN_plot,node
-
-! pletab,'ELSF_Zmm'
-! cntrlims,'deflMin','deflMax'
-! sadd,'DFL_FQ_Z','ELSF_Zmm',,1,,-deflMax
-
-*del , MPATHPLOT_ARR_pathNames ,      , nopr
-*del , MPATHPLOT_ARR_labels    ,      , nopr
-*dim , MPATHPLOT_ARR_pathNames , char , GEO_girderCount
-*dim , MPATHPLOT_ARR_labels    , char , GEO_girderCount
-
-*do,nthGirder,1,GEO_girderCount,1
-  ! girderCS=CS_girders(nthGirder)
-  ! csys,girderCS
-  girderPathName='G%nthGirder%'
-
-  cmsel,s,COMPL_GIRDER_%nthGirder%
-  nsll,s,1
-  cm,COMPN_temp,node
-  *get,xmin,node,,mnloc,x
-  *get,xmax,node,,mxloc,x
-  cmsel,s,COMPN_temp
-  nsel,r,loc,x,xmin
-  n1=ndnext(0)
-  cmsel,s,COMPN_temp
-  nsel,r,loc,x,xmax
-  n2=ndnext(0)
-  allsel
-
-  path,%girderPathName%,2,,100
-  ppath,1,n1
-  ppath,2,n2
-
-  pdef , 'DW_UZ'  , etab , 'DW_UZ'  , avg
-  pdef , 'EMN_UZ' , etab , 'EMN_UZ' , avg
-
-  pcalc , add , 'UZG_MM'  , 'DW_UZ'  ,  , 1e3
-  pcalc , add , 'UZD_MM'  , 'EMN_UZ' ,  , 1e3
-  pcalc , add , 'ELS_UGK' , 'UZG_MM' ,  , 1/1.4
-  pcalc , add , 'ELS_URA' , 'UZD_MM' ,  , 1/1.4
-
-  pthrebase,'ELS_UGK',0,'DEFL_GK'
-  pthrebase,'ELS_URA',0,'DEFL_RA'
-
-  pcalc , add , 'DEFL_QK'  , 'DEFL_RA' , 'DEFL_GK' , 1 , -1
-  pcalc , add , 'DEFL_FRQ' , 'DEFL_GK' , 'DEFL_QK' , 1 , 0.6
-  pcalc , add , 'DEFL_ATV' , 'DEFL_QK' ,           , 1
-
-  MPATHPLOT_ARR_pathNames(nthGirder) = girderPathName
-
-*enddo
-
-cmsel,s,COMPE_plot
-cmsel,s,COMPN_plot
-*do,nthGirder,1,GEO_girderCount,1
-  MPATHPLOT_ARR_labels(nthGirder)='DEFL_FRQ'
-*enddo
-
-view1w
-wincln,1
-/pspec,,1
-wntitle,'FLECHA TOTAL LONGARINAS [mm]',1
-/pspec,,0
-wntitle,'(COMB. FREQUENTE)',1,,'R'
-/view,1,0,-1,0
-/angle,1,0
-/auto,1
-/eshape,1
-/triad,off
-/dscale,,20
-clims
-go2png,1200
-  pldisp
-  /user,1
-  /noerase
-  esel,inve
-  esel,u,type,,3
-  nsle,s,active
-  pldisp
-  cmsel,s,COMPE_plot
-  cmsel,s,COMPN_plot
-  /udoc,1,cntr,off
-  plnsol,u,z
-  /plopts,leg3,on
-  /gformat,f,2,1
-  /udoc,1,cntr,right
-  /dscale,,off
-  cleanplot,'mpathplot','0.01'
-endpng,'IMG18a_girderUZ',,,,,memoImgsFolder
-/erase
-/annot,dele
-
-!!
-pletab,'ELSA_Zmm'
-cntrlims,'deflMin','deflMax'
-sadd,'DFL_AT_Z','ELSA_Zmm',,1,,-deflMax
-
-cmsel,s,COMPE_plot
-cmsel,s,COMPN_plot
-*do,nthGirder,1,GEO_girderCount,1
-  MPATHPLOT_ARR_labels(nthGirder)='DEFL_ATV'
-*enddo
-
-view1w
-wincln,1
-/pspec,,1
-wntitle,'FLECHA ATIVA LONGARINAS [mm]',1
-/view,1,0,-1,0
-/angle,1,0
-/auto,1
-/eshape,1
-/triad,off
-/dscale,,10
-clims
-go2png,1200
-  pldisp
-  /user,1
-  /noerase
-  esel,inve
-  esel,u,type,,3
-  nsle,s,active
-  pldisp
-  cmsel,s,COMPE_plot
-  cmsel,s,COMPN_plot
-  /udoc,1,cntr,off
-  plnsol,u,z
-  /plopts,leg3,on
-  /gformat,f,2,1
-  /udoc,1,cntr,right
-  /dscale,,off
-  cleanplot,'mpathplot','0.01'
-endpng,'IMG18b_girderUZ_atv',,,,,memoImgsFolder
-/erase
-/annot,dele
+/input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_V1_girderdflIMGs',mac
