@@ -6,9 +6,8 @@ SOLU_type          = 0
 SOLU_nsubst        = 20
 
 GEO_gerberStatus=0
-*del,GEO_gerberL
-*dim,GEO_gerberL,,1
-GEO_gerberL(1)=0
+*del,GEO_gerberL,,nopr
+*dim,GEO_gerberL,,GEO_supportCount
 
 GERBER_b  = 1
 GERBER_h  = 1
