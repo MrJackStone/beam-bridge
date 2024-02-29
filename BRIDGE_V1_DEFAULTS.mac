@@ -1,5 +1,8 @@
 ! BRIDGE_V1_DEFAULTS
 
+MAT_SOIL_tipNlim = 0
+MAT_SOIL_shadm   = 0
+MAT_SOIL_svadm   = 0
 
 MAT_Soil_absentOpt = 0
 SOLU_type          = 0

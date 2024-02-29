@@ -54,21 +54,23 @@ CTE_MESO_abutment = 5
 !! 2.1 ATTRIBUTES                                                                                 !!
 !!                                                                                                !!
 ! Materials
-MAT_Girder=1
-MAT_Slab=2
-MAT_Column=3
-MAT_FrameGirder=4
-MAT_GradeBeam=5
-MAT_PileCap=6
-MAT_Pile=7
-MAT_Abutment=8
-MAT_Approach=9
-MAT_Soil=10
-MAT_ABT_Soil=11
-MAT_Spring=12
-MAT_Matrix=13
-MAT_Gerber=14
-MAT_CrossBeam=15
+MAT_Girder      = 1
+MAT_Slab        = 2
+MAT_Column      = 3
+MAT_FrameGirder = 4
+MAT_GradeBeam   = 5
+MAT_PileCap     = 6
+MAT_Pile        = 7
+MAT_Abutment    = 8
+MAT_Approach    = 9
+MAT_Soil        = 10
+MAT_ABT_Soil    = 11
+MAT_Spring      = 12
+MAT_Matrix      = 13
+MAT_Gerber      = 14
+MAT_CrossBeam   = 15
+MAT_PileTip     = 16
+MAT_PileLat     = 17
 
 ! Element types
 TYPE_BEAM188=1
@@ -171,14 +173,14 @@ concrete, MAT_Approach,    MAT_Approach_fck,    MAT_Approach_dens,    MAT_Approa
 !
 !! 2.1.1.10 GERBER CONNECTION (CANTILEVER + CONSOLE)                                              !!
 concrete, MAT_Gerber,      MAT_Gerber_fck,      MAT_Gerber_dens,      MAT_Gerber_Poisson   ,,1
-!
-!! 2.1.1.11 SOIL (FOUNDATION)                                                                     !!
+
+!! 2.1.1.11 SOIL (LATERAL REACTION)                                                               !!
 MP,EX,MAT_Soil,MAT_Soil_E
 MP,PRXY,MAT_Soil,MAT_Soil_Poisson
-*if,MAT_Soil_sadm,ne,0,then
-    MAT_Soil_sigScale=pi*(PILE_d/2)*FEM_PileELength/SEC_HSOIL_area
-    tb,biso,MAT_Soil
-    tbdata,,MAT_Soil_sadm*MAT_Soil_sigScale
+*if,MAT_Soil_shadm,ne,0,then
+  MAT_Soil_sigScale=pi*(PILE_d/2)*FEM_PileELength/SEC_HSOIL_area
+  tb,biso,MAT_Soil
+  tbdata,,MAT_Soil_shadm*MAT_Soil_sigScale
 *endif
 
 !! 2.1.1.12 SOIL (INSIDE ABUTMENTS)                                                               !!
@@ -190,12 +192,30 @@ MP,PRXY,MAT_ABT_Soil,MAT_ABT_Soil_Poisson
 *afun,deg
 MAT_ABT_Soil_ka=tan(45-(MAT_ABT_Soil_fi/2))
 *afun,rad
-!
-!! 2.1.1.13 SPRING                                                                                !!
+
+!! 2.1.1.13 SOIL (PILE TIP)                                                                       !!
+mp , ex   , MAT_PileTip , MAT_Soil_E
+mp , prxy , MAT_PileTip , MAT_Soil_Poisson
+*if,MAT_SOIL_tipNlim,ne,0,then
+  MAT_PileTip_sadm=MAT_SOIL_tipNlim/SEC_PSOIL_area
+  tb,biso,MAT_PileTip
+  tbdata,,MAT_PileTip_sadm
+*endif
+
+!! 2.1.1.14 SOIL (PILE LATERAL FRICTION)                                                          !!
+mp , ex   , MAT_PileLat , MAT_Soil_E
+mp , prxy , MAT_PileLat , MAT_Soil_Poisson
+*if,MAT_SOIL_svadm,ne,0,then
+  MAT_PileLat_sigScale=pi*(PILE_d/2)*FEM_PileELength/SEC_VSOIL_area
+  tb,biso,MAT_PileLat
+  tbdata,,MAT_SOIL_svadm*MAT_PileLat_sigScale
+*endif
+
+!! 2.1.1.15 SPRING                                                                                !!
 MAT_Spring_E=1e10
 MP,EX,MAT_Spring,MAT_Spring_E
 !
-!! 2.1.1.14 Bearing & FRICTION (MATRIX27 ELEMENTS)                                               !!
+!! 2.1.1.16 Bearing & FRICTION (MATRIX27 ELEMENTS)                                               !!
 MAT_Matrix_E=1e10
 MP,EX,MAT_Matrix,MAT_Matrix_E
 !

@@ -591,10 +591,17 @@ MAT_Soil_kv=10e6
 MAT_Soil_kh=10e6
 ! End point stiffness
 MAT_Soil_kp=38e6
+
 ! Poisson's coefficient
 MAT_Soil_Poisson=0.2
-! Maximum allowable stress
-MAT_Soil_sadm=100e3
+
+! Maximum allowable stress: horizontal soil reaction
+MAT_SOIL_shadm=100e3
+! Maximum allowable stress: vertical soil reaction (friction)
+MAT_SOIL_svadm=100e3
+! Pile tip max load (force)
+MAT_SOIL_tipNlim=150e3
+
 ! Depth interval without lateral/vertical stiffness:
 !    [0] Disabled
 !    [1] Enabled

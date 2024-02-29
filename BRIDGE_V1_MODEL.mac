@@ -90,7 +90,7 @@ CMSEL,S,COMPN_RockSupport
     D,ALL,ALL,0
 *elseif,GEO_pileType,eq,1,then
     /prep7
-    sprsup,,,-FEM_springL,MAT_Soil,SEC_PSOIL_num,TYPE_LINK180,'COMPN_PileEndSup','COMPE_PileEndSup',0,3
+    sprsup,,,-FEM_springL,MAT_PileTip,SEC_PSOIL_num,TYPE_LINK180,'COMPN_PileEndSup','COMPE_PileEndSup',0,3
     cmsel,s,COMPN_PileEndSup
     d,COMPN_PileEndSup,uz,0
     cmsel,s,COMPN_RockSupport

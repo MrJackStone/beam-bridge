@@ -742,7 +742,7 @@ cm,COMPN_PILE_absentSoil,node
 cmsel,s,COMPN_PIER_piles
 cmsel,u,COMPN_PILE_absentSoil
 *if,MAT_Soil_kv,GT,0,THEN
-    sprsup,0,0,-FEM_springL,MAT_Soil,SEC_VSOIL_num,TYPE_LINK180,'COMPN_PIER_VSoil','COMPE_PIER_VSoil',,3
+    sprsup,0,0,-FEM_springL,MAT_PileLat,SEC_VSOIL_num,TYPE_LINK180,'COMPN_PIER_VSoil','COMPE_PIER_VSoil',,3
 *endif
 *if,MAT_Soil_kh,GT,0,THEN
     sprsup,-FEM_springL,0,0,MAT_Soil,SEC_HSOIL_num,TYPE_LINK180,'COMPN_PIER_HSoil','COMPE_PIER_HSoil',,4
@@ -773,7 +773,7 @@ cmsel,u,COMPN_PILE_absentSoil
 
     *if,MAT_Soil_kv,GT,0,THEN
         cmsel,s,COMPN_ABT1_pileSpringSupported
-        sprsup,0,0,-FEM_springL,MAT_Soil,SEC_VSOIL_num,TYPE_LINK180,'COMPN_ABT1_VSoil','COMPE_ABT1_VSoil',,3
+        sprsup,0,0,-FEM_springL,MAT_PileLat,SEC_VSOIL_num,TYPE_LINK180,'COMPN_ABT1_VSoil','COMPE_ABT1_VSoil',,3
     *endif
     *if,MAT_Soil_kh,GT,0,THEN
         *if,GEO_ABT1_type,eq,3,then
@@ -826,7 +826,7 @@ cmsel,u,COMPN_PILE_absentSoil
 
     *if,MAT_Soil_kv,GT,0,THEN
         cmsel,s,COMPN_ABT2_pileSpringSupported
-        sprsup,0,0,-FEM_springL,MAT_Soil,SEC_VSOIL_num,TYPE_LINK180,'COMPN_ABT2_VSoil','COMPE_ABT2_VSoil',,3
+        sprsup,0,0,-FEM_springL,MAT_PileLat,SEC_VSOIL_num,TYPE_LINK180,'COMPN_ABT2_VSoil','COMPE_ABT2_VSoil',,3
     *endif
     *if,MAT_Soil_kh,GT,0,THEN
         *if,GEO_ABT2_type,eq,3,then
