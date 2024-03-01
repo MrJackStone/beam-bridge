@@ -1,5 +1,4 @@
-cmsel,s,compe_girder
-nsle,s,active
+g_annobold, 1
 
 view1w
 windefa,1
@@ -53,7 +52,7 @@ nsle,s,active
 view1w
 windefa,1
 wincln,1
-wintitle,1,'LONGARINAS','MOMENTO FLETOR','CARGAS PERMANENTES [kNm]',,1,13
+wintitle,1,'LONGARINAS','MOMENTO FLETOR','ELU-Perm [kNm]',,1,13
 
 /view,1,-1,-1,1
 /angle,1,0
@@ -100,7 +99,7 @@ endpng,'IMG05b_girderMy_perm',,,,,memoImgsFolder
 view1w
 windefa,1
 wincln,1
-wintitle,1,'LONGARINAS','F. NORMAL (TR.)','ELU-Normal [kNm]',,1,13
+wintitle,1,'LONGARINAS','F. NORMAL (TR.)','ELU-Normal [kN]',,1,13
 
 /view,1,-1,-1,1
 /angle,1,0
@@ -147,7 +146,7 @@ endpng,'IMG05b_girderNt',,,,,memoImgsFolder
 view1w
 windefa,1
 wincln,1
-wintitle,1,'LONGARINAS','F. NORMAL (COMPR.)','ELU-Normal [kNm]',,1,13
+wintitle,1,'LONGARINAS','F. NORMAL (COMPR.)','ELU-Normal [kN]',,1,13
 
 /view,1,-1,-1,1
 /angle,1,0
@@ -166,10 +165,10 @@ cmsel,a,COMPE_pile !!
 /plopts,leg3,on
 /udoc,1,cntr,right
 /gformat,F,1,1
+/edge,1,1
 
 ! Axial compressive force on beams
 go2png,1200
-  /edge,1,1
   eplot
   /noerase
 
@@ -177,16 +176,14 @@ go2png,1200
   nsle,s,active
   /udoc,1,cntr,right
   /edge,1,0
-  plls,'N_c','N_c',0.63,,1
+  cleanplot,'plls','N_c','N_c','0.63',,'1'
 
   /device,vector,on
   /type,1,3
   /edge,1,1
-  !esel,s,type,,2
   cmsel,s,compa_slab
   esla,s
   eplot
-
 
 endpng,'IMG05c_girderNc',,,,,memoImgsFolder
 /erase
@@ -198,9 +195,7 @@ endpng,'IMG05c_girderNc',,,,,memoImgsFolder
 view1w
 windefa,1
 wincln,1
-/edge,1,0
-
-wntitle,'F.CORTANTE NAS LONGARINAS [kN]'
+wintitle,1,'LONGARINAS','F. CORTANTE','ELU-Normal [kN]',,1,13
 
 /view,1,-1,-1,1
 /angle,1,0
@@ -219,10 +214,10 @@ cmsel,a,COMPE_pile !!
 /plopts,leg3,on
 /udoc,1,cntr,right
 /gformat,F,1,1
+/edge,1,1
 
 ! Bending moments on beams
 go2png,1200
-  /edge,1,1
   eplot
   /noerase
 
@@ -230,16 +225,14 @@ go2png,1200
   nsle,s,active
   /udoc,1,cntr,right
   /edge,1,0
-  plls,'EAB_QZi','EAB_QZj',0.63,,1
+  cleanplot,'plls','EAB_QZi','EAB_QZj','0.63',,'1'
 
   /device,vector,on
   /type,1,3
   /edge,1,1
-  !esel,s,type,,2
   cmsel,s,compa_slab
   esla,s
   eplot
-
 
 endpng,'IMG05d_girderQ',,,,,memoImgsFolder
 /erase
@@ -252,11 +245,7 @@ view1w
 windefa,1
 wincln,1
 /edge,1,0
-
-wntitle,'F. CORTANTE NAS LONGARINAS [kN]'
-/anum,,1
-/tspec,15,1,4
-/tlabel,1,-0.98,'(CARGAS PERMANENTES)'
+wintitle,1,'LONGARINAS','F. CORTANTE','ELU-Perm [kN]',,1,13
 
 /view,1,-1,-1,1
 /angle,1,0
@@ -275,10 +264,10 @@ cmsel,a,COMPE_pile !!
 /plopts,leg3,on
 /udoc,1,cntr,right
 /gformat,F,1,1
+/edge,1,1
 
 ! Bending moments on beams
 go2png,1200
-  /edge,1,1
   eplot
   /noerase
 
@@ -286,18 +275,64 @@ go2png,1200
   nsle,s,active
   /udoc,1,cntr,right
   /edge,1,0
-  plls,'DW_QZi','DW_QZj',0.63,,1
+  cleanplot,'plls','DW_QZi','DW_QZj','0.63',,'1'
 
   /device,vector,on
   /type,1,3
   /edge,1,1
-  !esel,s,type,,2
   cmsel,s,compa_slab
   esla,s
   eplot
 
-
 endpng,'IMG05e_girderQ_perm',,,,,memoImgsFolder
+/erase
+/device,vector,off
+/type,1,3
+
+!!
+view1w
+windefa,1
+wincln,1
+/edge,1,0
+wintitle,1,'LONGARINAS','MOMENTO TORSOR','ELU-N [kNm]',,1,13
+
+/view,1,-1,-1,1
+/angle,1,0
+/auto,1
+/eshape,0
+allsel
+cmsel,s,compa_slab
+esel,u,type,,3
+esla,u
+cmsel,u,COMPE_pile !!
+eplot
+/user,1
+cmsel,a,COMPE_pile !!
+
+/plopts,leg3,on
+/udoc,1,cntr,right
+/gformat,F,1,1
+/edge,1,1
+
+! Bending moments on beams
+go2png,1200
+  eplot
+  /noerase
+
+  cmsel,s,compe_girder
+  nsle,s,active
+  /udoc,1,cntr,right
+  /edge,1,0
+  cleanplot,'plls','EAB_TQi','EAB_TQj','0.63',,'1'
+
+  /device,vector,on
+  /type,1,3
+  /edge,1,1
+  cmsel,s,compa_slab
+  esla,s
+  eplot
+
+endpng,'IMG05f_girderMT',,,,,memoImgsFolder
 /erase
 /device,vector,off
 /type,1,3
