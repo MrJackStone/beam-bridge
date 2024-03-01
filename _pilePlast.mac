@@ -1,5 +1,6 @@
 /post1
 allsel
+rsys,solu
 etable,'EPL',eppl,eqv
 *del,etNames
 *dim,etNames,char,1
@@ -76,4 +77,4 @@ clims
 
 
 
-
+rsys
