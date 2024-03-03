@@ -61,46 +61,46 @@ memoImgsFolder='memo_imgs'
 
 
 !!
-!!
+!! 1
 
 /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_V1_bcIMGs',mac
 
 !!
-!!
+!! 2
 
 /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_V1_slabIMGs',mac
 
 !!
-!!
+!! 3
 
 /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_V1_approxIMGs',mac
 
 !!
-!!
+!! 4
 
 /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_V1_girderIMGs',mac
 
 !!
-!!
+!! 5
 
-/input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_V1_frameIMGs',mac
+/input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_V1_girderdflIMGs',mac
 
 !!
-!!
+!! 6
 
 /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_V1_abtplatesIMGs',mac
 
 !!
-!!
+!! 7
 
 /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_V1_piercapsIMGs',mac
 
 !!
-!!
+!! 8
 
 /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_V1_pileIMGs',mac
 
 !!
-!!
+!! 9
 
-/input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_V1_girderdflIMGs',mac
+/input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_V1_frameIMGs',mac

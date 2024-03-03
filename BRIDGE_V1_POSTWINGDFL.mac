@@ -166,7 +166,7 @@ go2png,1200
   /edge,1,0
   eplot
   mpathplot,10,,'envelope_path_names','envelope_path_labels'
-endpng,'ABT%arg1%_WING_deflects',,,,,'memo_imgs'
+endpng,'IMG20a_ABT%arg1%_WING_deflects',,,,,'memo_imgs'
 /erase
 /annot,dele
 clims

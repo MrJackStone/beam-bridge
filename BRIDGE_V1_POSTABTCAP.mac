@@ -68,7 +68,7 @@ go2png,1200
   *if,upcase(arg2),eq,'Q',then
     /window,1,on
     /window,2,off
-    pletab,'EAB_%arg2%',avg
+    cleanplot,'pletab','EAB_%arg2%','avg'
 
   *else
     /window,1,on
@@ -91,7 +91,7 @@ go2png,1200
   ! /type,1,0
   eplot
   /device,vector,off
-endpng,'ABT%arg1%_PILECAP_%arg2%',,,,,'memo_imgs'
+endpng,'IMG22a_ABT%arg1%_PILECAP_%arg2%',,,,,'memo_imgs'
 /erase
 /annot,dele
 clims

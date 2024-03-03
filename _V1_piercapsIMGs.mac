@@ -30,7 +30,6 @@
 
     /udoc,1,cntr,right
     /plopts,leg3,on
-    ! /plopts,info,3
     /gformat,f,1,1
 
     ! Vertical axial force (compression)
@@ -44,7 +43,7 @@
     eplot
     /device,vector,off
 
-  endpng,'IMG13_capMX',,,,,memoImgsFolder
+  endpng,'IMG07a_capMX',,,,,memoImgsFolder
   /erase
   /annot,dele
 
@@ -79,11 +78,8 @@
     eplot
     /device,vector,off
 
-  endpng,'IMG14_capQ',,,,,memoImgsFolder
+  endpng,'IMG07b_capQ',,,,,memoImgsFolder
   /erase
   /annot,dele
 
 *endif
-
-
-

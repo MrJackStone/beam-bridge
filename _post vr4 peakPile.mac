@@ -189,7 +189,7 @@ go2png,1200
     /gformat,f,1,2
     clims
     cleanplot,'pletab','EMM_UZ'
-endpng,'IMG18_peakPile',,,,,resultsFolder
+endpng,'IMG11a_peakPile',,,,,resultsFolder
 /erase
 
 /annot,dele
@@ -335,7 +335,7 @@ go2png,1200
     /udoc,2,cntr,right
     /gformat,f,1,2
     pletab,'EMM_UZ'
-endpng,'IMG18_peakPile',,,,,resultsFolder
+endpng,'IMG11b_peakPile',,,,,resultsFolder
 /erase
 
 /annot,dele
@@ -444,7 +444,7 @@ go2png,1200
 
     /window,1,off
     /window,2,on
-endpng,'IMG19_peakPileQ',,,,,resultsFolder
+endpng,'IMG11c_peakPileQ',,,,,resultsFolder
 /erase
 
 /annot,dele

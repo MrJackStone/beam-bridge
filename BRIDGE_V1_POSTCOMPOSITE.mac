@@ -129,7 +129,7 @@ go2png,1200
   /device,vector,off
   cleanplot,'mpathplot','5','0'
   /type,,3
-endpng,'COMPOSITE_SLAB_My',,,,,resultsFolder
+endpng,'IMG24a_COMPOSITE_SLAB_My',,,,,resultsFolder
 /erase
 clims
 /annot,dele
@@ -174,7 +174,7 @@ go2png,1200
   /device,vector,off
   cleanplot,'mpathplot','5','0'
   /type,,3
-endpng,'COMPOSITE_SLAB_Qx',,,,,resultsFolder
+endpng,'IMG24b_COMPOSITE_SLAB_Qx',,,,,resultsFolder
 /erase
 clims
 /annot,dele

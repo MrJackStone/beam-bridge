@@ -56,7 +56,7 @@ go2png,1200
   /edge,1,0
   clims
   cleanplot,'pletab','ENEG_MX','1'
-endpng,'IMG04a_slabMx_neg',,,,,memoImgsFolder
+endpng,'IMG02a_slabMx_neg',,,,,memoImgsFolder
 /erase
 /annot,dele
 clims
@@ -117,7 +117,7 @@ go2png,1200
   /edge,1,0
   clims
   cleanplot,'pletab','EPOS_MX','1'
-endpng,'IMG04b_slabMx_pos',,,,,memoImgsFolder
+endpng,'IMG02b_slabMx_pos',,,,,memoImgsFolder
 /erase
 clims
 
@@ -183,6 +183,6 @@ go2png,1200
   /edge,1,0
   clims
   cleanplot,'pletab','EAB_Q','1'
-endpng,'IMG04c_slabQ',,,,,memoImgsFolder
+endpng,'IMG02c_slabQ',,,,,memoImgsFolder
 /erase
 clims

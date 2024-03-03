@@ -1,11 +1,5 @@
 !! Deflection on girders
 g_annobold , 1
-! sadd , 'ELS_UGK'  , 'DW_UZ'   ,           , 1/1.4
-! sadd , 'ELS_URA'  , 'EMN_UZ'  ,           , 1/1.4
-! sadd , 'ELS_UQK'  , 'ELS_URA' , 'ELS_UGK' , 1     , -1
-! sadd , 'ELS_UFQ'  , 'ELS_UGK' , 'ELS_UQK' , 1     , 0.6
-! sadd , 'ELSF_Zmm' , 'ELS_UFQ' ,           , 1e3
-! sadd , 'ELSA_Zmm' , 'ELS_UQK' ,           , 1e3
 
 cmsel,s,COMPE_girder
 cmsel,a,COMPE_slab
@@ -13,18 +7,12 @@ nsle,s,active
 cm,COMPE_plot,elem
 cm,COMPN_plot,node
 
-! pletab,'ELSF_Zmm'
-! cntrlims,'deflMin','deflMax'
-! sadd,'DFL_FQ_Z','ELSF_Zmm',,1,,-deflMax
-
 *del , MPATHPLOT_ARR_pathNames ,      , nopr
 *del , MPATHPLOT_ARR_labels    ,      , nopr
 *dim , MPATHPLOT_ARR_pathNames , char , GEO_girderCount
 *dim , MPATHPLOT_ARR_labels    , char , GEO_girderCount
 
 *do,nthGirder,1,GEO_girderCount,1
-  ! girderCS=CS_girders(nthGirder)
-  ! csys,girderCS
   girderPathName='G%nthGirder%'
 
   cmsel,s,COMPL_GIRDER_%nthGirder%
@@ -99,7 +87,7 @@ go2png,1200
   /udoc,1,cntr,right
   /dscale,,off
   cleanplot,'mpathplot','0.01'
-endpng,'IMG18a_girderUZ',,,,,memoImgsFolder
+endpng,'IMG05a_girderUZ',,,,,memoImgsFolder
 /erase
 /annot,dele
 
@@ -142,7 +130,7 @@ go2png,1200
   /udoc,1,cntr,right
   /dscale,,off
   cleanplot,'mpathplot','0.01'
-endpng,'IMG18b_girderUZ_atv',,,,,memoImgsFolder
+endpng,'IMG05b_girderUZ_atv',,,,,memoImgsFolder
 /erase
 /annot,dele
 

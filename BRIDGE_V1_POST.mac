@@ -19,32 +19,32 @@
 
 
   ! BRIDGE_V1_POSTTWALL , etable   , subtitle                      , imgName
-  BRIDGE_V1_POSTTWALL   , 'EAB_MX' , 'MOMENTO FLETOR (MX) [kNm/m]' , 'TRAN_MX'
-  BRIDGE_V1_POSTTWALL   , 'EAB_MY' , 'MOMENTO FLETOR (MY) [kNm/m]' , 'TRAN_MY'
-  BRIDGE_V1_POSTTWALL   , 'EAB_Q'  , 'F. CORTANTE [kN/m]'          , 'TRAN_Q'
-  BRIDGE_V1_POSTTWALL   , 'EAB_NX' , 'F. NORMAL (NX) [kN/m]'       , 'TRAN_NX'
-  BRIDGE_V1_POSTTWALL   , 'EAB_NY' , 'F. NORMAL (NY) [kN/m]'       , 'TRAN_NY'
+  BRIDGE_V1_POSTTWALL   , 'EAB_MX' , 'MOMENTO FLETOR (MX) [kNm/m]' , 'IMG13a_TRAN_MX'
+  BRIDGE_V1_POSTTWALL   , 'EAB_MY' , 'MOMENTO FLETOR (MY) [kNm/m]' , 'IMG13b_TRAN_MY'
+  BRIDGE_V1_POSTTWALL   , 'EAB_Q'  , 'F. CORTANTE [kN/m]'          , 'IMG13c_TRAN_Q'
+  BRIDGE_V1_POSTTWALL   , 'EAB_NX' , 'F. NORMAL (NX) [kN/m]'       , 'IMG13d_TRAN_NX'
+  BRIDGE_V1_POSTTWALL   , 'EAB_NY' , 'F. NORMAL (NY) [kN/m]'       , 'IMG13e_TRAN_NY'
 
   BRIDGE_V1_POSTABTCOL
 
   ! BRIDGE_V1_POSTWINGS , etable , subtitle , imgName
-  BRIDGE_V1_POSTWINGS   , 'EAB_MX' , 'MOMENTO FLETOR (MX) [kNm/m]' , 'WINGS_MX'
-  BRIDGE_V1_POSTWINGS   , 'EAB_MY' , 'MOMENTO FLETOR (MY) [kNm/m]' , 'WINGS_MY'
-  BRIDGE_V1_POSTWINGS   , 'EAB_Q'  , 'F. CORTANTE [kN/m]'          , 'WINGS_Q'!, 0.55
-  BRIDGE_V1_POSTWINGS   , 'EAB_NX' , 'F. NORMAL (NX) [kN/m]'       , 'WINGS_NX'
-  BRIDGE_V1_POSTWINGS   , 'EAB_NY' , 'F. NORMAL (NY) [kN/m]'       , 'WINGS_NY'
+  BRIDGE_V1_POSTWINGS   , 'EAB_MX' , 'MOMENTO FLETOR (MX) [kNm/m]' , 'IMG15a_WINGS_MX'
+  BRIDGE_V1_POSTWINGS   , 'EAB_MY' , 'MOMENTO FLETOR (MY) [kNm/m]' , 'IMG15b_WINGS_MY'
+  BRIDGE_V1_POSTWINGS   , 'EAB_Q'  , 'F. CORTANTE [kN/m]'          , 'IMG15c_WINGS_Q'!, 0.55
+  BRIDGE_V1_POSTWINGS   , 'EAB_NX' , 'F. NORMAL (NX) [kN/m]'       , 'IMG15d_WINGS_NX'
+  BRIDGE_V1_POSTWINGS   , 'EAB_NY' , 'F. NORMAL (NY) [kN/m]'       , 'IMG15e_WINGS_NY'
 
-  BRIDGE_V1_POSTLWALL , 1 , 'EAB_MX' , 'MOMENTO FLETOR (MX) [kNm/m]' , 'LWALL_MX'
-  BRIDGE_V1_POSTLWALL , 1 , 'EAB_MY' , 'MOMENTO FLETOR (MY) [kNm/m]' , 'LWALL_MY'
-  BRIDGE_V1_POSTLWALL , 1 , 'EAB_Q'  , 'F. CORTANTE [kN/m]'          , 'LWALL_Q'  !, 0.55
-  BRIDGE_V1_POSTLWALL , 1 , 'EAB_NX' , 'F. NORMAL (NX) [kN/m]'       , 'LWALL_NX'
-  BRIDGE_V1_POSTLWALL , 1 , 'EAB_NY' , 'F. NORMAL (NY) [kN/m]'       , 'LWALL_NY'
+  BRIDGE_V1_POSTLWALL , 1 , 'EAB_MX' , 'MOMENTO FLETOR (MX) [kNm/m]' , 'IMG16a_LWALL_MX'
+  BRIDGE_V1_POSTLWALL , 1 , 'EAB_MY' , 'MOMENTO FLETOR (MY) [kNm/m]' , 'IMG16b_LWALL_MY'
+  BRIDGE_V1_POSTLWALL , 1 , 'EAB_Q'  , 'F. CORTANTE [kN/m]'          , 'IMG16c_LWALL_Q'  !, 0.55
+  BRIDGE_V1_POSTLWALL , 1 , 'EAB_NX' , 'F. NORMAL (NX) [kN/m]'       , 'IMG16d_LWALL_NX'
+  BRIDGE_V1_POSTLWALL , 1 , 'EAB_NY' , 'F. NORMAL (NY) [kN/m]'       , 'IMG16e_LWALL_NY'
 
-  BRIDGE_V1_POSTLWALL , 2 , 'EAB_MX' , 'MOMENTO FLETOR (MX) [kNm/m]' , 'LWALL_MX'
-  BRIDGE_V1_POSTLWALL , 2 , 'EAB_MY' , 'MOMENTO FLETOR (MY) [kNm/m]' , 'LWALL_MY'
-  BRIDGE_V1_POSTLWALL , 2 , 'EAB_Q'  , 'F. CORTANTE [kN/m]'          , 'LWALL_Q'  !, 0.55
-  BRIDGE_V1_POSTLWALL , 2 , 'EAB_NX' , 'F. NORMAL (NX) [kN/m]'       , 'LWALL_NX'
-  BRIDGE_V1_POSTLWALL , 2 , 'EAB_NY' , 'F. NORMAL (NY) [kN/m]'       , 'LWALL_NY'
+  BRIDGE_V1_POSTLWALL , 2 , 'EAB_MX' , 'MOMENTO FLETOR (MX) [kNm/m]' , 'IMG17a_LWALL_MX'
+  BRIDGE_V1_POSTLWALL , 2 , 'EAB_MY' , 'MOMENTO FLETOR (MY) [kNm/m]' , 'IMG17b_LWALL_MY'
+  BRIDGE_V1_POSTLWALL , 2 , 'EAB_Q'  , 'F. CORTANTE [kN/m]'          , 'IMG17c_LWALL_Q'  !, 0.55
+  BRIDGE_V1_POSTLWALL , 2 , 'EAB_NX' , 'F. NORMAL (NX) [kN/m]'       , 'IMG17d_LWALL_NX'
+  BRIDGE_V1_POSTLWALL , 2 , 'EAB_NY' , 'F. NORMAL (NY) [kN/m]'       , 'IMG17e_LWALL_NY'
 
   BRIDGE_V1_POSTAPSLBDFL,1
   BRIDGE_V1_POSTAPSLBDFL,2
@@ -84,7 +84,7 @@
   BRIDGE_V1_POSTABTBEAM
 
   ! /output
-  ! /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_pilePlast',mac
+  /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_pilePlast',mac
 
 *endif
 

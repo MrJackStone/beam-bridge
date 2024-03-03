@@ -3,6 +3,8 @@
 view1w
 windefa,1
 wincln,1
+clims
+/annot,dele
 /edge,1,0
 
 /view,1,-1,-1,1
@@ -14,7 +16,6 @@ esel,u,type,,3
 eplot
 /user,1
 
-! /plopts,info,3
 /plopts,leg3,on
 /udoc,1,cntr,right
 /gformat,F,1,1
@@ -35,7 +36,7 @@ go2png,1200
   /angle,1,-60,zs
   /gline,,-1
   /udoc,1,cntr,off
-  plls,'N_c','N_c',0.21,,1
+  cleanplot,'plls','N_c','N_c','0.21',,'1'
   /gline,,0
 
   /type,1,3
@@ -54,11 +55,11 @@ go2png,1200
   *get,fcz_auto,graph,1,focus,z
   /focus,1,1e6
   /udoc,1,cntr,right
-  plls,'N_c','N_c',0.1,,1
+  cleanplot,'plls','N_c','N_c','0.1',,'1'
   /focus,1,fcx_auto,fcy_auto,fcz_auto
   esel,s,type,,2
 
-endpng,'IMG15_pileN',,,,,memoImgsFolder
+endpng,'IMG08a_pileN',,,,,memoImgsFolder
 /erase
 /annot,dele
 
@@ -79,7 +80,7 @@ go2png,1200
   /vup,1,x
   /angle,1,-60,zs
   /gline,,-1
-  plls,'M_obl','M_obl',0.52,,1
+  cleanplot,'plls','M_obl','M_obl','0.52',,'1'
   /gline,,0
 
   /type,1,3
@@ -89,7 +90,7 @@ go2png,1200
   /vup,1,z
   /angle,1,0,zs
 
-endpng,'IMG16_pileM',,,,,memoImgsFolder
+endpng,'IMG08b_pileM',,,,,memoImgsFolder
 /erase
 /annot,dele
 
@@ -109,7 +110,7 @@ go2png,1200
   /vup,1,x
   /angle,1,-60,zs
   /gline,,-1
-  plls,'Q_obl','Q_obl',0.52,,1
+  cleanplot,'plls','Q_obl','Q_obl','0.52',,'1'
   /gline,,0
 
   /type,1,3
@@ -119,8 +120,6 @@ go2png,1200
   /vup,1,z
   /angle,1,0,zs
 
-endpng,'IMG17_pileQ',,,,,memoImgsFolder
+endpng,'IMG08c_pileQ',,,,,memoImgsFolder
 /erase
 /annot,dele
-
-

@@ -68,7 +68,7 @@ go2png
     /eshape,10 !0.8
     clims,0,1e-9
     plnsol,eppl,eqv
-endpng,'soilPL'
+endpng,'IMG26a_soilPL'
 /erase
 /gline,,0
 

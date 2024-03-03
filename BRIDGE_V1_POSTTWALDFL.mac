@@ -100,8 +100,7 @@ wincln,1
 
 /angle,1,0
 /udoc,1,cntr,right
-/plopts,info,3
-/plopts,leg3,1
+/plopts,leg3,on
 wntitle , 'ENCONTRO 0%arg1%:'  , 1 , 0
 wntitle , 'PAREDE TRANSVERSAL' , 1 , 0 , 'C'
 wntitle , 'FLECHA RARA [mm]'   , 1 , 1 , 'R'
@@ -136,8 +135,8 @@ go2png,1200
   /eshape,0
   /edge,1,0
   eplot
-  mpathplot,3,,'envelope_path_names','envelope_path_labels'
-endpng,'ABT%arg1%_TRANWALL_deflects',,,,,'memo_imgs'
+  cleanplot,'mpathplot','3',,'envelope_path_names','envelope_path_labels'
+endpng,'IMG19a_ABT%arg1%_TRANWALL_deflects',,,,,'memo_imgs'
 /erase
 /annot,dele
 clims

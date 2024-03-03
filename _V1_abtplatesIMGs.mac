@@ -57,7 +57,7 @@ go2png,1200
     allsel
   *endif
   pletab,'EMN_NY',1
-endpng,'IMG10_abtNY',,,,,memoImgsFolder
+endpng,'IMG06a_abtNY',,,,,memoImgsFolder
 /erase
 /annot,dele
 
@@ -105,7 +105,7 @@ go2png,1200
     allsel
   *endif
   pletab,'EMN_MX',1
-endpng,'IMG11a_abtMX',,,,,memoImgsFolder
+endpng,'IMG06b_abtMX',,,,,memoImgsFolder
 /erase
 /annot,dele
 
@@ -151,7 +151,7 @@ go2png,1200
     allsel
   *endif
   pletab,'EMN_MY',1
-endpng,'IMG11b_abtMY',,,,,memoImgsFolder
+endpng,'IMG06c_abtMY',,,,,memoImgsFolder
 /erase
 /annot,dele
 
@@ -199,7 +199,7 @@ go2png,1200
     allsel
   *endif
   pletab,'EAB_Q',1
-endpng,'IMG12_abtQ',,,,,memoImgsFolder
+endpng,'IMG06d_abtQ',,,,,memoImgsFolder
 /erase
 /annot,dele
 

@@ -19,7 +19,7 @@ cmsel,s,COMPA_ABT_tranwall
 esla,s
 cm,COMPE_temp,elem
 
-/window,dele,all
+/window,all,dele
 /annot,dele
 /window,1,on
 /window,2,on

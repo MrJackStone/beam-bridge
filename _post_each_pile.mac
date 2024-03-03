@@ -64,7 +64,7 @@ go2png,1200
   /pnum,line,0
   lplot
 
-endpng,'pile_guide',,,,,resultsFolder
+endpng,'IMG12a_pile_guide',,,,,resultsFolder
 
 
 allsel
@@ -183,7 +183,7 @@ ln=0
     /udoc,4,cntr,right
     /gformat,f,1,2
     cleanplot,'pletab','EMM_UZ'
-  endpng,'PILE_%pileIdx%',,,,,resultsFolder
+  endpng,'IMG12b_PILE_%pileIdx%',,,,,resultsFolder
   /erase
   /annot,dele
   clims

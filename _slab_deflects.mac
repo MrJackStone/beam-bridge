@@ -1,5 +1,4 @@
-!/input,'F:\Ansys\03 Design\30 Pontes Anchieta\01 APDL\_slab_deflects',mac
-
+view1w
 windefa,1
 /device,font,3,Arial,1000,0,-64,0,0,,,
 /device,font,1,Arial,1000,0,-42,0,0,,,
@@ -10,8 +9,7 @@ windefa,1
 wincln,1
 /udoc,1,cntr,right
 /udoc,2,cntr,right
-/plopts,info,3
-/plopts,leg3,1
+/plopts,leg3,on
 /gformat,f,10,2
 /annot,dele
 
@@ -303,6 +301,12 @@ nsle,s,active
 /window,all,dele
 /window,1,-1,1.67,0,1
 /window,2,-1,1.67,-1,0
+wincln,1
+wincln,2
+/plopts,leg3,on
+/gformat,f,10,2
+/udoc,1,cntr,right
+/udoc,2,cntr,right
 /auto,all
 /angle,all,0
 /view,1,xView,0,zView
@@ -318,14 +322,15 @@ wntitle , 'LAJE DO TABULEIRO:' , 2 , 0
 wntitle , 'FLECHA MIN. [mm]'   , 2 , 0 , 'C'
 wntitle , '(COMB. RARA)'       , 2 , 1 , 'R'
 
+/window,1,on
+/window,2,on
+cmsel,s,COMPE_Slab
+cmsel,a,COMPE_girder
+nsle,s,active
+/eshape,1
+/gline,all,-1
+
 go2png,1200
-  /window,1,on
-  /window,2,on
-  cmsel,s,COMPE_Slab
-  cmsel,a,COMPE_girder
-  nsle,s,active
-  /eshape,1
-  /gline,all,-1
   eplot
   /user,all
   /noerase
@@ -335,15 +340,13 @@ go2png,1200
 
   /window,1,on
   /window,2,off
-  mpathplot,5,,'all_path_names','max_envelope_labels'
+  cleanplot,'mpathplot','5',,'all_path_names','max_envelope_labels'
 
   /window,1,off
   /window,2,on
-  mpathplot,5,,'all_path_names','min_envelope_labels'
+  cleanplot,'mpathplot','5',,'all_path_names','min_envelope_labels'
 
-  /gline,all,0
-
-endpng,'slab_deflections',,,,,'memo_imgs'
+endpng,'IMG10a_slab_deflections',,,,,'memo_imgs'
 /erase
 /annot,dele
 clims
