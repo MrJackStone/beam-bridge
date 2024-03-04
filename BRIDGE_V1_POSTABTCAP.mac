@@ -31,8 +31,16 @@ aplot
 /user,all
 /eshape,1
 
-wintitle,1,'ENCONTRO 0%arg1%: COROAMENTO',arg3,'VALOR MAX. [%arg4%]',0,1,13
-wintitle,2,'ENCONTRO 0%arg1%: COROAMENTO',arg3,'VALOR MIN. [%arg4%]',0,1,13
+*if,upcase(arg2),eq,'Q',then
+  centerTitle1='%arg2%: F. CORTANTE'
+  centerTitle2='%arg2%: F. CORTANTE'
+*else
+  centerTitle1='%arg2%+: MOMENTO FLETOR POSITIVO'
+  centerTitle2='%arg2%-: MOMENTO FLETOR NEGATIVO'
+*endif
+
+wintitle,1,'ENCONTRO 0%arg1%: COROAMENTO',centerTitle1,'ELU-Normal [%arg4%]',0,1,13
+wintitle,2,'ENCONTRO 0%arg1%: COROAMENTO',centerTitle2,'ELU-Normal [%arg4%]',0,1,13
 
 go2png,1200
   /window,1,on
@@ -58,11 +66,15 @@ go2png,1200
   *else
     /window,1,on
     /window,2,off
-    cleanplot,'pletab','EMX_%arg2%','avg'
+    EMX_%arg2%='EMX_%arg2%'
+    cleanplot,'etbplpos','EMX_%arg2%','1'
+    ! cleanplot,'pletab','EMX_%arg2%','avg'
 
     /window,1,off
     /window,2,on
-    cleanplot,'pletab','EMN_%arg2%','avg'
+    EMN_%arg2%='EMN_%arg2%'
+    cleanplot,'etbplneg','EMN_%arg2%','1'
+    ! cleanplot,'pletab','EMN_%arg2%','avg'
   *endif
 
   /window,1,on
