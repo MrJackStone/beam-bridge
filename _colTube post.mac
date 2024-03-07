@@ -121,6 +121,45 @@ smin , 'N_c'  , 'N_c0'   , 'ZEROS'
 smax , 'N_t0' , 'EMX_Ni' , 'EMX_Nj'
 smax , 'N_t'  , 'N_t0'   , 'ZEROS'
 
+! Internal reactions on piles, discounting impact coefficient
+sadd , 'N_ck' , 'N_c'   ,  , 1/1.4
+sadd , 'M_k'  , 'M_obl' ,  , 1/1.4
+sadd , 'Q_zk' , 'Q_z'   ,  , 1/1.4
+
+smin , 'N_cg'  , 'DW_Ni' , 'DW_Nj'
+smin , 'N_cg'  , 'N_cg'  , 'ZEROS'
+sadd , 'N_cgk' , 'N_cg'  ,         , 1/1.4
+sadd , 'N_cq'  , 'N_c'   , 'N_cg'  , 1                      , -1
+sadd , 'N_cqk' , 'N_cq'  ,         , 1/(1.4*LOAD_dynImpact)
+
+smax , 'M_yg'   , 'DW_MYi' , 'DW_MYj'
+smax , 'M_zg'   , 'DW_MZi' , 'DW_MZj'
+sexp , 'MYg_sq' , 'M_yg'   ,          , 2
+sexp , 'MZg_sq' , 'M_zg'   ,          , 2
+sadd , 'Mg_sq'  , 'MYg_sq' , 'MZg_sq'
+sexp , 'Mg_obl' , 'Mg_sq'  ,          , 0.5
+sadd , 'Mgk_o'  , 'Mg_obl' ,          , 1/1.4
+sadd , 'Mq_o'   , 'M_obl'  , 'Mg_obl' , 1                      , -1
+sadd , 'Mqk_o'  , 'Mq_o'   ,          , 1/(1.4*LOAD_dynImpact)
+
+smax , 'Q_yg'   , 'DW_QYi' , 'DW_QYj'
+smax , 'Q_zg'   , 'DW_QZi' , 'DW_QZj'
+sexp , 'QYg_sq' , 'Q_yg'   ,          , 2
+sexp , 'QZg_sq' , 'Q_zg'   ,          , 2
+sadd , 'Qg_sq'  , 'QYg_sq' , 'QZg_sq'
+sexp , 'Qg_obl' , 'Qg_sq'  ,          , 0.5
+sadd , 'Qgk_o'  , 'Qg_obl' ,          , 1/1.4
+sadd , 'Qq_o'   , 'Q_obl'  , 'Qg_obl' , 1                      , -1
+sadd , 'Qqk_o'  , 'Qq_o'   ,          , 1/(1.4*LOAD_dynImpact)
+
+sadd , 'Ndc_pile' , 'N_cqk' , 'N_cgk' , 1 , 1
+sadd , 'Mdo_pile' , 'Mqk_o' , 'Mgk_o' , 1 , 1
+sadd , 'Qdo_pile' , 'Qqk_o' , 'Qgk_o' , 1 , 1
+
+sadd , 'Ndc_estr' , 'N_cqk' , 'N_cgk' , 1.4 , 1.4
+sadd , 'Mdo_estr' , 'Mqk_o' , 'Mgk_o' , 1.4 , 1.4
+sadd , 'Qdo_estr' , 'Qqk_o' , 'Qgk_o' , 1.4 , 1.4
+
 ! Displacements in mm
 sadd , 'EMM_UX' , 'EAB_UX' ,  , 1e3
 sadd , 'EMM_UY' , 'EAB_UY' ,  , 1e3

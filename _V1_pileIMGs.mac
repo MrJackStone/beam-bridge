@@ -4,6 +4,7 @@ view1w
 windefa,1
 wincln,1
 clims
+boldfont,1
 /annot,dele
 /edge,1,0
 
@@ -13,6 +14,8 @@ clims
 /eshape,0
 allsel
 esel,u,type,,3
+cm,compe_colored,elem
+/color,cm,dgra,compe_colored
 eplot
 /user,1
 
@@ -20,7 +23,7 @@ eplot
 /udoc,1,cntr,right
 /gformat,F,1,1
 
-wntitle,'F. AXIAL NAS ESTACAS [kN]'
+wintitle,1,'ESTACAS','F. AXIAL','ELU-Normal [kN]',,,13
 
 go2png,1200
   /edge,1,1
@@ -36,7 +39,7 @@ go2png,1200
   /angle,1,-60,zs
   /gline,,-1
   /udoc,1,cntr,off
-  cleanplot,'plls','N_c','N_c','0.21',,'1'
+  cleanplot,'plls','Ndc_estr','Ndc_estr','0.21',,'1'
   /gline,,0
 
   /type,1,3
@@ -55,7 +58,7 @@ go2png,1200
   *get,fcz_auto,graph,1,focus,z
   /focus,1,1e6
   /udoc,1,cntr,right
-  cleanplot,'plls','N_c','N_c','0.1',,'1'
+  cleanplot,'plls','Ndc_estr','Ndc_estr','0.1',,'1'
   /focus,1,fcx_auto,fcy_auto,fcz_auto
   esel,s,type,,2
 
@@ -64,7 +67,7 @@ endpng,'IMG08a_pileN',,,,,memoImgsFolder
 /annot,dele
 
 !!
-wntitle,'MOM. FLETOR NAS ESTACAS [kNm]'
+wintitle,1,'ESTACAS','MOMENTO FLETOR','ELU-Normal [kNm]',,,13
 
 go2png,1200
   /edge,1,1
@@ -80,7 +83,7 @@ go2png,1200
   /vup,1,x
   /angle,1,-60,zs
   /gline,,-1
-  cleanplot,'plls','M_obl','M_obl','0.52',,'1'
+  cleanplot,'plls','Mdo_estr','Mdo_estr','0.52',,'1'
   /gline,,0
 
   /type,1,3
@@ -95,7 +98,7 @@ endpng,'IMG08b_pileM',,,,,memoImgsFolder
 /annot,dele
 
 !!
-wntitle,'F. CORTANTE NAS ESTACAS [kN]'
+wintitle,1,'ESTACAS','FOR. CORTANTE','ELU-Normal [kN]',,,13
 
 go2png,1200
   /edge,1,1
@@ -110,7 +113,7 @@ go2png,1200
   /vup,1,x
   /angle,1,-60,zs
   /gline,,-1
-  cleanplot,'plls','Q_obl','Q_obl','0.52',,'1'
+  cleanplot,'plls','Qdo_estr','Qdo_estr','0.52',,'1'
   /gline,,0
 
   /type,1,3

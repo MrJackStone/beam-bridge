@@ -68,9 +68,10 @@ endpng,'IMG12a_pile_guide',,,,,resultsFolder
 
 
 allsel
-sadd , 'N_ck' , 'N_c'   ,  , 1/1.4
-sadd , 'M_k'  , 'M_obl' ,  , 1/1.4
-sadd , 'Q_zk' , 'Q_z'   ,  , 1/1.4
+! sadd , 'N_ck' , 'N_c'   ,  , 1/1.4
+! sadd , 'M_k'  , 'M_obl' ,  , 1/1.4
+! sadd , 'Q_zk' , 'Q_z'   ,  , 1/1.4
+sadd, 'EK_UZ', 'EMM_UZ',,1/1.4
 
 cmsel,s,compl_abt_piles
 cmsel,a,compl_pile
@@ -127,7 +128,7 @@ ln=0
     /dscale,1,off
     /udoc,1,cntr,right
     /gformat,f,1,0
-    cleanplot,'plls','N_ck','N_ck','1','0'
+    cleanplot,'plls','Ndc_pile','Ndc_pile','1','0'
     /device,vector,on
     eplot
     /device,vector,off
@@ -145,7 +146,7 @@ ln=0
     /udoc,2,cntr,right
     /device,vector,off
     /gformat,f,1,1
-    cleanplot,'plls','M_k','M_k','-1','0'
+    cleanplot,'plls','Mdo_pile','Mdo_pile','-1','0'
 
     /window,1,off
     /window,2,off
@@ -160,7 +161,7 @@ ln=0
     /udoc,3,cntr,right
     /device,vector,off
     /gformat,f,1,1
-    cleanplot,'plls','Q_zk','Q_zk','-1','0'
+    cleanplot,'plls','Qdo_pile','Qdo_pile','-1','0'
 
     /window,1,off
     /window,2,off
@@ -182,7 +183,7 @@ ln=0
     /focus,4,1e6,,,1
     /udoc,4,cntr,right
     /gformat,f,1,2
-    cleanplot,'pletab','EMM_UZ'
+    cleanplot,'pletab','EK_UZ'
   endpng,'IMG12b_PILE_%pileIdx%',,,,,resultsFolder
   /erase
   /annot,dele

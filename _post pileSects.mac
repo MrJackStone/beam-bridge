@@ -5,21 +5,43 @@ esel,u,type,,3
 *get,ec,elem,,count
 *del,f_all
 *del,m_all
+*del,nd_all
+*del,nk_all
+*del,md_all
+*del,mk_all
 *dim,f_all,,ec
+*dim,nd_all,,ec
+*dim,nk_all,,ec
 *dim,m_all,,ec
+*dim,md_all,,ec
+*dim,mk_all,,ec
+
 enu=0
 *do,ei,1,ec,1
     enu=elnext(enu)
     *get,nth_f,elem,enu,etab,n_c
     *get,nth_m,elem,enu,etab,m_obl
+
+    *get,nth_nk,elem,enu,etab,ndc_pile
+    nth_nd=nth_nk*1.4
+    *get,nth_mk,elem,enu,etab,mdo_pile
+    nth_md=nth_mk*1.4
+
     f_all(ei)=nth_f
     m_all(ei)=nth_m
+
+    nk_all(ei)=nth_nk
+    nd_all(ei)=nth_nd
+    mk_all(ei)=nth_mk
+    md_all(ei)=nth_md
 *enddo
 
 *cfopen,'RES_pileSects_MN',txt
     *vwrite,
-    ('           N             M')
-    *vwrite,f_all(1),m_all(1)
-    (F12.2,'  ',F12.2)
+    ('----------ELU-Normal-super  ----------ELU-Normal-infra  -------------ELU-Geotecnia')
+    *vwrite,
+    ('           N             M             N             M             N             M')
+    *vwrite,f_all(1),m_all(1),nd_all(1),md_all(1),nk_all(1),mk_all(1)
+    (F12.2,'  ',F12.2,'  ',F12.2,'  ',F12.2,'  ',F12.2,'  ',F12.2,'  ',F12.2,'  ',F12.2)
 *cfclos
 
