@@ -82,37 +82,41 @@ TYPE_MPC184=6
 TYPE_MASS21=7
 
 ! Cross-sections
-SEC_GIRDER_num=1
-SEC_SLAB_num=2
-SEC_COLUMN_num=3
-SEC_FRAMEGIRDER_num=4
-SEC_PILECAP_num=5
-SEC_GRADEBEAM_num=6
-SEC_PILE_num=7
-SEC_VSOIL_num=8
-SEC_HSOIL_num=9
-SEC_SPRING_num=10
-SEC_Bearing_num=11
-SEC_BearingXZ_num=12
-SEC_BearingYZ_num=13
-SEC_FRICTION_num=14
-SEC_ABT_longWall=15
-SEC_ABT_tranWall=16
-SEC_ABT_column=17
-SEC_ABT_beam=18
-SEC_ABT_wing=19
-SEC_ABT_appSlab=20
-SEC_ABT_pile=21
-SEC_ABT_pileCap=22
-REAL_ABT_kv=23
-REAL_ABT_kh=24
-SEC_COLWALL=25
-SEC_COLCAP=26
-SEC_PSOIL_num=27
-SEC_GERBER=28
-SEC_CONSOLE=29
-SEC_CROSSBEAM=30
-SEC_ABT_thinTranWall=31
+SEC_GIRDER_num       = 1
+SEC_SLAB_num         = 2
+SEC_COLUMN_num       = 3
+SEC_FRAMEGIRDER_num  = 4
+SEC_PILECAP_num      = 5
+SEC_GRADEBEAM_num    = 6
+SEC_PILE_num         = 7
+SEC_VSOIL_num        = 8
+SEC_HSOIL_num        = 9
+SEC_SPRING_num       = 10
+SEC_Bearing_num      = 11
+SEC_BearingXZ_num    = 12
+SEC_BearingYZ_num    = 13
+SEC_FRICTION_num     = 14
+SEC_ABT_longWall     = 15
+SEC_ABT_tranWall     = 16
+SEC_ABT_column       = 17
+SEC_ABT_beam         = 18
+SEC_ABT_wing         = 19
+SEC_ABT_appSlab      = 20
+SEC_ABT_pile         = 21
+SEC_ABT_pileCap      = 22
+REAL_ABT_kv          = 23
+REAL_ABT_kh          = 24
+SEC_COLWALL          = 25
+SEC_COLCAP           = 26
+SEC_PSOIL_num        = 27
+SEC_GERBER           = 28
+SEC_CONSOLE          = 29
+SEC_CROSSBEAM        = 30
+SEC_ABT_thinTranWall = 31
+
+*del,SEC_GIRDER_nums,,nopr
+*dim,SEC_GIRDER_nums,GEO_girderSectionCount
+*vfill,SEC_GIRDER_nums,ramp,32,1
 
 ! Coordinate systems
 CS_base=11
@@ -255,40 +259,59 @@ et,TYPE_MASS21,21
 !!                                                                                                !!
 
 !! 2.1.3.1 GIRDER                                                                                 !!
-*if,MAT_Girder_type,EQ,0,THEN
-   ! Write custom cross-section file
-   SEC_GIRDER,GIRDER_bfs,GIRDER_bfi,GIRDER_d,GIRDER_tfs,GIRDER_tfi,GIRDER_tw,GIRDER_hs,GIRDER_hi,GIRDER_hw,GIRDER_name
-   ! Update input geometry
-   GIRDER_bfs=SEC_GIRDER_VAR_bfs
-   GIRDER_bfi=SEC_GIRDER_VAR_bfi
-   GIRDER_d=SEC_GIRDER_VAR_d
-   GIRDER_tfs=SEC_GIRDER_VAR_tfs
-   GIRDER_tfi=SEC_GIRDER_VAR_tfi
-   GIRDER_tw=SEC_GIRDER_VAR_tw
-   GIRDER_hs=SEC_GIRDER_VAR_hs
-   GIRDER_hi=SEC_GIRDER_VAR_hi
-   GIRDER_hw=SEC_GIRDER_VAR_hw
-   ! Create cross-section
-   SECTYPE,SEC_GIRDER_num,BEAM,MESH,GIRDER_name
-   SECREAD,GIRDER_name,SECT,,MESH
-   SECOFFSET,USER,GIRDER_bfi/2,GIRDER_d
-*elseif,MAT_Girder_type,EQ,1,THEN
-   ! Create section from database
-   CEDISAVS,SEC_GIRDER_num,GIRDER_name,2
-   GIRDER_bfs=CEDISAVS_VAR_bf
-   GIRDER_bfi=CEDISAVS_VAR_bf
-   GIRDER_d=CEDISAVS_VAR_d
-   GIRDER_tfs=CEDISAVS_VAR_tf
-   GIRDER_tfi=CEDISAVS_VAR_tf
-   GIRDER_tw=CEDISAVS_VAR_tw
-   GIRDER_hs=0
-   GIRDER_hi=0
-   GIRDER_hw=CEDISAVS_VAR_d-2*CEDISAVS_VAR_tf
-   !! *if,SEC_offset,EQ,1,THEN
-      SECOFFSET,USER,,GIRDER_d
-   !! *endif
-*endif
-!
+*do,nthGirderSection,1,GEO_girderSectionCount
+  ! Collect section description
+  num  = SEC_GIRDER_nums(nthGirderSection)
+  bfs  = GIRDER_bfs(nthGirderSection)
+  bfi  = GIRDER_bfi(nthGirderSection)
+  tfs  = GIRDER_tfs(nthGirderSection)
+  tfi  = GIRDER_tfi(nthGirderSection)
+  tw   = GIRDER_tw(nthGirderSection)
+  hs   = GIRDER_hs(nthGirderSection)
+  hi   = GIRDER_hi(nthGirderSection)
+  hw   = GIRDER_hw(nthGirderSection)
+  name = GIRDER_name(nthGirderSection)
+
+  *if,MAT_Girder_type,EQ,0,THEN
+    ! Write custom cross-section file
+    SEC_GIRDER,bfs,bfi,d,tfs,tfi,tw,hs,hi,hw,name
+
+    ! Update input geometry
+    GIRDER_bfs(nthGirderSection) = SEC_GIRDER_VAR_bfs
+    GIRDER_bfi(nthGirderSection) = SEC_GIRDER_VAR_bfi
+    GIRDER_d  (nthGirderSection) = SEC_GIRDER_VAR_d
+    GIRDER_tfs(nthGirderSection) = SEC_GIRDER_VAR_tfs
+    GIRDER_tfi(nthGirderSection) = SEC_GIRDER_VAR_tfi
+    GIRDER_tw (nthGirderSection) = SEC_GIRDER_VAR_tw
+    GIRDER_hs (nthGirderSection) = SEC_GIRDER_VAR_hs
+    GIRDER_hi (nthGirderSection) = SEC_GIRDER_VAR_hi
+    GIRDER_hw (nthGirderSection) = SEC_GIRDER_VAR_hw
+
+    ! Create cross-section
+    sectype,num,beam,mesh,name
+    secread,name,sect,,mesh
+    secoffset,user,bfi/2,d
+
+  *elseif,MAT_Girder_type,EQ,1,THEN
+    ! Create section from database
+    CEDISAVS,num,name,2
+    secoffset,user,,d
+
+    ! Update input geometry
+    GIRDER_bfs(nthGirderSection) = CEDISAVS_VAR_bf
+    GIRDER_bfi(nthGirderSection) = CEDISAVS_VAR_bf
+    GIRDER_d  (nthGirderSection) = CEDISAVS_VAR_d
+    GIRDER_tfs(nthGirderSection) = CEDISAVS_VAR_tf
+    GIRDER_tfi(nthGirderSection) = CEDISAVS_VAR_tf
+    GIRDER_tw (nthGirderSection) = CEDISAVS_VAR_tw
+    GIRDER_hs (nthGirderSection) = 0
+    GIRDER_hi (nthGirderSection) = 0
+    GIRDER_hw (nthGirderSection) = CEDISAVS_VAR_d-2*CEDISAVS_VAR_tf
+
+  *endif
+
+*enddo
+
 !! 2.1.3.2 SLAB                                                                                   !!
 sectype,SEC_SLAB_num,SHELL,,SLAB_name
 secdata,SLAB_t,MAT_Slab
