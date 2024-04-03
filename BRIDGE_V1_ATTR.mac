@@ -749,7 +749,7 @@ GEO_frameGirderRight=GEO_frameGirderLeft
 *if,SEC_offset,EQ,0,THEN
    zFrameTop=0
 *elseif,SEC_offset,EQ,1,THEN
-   zFrameTop=0-GIRDER_d-FRAMEGIRDER_h
+   zFrameTop=0-GIRDER_d(1)-FRAMEGIRDER_h !! TODO: contemplate multiple girder heights
 *endif
 
 ! Calculate the vertical position of the base of the columns

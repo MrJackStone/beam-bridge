@@ -4,6 +4,18 @@
 /uis,msgpop,3
 /output,outpost,out
 
+! Temporary backwards compatibility with scalar definition of girder cross-sections
+GIRDER_d0    = GIRDER_d   (1)
+GIRDER_bfs0  = GIRDER_bfs (1)
+GIRDER_bfi0  = GIRDER_bfi (1)
+GIRDER_tfs0  = GIRDER_tfs (1)
+GIRDER_tfi0  = GIRDER_tfi (1)
+GIRDER_tw0   = GIRDER_tw  (1)
+GIRDER_hs0   = GIRDER_hs  (1)
+GIRDER_hi0   = GIRDER_hi  (1)
+GIRDER_hw0   = GIRDER_hw  (1)
+GIRDER_name0 = GIRDER_name(1)
+
 *if,SOLU_type,eq,0,then
   ! Static
   /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_colTube post',mac
