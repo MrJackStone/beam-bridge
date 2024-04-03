@@ -83,6 +83,36 @@ GEO_uniGirderSpacing=1
    GEO_girderY_end(1)=
 *endif
 
+! Set girder cross-section per span:
+!    [0] Off (girder cross-sections corresponding to each span)
+!    [1] On (use same cross-section for all girders)
+GEO_uniGirderSection=0
+*if,GEO_uniGirderSection,eq,0,then
+  GEO_girderSectionCount=GEO_supportCount
+*else
+  GEO_girderSectionCount=1
+*endif
+
+! Cross-section
+*del,GIRDER_parms,,nopr
+*dim,GIRDER_parms,char,9
+GIRDER_parms(1)= 'GIRDER_d' , 'GIRDER_bfs' , 'GIRDER_bfi' , 'GIRDER_tfs' , 'GIRDER_tfi' , 'GIRDER_tw' , 'GIRDER_hs' , 'GIRDER_hi' , 'GIRDER_hw'
+arrinit,'GIRDER_parms',,GEO_girderSectionCount
+
+*del,GIRDER_name,,nopr
+*dim,GIRDER_name,char,GEO_girderSectionCount
+
+GIRDER_d   (1) = 1.5
+GIRDER_bfs (1) = 0.7
+GIRDER_bfi (1) = 0.6
+GIRDER_tfs (1) = 0.15
+GIRDER_tfi (1) = 0.20
+GIRDER_tw  (1) = 0.25
+GIRDER_hs  (1) = 0.1
+GIRDER_hi  (1) = 0.2
+GIRDER_hw  (1) = 0.85
+GIRDER_name(1) = 'G150x70'   ! CEDISAVS
+
 ! Connection between girders (inner spans, does not include overhangs)
 !    [0] Pinned
 !    [1] Rigid (all DOFs)
@@ -117,18 +147,6 @@ FEM_GirderConnection_UZ=0
   FEM_Bearing_kv=1e10
   ! Horizontal stiffness in the connection between girders and frame girders [N/m]
   FEM_Bearing_kh=2e9
-
-! Cross-section
-GIRDER_d    = 1.5
-GIRDER_bfs  = 0.7
-GIRDER_bfi  = 0.6
-GIRDER_tfs  = 0.15
-GIRDER_tfi  = 0.20
-GIRDER_tw   = 0.25
-GIRDER_hs   = 0.1
-GIRDER_hi   = 0.2
-GIRDER_hw   = 0.85
-GIRDER_name = 'G150x70'   ! CEDISAVS
 
 ! Material type
 !    [0] Concrete
