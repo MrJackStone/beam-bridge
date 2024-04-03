@@ -271,9 +271,7 @@ et,TYPE_MASS21,21
    ! Create cross-section
    SECTYPE,SEC_GIRDER_num,BEAM,MESH,GIRDER_name
    SECREAD,GIRDER_name,SECT,,MESH
-   !!*if,SEC_offset,EQ,1,THEN
-      SECOFFSET,USER,GIRDER_bfi/2,GIRDER_d
-   !!*endif
+   SECOFFSET,USER,GIRDER_bfi/2,GIRDER_d
 *elseif,MAT_Girder_type,EQ,1,THEN
    ! Create section from database
    CEDISAVS,SEC_GIRDER_num,GIRDER_name,2
@@ -292,12 +290,10 @@ et,TYPE_MASS21,21
 *endif
 !
 !! 2.1.3.2 SLAB                                                                                   !!
-SECTYPE,SEC_SLAB_num,SHELL,,SLAB_name
-SECDATA,SLAB_t,MAT_Slab
-!! *if,SEC_offset,EQ,1,THEN
-   SECOFFSET,BOT
-!! *endif
-!
+sectype,SEC_SLAB_num,SHELL,,SLAB_name
+secdata,SLAB_t,MAT_Slab
+secoffset,-(SLAB_t/2)-SLAB_hF
+
 !! 2.1.3.3 CANTILEVER (GERBER CONNECTION)                                                         !!
 sectype,SEC_GERBER,beam,rect,'GERBER',2
 secdata,GERBER_b,GERBER_h

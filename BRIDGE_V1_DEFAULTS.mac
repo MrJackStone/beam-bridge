@@ -3,25 +3,26 @@
 !!                                                                                                !!
 !! 1.0  Global definitions                                                                        !!
 !!                                                                                                !!
-SEC_offset=0
+SEC_offset = 0
 
 
 
 !!                                                                                                !!
 !! 1.1  Superstructure                                                                            !!
 !!                                                                                                !!
-GEO_deckRadius=0
+GEO_deckRadius = 0
 
-GEO_slabConnection=0
+SLAB_hF            = 0
+GEO_slabConnection = 0
 
-GEO_girderConnection=0
+GEO_girderConnection = 0
 
-FEM_sgCouple_UX=1
-FEM_sgCouple_UY=1
-FEM_sgCouple_UZ=1
-FEM_sgCouple_RX=1
-FEM_sgCouple_RY=1
-FEM_sgCouple_RZ=1
+FEM_sgCouple_UX = 1
+FEM_sgCouple_UY = 1
+FEM_sgCouple_UZ = 1
+FEM_sgCouple_RX = 1
+FEM_sgCouple_RY = 1
+FEM_sgCouple_RZ = 1
 
 
 
@@ -70,40 +71,40 @@ SOLU_ksi      = 0.02
 !! Default material properties                                                                    !!
 !!                                                                                                !!
 ! Deck slab
-MAT_Slab_Poisson=0.2
-MAT_Slab_dens=2500
+MAT_Slab_Poisson = 0.2
+MAT_Slab_dens    = 2500
 
 ! Pier columns
-MAT_Column_Poisson=0.2
-MAT_Column_dens=2500
+MAT_Column_Poisson = 0.2
+MAT_Column_dens    = 2500
 
 ! Pier frame girders
-MAT_FrameGirder_Poisson=0.2
-MAT_FrameGirder_dens=2500
+MAT_FrameGirder_Poisson = 0.2
+MAT_FrameGirder_dens    = 2500
 
 ! Pile caps
-MAT_PileCap_Poisson=0.2
-MAT_PileCap_dens=2500
+MAT_PileCap_Poisson = 0.2
+MAT_PileCap_dens    = 2500
 
 ! Infrastructure grade beams
-MAT_GradeBeam_Poisson=0.2
-MAT_GradeBeam_dens=2500
+MAT_GradeBeam_Poisson = 0.2
+MAT_GradeBeam_dens    = 2500
 
 ! Piles
-MAT_Pile_Poisson=0.2
-MAT_Pile_dens=2500
+MAT_Pile_Poisson = 0.2
+MAT_Pile_dens    = 2500
 
 ! Abutments
-MAT_Abutment_Poisson=0.2
-MAT_Abutment_dens=2500
+MAT_Abutment_Poisson = 0.2
+MAT_Abutment_dens    = 2500
 
 ! Approach slabs
-MAT_Approach_Poisson=0.2
-MAT_Approach_dens=2500
+MAT_Approach_Poisson = 0.2
+MAT_Approach_dens    = 2500
 
 ! Gerber cantilevers
-MAT_Gerber_Poisson=0.2
-MAT_Gerber_dens=2500
+MAT_Gerber_Poisson = 0.2
+MAT_Gerber_dens    = 2500
 
 ! Soil
 MAT_Soil_Poisson=0.2

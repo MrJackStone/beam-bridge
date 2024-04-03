@@ -53,6 +53,8 @@ GEO_rightSlabHang=0.9
 
 ! Thickness
 SLAB_t=0.22
+! Gap between slab & girder (pre-fabricated slab)
+SLAB_hF = 0.07
 
 ! Longitudinal stiffness reduction, between 0 (full reduction) and 1 (no reduction)
 SLAB_longRedCoef=0.6
