@@ -1273,7 +1273,7 @@ nthPier=0
   LOAD_locRep=1
 *endif
 
-loadtrain, LOAD_ltName,LOAD_locRep,0,LOAD_dynImpact, udlLength ! Output: LOADTRAIN_VAR_count; LOADTRAIN_ARR_positions; LOADTRAIN_ARR_loads
+loadtrain, LOAD_ltName,LOAD_locRep,0,1, udlLength ! Output: LOADTRAIN_VAR_count; LOADTRAIN_ARR_positions; LOADTRAIN_ARR_loads
 LOAD_plCount=LOADTRAIN_VAR_count
 *del,LOAD_plDist,,nopr
 *del,LOAD_plValue,,nopr
@@ -1316,8 +1316,8 @@ LOAD_vehicleTraffic=LOAD_dynImpact*LOAD_vehicleTraffic_k
 *if,LOAD_combination,EQ,1,THEN
    ! Ultimate load: load train as main
    ! Live loads
-   *voper,LOAD_plValue,LOAD_gammaQ,MULT,LOAD_plValue
-   LOAD_vehicleTraffic    = LOAD_vehicleTraffic*LOAD_gammaQ*LOAD_psi0
+   *voper,LOAD_plValue,LOAD_gammaQ*LOAD_dynImpact,MULT,LOAD_plValue
+   LOAD_vehicleTraffic    = LOAD_vehicleTraffic*LOAD_dynImpact*LOAD_gammaQ*LOAD_psi0
    LOAD_pedestrianTraffic = LOAD_pedestrianTraffic_k*LOAD_gammaQ*LOAD_psi0
    LOAD_waterFlow         = LOAD_waterFlow_k*LOAD_gammaQ*LOAD_psi0
    LOAD_columnWind        = LOAD_columnWind_k*LOAD_gammaQ*LOAD_psi0
@@ -1330,8 +1330,8 @@ LOAD_vehicleTraffic=LOAD_dynImpact*LOAD_vehicleTraffic_k
 *elseif,LOAD_combination,EQ,2,THEN
    ! Ultimate load: wind/tide as main
    ! Live loads
-   *voper,LOAD_plValue,LOAD_gammaQ*LOAD_psi0,MULT,LOAD_plValue
-   LOAD_vehicleTraffic    = LOAD_vehicleTraffic*LOAD_gammaQ
+   *voper,LOAD_plValue,LOAD_gammaQ*LOAD_dynImpact*LOAD_psi0,MULT,LOAD_plValue
+   LOAD_vehicleTraffic    = LOAD_vehicleTraffic*LOAD_dynImpact*LOAD_gammaQ
    LOAD_pedestrianTraffic = LOAD_pedestrianTraffic_k*LOAD_gammaQ
    LOAD_waterFlow         = LOAD_waterFlow_k*LOAD_gammaQ*LOAD_psi0
    LOAD_columnWind        = LOAD_columnWind_k*LOAD_gammaQ*LOAD_psi0
@@ -1420,6 +1420,20 @@ LOAD_vehicleTraffic=LOAD_dynImpact*LOAD_vehicleTraffic_k
    LOAD_waterFlow         = LOAD_waterFlow_k*LOAD_psi1
    LOAD_columnWind        = LOAD_columnWind_k*LOAD_psi1
    LOAD_deckWind          = LOAD_deckWind_k*LOAD_psi1
+   ! Dead loads
+   LOAD_g            = LOAD_g_k
+   LOAD_pav          = LOAD_pav_k
+   LOAD_barrierValue = LOAD_barrierValue_k
+
+*elseif,LOAD_combination,EQ,9,THEN
+   ! Service load ("frequente"): load train as main
+   ! Live loads
+   *voper,LOAD_plValue,1,MULT,LOAD_plValue
+   LOAD_vehicleTraffic    = LOAD_vehicleTraffic_k*LOAD_psi2
+   LOAD_pedestrianTraffic = LOAD_pedestrianTraffic_k*LOAD_psi2
+   LOAD_waterFlow         = LOAD_waterFlow_k*LOAD_psi2
+   LOAD_columnWind        = LOAD_columnWind_k*0
+   LOAD_deckWind          = LOAD_deckWind_k*0
    ! Dead loads
    LOAD_g            = LOAD_g_k
    LOAD_pav          = LOAD_pav_k

@@ -40,8 +40,9 @@ cm,COMPN_plot,node
   pcalc , add , 'ELS_UGK' , 'UZG_MM' ,  , 1/1.4
   pcalc , add , 'ELS_URA' , 'UZD_MM' ,  , 1/1.4
 
-  pthrebase,'ELS_UGK',0,'DEFL_GK'
-  pthrebase,'ELS_URA',0,'DEFL_RA'
+  pthrebase , 'UZD_MM'  , 0 , 'DEFL_RAW'
+  pthrebase , 'ELS_UGK' , 0 , 'DEFL_GK'
+  pthrebase , 'ELS_URA' , 0 , 'DEFL_RA'
 
   pcalc , add , 'DEFL_QK'  , 'DEFL_RA' , 'DEFL_GK' , 1 , -1
   pcalc , add , 'DEFL_FRQ' , 'DEFL_GK' , 'DEFL_QK' , 1 , 0.6
@@ -55,6 +56,7 @@ cmsel,s,COMPE_plot
 cmsel,s,COMPN_plot
 *do,nthGirder,1,GEO_girderCount,1
   MPATHPLOT_ARR_labels(nthGirder)='DEFL_FRQ'
+  ! MPATHPLOT_ARR_labels(nthGirder)='DEFL_RAW'
 *enddo
 
 view1w
