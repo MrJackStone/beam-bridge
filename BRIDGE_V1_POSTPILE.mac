@@ -1,3 +1,332 @@
+! BRIDGE_V1_POSTPILE
+
+/annot,dele
+
+view1w
+windefa,1
+wincln,1
+clims
+boldfont,1
+/annot,dele
+/edge,1,0
+
+/view,1,-1,-1,1
+/angle,1,0
+/auto,1
+/eshape,0
+allsel
+esel,u,type,,3
+cm,compe_colored,elem
+/color,cm,dgra,compe_colored
+eplot
+/user,1
+
+/plopts,leg3,on
+/udoc,1,cntr,right
+/gformat,F,1,1
+
+wintitle,1,'ESTACAS','F. AXIAL','ELU-Normal [kN]',,,13
+
+go2png,1200
+  /edge,1,1
+  eplot
+  /noerase
+
+  cmsel,s,compl_pile
+  cmsel,a,compl_abt_piles
+  esll,s
+  nsle,s,active
+  /edge,1,0
+  /vup,1,x
+  /angle,1,-60,zs
+  /gline,,-1
+  /udoc,1,cntr,off
+  cleanplot,'plls','Ndc_estr','Ndc_estr','0.21',,'1'
+  /gline,,0
+
+  /type,1,3
+  /edge,1,1
+  esel,s,type,,2
+  eplot
+  /vup,1,z
+  /angle,1,0,zs
+
+  cmsel,s,compl_pile
+  cmsel,a,compl_abt_piles
+  esll,s
+  nsle,s,active
+  *get,fcx_auto,graph,1,focus,x
+  *get,fcy_auto,graph,1,focus,y
+  *get,fcz_auto,graph,1,focus,z
+  /focus,1,1e6
+  /udoc,1,cntr,right
+  cleanplot,'plls','Ndc_estr','Ndc_estr','0.1',,'1'
+  /focus,1,fcx_auto,fcy_auto,fcz_auto
+  esel,s,type,,2
+
+endpng,'IMG08a_pileN',,,,,memoImgsFolder
+/erase
+/annot,dele
+
+!!
+wintitle,1,'ESTACAS','MOMENTO FLETOR','ELU-Normal [kNm]',,,13
+
+go2png,1200
+  /edge,1,1
+  esel,s,type,,2
+  eplot
+  /noerase
+
+  cmsel,s,compl_pile
+  cmsel,a,compl_abt_piles
+  esll,s
+  nsle,s,active
+  /edge,1,0
+  /vup,1,x
+  /angle,1,-60,zs
+  /gline,,-1
+  cleanplot,'plls','Mdo_estr','Mdo_estr','0.52',,'1'
+  /gline,,0
+
+  /type,1,3
+  /edge,1,1
+  esel,s,type,,2
+  eplot
+  /vup,1,z
+  /angle,1,0,zs
+
+endpng,'IMG08b_pileM',,,,,memoImgsFolder
+/erase
+/annot,dele
+
+!!
+wintitle,1,'ESTACAS','FOR. CORTANTE','ELU-Normal [kN]',,,13
+
+go2png,1200
+  /edge,1,1
+  eplot
+  /noerase
+
+  cmsel,s,compl_pile
+  cmsel,a,compl_abt_piles
+  esll,s
+  nsle,s,active
+  /edge,1,0
+  /vup,1,x
+  /angle,1,-60,zs
+  /gline,,-1
+  cleanplot,'plls','Qdo_estr','Qdo_estr','0.52',,'1'
+  /gline,,0
+
+  /type,1,3
+  /edge,1,1
+  esel,s,type,,2
+  eplot
+  /vup,1,z
+  /angle,1,0,zs
+
+endpng,'IMG08c_pileQ',,,,,memoImgsFolder
+/erase
+/annot,dele
+
+
+
+!!  Individual piles                                                                              !!
+resultsFolder='memo_imgs'
+
+/annot,dele
+view1w
+clims
+
+! Pile guide
+
+/window,all,dele
+/window,1,-1,1.67,0,1
+/window,2,-1,1.67,-1,0
+/view,1,0,0,-1
+/view,2,0,0,-1
+/auto,all
+/angle,all,0
+
+wntitle,'ENCONTRO 01: ID. ESTACAS',1,1,'C'
+wntitle,'ENCONTRO 02: ID. ESTACAS',2,1,'C'
+
+go2png,1200
+
+  /window,1,on
+  /window,2,off
+  cmsel,s,COMPA_ABT_1
+  esla,s
+  /device,vector,on
+  /edge,1,1
+  /eshape,0
+  eplot
+  /noerase
+  /user,1
+  /eshape,1
+  cmsel,s,COMPL_ABT_piles
+  cmsel,r,COMPL_ABT_1
+  esll,s
+  nsle,s,active
+  eplot
+  /pnum,line,1
+  /number,2
+  lplot
+  /number,1
+  /pnum,line,0
+  lplot
+
+  /window,1,off
+  /window,2,on
+  cmsel,s,COMPA_ABT_2
+  esla,s
+  /device,vector,on
+  /edge,2,1
+  /eshape,0
+  eplot
+  /user,2
+  /eshape,1
+  cmsel,s,COMPL_ABT_piles
+  cmsel,r,COMPL_ABT_2
+  esll,s
+  nsle,s,active
+  eplot
+  /pnum,line,1
+  /number,2
+  lplot
+  /number,1
+  /pnum,line,0
+  lplot
+
+endpng,'IMG12a_pile_guide',,,,,resultsFolder
+
+
+allsel
+! sadd , 'N_ck' , 'N_c'   ,  , 1/1.4
+! sadd , 'M_k'  , 'M_obl' ,  , 1/1.4
+! sadd , 'Q_zk' , 'Q_z'   ,  , 1/1.4
+sadd, 'EK_UZ', 'EMM_UZ',,1/1.4
+
+cmsel,s,compl_abt_piles
+cmsel,a,compl_pile
+cm,compl_temp,line
+*get,lc,line,,count
+
+ln=0
+*do,nthLine,1,lc,1
+  cmsel,s,COMPL_temp
+  ln=lsnext(ln)
+  lsel,s,line,,ln
+
+  pileIdx=ln
+
+  esll,s
+  nsle,s,active
+
+  /window,all,dele
+  /window , 1 , -1.00   , -0.3325 , -0.92 , 1
+  /window , 2 , -0.3325 , 0.335   , -0.92 , 1
+  /window , 3 , 0.335   , 1.0025  , -0.92 , 1
+  /window , 4 , 1.0025  , 1.67    , -0.92 , 1
+  /window , 5 , -1      , 1.67    , -1    , -0.92
+  wincln,1
+  wincln,2
+  wincln,3
+  wincln,4
+  /plopts,info,0
+  /plopts,leg3,on
+  /plopts,wins,0
+  /view,1, 1, 1, 1
+  /view,2,-1,-1, 1
+  /view,3,-1,-1, 1
+  /view,4, 0,-1, 0
+  /angle,all,0
+  /edge,all,1
+
+  wntitle , 'F. NORMAL [kN]'    , 1 , 1 , 'C'
+  wntitle , 'M. FLETOR [kNm]'   , 2 , 1 , 'C'
+  wntitle , 'F. CORTANTE [kN]'  , 3 , 1 , 'C'
+  wntitle , 'RECALQUE [mm]'     , 4 , 1 , 'C'
+  wntitle , 'ESTACA #%pileIdx%' , 5 , 0 , 'C'
+
+  go2png,1200
+    /window,1,on
+    /window,2,off
+    /window,3,off
+    /window,4,off
+    /window,5,off
+    /auto,1
+    eplot
+    /noerase
+    /user,1
+    /dscale,1,off
+    /udoc,1,cntr,right
+    /gformat,f,1,0
+    cleanplot,'plls','Ndc_pile','Ndc_pile','1','0'
+    /device,vector,on
+    eplot
+    /device,vector,off
+
+    /window,1,off
+    /window,2,on
+    /window,3,off
+    /window,4,off
+    /window,5,off
+    /auto,2
+    /device,vector,on
+    eplot
+    /user,2
+    /dscale,2,off
+    /udoc,2,cntr,right
+    /device,vector,off
+    /gformat,f,1,1
+    cleanplot,'plls','Mdo_pile','Mdo_pile','-1','0'
+
+    /window,1,off
+    /window,2,off
+    /window,3,on
+    /window,4,off
+    /window,5,off
+    /auto,3
+    /device,vector,on
+    eplot
+    /user,3
+    /dscale,3,off
+    /udoc,3,cntr,right
+    /device,vector,off
+    /gformat,f,1,1
+    cleanplot,'plls','Qdo_pile','Qdo_pile','-1','0'
+
+    /window,1,off
+    /window,2,off
+    /window,3,off
+    /window,4,on
+    /window,5,off
+    /eshape,1
+    /auto,4
+    /device,vector,on
+    /type,4,0
+    eplot
+    /device,vector,off
+    /user,4
+    /dscale,4,30
+    /udoc,4,cntr,off
+    /type,4,3
+    plnsol,u,z
+    /dscale,4,off
+    /focus,4,1e6,,,1
+    /udoc,4,cntr,right
+    /gformat,f,1,2
+    cleanplot,'pletab','EK_UZ'
+  endpng,'IMG12b_PILE_%pileIdx%',,,,,resultsFolder
+  /erase
+  /annot,dele
+  clims
+*enddo
+
+
+
+!!  Peak pile                                                                                     !!
 resultsFolder='memo_imgs'
 
 /annot,dele
@@ -453,3 +782,83 @@ endpng,'IMG11c_peakPileQ',,,,,resultsFolder
 
 /annot,dele
 
+
+
+!! Plastic strain                                                                                 !!
+/post1
+allsel
+rsys,solu
+etable,'EPL',eppl,eqv
+*del,etNames
+*dim,etNames,char,1
+etNames(1)='EPL'
+etenv,1,LoadStepCount,'etNames'
+
+
+
+
+esel,s,elem,,11677
+
+esel,s,type,,3
+esel,r,real,,9
+nsle,s,active
+/eshape,10
+/dscale,,off
+cm,e,elem
+
+*get,ec,elem,,count
+en=0
+*do,i,1,ec,1
+    en=elnext(en)
+    n1=nelem(en,1)
+    n2=nelem(en,2)
+    *if,nx(n1),eq,nx(n2),then
+        esel,u,elem,,en
+    *endif
+*enddo
+cm,e2,elem
+
+/window,all,dele
+view1w
+/view,1,0,-1,0
+/angle,1,0
+/auto,1
+wincln,1
+
+allsel
+/eshape,0
+esel,u,type,,3
+/type,1,3
+/edge,1,1
+eplot
+/user,1
+/dist,1,0.95,1
+
+go2png
+    /device,vector,on
+    eplot
+    /noerase
+
+    cmsel,s,compl_pile
+    cmsel,a,compl_abt_piles
+    esll,s
+    nsle,s,active
+    cm,pls,elem
+    /color,cm,dgra,pls
+    /device,vector,off
+    /gline,,-1
+    /eshape,1
+    eplot
+
+    cmsel,s,e2
+    nsle,s,active
+    /eshape,10 !0.8
+    clims,0,1e-9
+    plnsol,eppl,eqv
+endpng,'IMG26a_soilPL'
+/erase
+/gline,,0
+
+clims
+
+rsys

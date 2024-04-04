@@ -1,16 +1,10 @@
-/post1
-set,last
+! BRIDGE_V1_POSTAPPSLAB
 
-allsel
-smax,'ENEG_MX','EMX_MX','ZEROS'
-smax,'EPOS_MX','EMN_MX','ZEROS',-1
-sabs,0
-
-cmsel,s,compa_slab
+cmsel,s,compa_abt_appslab
 esla,s
 nsle,s,active
 cm,vn,node
-/input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_slab_paths',mac
+BRIDGE_V1_POSTSLABPATHS
 
 *del,MPATHPLOT_ARR_pathNames
 *dim,MPATHPLOT_ARR_pathNames,char,GEO_genSpanCount*5
@@ -29,7 +23,7 @@ nsle,s,active
 view1w
 windefa,1
 wincln,1
-wntitle,'LAJES: MOM. FLETOR (-) [kNm/m]'
+wntitle,'APROX: MOM. FLETOR (-) [kNm/m]'
 
 /view,1,-1,-1,1
 /angle,1,0
@@ -38,7 +32,7 @@ eplot
 /user,1
 
 cmsel,a,COMPE_pile
-cmsel,s,compa_slab
+cmsel,s,compa_abt_appslab
 esla,u
 
 /plopts,leg3,on
@@ -50,15 +44,14 @@ esla,u
 go2png,1200
   eplot
   /noerase
-  cmsel,s,compa_slab
+  cmsel,s,compa_abt_appslab
   esla,s
   nsle,s,active
   /edge,1,0
   clims
   cleanplot,'pletab','ENEG_MX','1'
-endpng,'IMG02a_slabMx_neg',,,,,memoImgsFolder
+endpng,'IMG03a_approxMx_neg',,,,,memoImgsFolder
 /erase
-/annot,dele
 clims
 
 !!
@@ -68,18 +61,6 @@ clims
   MPATHPLOT_ARR_labels(i)='EPOS_MX'
 *enddo
 
-nsel,none
-esel,none
-*do,nthSupport,1,GEO_supportCount,1
-  xSupport=GEO_supportX(nthSupport)
-  nsel,a,loc,x,xSupport-0.5,xSupport+0.5
-  esln,a
-*enddo
-cmsel,r,COMPE_slab
-cmsel,r,COMPN_slab
-cm,COMPE_slabIgnore,elem
-cm,COMPN_slabIgnore,node
-
 allsel
 esel,u,type,,3
 cmsel,u,COMPE_pile
@@ -88,7 +69,7 @@ nsle,s,active
 view1w
 windefa,1
 wincln,1
-wntitle,'LAJES: MOM. FLETOR (+) [kNm/m]'
+wntitle,'APROX: MOM. FLETOR (+) [kNm/m]'
 
 /view,1,-1,-1,1
 /angle,1,0
@@ -97,9 +78,8 @@ eplot
 /user,1
 
 cmsel,a,COMPE_pile
-cmsel,s,compa_slab
+cmsel,s,compa_abt_appslab
 esla,u
-cmsel,a,COMPE_slabIgnore
 
 /plopts,leg3,on
 /udoc,1,cntr,right
@@ -110,14 +90,15 @@ cmsel,a,COMPE_slabIgnore
 go2png,1200
   eplot
   /noerase
-  cmsel,s,compa_slab
+  cmsel,s,compa_abt_appslab
   esla,s
-  cmsel,u,COMPE_slabIgnore
   nsle,s,active
+  nsel,u,loc,x,0,-0.5
+  nsel,u,loc,x,GEO_deckLength,GEO_deckLength+0.5
   /edge,1,0
   clims
   cleanplot,'pletab','EPOS_MX','1'
-endpng,'IMG02b_slabMx_pos',,,,,memoImgsFolder
+endpng,'IMG03b_approxMx_pos',,,,,memoImgsFolder
 /erase
 clims
 
@@ -128,22 +109,6 @@ clims
   MPATHPLOT_ARR_labels(i)='EAB_Q'
 *enddo
 
-nsel,none
-esel,none
-*do,nthGirder,1,GEO_girderCount,1
-  girderCS=CS_girders(nthGirder)
-  csys,girderCS
-  nsel,a,loc,y,-(SLAB_t+GIRDER_bfs0/2),(SLAB_t+GIRDER_bfs0/2)
-  esln,a
-  csys,0
-*enddo
-cmsel,r,COMPE_slab
-cmsel,r,COMPN_slab
-cmsel,a,COMPE_slabIgnore
-cmsel,a,COMPN_slabIgnore
-cm,COMPE_slabIgnore,elem
-cm,COMPN_slabIgnore,node
-
 allsel
 esel,u,type,,3
 cmsel,u,COMPE_pile
@@ -152,7 +117,7 @@ nsle,s,active
 view1w
 windefa,1
 wincln,1
-wntitle,'LAJES: FOR. CORTANTE [kN/m]'
+wntitle,'APROX: FOR. CORTANTE [kN/m]'
 
 /view,1,-1,-1,1
 /angle,1,0
@@ -161,9 +126,8 @@ eplot
 /user,1
 
 cmsel,a,COMPE_pile
-cmsel,s,compa_slab
+cmsel,s,compa_abt_appslab
 esla,u
-cmsel,a,COMPE_slabIgnore
 
 /plopts,leg3,on
 /udoc,1,cntr,right
@@ -174,15 +138,16 @@ cmsel,a,COMPE_slabIgnore
 go2png,1200
   eplot
   /noerase
-  cmsel,s,compa_slab
+  cmsel,s,compa_abt_appslab
   esla,s
-  cmsel,u,COMPE_slabIgnore
   nsle,s,active
-  ! nsel,u,loc,x,0,0.5
-  ! nsel,u,loc,x,GEO_deckLength,GEO_deckLength-0.5
+  nsel,u,loc,x,0,-0.5
+  nsel,u,loc,x,GEO_deckLength,GEO_deckLength+0.5
+  nsel,u,loc,x,-GEO_ABT1_appSlabL
+  nsel,u,loc,x,GEO_deckLength+GEO_ABT2_appSlabL
   /edge,1,0
   clims
   cleanplot,'pletab','EAB_Q','1'
-endpng,'IMG02c_slabQ',,,,,memoImgsFolder
+endpng,'IMG03c_approxQ',,,,,memoImgsFolder
 /erase
 clims

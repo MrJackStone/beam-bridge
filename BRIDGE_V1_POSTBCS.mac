@@ -1,3 +1,5 @@
+! BRIDGE_V1_POSTBCS
+
 /prep7
 displayLS=nint(LoadStepCount/2)
 allsel

@@ -1,3 +1,5 @@
+! BRIDGE_V1_POSTGIRDER
+
 g_annobold, 1
 
 view1w
@@ -336,3 +338,143 @@ endpng,'IMG04g_girderMT',,,,,memoImgsFolder
 /erase
 /device,vector,off
 /type,1,3
+
+
+
+!! Deflection on girders                                                                          !!
+g_annobold , 1
+
+cmsel,s,COMPE_girder
+cmsel,a,COMPE_slab
+nsle,s,active
+cm,COMPE_plot,elem
+cm,COMPN_plot,node
+
+*del , MPATHPLOT_ARR_pathNames ,      , nopr
+*del , MPATHPLOT_ARR_labels    ,      , nopr
+*dim , MPATHPLOT_ARR_pathNames , char , GEO_girderCount
+*dim , MPATHPLOT_ARR_labels    , char , GEO_girderCount
+
+*do,nthGirder,1,GEO_girderCount,1
+  girderPathName='G%nthGirder%'
+
+  cmsel,s,COMPL_GIRDER_%nthGirder%
+  nsll,s,1
+  cm,COMPN_temp,node
+  *get,xmin,node,,mnloc,x
+  *get,xmax,node,,mxloc,x
+  cmsel,s,COMPN_temp
+  nsel,r,loc,x,xmin
+  n1=ndnext(0)
+  cmsel,s,COMPN_temp
+  nsel,r,loc,x,xmax
+  n2=ndnext(0)
+  allsel
+
+  path,%girderPathName%,2,,100
+  ppath,1,n1
+  ppath,2,n2
+
+  pdef , 'DW_UZ'  , etab , 'DW_UZ'  , avg
+  pdef , 'EMN_UZ' , etab , 'EMN_UZ' , avg
+
+  pcalc , add , 'UZG_MM'  , 'DW_UZ'  ,  , 1e3
+  pcalc , add , 'UZD_MM'  , 'EMN_UZ' ,  , 1e3
+  pcalc , add , 'ELS_UGK' , 'UZG_MM' ,  , 1/1.4
+  pcalc , add , 'ELS_URA' , 'UZD_MM' ,  , 1/1.4
+
+  pthrebase , 'UZD_MM'  , 0 , 'DEFL_RAW'
+  pthrebase , 'ELS_UGK' , 0 , 'DEFL_GK'
+  pthrebase , 'ELS_URA' , 0 , 'DEFL_RA'
+
+  pcalc , add , 'DEFL_QK'  , 'DEFL_RA' , 'DEFL_GK' , 1 , -1
+  pcalc , add , 'DEFL_FRQ' , 'DEFL_GK' , 'DEFL_QK' , 1 , 0.6
+  pcalc , add , 'DEFL_ATV' , 'DEFL_QK' ,           , 1
+
+  MPATHPLOT_ARR_pathNames(nthGirder) = girderPathName
+
+*enddo
+
+cmsel,s,COMPE_plot
+cmsel,s,COMPN_plot
+*do,nthGirder,1,GEO_girderCount,1
+  MPATHPLOT_ARR_labels(nthGirder)='DEFL_FRQ'
+  ! MPATHPLOT_ARR_labels(nthGirder)='DEFL_RAW'
+*enddo
+
+view1w
+wincln,1
+/pspec,,1
+wntitle,'FLECHA TOTAL LONGARINAS [mm]',1
+/pspec,,0
+wntitle,'(COMB. FREQUENTE)',1,,'R'
+/view,1,0,-1,0
+/angle,1,0
+/auto,1
+/eshape,1
+/triad,off
+/dscale,,20
+clims
+go2png,1200
+  pldisp
+  /user,1
+  /noerase
+  esel,inve
+  esel,u,type,,3
+  nsle,s,active
+  pldisp
+  cmsel,s,COMPE_plot
+  cmsel,s,COMPN_plot
+  /udoc,1,cntr,off
+  plnsol,u,z
+  /plopts,leg3,on
+  /gformat,f,2,1
+  /udoc,1,cntr,right
+  /dscale,,off
+  cleanplot,'mpathplot','0.01'
+endpng,'IMG05a_girderUZ',,,,,memoImgsFolder
+/erase
+/annot,dele
+
+!!
+pletab,'ELSA_Zmm'
+cntrlims,'deflMin','deflMax'
+sadd,'DFL_AT_Z','ELSA_Zmm',,1,,-deflMax
+
+cmsel,s,COMPE_plot
+cmsel,s,COMPN_plot
+*do,nthGirder,1,GEO_girderCount,1
+  MPATHPLOT_ARR_labels(nthGirder)='DEFL_ATV'
+*enddo
+
+view1w
+wincln,1
+/pspec,,1
+wntitle,'FLECHA ATIVA LONGARINAS [mm]',1
+/view,1,0,-1,0
+/angle,1,0
+/auto,1
+/eshape,1
+/triad,off
+/dscale,,10
+clims
+go2png,1200
+  pldisp
+  /user,1
+  /noerase
+  esel,inve
+  esel,u,type,,3
+  nsle,s,active
+  pldisp
+  cmsel,s,COMPE_plot
+  cmsel,s,COMPN_plot
+  /udoc,1,cntr,off
+  plnsol,u,z
+  /plopts,leg3,on
+  /gformat,f,2,1
+  /udoc,1,cntr,right
+  /dscale,,off
+  cleanplot,'mpathplot','0.01'
+endpng,'IMG05b_girderUZ_atv',,,,,memoImgsFolder
+/erase
+/annot,dele

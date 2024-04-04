@@ -1,5 +1,7 @@
 ! BRIDGE_V1_POST
 
+memoImgsFolder='memo_imgs'
+
 /post1
 /uis,msgpop,3
 /output,outpost,out
@@ -16,20 +18,102 @@ GIRDER_hi0   = GIRDER_hi  (1)
 GIRDER_hw0   = GIRDER_hw  (1)
 GIRDER_name0 = GIRDER_name(1)
 
+! Display settings
+/device,font,3,Arial,1000,0,-64,0,0,,,
+/device,font,1,Arial,1000,0,-42,0,0,,,
+/device,text,1,100
+/tspec,15,1.5,4,0,0
+/annot,dele
+
+/triad,off
+
+/psf   , PRES ,NORM,2,0,1
+/pbf   , DEFA ,,1
+/psymb , CS   ,0
+/psymb , NDIR ,0
+/psymb , ESYS ,0
+/psymb , LDIV ,0
+/psymb , LDIR ,0
+/psymb , ADIR ,0
+/psymb , ECON ,0
+/psymb , XNODE,0
+/psymb , DOT  ,1
+/psymb , PCONV,0
+/psymb , LAYR ,0
+/psymb , FBCS ,0
+/pbc   , U    ,,0
+/pbc   , ROT  ,,0
+/pbc   , TEMP ,,0
+/pbc   , PRES ,,0
+/pbc   , VOLT ,,0
+/pbc   , MAG  ,,0
+/pbc   , A    ,,0
+/pbc   , CHRG ,,0
+/pbc   , F    ,,1
+/pbc   , M    ,,0
+/pbc   , HEAT ,,0
+/pbc   , AMPS ,,0
+/pbc   , FLUX ,,0
+/pbc   , CSG  ,,0
+/pbc   , NFOR ,,0
+/pbc   , NMOM ,,0
+/pbc   , RFOR ,,0
+/pbc   , RMOM ,,0
+/pbc   , PATH ,,0
+/pbc   , MAST ,,0
+/pbc   , CP   ,,0
+/pbc   , CE   ,,0
+/pbc   , ACEL ,,0
+/pbc   , OMEG ,,0
+/pbc   , PATH ,,0
+
+/udoc,1,cntr,off
+/udoc,1,type,off
+/udoc,1,typ2,off
+/udoc,1,inum,off
+/udoc,1,misc,off
+/udoc,1,surf,off
+/udoc,1,body,off
+/udoc,1,bcdc,off
+
+
 *if,SOLU_type,eq,0,then
   ! Static
-  /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_colTube post',mac
-  /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_V1_memoIMGs',mac
+  BRIDGE_V1_ETABLES
 
-  /pspec,0,0,1
-  /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_slab_deflects',mac
-
-  /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_post pileSects',mac
-  /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_post vr4 peakPile',mac
-  /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_post_each_pile',mac
-  /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_post pileGroup',mac
+  !!  Boundary conditions                                                                           !!
+  BRIDGE_V1_POSTBCS
 
 
+  !!  Girders                                                                                       !!
+  BRIDGE_V1_POSTGIRDER
+  BRIDGE_V1_POSTCOMPOSITE
+
+
+  !!  Deck slab                                                                                     !!
+  BRIDGE_V1_POSTDECK
+
+
+  !!  Pier: pile caps                                                                               !!
+  BRIDGE_V1_POSTPCAP
+
+
+  !!  Pier: frame                                                                                   !!
+  BRIDGE_V1_POSTPIER
+
+
+  !!  Piles                                                                                         !!
+  BRIDGE_V1_REPORTPILE
+  BRIDGE_V1_POSTPILE
+
+
+  !!  Abutment: approach slab                                                                       !!
+  BRIDGE_V1_POSTAPPSLAB
+  BRIDGE_V1_POSTAPSLBDFL,1
+  BRIDGE_V1_POSTAPSLBDFL,2
+
+
+  !!  Abutment: transversal wall                                                                    !!
   ! BRIDGE_V1_POSTTWALL , etable   , subtitle                      , imgName
   BRIDGE_V1_POSTTWALL   , 'EAB_MX' , 'MOMENTO FLETOR (MX) [kNm/m]' , 'IMG13a_TRAN_MX'
   BRIDGE_V1_POSTTWALL   , 'EAB_MY' , 'MOMENTO FLETOR (MY) [kNm/m]' , 'IMG13b_TRAN_MY'
@@ -37,32 +121,17 @@ GIRDER_name0 = GIRDER_name(1)
   BRIDGE_V1_POSTTWALL   , 'EAB_NX' , 'F. NORMAL (NX) [kN/m]'       , 'IMG13d_TRAN_NX'
   BRIDGE_V1_POSTTWALL   , 'EAB_NY' , 'F. NORMAL (NY) [kN/m]'       , 'IMG13e_TRAN_NY'
 
-  BRIDGE_V1_POSTABTCOL
+  BRIDGE_V1_POSTTWALDFL,1,2
+  BRIDGE_V1_POSTTWALDFL,2,2
 
+
+  !!  Abutment: wings                                                                               !!
   ! BRIDGE_V1_POSTWINGS , etable , subtitle , imgName
   BRIDGE_V1_POSTWINGS   , 'EAB_MX' , 'MOMENTO FLETOR (MX) [kNm/m]' , 'IMG15a_WINGS_MX'
   BRIDGE_V1_POSTWINGS   , 'EAB_MY' , 'MOMENTO FLETOR (MY) [kNm/m]' , 'IMG15b_WINGS_MY'
   BRIDGE_V1_POSTWINGS   , 'EAB_Q'  , 'F. CORTANTE [kN/m]'          , 'IMG15c_WINGS_Q'!, 0.55
   BRIDGE_V1_POSTWINGS   , 'EAB_NX' , 'F. NORMAL (NX) [kN/m]'       , 'IMG15d_WINGS_NX'
   BRIDGE_V1_POSTWINGS   , 'EAB_NY' , 'F. NORMAL (NY) [kN/m]'       , 'IMG15e_WINGS_NY'
-
-  BRIDGE_V1_POSTLWALL , 1 , 'EAB_MX' , 'MOMENTO FLETOR (MX) [kNm/m]' , 'IMG16a_LWALL_MX'
-  BRIDGE_V1_POSTLWALL , 1 , 'EAB_MY' , 'MOMENTO FLETOR (MY) [kNm/m]' , 'IMG16b_LWALL_MY'
-  BRIDGE_V1_POSTLWALL , 1 , 'EAB_Q'  , 'F. CORTANTE [kN/m]'          , 'IMG16c_LWALL_Q'  !, 0.55
-  BRIDGE_V1_POSTLWALL , 1 , 'EAB_NX' , 'F. NORMAL (NX) [kN/m]'       , 'IMG16d_LWALL_NX'
-  BRIDGE_V1_POSTLWALL , 1 , 'EAB_NY' , 'F. NORMAL (NY) [kN/m]'       , 'IMG16e_LWALL_NY'
-
-  BRIDGE_V1_POSTLWALL , 2 , 'EAB_MX' , 'MOMENTO FLETOR (MX) [kNm/m]' , 'IMG17a_LWALL_MX'
-  BRIDGE_V1_POSTLWALL , 2 , 'EAB_MY' , 'MOMENTO FLETOR (MY) [kNm/m]' , 'IMG17b_LWALL_MY'
-  BRIDGE_V1_POSTLWALL , 2 , 'EAB_Q'  , 'F. CORTANTE [kN/m]'          , 'IMG17c_LWALL_Q'  !, 0.55
-  BRIDGE_V1_POSTLWALL , 2 , 'EAB_NX' , 'F. NORMAL (NX) [kN/m]'       , 'IMG17d_LWALL_NX'
-  BRIDGE_V1_POSTLWALL , 2 , 'EAB_NY' , 'F. NORMAL (NY) [kN/m]'       , 'IMG17e_LWALL_NY'
-
-  BRIDGE_V1_POSTAPSLBDFL,1
-  BRIDGE_V1_POSTAPSLBDFL,2
-
-  BRIDGE_V1_POSTTWALDFL,1,2
-  BRIDGE_V1_POSTTWALDFL,2,2
 
   *if,GEO_ABT1_type,eq,4,then
     BRIDGE_V1_POSTWINGDFL,1
@@ -78,6 +147,29 @@ GIRDER_name0 = GIRDER_name(1)
     BRIDGE_V1_POSTLWDFL,2
   *endif
 
+
+  !!  Abutment: longitudinal wall                                                                   !!
+  BRIDGE_V1_POSTLWALL , 1 , 'EAB_MX' , 'MOMENTO FLETOR (MX) [kNm/m]' , 'IMG16a_LWALL_MX'
+  BRIDGE_V1_POSTLWALL , 1 , 'EAB_MY' , 'MOMENTO FLETOR (MY) [kNm/m]' , 'IMG16b_LWALL_MY'
+  BRIDGE_V1_POSTLWALL , 1 , 'EAB_Q'  , 'F. CORTANTE [kN/m]'          , 'IMG16c_LWALL_Q'  !, 0.55
+  BRIDGE_V1_POSTLWALL , 1 , 'EAB_NX' , 'F. NORMAL (NX) [kN/m]'       , 'IMG16d_LWALL_NX'
+  BRIDGE_V1_POSTLWALL , 1 , 'EAB_NY' , 'F. NORMAL (NY) [kN/m]'       , 'IMG16e_LWALL_NY'
+
+  BRIDGE_V1_POSTLWALL , 2 , 'EAB_MX' , 'MOMENTO FLETOR (MX) [kNm/m]' , 'IMG17a_LWALL_MX'
+  BRIDGE_V1_POSTLWALL , 2 , 'EAB_MY' , 'MOMENTO FLETOR (MY) [kNm/m]' , 'IMG17b_LWALL_MY'
+  BRIDGE_V1_POSTLWALL , 2 , 'EAB_Q'  , 'F. CORTANTE [kN/m]'          , 'IMG17c_LWALL_Q'  !, 0.55
+  BRIDGE_V1_POSTLWALL , 2 , 'EAB_NX' , 'F. NORMAL (NX) [kN/m]'       , 'IMG17d_LWALL_NX'
+  BRIDGE_V1_POSTLWALL , 2 , 'EAB_NY' , 'F. NORMAL (NY) [kN/m]'       , 'IMG17e_LWALL_NY'
+
+
+  !!  Abutment: overhangs                                                                           !!
+  BRIDGE_V1_POSTABTOVHANG , 1 , 'MX' , 'MOMENTO FLETOR' , 'kNm/m' , 0.7
+  BRIDGE_V1_POSTABTOVHANG , 1 , 'Q'  , 'F. CORTANTE'    , 'kN/m'  , 0.7
+  BRIDGE_V1_POSTABTOVHANG , 2 , 'MX' , 'MOMENTO FLETOR' , 'kNm/m' , 0.7
+  BRIDGE_V1_POSTABTOVHANG , 2 , 'Q'  , 'F. CORTANTE'    , 'kN/m'  , 0.7
+
+
+  !!  Abutment: pile caps                                                                           !!
   BRIDGE_V1_POSTABTCAP , 1 , 'MX' , 'MOMENTO FLETOR (MX)' , 'kNm/m'
   BRIDGE_V1_POSTABTCAP , 1 , 'MY' , 'MOMENTO FLETOR (MY)' , 'kNm/m'
   BRIDGE_V1_POSTABTCAP , 1 , 'Q'  , 'F. CORTANTE'         , 'kN/m'
@@ -85,18 +177,13 @@ GIRDER_name0 = GIRDER_name(1)
   BRIDGE_V1_POSTABTCAP , 2 , 'MY' , 'MOMENTO FLETOR (MY)' , 'kNm/m'
   BRIDGE_V1_POSTABTCAP , 2 , 'Q'  , 'F. CORTANTE'         , 'kN/m'
 
-  BRIDGE_V1_POSTABTOVHANG , 1 , 'MX' , 'MOMENTO FLETOR' , 'kNm/m' , 0.7
-  BRIDGE_V1_POSTABTOVHANG , 1 , 'Q'  , 'F. CORTANTE'    , 'kN/m'  , 0.7
-  BRIDGE_V1_POSTABTOVHANG , 2 , 'MX' , 'MOMENTO FLETOR' , 'kNm/m' , 0.7
-  BRIDGE_V1_POSTABTOVHANG , 2 , 'Q'  , 'F. CORTANTE'    , 'kN/m'  , 0.7
 
-  ! Composite steel-concrete results
-  BRIDGE_V1_POSTCOMPOSITE
+  !!  Abutment: column (transversal wall)                                                           !!
+  BRIDGE_V1_POSTABTCOL
 
+
+  !!  Abutment: back beam                                                                           !!
   BRIDGE_V1_POSTABTBEAM
-
-  ! /output
-  /input,'F:\Ferramentas\01 Code\02 APDL\04 Structures\04 Beam Bridge\_pilePlast',mac
 
 *endif
 
