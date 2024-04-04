@@ -312,6 +312,17 @@ et,TYPE_MASS21,21
 
   *endif
 
+  *del , num  ,, nopr
+  *del , bfs  ,, nopr
+  *del , bfi  ,, nopr
+  *del , d    ,, nopr
+  *del , tfs  ,, nopr
+  *del , tfi  ,, nopr
+  *del , tw   ,, nopr
+  *del , hs   ,, nopr
+  *del , hi   ,, nopr
+  *del , hw   ,, nopr
+  *del , name ,, nopr
 *enddo
 
 !! 2.1.3.2 SLAB                                                                                   !!
