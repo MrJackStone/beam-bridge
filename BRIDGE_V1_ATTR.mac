@@ -338,12 +338,10 @@ SECTYPE,SEC_COLUMN_num,BEAM,RECT,COLUMN_name,2
 SECDATA,COLUMN_cx,COLUMN_cy
 !
 !! 2.1.3.6 FRAME GIRDER                                                                           !!
-SECTYPE,SEC_FRAMEGIRDER_num,BEAM,RECT,FRAMEGIRDER_name,2
-SECDATA,FRAMEGIRDER_b,FRAMEGIRDER_h
-! *if,SEC_offset,EQ,1,THEN
-   SECOFFSET,USER,,FRAMEGIRDER_h/2
-! *endif
-!
+sectype,SEC_FRAMEGIRDER_num,BEAM,RECT,FRAMEGIRDER_name,2
+secdata,FRAMEGIRDER_b,FRAMEGIRDER_h
+secoffset,USER,,FRAMEGIRDER_h/2
+
 !! 2.1.3.7 Cross beam                                                                             !!
 sectype,SEC_CROSSBEAM,beam,rect,'CRSBEAM',2
 secdata,CROSSBEAM_b,CROSSBEAM_h
