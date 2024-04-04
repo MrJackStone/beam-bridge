@@ -5,12 +5,14 @@ g_annobold, 1
 view1w
 windefa,1
 wincln,1
+clims
 wintitle,1,'LONGARINAS','MOMENTO FLETOR','ELU-Normal [kNm]',,1,13
 
 /view,1,-1,-1,1
 /angle,1,0
 /auto,1
 /eshape,0
+/device,vector,off
 allsel
 cmsel,s,compa_slab
 esel,u,type,,3

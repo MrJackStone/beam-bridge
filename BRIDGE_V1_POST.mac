@@ -79,10 +79,12 @@ GIRDER_name0 = GIRDER_name(1)
 
 *if,SOLU_type,eq,0,then
   ! Static
-  BRIDGE_V1_ETABLES
-
   !!  Boundary conditions                                                                           !!
   BRIDGE_V1_POSTBCS
+
+
+  !!  Compile results                                                                             !!
+  BRIDGE_V1_ETABLES
 
 
   !!  Girders                                                                                       !!

@@ -45,6 +45,7 @@ wincln,2
 /view,2,1,1,1
 /edge,1,0
 /edge,2,0
+vscale=1.5
 
 wintitle,1,' ','ENCONTRO 01',' ',,1,13
 wintitle,2,' ','ENCONTRO 02',' ',,1,13
@@ -73,8 +74,8 @@ wintitle,2,' ','ENCONTRO 02',' ',,1,13
 /auto,1
 eplot
 /user,1
-/vscale,1,0.5
-/vscale,2,0.5
+/vscale,1,vscale
+/vscale,2,vscale
 /hbc,1,1
 /color,f,red
 
