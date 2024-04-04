@@ -264,13 +264,14 @@ et,TYPE_MASS21,21
   num  = SEC_GIRDER_nums(nthGirderSection)
   bfs  = GIRDER_bfs(nthGirderSection)
   bfi  = GIRDER_bfi(nthGirderSection)
+  d    = GIRDER_d(nthGirderSection)
   tfs  = GIRDER_tfs(nthGirderSection)
   tfi  = GIRDER_tfi(nthGirderSection)
   tw   = GIRDER_tw(nthGirderSection)
   hs   = GIRDER_hs(nthGirderSection)
   hi   = GIRDER_hi(nthGirderSection)
   hw   = GIRDER_hw(nthGirderSection)
-  name = GIRDER_name(nthGirderSection)
+  name = GIRDER_name(1,nthGirderSection)
 
   *if,MAT_Girder_type,EQ,0,THEN
     ! Write custom cross-section file
@@ -295,7 +296,6 @@ et,TYPE_MASS21,21
   *elseif,MAT_Girder_type,EQ,1,THEN
     ! Create section from database
     CEDISAVS,num,name,2
-    secoffset,user,,d
 
     ! Update input geometry
     GIRDER_bfs(nthGirderSection) = CEDISAVS_VAR_bf
@@ -307,6 +307,8 @@ et,TYPE_MASS21,21
     GIRDER_hs (nthGirderSection) = 0
     GIRDER_hi (nthGirderSection) = 0
     GIRDER_hw (nthGirderSection) = CEDISAVS_VAR_d-2*CEDISAVS_VAR_tf
+
+    secoffset,user,,GIRDER_d(nthGirderSection)
 
   *endif
 
