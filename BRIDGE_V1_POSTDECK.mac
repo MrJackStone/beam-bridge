@@ -510,12 +510,8 @@ wincln,2
 /edge,all,1
 
 /annot  , dele
-wntitle , 'LAJE DO TABULEIRO:' , 1 , 0
-wntitle , 'FLECHA MAX. [mm]'   , 1 , 0 , 'C'
-wntitle , '(COMB. RARA)'       , 1 , 1 , 'R'
-wntitle , 'LAJE DO TABULEIRO:' , 2 , 0
-wntitle , 'FLECHA MIN. [mm]'   , 2 , 0 , 'C'
-wntitle , '(COMB. RARA)'       , 2 , 1 , 'R'
+wintitle,1,'LAJE DO TABULEIRO','FLECHA MAX.','ELS-Rara [mm]',,1,13
+wintitle,2,'LAJE DO TABULEIRO','FLECHA MIN.','ELS-Rara [mm]',,1,13
 
 /window,1,on
 /window,2,on
