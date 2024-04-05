@@ -237,8 +237,8 @@ csys,CS_girders(1)
 nsel,r,loc,y,-1e9,0
 
 esln,r,1
-cm,COMPE_SlabSpab_SR,elem
-cm,COMPN_SlabSpab_SR,node
+cm,COMPE_SlabSpan_SR,elem
+cm,COMPN_SlabSpan_SR,node
 
 ! Left overhang
 cmsel,s,COMPE_Slab
@@ -251,8 +251,8 @@ csys,CS_girders(GEO_girderCount)
 nsel,r,loc,y,0,1e9
 
 esln,r,1
-cm,COMPE_SlabSpab_SL,elem
-cm,COMPN_SlabSpab_SL,node
+cm,COMPE_SlabSpan_SL,elem
+cm,COMPN_SlabSpan_SL,node
 
 !! Create paths                                                                                   !!
 pathCount=50
@@ -321,8 +321,8 @@ pathIdx=0
 *enddo
 
 ! Right overhang paths
-cmsel,s,COMPE_SlabSpab_SR
-cmsel,s,COMPN_SlabSpab_SR
+cmsel,s,COMPE_SlabSpan_SR
+cmsel,s,COMPN_SlabSpan_SR
 
 csA=CS_rightDeckEdge
 *get,csAy,cdsy,csA,loc,y
@@ -367,8 +367,8 @@ csB=CS_girders(1)
 *enddo
 
 ! Left overhang paths
-cmsel,s,COMPE_SlabSpab_SL
-cmsel,s,COMPN_SlabSpab_SL
+cmsel,s,COMPE_SlabSpan_SL
+cmsel,s,COMPN_SlabSpan_SL
 
 csA=CS_girders(GEO_girderCount)
 *get,csAy,cdsy,csA,loc,y
@@ -443,8 +443,8 @@ pthenv,'CLEAR','slab_envelope'
   *enddo
 
   ! Right overhang paths
-  cmsel,s,COMPE_SlabSpab_SR
-  cmsel,s,COMPN_SlabSpab_SR
+  cmsel,s,COMPE_SlabSpan_SR
+  cmsel,s,COMPN_SlabSpan_SR
   *do,nthPath,1,pathCount,1
     pthName='SR_P%nthPath%'
     path,pthName
@@ -455,8 +455,8 @@ pthenv,'CLEAR','slab_envelope'
   *enddo
 
   ! Left overhang paths
-  cmsel,s,COMPE_SlabSpab_SL
-  cmsel,s,COMPN_SlabSpab_SL
+  cmsel,s,COMPE_SlabSpan_SL
+  cmsel,s,COMPN_SlabSpan_SL
   *do,nthPath,1,pathCount,1
     pthName='SL_P%nthPath%'
     path,pthName
