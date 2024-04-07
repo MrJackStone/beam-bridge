@@ -1,6 +1,7 @@
 ! BRIDGE_V1_POSTGIRDER
 
-g_annobold, 1
+boldfont, 1
+/number,1
 
 *do,nthSpan,1,GEO_spanCount,1
 
@@ -373,6 +374,22 @@ g_annobold, 1
 g_annobold , 1
 
 *do,nthSpan,1,GEO_spanCount,1
+  xi=GEO_supportX(nthSpan)
+  xj=GEO_supportX(nthSpan+1)
+  cmsel,s,COMPA_slab
+  lsel,s,loc,x,xi,xj
+  lsla,r
+  cm,COMPL_SPAN_%nthSpan%,line
+*enddo
+
+allsel
+esel,u,type,,3
+nsle
+cm,COMPE_bg,elem
+/color,defa
+/color,cm,dgra,COMPE_bg
+
+*do,nthSpan,1,GEO_spanCount,1
 
   cmsel,s,COMPE_GIRDERS_S%nthSpan%
   cmsel,a,COMPE_SLAB_%nthSpan%
@@ -438,14 +455,22 @@ g_annobold , 1
   wintitle,1,'LONGARINAS %spanSuffix%','FLECHA TOTAL','ELS-Frequente [mm]',,1,13
   /view,1,0,-1,0
   /angle,1,0
+  /type,1,0
   /auto,1
+  cmsel,s,COMPE_girder
+  cmsel,a,COMPE_slab
+  nsle,s,active
+  eplot
+  /user,1
+  cmsel,s,COMPE_plot
+  cmsel,s,COMPN_plot
   /eshape,1
   /triad,off
   /dscale,,20
+  /number,2
   clims
   go2png,1200
     pldisp
-    /user,1
     /noerase
     esel,inve
     esel,u,type,,3
@@ -453,6 +478,7 @@ g_annobold , 1
     pldisp
     cmsel,s,COMPE_plot
     cmsel,s,COMPN_plot
+    /number,1
     /udoc,1,cntr,off
     plnsol,u,z
     /plopts,leg3,on
@@ -480,14 +506,20 @@ g_annobold , 1
   wintitle,1,'LONGARINAS %spanSuffix%','FLECHA ATIVA','Qk [mm]',,1,13
   /view,1,0,-1,0
   /angle,1,0
-  /auto,1
+  cmsel,s,COMPE_girder
+  cmsel,a,COMPE_slab
+  nsle,s,active
+  eplot
+  /user,1
+  cmsel,s,COMPE_plot
+  cmsel,s,COMPN_plot
   /eshape,1
   /triad,off
   /dscale,,10
+  /number,2
   clims
   go2png,1200
     pldisp
-    /user,1
     /noerase
     esel,inve
     esel,u,type,,3
@@ -496,6 +528,7 @@ g_annobold , 1
     cmsel,s,COMPE_plot
     cmsel,s,COMPN_plot
     /udoc,1,cntr,off
+    /number,1
     plnsol,u,z
     /plopts,leg3,on
     /gformat,f,2,1
@@ -506,4 +539,7 @@ g_annobold , 1
   /erase
   /annot,dele
 
+
 *enddo
+
+cmdele,COMPE_bg
