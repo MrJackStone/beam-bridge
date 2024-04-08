@@ -1277,6 +1277,10 @@ nthPier=0
     LOAD_dynImpact=(1600-60*sqrt(minSpanLength)+2.25*minSpanLength)/1000
     LOAD_dynImpact=(LOAD_dynImpact>1.2)
 
+    ! Railway bridge (NBR 7188:2024)
+    LOAD_dynImpact = 1+1.06*(20/(minSpanLength+50))
+    LOAD_dynImpact = (LOAD_dynImpact<1.35)
+
 *endif
 
 ! Apply impact coefficient to dynamic loads
