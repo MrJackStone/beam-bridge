@@ -6,11 +6,6 @@ secCount=101
 
 xPitch=GEO_deckLength/(secCount-1)
 
-myPeakLS=0
-qxPeakLS=0
-myOverallPeak=0
-qxOverallPeak=0
-
 cmsel,s,COMPE_Slab
 nsle,s,active
 clims
@@ -18,12 +13,16 @@ clims
 *get,yMin,node,,mnloc,y
 *get,yMax,node,,mxloc,y
 
+*del,path_span,,nopr
+*dim,path_span,,secCount
+
 ! Create paths
 *do,nthSec,1,secCount,1
   ! Calculate cross-section position
   xCoord=xPitch*(nthSec-1)
 
   ! Determine on which span the section lies
+  activeSpan=0
   *do,nthSpan,1,GEO_spanCount,1
     xi=GEO_supportX(nthSpan)
     xj=GEO_supportX(nthSpan+1)
@@ -32,6 +31,8 @@ clims
       *exit
     *endif
   *enddo
+
+  path_span(nthSec)=activeSpan
 
   ! Calculate Z coordinate
   zi=zFrameTop+GEO_frameTopOffset(activeSpan)
@@ -46,6 +47,11 @@ clims
   ppath,2,,xCoord,yMax,zCoord
 *enddo
 
+*del,mymax_ls,,nopr
+*del,qxmax_ls,,nopr
+*dim,mymax_ls,,GEO_spanCount,2
+*dim,qxmax_ls,,GEO_spanCount,2
+
 *do,nthLS,1,LoadStepCount,1
 
     *msg,ui,nthLS,LoadStepCount
@@ -57,28 +63,32 @@ BRIDGE_V1_POSTCOMPOSITE: reading load step %I/%I.
 
     *do,nthSec,1,secCount,1
       pthName=strcat('SS_',chrval(nthSec))
+      pthSpan=path_span(nthSec)
+
       path,%pthName%
 
       ! Map bending moment (about transversal direction)
+      mySpanPeak=mymax_ls(pthSpan,2)
       pdef,'MY',etab,'SHELL_MY'
       pcalc,intg,'MY_CUM','MY','S',1
       *get,myCumMax,path,,max,'MY_CUM'
       *get,myCumMin,path,,min,'MY_CUM'
       myCumPeak=(abs(myCumMin)>abs(myCumMax))
-      *if,myCumPeak,gt,myOverallPeak,then
-        myOverallPeak=myCumPeak
-        myPeakLS=nthLS
+      *if,myCumPeak,gt,mySpanPeak,then
+        mymax_ls(pthSpan,1)=nthLS
+        mymax_ls(pthSpan,2)=myCumPeak
       *endif
 
       ! Map shear force (along transversal direction)
+      qxSpanPeak=qxmax_ls(pthSpan,2)
       pdef,'QX',etab,'SHELL_QX'
       pcalc,intg,'QX_CUM','QX','S',1
       *get,qxCumMax,path,,max,'QX_CUM'
       *get,qxCumMin,path,,min,'QX_CUM'
       qxCumPeak=(abs(qxCumMin)>abs(qxCumMax))
-      *if,qxCumPeak,gt,qxOverallPeak,then
-        qxOverallPeak=qxCumPeak
-        qxPeakLS=nthLS
+      *if,qxCumPeak,gt,qxSpanPeak,then
+        qxmax_ls(pthSpan,1)=nthLS
+        qxmax_ls(pthSpan,2)=qxCumPeak
       *endif
 
     *enddo
@@ -91,21 +101,22 @@ BRIDGE_V1_POSTCOMPOSITE: reading load step %I/%I.
   pthName=strcat('SS_',chrval(nthSec))
   path,%pthName%
 
-  ! Map bending moment (about transversal direction)
-  subset,myPeakLS
-  cshell_my,1
-  pdef  , 'MY' , etab     , 'SHELL_MY'
-  pcalc , intg , 'MY_CUM' , 'MY'       , 'S' , 1
+  *do,nthSpan,1,GEO_spanCount,1
+    ! Map bending moment (about transversal direction)
+    myLS=mymax_ls(nthSpan,1)
+    subset,myLS
+    cshell_my,1
+    pdef  , 'MY' , etab     , 'SHELL_MY'
+    pcalc , intg , 'MY%nthSpan%_CUM' , 'MY'       , 'S' , 1
 
-  ! Map shear force
-  subset,qxPeakLS
-  cshell_qx,1
-  pdef  , 'QX' , etab     , 'SHELL_QX'
-  pcalc , intg , 'QX_CUM' , 'QX'       , 'S' , 1
+    ! Map shear force
+    qxLS=qxmax_ls(nthSpan,1)
+    subset,qxLS
+    cshell_qx,1
+    pdef  , 'QX' , etab     , 'SHELL_QX'
+    pcalc , intg , 'QX%nthSpan%_CUM' , 'QX'       , 'S' , 1
+  *enddo
 
-  ! MPATHPLOT_ARR_pathNames(nthSec)=pthName
-  ! MPATHPLOT_ARR_labels(nthSec)='MY_CUM'
-  ! MPATHPLOT_ARR_labels(nthSec)='QX_CUM'
 *enddo
 
 *do,nthSpan,1,GEO_spanCount,1
@@ -114,16 +125,19 @@ BRIDGE_V1_POSTCOMPOSITE: reading load step %I/%I.
   xi=GEO_supportX(nthSpan)
   xj=GEO_supportX(nthSpan+1)
 
+  *del,MPATHPLOT_ARR_pathNames,,nopr
+  zeroEntries=1
+
   *do,nthSec,1,secCount,1
     pthName=strcat('SS_',chrval(nthSec))
     xCoord=xPitch*(nthSec-1)
 
     *if,xCoord,ge,xi,and,xCoord,le,xj,then
 
-      *if,nthSec,eq,1,then
-        *del,MPATHPLOT_ARR_pathNames,,nopr
+      *if,zeroEntries,eq,1,then
         *dim,MPATHPLOT_ARR_pathNames,char,1
         MPATHPLOT_ARR_pathNames(1)=pthName
+        zeroEntries=0
 
       *else
         *get,parLen,parm,MPATHPLOT_ARR_pathNames,dim,x
@@ -147,15 +161,15 @@ BRIDGE_V1_POSTCOMPOSITE: reading load step %I/%I.
 
   ! Plot peak MY
   *del,MPATHPLOT_ARR_labels,,nopr
-  *dim,MPATHPLOT_ARR_labels,char,1
+  *dim,MPATHPLOT_ARR_labels,char,validPathCount
   *do,nthPath,1,validPathCount,1
-    MPATHPLOT_ARR_labels(nthPath)='MY_CUM'
+    MPATHPLOT_ARR_labels(nthPath)='MY%nthSpan%_CUM'
   *enddo
 
   view1w
   windefa,1
   wincln,1
-  wintitle,1,'LAJE DO TABULEIRO','MOMENTO FLETOR ACUMULADO','ELU-Normal [kNm]',,1,13
+  wintitle,1,'LAJE DO TABULEIRO (SP. %nthSpan%)','MOMENTO FLETOR ACUMULADO','ELU-Normal [kNm]',,1,13
   /gformat,f,1,1
   /plopts,leg3,on
   /udoc,1,cntr,right
@@ -181,15 +195,15 @@ BRIDGE_V1_POSTCOMPOSITE: reading load step %I/%I.
 
   ! Plot peak QX
   *del,MPATHPLOT_ARR_labels,,nopr
-  *dim,MPATHPLOT_ARR_labels,char,1
+  *dim,MPATHPLOT_ARR_labels,char,validPathCount
   *do,nthPath,1,validPathCount,1
-    MPATHPLOT_ARR_labels(nthPath)='QX_CUM'
+    MPATHPLOT_ARR_labels(nthPath)='QX%nthSpan%_CUM'
   *enddo
 
   view1w
   windefa,1
   wincln,1
-  wintitle,1,'LAJE Do TABULEIRO','F. CORTANTE ACUMULADA','ELU-Normal [kN]',,1,13
+  wintitle,1,'LAJE DO TABULEIRO (SP. %nthSpan%)','F. CORTANTE ACUMULADA','ELU-Normal [kN]',,1,13
   /gformat,f,1,1
   /plopts,leg3,on
   /udoc,1,cntr,right
@@ -211,4 +225,5 @@ BRIDGE_V1_POSTCOMPOSITE: reading load step %I/%I.
   /erase
   clims
   /annot,dele
+
 *enddo
