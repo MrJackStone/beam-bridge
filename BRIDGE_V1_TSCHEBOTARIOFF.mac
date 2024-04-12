@@ -28,10 +28,21 @@ cm,COMPE_tschebotarioff,elem
   esll,s
   nsle,s,active
 
+  ! Add pier columns to selection if mesostructure is of cap-beam frame type
+  mesoType=GEO_mesoType(supportIndex)
+  *if,mesoType,eq,CTE_MESO_beamCap,then
+    cm,COMPL_temp,line
+    cmsel,s,COMPL_FRAME_%supportIndex%
+    cmsel,r,COMPL_Column
+    cmsel,a,COMPL_temp
+    esll,a
+    nsle,a,active
+  *endif
+
   ! Calculate affected depth in the context of the local pile group
   *get,localZero,node,,mxloc,z
-  localTopZ  = localZero-topDepth
-  localBotZ  = localZero-botDepth
+  localTopZ = localZero-topDepth
+  localBotZ = localZero-botDepth
 
   ! Select affected pile elements
   nsel,r,loc,z,localTopZ,localBotZ
@@ -42,7 +53,6 @@ cm,COMPE_tschebotarioff,elem
   enum=0
   *do,nthElem,1,ec,1
     enum=elnext(enum)
-    nsle,s,active
     n1=nelem(enum,1)
     n2=nelem(enum,2)
 
