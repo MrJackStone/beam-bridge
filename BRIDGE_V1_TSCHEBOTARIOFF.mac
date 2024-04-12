@@ -32,8 +32,6 @@ cm,COMPE_tschebotarioff,elem
   *get,localZero,node,,mxloc,z
   localTopZ  = localZero-topDepth
   localBotZ  = localZero-botDepth
-  halfHeight = (localTopZ-localBotZ)/2
-  zCenter    = (localTopZ+localBotZ)/2
 
   ! Select affected pile elements
   nsel,r,loc,z,localTopZ,localBotZ
@@ -47,16 +45,27 @@ cm,COMPE_tschebotarioff,elem
     nsle,s,active
     n1=nelem(enum,1)
     n2=nelem(enum,2)
-    n1Offset=abs(nz(n1)-zCenter)
-    n2Offset=abs(nz(n2)-zCenter)
 
     ! Calculate pressure values based on pressure diagram shape
     *if,pressureShape,eq,0,then
-      n1Pres=peakPressure
-      n2Pres=peakPressure
+      ! Constant pressure (rectangular diagram)
+      n1Pres = peakPressure
+      n2Pres = peakPressure
     *elseif,pressureShape,eq,1,then
-      n1Pres=peakPressure*(1-(n1Offset/halfHeight))
-      n2Pres=peakPressure*(1-(n2Offset/halfHeight))
+      ! Tschebotarioff pressure (triangular, max at mid depth)
+      halfHeight = (localTopZ-localBotZ)/2
+      zCenter    = (localTopZ+localBotZ)/2
+      n1Offset   = abs(nz(n1)-zCenter)
+      n2Offset   = abs(nz(n2)-zCenter)
+      n1Pres     = peakPressure*(1-(n1Offset/halfHeight))
+      n2Pres     = peakPressure*(1-(n2Offset/halfHeight))
+    *elseif,pressureShape,eq,2,then
+      ! Triangular pressure (max at top, zero at bottom)
+      diagramHeight = localTopZ-localBotZ
+      n1Offset      = abs(nz(n1)-localTopZ)
+      n2Offset      = abs(nz(n2)-localTopZ)
+      n1Pres        = peakPressure*(1-(n1Offset/diagramHeight))
+      n2Pres        = peakPressure*(1-(n2Offset/diagramHeight))
     *endif
 
     sfbeam,enum,loadKey,pres,n1Pres,n2Pres

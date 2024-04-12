@@ -644,7 +644,8 @@ LOAD_TSCHEBOTARIOFF_status = 1
 !    (5, i): load key (see BEAM188)
 !    (6, i): load shape:
 !              [0] constant pressure (de Beer)
-!              [1] triangular pressure (Tschebotarioff)
+!              [1] triangular pressure (Tschebotarioff, zero-max-zero)
+!              [2] triangular pressure (max-zero)
 *del,LOAD_TSCHEBOTARIOFF_data,,nopr
 *dim,LOAD_TSCHEBOTARIOFF_data,,6,GEO_supportCount
 LOAD_TSCHEBOTARIOFF_data(1,1) = 1 , 0 , 2 , -30e3 , 1, 0
