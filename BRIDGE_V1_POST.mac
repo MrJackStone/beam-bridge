@@ -87,6 +87,15 @@ GIRDER_name0 = GIRDER_name(1)
   BRIDGE_V1_ETABLES
 
 
+  !!  Pier: frame                                                                                   !!
+  BRIDGE_V1_POSTPIER
+
+
+  !!  Piles                                                                                         !!
+  BRIDGE_V1_REPORTPILE
+  BRIDGE_V1_POSTPILE
+
+
   !!  Girders                                                                                       !!
   BRIDGE_V1_POSTGIRDER
   BRIDGE_V1_POSTCOMPOSITE
@@ -98,15 +107,6 @@ GIRDER_name0 = GIRDER_name(1)
 
   !!  Pier: pile caps                                                                               !!
   BRIDGE_V1_POSTPCAP
-
-
-  !!  Pier: frame                                                                                   !!
-  BRIDGE_V1_POSTPIER
-
-
-  !!  Piles                                                                                         !!
-  BRIDGE_V1_REPORTPILE
-  BRIDGE_V1_POSTPILE
 
 
   !!  Abutment: approach slab                                                                       !!

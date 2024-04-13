@@ -341,10 +341,10 @@ GEO_ABT1_curtainL = 3
 ! Unrestrained pile length
 GEO_ABT1_pileFree = 0
 
-! Supress longitudinal walls:
+! Suppress longitudinal walls:
 !    [0] OFF (include longitudinal walls)
-!    [1] ON (supress longitudinal walls)
-GEO_ABT1_supressLW = 1
+!    [1] ON (suppress longitudinal walls)
+GEO_ABT1_suppressLW = 1
 
 ! Options for abutment type 4:
 GEO_ABT1_wingAngle     = 50
@@ -424,10 +424,10 @@ GEO_ABT2_curtainL = 3
 ! Unrestrained pile length
 GEO_ABT2_pileFree = 0
 
-! Supress longitudinal walls:
+! Suppress longitudinal walls:
 !    [0] OFF (include longitudinal walls)
-!    [1] ON (supress longitudinal walls)
-GEO_ABT2_supressLW = 1
+!    [1] ON (suppress longitudinal walls)
+GEO_ABT2_suppressLW = 1
 
 ! Options for abutment type 4:
 GEO_ABT2_wingAngle     = 50
