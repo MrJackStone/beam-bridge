@@ -302,7 +302,7 @@ cmpadd,'COMPA_ABT_walls'
 *endif
 
 ! Draw beam
-*if,GEO_ABT_suppressLW,eq,0,then
+*if,GEO_ABT_suppressLW,eq,0,and,GEO_ABT_beamW,gt,0,then
     k , K19 , x05 , y01 , z19
     k , K20 , x05 , y02 , z19
 

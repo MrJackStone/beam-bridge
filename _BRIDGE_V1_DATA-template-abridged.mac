@@ -224,7 +224,7 @@ MAT_FrameGirder_fck = 40e6
 !    [3] End only
 GEO_ABT_status = 1
 
-! Beam depth
+! Beam depth (zero to deactivate)
 GEO_ABT_beamH = 0.8
 
 ! Column width (zero to deactivate)

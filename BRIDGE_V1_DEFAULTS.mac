@@ -27,6 +27,14 @@ FEM_sgCouple_RZ = 1
 
 
 !!                                                                                                !!
+!! 1.3  Abutments                                                                                 !!
+!!                                                                                                !!
+GEO_ABT1_suppressLW=0
+GEO_ABT2_suppressLW=0
+
+
+
+!!                                                                                                !!
 !! 1.5  Gerber cantilever on girder support                                                       !!
 !!                                                                                                !!
 GEO_gerberStatus=0
