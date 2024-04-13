@@ -632,10 +632,10 @@ skewedDeltaY=GEO_deckLength*tan(LOAD_ltSkewness)
 *del,LOAD_ltWheelOff_end
 *dim,LOAD_ltWheelOff_end,,LOAD_wheelCount
 *do,nthLine,1,LOAD_ltCount,1
-    LOAD_ltWheelOff_beg(nthLine*2-1)=LOAD_ltLineOff(nthLine)-(LOAD_ltWidth/2)
-    LOAD_ltWheelOff_beg(nthLine*2)=LOAD_ltLineOff(nthLine)+(LOAD_ltWidth/2)
-    LOAD_ltWheelOff_end(nthLine*2-1)=LOAD_ltLineOff(nthLine)-(LOAD_ltWidth/2)+skewedDeltaY
-    LOAD_ltWheelOff_end(nthLine*2)=LOAD_ltLineOff(nthLine)+(LOAD_ltWidth/2)+skewedDeltaY
+  LOAD_ltWheelOff_beg(nthLine*2-1) = LOAD_ltLineOff(nthLine)-(LOAD_ltWidth/2)
+  LOAD_ltWheelOff_beg(nthLine*2)   = LOAD_ltLineOff(nthLine)+(LOAD_ltWidth/2)
+  LOAD_ltWheelOff_end(nthLine*2-1) = LOAD_ltLineOff(nthLine)-(LOAD_ltWidth/2)+skewedDeltaY
+  LOAD_ltWheelOff_end(nthLine*2)   = LOAD_ltLineOff(nthLine)+(LOAD_ltWidth/2)+skewedDeltaY
 *enddo
 
 ! Calculate X coordinates of gerber connections
