@@ -1,5 +1,13 @@
 ! BRIDGE_V1_POSTABTBEAM
 
+*if,GEO_ABT_beamH,eq,0,then
+  *return,-1
+*endif
+
+*if,GEO_ABT1_suppressLW,eq,1,and,GEO_ABT2_suppressLW,eq,1,then
+  *return,-1
+*endif
+
 
 !! Display settings                                                                               !!
 /device,font,3,Arial,1000,0,-64,0,0,,,
