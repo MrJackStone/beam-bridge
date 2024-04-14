@@ -18,15 +18,18 @@
 allsel
 
 ! Calculate global Z coordinate at the surface level of each abutment
+ABT1_verticalOffset=GEO_frameTopOffset(1)
+ABT2_verticalOffset=GEO_frameTopOffset(GEO_supportCount)
+
 *del,tmp
 *del,LOAD_ABT1_topLevel
 *voper,               tmp, NLIST_x, mult, ABT1_angCoef
-*voper,LOAD_ABT1_topLevel, tmp    , add , ABT1_linCoef
+*voper,LOAD_ABT1_topLevel, tmp    , add , ABT1_linCoef+ABT1_verticalOffset
 
 *del,tmp
 *del,LOAD_ABT2_topLevel
 *voper,               tmp, NLIST_x, mult, ABT2_angCoef
-*voper,LOAD_ABT2_topLevel, tmp    , add , ABT2_linCoef
+*voper,LOAD_ABT2_topLevel, tmp    , add , ABT2_linCoef+ABT2_verticalOffset
 
 ! Calculate soil height above each node
 *del,LOAD_ABT1_h
