@@ -1,0 +1,104 @@
+! BRIDGE_V1_POSTTHINWALL , etable , centerTitle , rightTitle , imgName
+! BRIDGE_V1_POSTTHINWALL , arg1   , arg2        , arg3       , arg4
+
+
+etabName    = arg1
+centerTitle = arg2
+units       = arg3
+
+
+view4w
+clims
+boldfont,1
+/gformat,f,2,1
+/annot,dele
+
+cmsel,s,COMPA_ABT_thinTranWall
+esla,s
+cm,COMPE_temp,elem
+
+/window,all,dele
+/annot,dele
+/window,1,on
+/window,2,on
+wincln,1
+wincln,2
+/udoc,1,cntr,right
+/udoc,2,cntr,right
+/plopts,leg3,on
+/window , 1 , -1 , 1.67 , 0  , 1
+/window , 2 , -1 , 1.67 , -1 , 0
+/edge,all,1
+/view,1,1,0,0
+/view,2,-1,0,0
+/angle,all,0
+/dscale,all,off
+/eshape,0
+/triad,off
+/auto,all
+cmsel,s,COMPE_ABT_1
+cmsel,a,COMPE_ABT_2
+eplot
+/user,all
+
+
+wintitle,1,'ENCONTRO 01: PAREDE TRANSVERSAL',centerTitle,units,,1,13
+wintitle,2,'ENCONTRO 02: PAREDE TRANSVERSAL',centerTitle,units,,1,13
+
+axanno,1
+axanno,2
+
+go2png,1200
+  /window,1,on
+  /window,2,off
+  /auto,1
+  cmsel,s,COMPA_ABT_1
+  esla,s
+  nsle,s,active
+  /eshape,1
+  eplot
+  /noerase
+  /user,1
+  cmsel,s,COMPL_ABT_1
+  esll,a
+  nsle,s,active
+  eplot
+  /eshape,0
+
+  /window,1,off
+  /window,2,on
+  /auto,2
+  cmsel,s,COMPA_ABT_2
+  esla,s
+  nsle,s,active
+  /eshape,1
+  eplot
+  /user,2
+  cmsel,s,COMPL_ABT_2
+  esll,a
+  nsle,s,active
+  eplot
+  /eshape,0
+
+  /window,1,on
+  /window,2,off
+  cmsel,s,COMPE_temp
+  cmsel,s,COMPA_ABT_1
+  esla,r
+  nsle,s
+  cleanplot,'pletab',etabName,'1'
+
+  /window,1,off
+  /window,2,on
+  cmsel,s,COMPE_temp
+  cmsel,s,COMPA_ABT_2
+  esla,r
+  nsle,s
+  cleanplot,'pletab',etabName,'1'
+
+endpng,arg4,,,,,'memo_imgs'
+/erase
+/annot,dele
+clims
+view1w
+
