@@ -77,20 +77,21 @@ nsle,s,active
 *enddo
 
 !! Plot path envelopes                                                                            !!
-*del , envelope_path_names  ,      , nopr
-*dim , envelope_path_names  , char , pathCount*2
-*del , envelope_path_labels ,      , nopr
-*dim , envelope_path_labels , char , pathCount*2
+*del , MPATHPLOT_ARR_pathNames ,      , nopr
+*dim , MPATHPLOT_ARR_pathNames , char , pathCount*2
+*del , MPATHPLOT_ARR_labels    ,      , nopr
+*dim , MPATHPLOT_ARR_labels    , char , pathCount*2
 
 *do,nthPath,1,pathCount,1
-  envelope_path_names(nthPath*2-1)  = path_names(nthPath)
-  envelope_path_names(nthPath*2)    = path_names(nthPath)
-  envelope_path_labels(nthPath*2-1) = 'NET_UX+'
-  envelope_path_labels(nthPath*2)   = 'NET_UX-'
+  MPATHPLOT_ARR_pathNames(nthPath*2-1) = path_names(nthPath)
+  MPATHPLOT_ARR_pathNames(nthPath*2)   = path_names(nthPath)
+  MPATHPLOT_ARR_labels(nthPath*2-1)    = 'NET_UX+'
+  MPATHPLOT_ARR_labels(nthPath*2)      = 'NET_UX-'
 *enddo
 
 view1w
 wincln,1
+clims
 
 *if,arg1,eq,1,then
   /view,1,1,1,1
@@ -135,7 +136,7 @@ go2png,1200
   /eshape,0
   /edge,1,0
   eplot
-  cleanplot,'mpathplot','3',,'envelope_path_names','envelope_path_labels'
+  cleanplot,'mpathplot','3'
 endpng,'IMG19a_ABT%arg1%_TRANWALL_deflects',,,,,'memo_imgs'
 /erase
 /annot,dele
