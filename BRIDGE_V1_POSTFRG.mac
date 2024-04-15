@@ -62,7 +62,6 @@ wincln,2
 wincln,3
 
 /plopts,leg3,on
-/plopts,info,3
 /udoc,1,cntr,right
 /udoc,2,cntr,right
 
@@ -88,7 +87,7 @@ go2png,1200
   /eshape,0
   cmsel,s,compe_fg1
   cmsel,s,compn_fg1
-  plls,emx_%key%i,emx_%key%j,,1
+  cleanplot,'plls','emx_%key%i','emx_%key%j',,'1'
 
   /window,1,off
   /window,2,on
@@ -104,7 +103,7 @@ go2png,1200
   /eshape,0
   cmsel,s,compe_fg2
   cmsel,s,compn_fg2
-  plls,emx_%key%i,emx_%key%j
+  cleanplot,'plls','emx_%key%i','emx_%key%j'
 endpng,'FRAMEGIRDER_%key%max',,,,,memoImgsFolder
 /erase
 /annot,dele
@@ -122,7 +121,6 @@ wincln,2
 wincln,3
 
 /plopts,leg3,on
-/plopts,info,3
 /udoc,1,cntr,right
 /udoc,2,cntr,right
 
@@ -148,7 +146,7 @@ go2png,1200
   /eshape,0
   cmsel,s,compe_fg1
   cmsel,s,compn_fg1
-  plls,emn_%key%i,emn_%key%j,,1
+  cleanplot,'plls','emn_%key%i','emn_%key%j',,'1'
 
   /window,1,off
   /window,2,on
@@ -164,7 +162,7 @@ go2png,1200
   /eshape,0
   cmsel,s,compe_fg2
   cmsel,s,compn_fg2
-  plls,emn_%key%i,emn_%key%j
+  cleanplot,'plls','emn_%key%i','emn_%key%j'
 endpng,'FRAMEGIRDER_%key%min',,,,,memoImgsFolder
 /erase
 /annot,dele

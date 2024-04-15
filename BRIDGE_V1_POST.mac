@@ -90,10 +90,24 @@ GIRDER_name0 = GIRDER_name(1)
   !!  Pier: frame                                                                                   !!
   BRIDGE_V1_POSTPIER
 
+  BRIDGE_V1_POSTFRC , 'MY'
+  BRIDGE_V1_POSTFRC , 'MZ'
+  BRIDGE_V1_POSTFRC , 'QZ'
+  BRIDGE_V1_POSTFRC , 'QY'
+  BRIDGE_V1_POSTFRC , 'N'
+  BRIDGE_V1_POSTFRC , 'MOBL'
+
+  BRIDGE_V1_POSTFRG, 'MY'
+  BRIDGE_V1_POSTFRG, 'QZ'
+
 
   !!  Piles                                                                                         !!
   BRIDGE_V1_REPORTPILE
   BRIDGE_V1_POSTPILE
+
+
+  !!  Pier: pile caps                                                                               !!
+  BRIDGE_V1_POSTPCAP
 
 
   !!  Girders                                                                                       !!
@@ -103,10 +117,6 @@ GIRDER_name0 = GIRDER_name(1)
 
   !!  Deck slab                                                                                     !!
   BRIDGE_V1_POSTDECK
-
-
-  !!  Pier: pile caps                                                                               !!
-  BRIDGE_V1_POSTPCAP
 
 
   !!  Abutment: approach slab                                                                       !!

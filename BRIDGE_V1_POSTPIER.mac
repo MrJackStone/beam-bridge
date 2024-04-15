@@ -135,8 +135,9 @@
     /erase
     /annot,dele
 
-  *elseif,GEO_frameOpt,eq,0,then
+  *elseif,GEO_frameOpt,eq,0,or,GEO_frameOpt,eq,2,then
     ! Column-girder frame
+    boldfont,1
     /annot,dele
 
     allsel
@@ -160,7 +161,6 @@
 
       /udoc,1,cntr,right
       /plopts,leg3,on
-      ! /plopts,info,3
       /gformat,f,1,1
 
       ! Vertical axial force (compression)
