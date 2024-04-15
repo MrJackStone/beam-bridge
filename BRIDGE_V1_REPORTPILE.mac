@@ -1,50 +1,95 @@
 ! BRIDGE_V1_REPORTPILE
 
-cmsel,s,compn_pile
-esln,s
-esel,u,type,,3
+cmsel,s,COMPL_pile
+cmsel,a,COMPL_ABT_piles
+! cmsel,a,COMPL_column
+cm,COMPL_allPiles,line
+*get,lc,line,,count
 
-*get,ec,elem,,count
-*del,f_all
-*del,m_all
-*del,nd_all
-*del,nk_all
-*del,md_all
-*del,mk_all
-*dim,f_all,,ec
-*dim,nd_all,,ec
-*dim,nk_all,,ec
-*dim,m_all,,ec
-*dim,md_all,,ec
-*dim,mk_all,,ec
+! cmsel,s,compn_pile
+! esln,s
+! esel,u,type,,3
+cmsel,s,COMPL_allPiles
+esll,s
+cm,COMPE_allPiles,elem
+*get , ec , elem ,  , count
 
-enu=0
+*del , f_all
+*del , m_all
+*del , nd_all
+*del , nk_all
+*del , md_all
+*del , mk_all
+*del , z_all
+*del , i_all
+*dim , f_all  ,  , ec
+*dim , nd_all ,  , ec
+*dim , nk_all ,  , ec
+*dim , m_all  ,  , ec
+*dim , md_all ,  , ec
+*dim , mk_all ,  , ec
+*dim , z_all  ,  , ec
+*dim , i_all  ,  , ec
+
+enum=0
 *do,ei,1,ec,1
-    enu=elnext(enu)
-    *get,nth_f,elem,enu,etab,n_c
-    *get,nth_m,elem,enu,etab,m_obl
+  cmsel,s,COMPE_allPiles
+  nsle,s,active
 
-    *get,nth_nk,elem,enu,etab,ndc_pile
-    nth_nd=nth_nk*1.4
-    *get,nth_mk,elem,enu,etab,mdo_pile
-    nth_md=nth_mk*1.4
+  enum=elnext(enum)
 
-    f_all(ei)=nth_f
-    m_all(ei)=nth_m
+  elemCenterZ=centrz(enum)
 
-    nk_all(ei)=nth_nk
-    nd_all(ei)=nth_nd
-    mk_all(ei)=nth_mk
-    md_all(ei)=nth_md
+  pileLine=0
+  lnum=0
+  *do,nthLine,1,lc,1
+    cmsel,s,COMPL_allPiles
+    lnum=lsnext(lnum)
+    lsel,s,line,,lnum
+    esll,s
+    selCheck=esel(enum)
+    *if,selCheck,eq,1,then
+      pileLine=lnum
+      *exit
+    *endif
+  *enddo
+
+  zmax=0
+  *if,pileLine,ne,0,then
+    lsel,s,line,,pileLine
+    nsll,s
+    cmsel,r,COMPN_pile
+    *get,zmax,node,,mxloc,z
+  *endif
+  elemDepth=zmax-elemCenterZ
+
+  *get,nth_f,elem,enum,etab,n_c
+  *get,nth_m,elem,enum,etab,m_obl
+
+  *get,nth_nk,elem,enum,etab,ndc_pile
+  nth_nd=nth_nk*1.4
+  *get,nth_mk,elem,enum,etab,mdo_pile
+  nth_md=nth_mk*1.4
+
+  i_all(ei)=pileLine
+  z_all(ei)=elemDepth
+
+  f_all(ei)=nth_f
+  m_all(ei)=nth_m
+
+  nk_all(ei)=nth_nk
+  nd_all(ei)=nth_nd
+  mk_all(ei)=nth_mk
+  md_all(ei)=nth_md
 *enddo
 
 *cfopen,'RES_pileSects_MN',txt
     *vwrite,
-    ('----------ELU-Normal-super  ----------ELU-Normal-infra  -------------ELU-Geotecnia')
+    ('------------Geometria  ----------ELU-Normal-super  ----------ELU-Normal-infra  -------------ELU-Geotecnia')
     *vwrite,
-    ('           N             M             N             M             N             M')
-    *vwrite,f_all(1),m_all(1),nd_all(1),md_all(1),nk_all(1),mk_all(1)
-    (F12.2,'  ',F12.2,'  ',F12.2,'  ',F12.2,'  ',F12.2,'  ',F12.2,'  ',F12.2,'  ',F12.2)
+    (' PILE #         Z [m]             N             M             N             M             N             M')
+    *vwrite,i_all(1),z_all(1),f_all(1),m_all(1),nd_all(1),md_all(1),nk_all(1),mk_all(1)
+    (F8.0,TL1,'  ',F12.2,'  ',F12.2,'  ',F12.2,'  ',F12.2,'  ',F12.2,'  ',F12.2,'  ',F12.2,'  ',F12.2,'  ',F12.2)
 *cfclos
 
 !!                                                                                                !!
