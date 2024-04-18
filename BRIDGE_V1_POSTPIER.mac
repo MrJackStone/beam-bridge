@@ -1,0 +1,406 @@
+! BRIDGE_V1_POSTPIER
+
+*if,GEO_pierCount,gt,0,then
+
+  *if,GEO_frameOpt,eq,1,then
+    ! Tubular pier columns
+    /annot,dele
+
+    allsel
+    esel,u,type,,3
+
+    view1w
+    windefa,1
+    wincln,1
+    /view,1,-1,-1,1
+    /auto,1
+    eplot
+    /user,1
+
+    wntitle,'F. AXIAL (V) NOS PILARES [kN/m]'
+
+    go2png,1200
+
+      cmsel,s,compa_coltubewall
+      cmsel,a,compa_coltubecap
+      esla,s
+      nsle,s,active
+
+      /udoc,1,cntr,right
+      /plopts,leg3,on
+      /gformat,f,1,1
+
+      ! Vertical axial force (compression)
+      pletab,'EMN_NY',1
+      /noerase
+
+      /device,vector,on
+      allsel
+      esel,u,type,,3
+      nsle,s,active
+      eplot
+      /device,vector,off
+
+    endpng,'IMG09a_pierNY',,,,,memoImgsFolder
+    /erase
+    /annot,dele
+
+    !!
+    wntitle,'F. AXIAL (H) NOS PILARES [kN/m]'
+
+    go2png,1200
+
+      cmsel,s,compa_coltubewall
+      cmsel,a,compa_coltubecap
+      esla,s
+      nsle,s,active
+
+      /udoc,1,cntr,right
+      /plopts,leg3,on
+      ! /plopts,info,3
+      /gformat,f,1,1
+
+      ! Vertical axial force (compression)
+      pletab,'EMX_NX',1
+      /noerase
+
+      /device,vector,on
+      allsel
+      esel,u,type,,3
+      nsle,s,active
+      eplot
+      /device,vector,off
+
+    endpng,'IMG09b_pierNX',,,,,memoImgsFolder
+    /erase
+    /annot,dele
+
+    !!
+    wntitle,'M. FLETOR NOS PILARES [kNm/m]'
+
+    go2png,1200
+
+      cmsel,s,compa_coltubewall
+      cmsel,a,compa_coltubecap
+      esla,s
+      nsle,s,active
+
+      /udoc,1,cntr,right
+      /plopts,leg3,on
+      ! /plopts,info,3
+      /gformat,f,1,1
+
+      ! Vertical axial force (compression)
+      pletab,'EMN_MX',1
+      /noerase
+
+      /device,vector,on
+      allsel
+      esel,u,type,,3
+      nsle,s,active
+      eplot
+      /device,vector,off
+
+    endpng,'IMG09c_pierMX',,,,,memoImgsFolder
+    /erase
+    /annot,dele
+
+    !!
+    wntitle,'F. CORTANTE NOS PILARES [kN/m]'
+
+    go2png,1200
+
+      cmsel,s,compa_coltubewall
+      cmsel,a,compa_coltubecap
+      esla,s
+      nsle,s,active
+
+      /udoc,1,cntr,right
+      /plopts,leg3,on
+      ! /plopts,info,3
+      /gformat,f,1,1
+
+      ! Vertical axial force (compression)
+      pletab,'EAB_Q',1
+      /noerase
+
+      /device,vector,on
+      allsel
+      esel,u,type,,3
+      nsle,s,active
+      eplot
+      /device,vector,off
+
+    endpng,'IMG09d_pierQ',,,,,memoImgsFolder
+    /erase
+    /annot,dele
+
+  *elseif,GEO_frameOpt,eq,0,or,GEO_frameOpt,eq,2,then
+    ! Column-girder frame
+    boldfont,1
+    /annot,dele
+
+    allsel
+    esel,u,type,,3
+
+    view1w
+    windefa,1
+    wincln,1
+    /view,1,-1,-1,1
+    /auto,1
+    eplot
+    /user,1
+
+    wntitle,'F. AXIAL NOS PILARES [kN]'
+
+    go2png,1200
+
+      cmsel,s,compl_column
+      esll,s
+      nsle,s,active
+
+      /udoc,1,cntr,right
+      /plopts,leg3,on
+      /gformat,f,1,1
+
+      ! Vertical axial force (compression)
+      /vup,1,x
+      /angle,1,-60,zs
+      plls,EAB_Ni,EAB_Nj,3,,1
+      /vup,1,z
+      /angle,1,0,zs
+      /noerase
+
+      /device,vector,on
+      allsel
+      esel,u,type,,3
+      nsle,s,active
+      eplot
+      /device,vector,off
+
+    endpng,'IMG09e_columnN',,,,,memoImgsFolder
+    /erase
+    /annot,dele
+
+    !!
+    wntitle,'M. FLETOR NOS PILARES [kNm]'
+
+    /anum,,1
+    /tspec,15,1,4
+    /tlabel,-0.94,-0.65,'MY'
+    /anum,,1
+    /tspec,15,1,4
+    /tlabel,1.55,-0.65,'MZ'
+
+
+    go2png,1200
+
+      cmsel,s,compl_column
+      esll,s
+      nsle,s,active
+
+      /udoc,1,cntr,right
+      /plopts,leg3,on
+      ! /plopts,info,3
+      /gformat,f,1,1
+
+      ! Y bending moment
+      /vup,1,x
+      /angle,1,-60,zs
+      /udoc,1,cntr,left
+      plls,EAB_MYi,EAB_MYj,3,,1
+      /vup,1,z
+      /angle,1,0,zs
+      /noerase
+
+      ! Z bending moment
+      /vup,1,y
+      /angle,1,60,zs
+      /udoc,1,cntr,right
+      plls,EAB_MZi,EAB_MZj,3,,1
+      /vup,1,z
+      /angle,1,0,zs
+
+      /device,vector,on
+      allsel
+      esel,u,type,,3
+      nsle,s,active
+      eplot
+      /device,vector,off
+
+    endpng,'IMG09f_columnM',,,,,memoImgsFolder
+    /erase
+    /annot,dele
+
+    !!
+    wntitle,'F. CORTANTE NOS PILARES [kN]'
+
+    /anum,,1
+    /tspec,15,1,4
+    /tlabel,-0.94,-0.65,'QY'
+    /anum,,1
+    /tspec,15,1,4
+    /tlabel,1.55,-0.65,'QZ'
+
+    go2png,1200
+
+      cmsel,s,compl_column
+      esll,s
+      nsle,s,active
+
+      /udoc,1,cntr,right
+      /plopts,leg3,on
+      ! /plopts,info,3
+      /gformat,f,1,1
+
+      ! Z-Shear force
+      /vup,1,x
+      /angle,1,-60,zs
+      /udoc,1,cntr,left
+      plls,EAB_QZi,EAB_QZj,3,,1
+      /vup,1,z
+      /angle,1,0,zs
+      /noerase
+
+      ! Y-Shear force
+      /vup,1,y
+      /angle,1,60,zs
+      /udoc,1,cntr,right
+      plls,EAB_QYi,EAB_QYj,3,,1
+      /vup,1,z
+      /angle,1,0,zs
+
+      /device,vector,on
+      allsel
+      esel,u,type,,3
+      nsle,s,active
+      eplot
+      /device,vector,off
+
+    endpng,'IMG09g_columnQ',,,,,memoImgsFolder
+    /erase
+    /annot,dele
+
+    !!
+    wntitle,'F. AXIAL NA TRAVESSA [kN]'
+
+    go2png,1200
+
+      cmsel,s,compl_framegirder
+      esll,s
+      nsle,s,active
+
+      /udoc,1,cntr,right
+      /plopts,leg3,on
+      ! /plopts,info,3
+      /gformat,f,1,1
+
+      ! Vertical axial force (compression)
+      plls,EAB_Ni,EAB_Nj,3,,1
+      /noerase
+
+      /device,vector,on
+      allsel
+      esel,u,type,,3
+      nsle,s,active
+      eplot
+      /device,vector,off
+
+    endpng,'IMG09h_framegN',,,,,memoImgsFolder
+    /erase
+    /annot,dele
+
+    !!
+    wntitle,'M. FLETOR NA TRAVESSA [kNm]'
+
+    /anum,,1
+    /tspec,15,1,4
+    /tlabel,-0.94,-0.65,'MY'
+    /anum,,1
+    /tspec,15,1,4
+    /tlabel,1.55,-0.65,'MZ'
+
+
+    go2png,1200
+
+      cmsel,s,compl_framegirder
+      esll,s
+      nsle,s,active
+
+      /udoc,1,cntr,right
+      /plopts,leg3,on
+      ! /plopts,info,3
+      /gformat,f,1,1
+
+      ! Y bending moment
+      /udoc,1,cntr,left
+      plls,EAB_MYi,EAB_MYj,3,,1
+      /noerase
+
+      ! Z bending moment
+      /vup,1,x
+      /angle,1,-60,zs
+      /udoc,1,cntr,right
+      plls,EAB_MZi,EAB_MZj,-3,,1
+      /vup,1,z
+      /angle,1,0,zs
+
+      /device,vector,on
+      allsel
+      esel,u,type,,3
+      nsle,s,active
+      eplot
+      /device,vector,off
+
+    endpng,'IMG09i_framegM',,,,,memoImgsFolder
+    /erase
+    /annot,dele
+
+    !!
+    wntitle,'F. CORTANTE NA TRAVESSA [kN]'
+
+    /anum,,1
+    /tspec,15,1,4
+    /tlabel,-0.94,-0.65,'QY'
+    /anum,,1
+    /tspec,15,1,4
+    /tlabel,1.55,-0.65,'QZ'
+
+    go2png,1200
+
+      cmsel,s,compl_framegirder
+      esll,s
+      nsle,s,active
+
+      /udoc,1,cntr,right
+      /plopts,leg3,on
+      ! /plopts,info,3
+      /gformat,f,1,1
+
+      ! Z-Shear force
+      /udoc,1,cntr,left
+      plls,EAB_QZi,EAB_QZj,3,,1
+      /noerase
+
+      ! Y-Shear force
+      /vup,1,x
+      /angle,1,-60,zs
+      /udoc,1,cntr,right
+      plls,EAB_QYi,EAB_QYj,-3,,1
+      /vup,1,z
+      /angle,1,0,zs
+
+      /device,vector,on
+      allsel
+      esel,u,type,,3
+      nsle,s,active
+      eplot
+      /device,vector,off
+
+    endpng,'IMG09j_framegQ',,,,,memoImgsFolder
+    /erase
+    /annot,dele
+
+  *endif
+
+*endif

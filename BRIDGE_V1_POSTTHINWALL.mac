@@ -1,21 +1,19 @@
-! BRIDGE_V1_POSTTWALL , etable , subtitle , imgName
-! BRIDGE_V1_POSTTWALL , arg1   , arg2     , arg3
+! BRIDGE_V1_POSTTHINWALL , etable , centerTitle , rightTitle , imgName
+! BRIDGE_V1_POSTTHINWALL , arg1   , arg2        , arg3       , arg4
 
 
-etabName=arg1
+etabName    = arg1
+centerTitle = arg2
+units       = arg3
 
-/device,font,3,Arial,1000,0,-64,0,0,,,
-/device,font,1,Arial,1000,0,-42,0,0,,,
-/device,text,1,100
-/tspec,15,1.5,4,0,0
-/gformat,f,2,1
-/annot,dele
-/erase
+
 view4w
 clims
-erase
+boldfont,1
+/gformat,f,2,1
+/annot,dele
 
-cmsel,s,COMPA_ABT_tranwall
+cmsel,s,COMPA_ABT_thinTranWall
 esla,s
 cm,COMPE_temp,elem
 
@@ -43,11 +41,9 @@ cmsel,a,COMPE_ABT_2
 eplot
 /user,all
 
-wntitle,'ENCONTRO 01: PAREDE TRANSVERSAL',1,0
-wntitle,arg2,1,1,'R'
 
-wntitle,'ENCONTRO 02: PAREDE TRANSVERSAL',2,0
-wntitle,arg2,2,1,'R'
+wintitle,1,'ENCONTRO 01: PAREDE TRANSVERSAL',centerTitle,units,,1,13
+wintitle,2,'ENCONTRO 02: PAREDE TRANSVERSAL',centerTitle,units,,1,13
 
 axanno,1
 axanno,2
@@ -100,8 +96,9 @@ go2png,1200
   nsle,s
   cleanplot,'pletab',etabName,'1'
 
-endpng,arg3,,,,,'memo_imgs'
+endpng,arg4,,,,,'memo_imgs'
 /erase
 /annot,dele
 clims
 view1w
+

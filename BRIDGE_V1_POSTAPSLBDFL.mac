@@ -2,6 +2,7 @@
 ! BRIDGE_V1_POSTAPSLBDFL, arg1
 
 !! Initial configs                                                                                !!
+view1w
 windefa,1
 /device,font,3,Arial,1000,0,-64,0,0,,,
 /device,font,1,Arial,1000,0,-42,0,0,,,
@@ -97,9 +98,8 @@ nsle,s,active
 view1w
 wincln,1
 /view,1,1,1,1
-/udoc,1,cntr,right
-/plopts,info,3
-/plopts,leg3,1
+/plopts,leg3,on
+g_annobold,1
 wntitle , 'ENCONTRO 0%arg1%:'     , 1 , 0
 wntitle , 'LAJE DE APROX.'   , 1 , 0 , 'C'
 wntitle , 'FLECHA RARA [mm]' , 1 , 1 , 'R'
@@ -120,8 +120,8 @@ nsle,s,active
 go2png,1200
   /device,vector,on
   eplot
-  /user,1
   /noerase
+  /user,1
   cmsel,s,COMPL_ABT_piles
   esll,a
   nsle,s,active
@@ -134,8 +134,8 @@ go2png,1200
   /eshape,0
   /edge,1,0
   eplot
-  mpathplot,3,,'envelope_path_names','envelope_path_labels'
-endpng,'ABT%arg1%_APPSLAB_deflects',,,,,'memo_imgs'
+  cleanplot,'mpathplot','3',,'envelope_path_names','envelope_path_labels'
+endpng,'IMG18a_ABT%arg1%_APPSLAB_deflects',,,,,'memo_imgs'
 /erase
 /annot,dele
 clims

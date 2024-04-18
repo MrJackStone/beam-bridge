@@ -42,3 +42,9 @@ SFE,ALL,2,PRES,,LOAD_pav
     ! Earth pressures
     BRIDGE_V1_EARTHPRES,0
 *endif
+
+! Tschebotarioff lateral pressure on piles
+*if,LOAD_TSCHEBOTARIOFF_status,eq,1,then
+  BRIDGE_V1_TSCHEBOTARIOFF
+  BRIDGE_V1_PICTSCHE
+*endif

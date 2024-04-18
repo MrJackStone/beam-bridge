@@ -1,0 +1,157 @@
+! BRIDGE_V1_ETABLES
+
+/post1
+
+resultsFolder='results'
+
+*if,GEO_frameOpt,eq,1,then
+  *if,GEO_pierCount,gt,0,then
+    cmsel,s,COMPA_colTubeWall
+    esla,s
+    cm,COMPE_colTubeWall,elem
+  *else
+    asel,u,area,,all
+    cm,COMPA_colTubeWall,area
+    esla,s
+    cm,COMPE_colTubeWall,elem
+  *endif
+*endif
+
+/dscale,,off
+
+
+!!
+! Element table envelopes
+allsel
+set,first
+
+etable,'UX',U,X
+etable,'UY',U,Y
+etable,'UZ',U,Z
+etable,'DW_UX',U,X
+etable,'DW_UY',U,Y
+etable,'DW_UZ',U,Z
+sadd,'DW_UX','DW_UX',,1
+sadd,'DW_UY','DW_UY',,1
+sadd,'DW_UZ','DW_UZ',,1
+
+! SHELL181
+defetabs,181,,1,0
+defetabs,181,'DW_',1,1
+
+! BEAM188
+defetabs,188,,1,0
+defetabs,188,'DW_',1,1
+
+sabs,1
+smax,'DW_Q','DW_QX','DW_QY'
+sabs
+
+sadd,'ZEROS','UX','UX',1,-1
+
+*del,ETNames
+*dim,ETNames,CHAR,21
+ETNames(1)=  'MX', 'MY',  'NX',  'NY',  'QX',  'QY',  'UX',  'UY',  'UZ'
+ETNames(10)= 'Ni', 'Nj', 'QZi', 'QZj', 'QYi', 'QYj', 'MYi', 'MYj', 'MZi', 'MZj'
+ETNames(20)= 'TQi', 'TQj'
+
+etenv,2,LoadStepCount,'ETNames'
+
+*del,env_etnames
+*dim,env_etnames,char,21*4
+*do,nthET,1,21,1
+    baseName=ETNames(nthET)
+    env_etnames(nthET*4-3)=strcat('EMN_',baseName)
+    env_etnames(nthET*4-2)=strcat('EMX_',baseName)
+    env_etnames(nthET*4-1)=strcat('EAB_',baseName)
+    env_etnames(nthET*4-0)=strcat('DW_',baseName)
+*enddo
+
+*do,i,1,21*4,1
+    et_name=env_etnames(i)
+    str_length=strleng(et_name)
+    start_pos=str_length-1
+    last2chars=strsub(et_name,start_pos,2)
+    suf=upcase(last2chars)
+    *if,suf,eq,'UX',then
+        scale_et=0
+    *elseif,suf,eq,'UY',then
+        scale_et=0
+    *elseif,suf,eq,'UZ',then
+        scale_et=0
+    *else
+        scale_et=1
+    *endif
+    *if,scale_et,eq,1,then
+        sadd,et_name,et_name,,1e-3
+    *endif
+*enddo
+
+! Shell181 max shear
+smax,'EAB_Q','EAB_QX','EAB_QY'
+
+! BEAM188 max oblique bending moment
+smax , 'M_y'   , 'EAB_MYi' , 'EAB_MYj'
+smax , 'M_z'   , 'EAB_MZi' , 'EAB_MZj'
+sexp , 'MY_sq' , 'M_y'     ,           , 2
+sexp , 'MZ_sq' , 'M_z'     ,           , 2
+sadd , 'M_sq'  , 'MY_sq'   , 'MZ_sq'
+sexp , 'M_obl' , 'M_sq'    ,           , 0.5
+
+! BEAM188 max oblique shear force
+smax , 'Q_y'   , 'EAB_QYi' , 'EAB_QYj'
+smax , 'Q_z'   , 'EAB_QZi' , 'EAB_QZj'
+sexp , 'QY_sq' , 'Q_y'     ,           , 2
+sexp , 'QZ_sq' , 'Q_z'     ,           , 2
+sadd , 'Q_sq'  , 'QY_sq'   , 'QZ_sq'
+sexp , 'Q_obl' , 'Q_sq'    ,           , 0.5
+
+! BEAM188 max tension and compression
+smin , 'N_c0' , 'EMN_Ni' , 'EMN_Nj'
+smin , 'N_c'  , 'N_c0'   , 'ZEROS'
+smax , 'N_t0' , 'EMX_Ni' , 'EMX_Nj'
+smax , 'N_t'  , 'N_t0'   , 'ZEROS'
+
+! Internal reactions on piles, discounting impact coefficient
+sadd , 'N_ck' , 'N_c'   ,  , 1/1.4
+sadd , 'M_k'  , 'M_obl' ,  , 1/1.4
+sadd , 'Q_zk' , 'Q_z'   ,  , 1/1.4
+
+smin , 'N_cg'  , 'DW_Ni' , 'DW_Nj'
+smin , 'N_cg'  , 'N_cg'  , 'ZEROS'
+sadd , 'N_cgk' , 'N_cg'  ,         , 1/1.4
+sadd , 'N_cq'  , 'N_c'   , 'N_cg'  , 1                      , -1
+sadd , 'N_cqk' , 'N_cq'  ,         , 1/(1.4*LOAD_dynImpact)
+
+smax , 'M_yg'   , 'DW_MYi' , 'DW_MYj'
+smax , 'M_zg'   , 'DW_MZi' , 'DW_MZj'
+sexp , 'MYg_sq' , 'M_yg'   ,          , 2
+sexp , 'MZg_sq' , 'M_zg'   ,          , 2
+sadd , 'Mg_sq'  , 'MYg_sq' , 'MZg_sq'
+sexp , 'Mg_obl' , 'Mg_sq'  ,          , 0.5
+sadd , 'Mgk_o'  , 'Mg_obl' ,          , 1/1.4
+sadd , 'Mq_o'   , 'M_obl'  , 'Mg_obl' , 1                      , -1
+sadd , 'Mqk_o'  , 'Mq_o'   ,          , 1/(1.4*LOAD_dynImpact)
+
+smax , 'Q_yg'   , 'DW_QYi' , 'DW_QYj'
+smax , 'Q_zg'   , 'DW_QZi' , 'DW_QZj'
+sexp , 'QYg_sq' , 'Q_yg'   ,          , 2
+sexp , 'QZg_sq' , 'Q_zg'   ,          , 2
+sadd , 'Qg_sq'  , 'QYg_sq' , 'QZg_sq'
+sexp , 'Qg_obl' , 'Qg_sq'  ,          , 0.5
+sadd , 'Qgk_o'  , 'Qg_obl' ,          , 1/1.4
+sadd , 'Qq_o'   , 'Q_obl'  , 'Qg_obl' , 1                      , -1
+sadd , 'Qqk_o'  , 'Qq_o'   ,          , 1/(1.4*LOAD_dynImpact)
+
+sadd , 'Ndc_pile' , 'N_cqk' , 'N_cgk' , 1 , 1
+sadd , 'Mdo_pile' , 'Mqk_o' , 'Mgk_o' , 1 , 1
+sadd , 'Qdo_pile' , 'Qqk_o' , 'Qgk_o' , 1 , 1
+
+sadd , 'Ndc_estr' , 'N_cqk' , 'N_cgk' , 1.4 , 1.4
+sadd , 'Mdo_estr' , 'Mqk_o' , 'Mgk_o' , 1.4 , 1.4
+sadd , 'Qdo_estr' , 'Qqk_o' , 'Qgk_o' , 1.4 , 1.4
+
+! Displacements in mm
+sadd , 'EMM_UX' , 'EAB_UX' ,  , 1e3
+sadd , 'EMM_UY' , 'EAB_UY' ,  , 1e3
+sadd , 'EMM_UZ' , 'EMN_UZ' ,  , 1e3

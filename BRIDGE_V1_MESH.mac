@@ -596,7 +596,7 @@ ESEL,U,ELEM,,ALL
 NSEL,U,NODE,,ALL
 CMSEL,S,COMPL_Pile
 cmsel,a,COMPL_ABT_piles
-ORIENT,TYPE_BEAM188,MAT_Pile,SEC_PILE_num,-1,,,FEM_PileELength
+ORIENT,TYPE_BEAM188,MAT_Pile,SEC_PILE_num,1,,,FEM_PileELength
 LMESH,ALL
 NSLE,S,ACTIVE
 CM,COMPE_Pile,ELEM
@@ -742,7 +742,7 @@ cm,COMPN_PILE_absentSoil,node
 cmsel,s,COMPN_PIER_piles
 cmsel,u,COMPN_PILE_absentSoil
 *if,MAT_Soil_kv,GT,0,THEN
-    sprsup,0,0,-FEM_springL,MAT_Soil,SEC_VSOIL_num,TYPE_LINK180,'COMPN_PIER_VSoil','COMPE_PIER_VSoil',,3
+    sprsup,0,0,-FEM_springL,MAT_PileLat,SEC_VSOIL_num,TYPE_LINK180,'COMPN_PIER_VSoil','COMPE_PIER_VSoil',,3
 *endif
 *if,MAT_Soil_kh,GT,0,THEN
     sprsup,-FEM_springL,0,0,MAT_Soil,SEC_HSOIL_num,TYPE_LINK180,'COMPN_PIER_HSoil','COMPE_PIER_HSoil',,4
@@ -756,8 +756,8 @@ cmsel,u,COMPN_PILE_absentSoil
 ! First abutment
 *if,GEO_ABT1_status,eq,1,then
     cmsel,s,COMPN_ABT1_piles
-    *get,zmx,node,,mxloc,z
     *if,GEO_ABT1_pileFree,gt,0,then
+        *get,zmx,node,,mxloc,z
         nsel,u,loc,z,zmx,zmx-GEO_ABT1_pileFree
         cm,COMPN_ABT1_pileRestrained,node
         cmsel,s,COMPN_ABT1_piles
@@ -766,29 +766,33 @@ cmsel,u,COMPN_PILE_absentSoil
     *else
         cm,COMPN_ABT1_pileRestrained,node
     *endif
+
     cmsel,s,COMPN_ABT1_pileRestrained
     cmsel,u,COMPN_PILE_absentSoil
+    cm,COMPN_ABT1_pileSpringSupported,node
+
     *if,MAT_Soil_kv,GT,0,THEN
-        sprsup,0,0,-FEM_springL,MAT_Soil,SEC_VSOIL_num,TYPE_LINK180,'COMPN_ABT1_VSoil','COMPE_ABT1_VSoil',,3
+        cmsel,s,COMPN_ABT1_pileSpringSupported
+        sprsup,0,0,-FEM_springL,MAT_PileLat,SEC_VSOIL_num,TYPE_LINK180,'COMPN_ABT1_VSoil','COMPE_ABT1_VSoil',,3
     *endif
     *if,MAT_Soil_kh,GT,0,THEN
         *if,GEO_ABT1_type,eq,3,then
             ! Pile curtain: perpendicular soil supports only
-            cm,COMPN_temp,node
             cmsel,s,COMPL_ABT_twPiles
             cmsel,a,COMPL_ABT_vxPiles
-            nsll,r,1
-            cmsel,u,COMPN_PILE_absentSoil
-            sprsup,-FEM_springL,0,0,MAT_Soil,SEC_HSOIL_num,TYPE_LINK180,'COMPN_ABT1_HSoil','COMPE_ABT1_HSoil',,4
-            cmsel,s,COMPN_temp
+            nsll,s,1
+            cmsel,r,COMPN_ABT1_pileSpringSupported
+            sprsup , -FEM_springL , 0            , 0 , MAT_Soil , SEC_HSOIL_num , TYPE_LINK180 , 'COMPN_ABT1_HSoil' , 'COMPE_ABT1_HSoil' ,  , 4
             cmsel,s,COMPL_ABT_lwPiles
             cmsel,a,COMPL_ABT_vxPiles
-            nsll,r,1
-            cmsel,u,COMPN_PILE_absentSoil
-            sprsup,0,-FEM_springL,0,MAT_Soil,SEC_HSOIL_num,TYPE_LINK180,'COMPN_temp' ,'COMPE_temp',,4
+            nsll,s,1
+            cmsel,r,COMPN_ABT1_pileSpringSupported
+            sprsup , 0            , -FEM_springL , 0 , MAT_Soil , SEC_HSOIL_num , TYPE_LINK180 , 'COMPN_temp'       , 'COMPE_temp'       ,  , 4
         *else
-            sprsup,-FEM_springL,0,0,MAT_Soil,SEC_HSOIL_num,TYPE_LINK180,'COMPN_ABT1_HSoil','COMPE_ABT1_HSoil',,4
-            sprsup,0,-FEM_springL,0,MAT_Soil,SEC_HSOIL_num,TYPE_LINK180,'COMPN_temp' ,'COMPE_temp',,4
+            cmsel,s,COMPN_ABT1_pileSpringSupported
+            sprsup , -FEM_springL , 0            , 0 , MAT_Soil , SEC_HSOIL_num , TYPE_LINK180 , 'COMPN_ABT1_HSoil' , 'COMPE_ABT1_HSoil' ,  , 4
+            cmsel,s,COMPN_ABT1_pileSpringSupported
+            sprsup , 0            , -FEM_springL , 0 , MAT_Soil , SEC_HSOIL_num , TYPE_LINK180 , 'COMPN_temp'       , 'COMPE_temp'       ,  , 4
         *endif
         cmsel,s,COMPN_temp
         cmsel,s,COMPE_temp
@@ -799,15 +803,14 @@ cmsel,u,COMPN_PILE_absentSoil
     cmsel,s,COMPN_ABT1_piles
     cmsel,a,COMPN_ABT1_HSoil
     cmsel,a,COMPN_ABT1_VSoil
-    csys,CS_ABT1
     csys,0
 *endif
 
 ! Second abutment
 *if,GEO_ABT2_status,eq,1,then
     cmsel,s,COMPN_ABT2_piles
-    *get,zmx,node,,mxloc,z
     *if,GEO_ABT2_pileFree,gt,0,then
+        *get,zmx,node,,mxloc,z
         nsel,u,loc,z,zmx,zmx-GEO_ABT2_pileFree
         cm,COMPN_ABT2_pileRestrained,node
         cmsel,s,COMPN_ABT2_piles
@@ -816,29 +819,33 @@ cmsel,u,COMPN_PILE_absentSoil
     *else
         cm,COMPN_ABT2_pileRestrained,node
     *endif
+
     cmsel,s,COMPN_ABT2_pileRestrained
     cmsel,u,COMPN_PILE_absentSoil
+    cm,COMPN_ABT2_pileSpringSupported,node
+
     *if,MAT_Soil_kv,GT,0,THEN
-        sprsup,0,0,-FEM_springL,MAT_Soil,SEC_VSOIL_num,TYPE_LINK180,'COMPN_ABT2_VSoil','COMPE_ABT2_VSoil',,3
+        cmsel,s,COMPN_ABT2_pileSpringSupported
+        sprsup,0,0,-FEM_springL,MAT_PileLat,SEC_VSOIL_num,TYPE_LINK180,'COMPN_ABT2_VSoil','COMPE_ABT2_VSoil',,3
     *endif
     *if,MAT_Soil_kh,GT,0,THEN
         *if,GEO_ABT2_type,eq,3,then
             ! Pile curtain: perpendicular soil supports only
-            cm,COMPN_temp,node
             cmsel,s,COMPL_ABT_twPiles
             cmsel,a,COMPL_ABT_vxPiles
-            nsll,r,1
-            cmsel,u,COMPN_PILE_absentSoil
-            sprsup,-FEM_springL,0,0,MAT_Soil,SEC_HSOIL_num,TYPE_LINK180,'COMPN_ABT2_HSoil','COMPE_ABT2_HSoil',,4
-            cmsel,s,COMPN_temp
+            nsll,s,1
+            cmsel,r,COMPN_ABT2_pileSpringSupported
+            sprsup , -FEM_springL , 0            , 0 , MAT_Soil , SEC_HSOIL_num , TYPE_LINK180 , 'COMPN_ABT2_HSoil' , 'COMPE_ABT2_HSoil' ,  , 4
             cmsel,s,COMPL_ABT_lwPiles
             cmsel,a,COMPL_ABT_vxPiles
-            nsll,r,1
-            cmsel,u,COMPN_PILE_absentSoil
-            sprsup,0,-FEM_springL,0,MAT_Soil,SEC_HSOIL_num,TYPE_LINK180,'COMPN_temp' ,'COMPE_temp',,4
+            nsll,s,1
+            cmsel,r,COMPN_ABT2_pileSpringSupported
+            sprsup , 0            , -FEM_springL , 0 , MAT_Soil , SEC_HSOIL_num , TYPE_LINK180 , 'COMPN_temp'       , 'COMPE_temp'       ,  , 4
         *else
-            sprsup,-FEM_springL,0,0,MAT_Soil,SEC_HSOIL_num,TYPE_LINK180,'COMPN_ABT2_HSoil','COMPE_ABT2_HSoil',,4
-            sprsup,0,-FEM_springL,0,MAT_Soil,SEC_HSOIL_num,TYPE_LINK180,'COMPN_temp' ,'COMPE_temp',,4
+            cmsel,s,COMPN_ABT2_pileSpringSupported
+            sprsup , -FEM_springL , 0            , 0 , MAT_Soil , SEC_HSOIL_num , TYPE_LINK180 , 'COMPN_ABT2_HSoil' , 'COMPE_ABT2_HSoil' ,  , 4
+            cmsel,s,COMPN_ABT2_pileSpringSupported
+            sprsup , 0            , -FEM_springL , 0 , MAT_Soil , SEC_HSOIL_num , TYPE_LINK180 , 'COMPN_temp'       , 'COMPE_temp'       ,  , 4
         *endif
         cmsel,s,COMPN_temp
         cmsel,s,COMPE_temp
@@ -849,7 +856,6 @@ cmsel,u,COMPN_PILE_absentSoil
     cmsel,s,COMPN_ABT2_piles
     cmsel,a,COMPN_ABT2_HSoil
     cmsel,a,COMPN_ABT2_VSoil
-    csys,CS_ABT2
     csys,0
 *endif
 

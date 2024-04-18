@@ -1,5 +1,199 @@
-!/input,'F:\Ansys\03 Design\30 Pontes Anchieta\01 APDL\_slab_deflects',mac
+! BRIDGE_V1_POSTDECK
 
+/post1
+set,last
+
+allsel
+smax,'ENEG_MX','EMX_MX','ZEROS'
+smax,'EPOS_MX','EMN_MX','ZEROS',-1
+sabs,0
+
+cmsel,s,compa_slab
+esla,s
+nsle,s,active
+cm,vn,node
+BRIDGE_V1_POSTSLABPATHS
+
+*del,MPATHPLOT_ARR_pathNames
+*dim,MPATHPLOT_ARR_pathNames,char,GEO_genSpanCount*5
+*del,MPATHPLOT_ARR_labels
+*dim,MPATHPLOT_ARR_labels,char,GEO_genSpanCount*5
+*do,i,1,GEO_genSpanCount*5,1
+  MPATHPLOT_ARR_pathNames(i)=pthNames(i)
+  MPATHPLOT_ARR_labels(i)='ENEG_MX'
+*enddo
+
+allsel
+esel,u,type,,3
+cmsel,u,COMPE_pile
+nsle,s,active
+
+view1w
+windefa,1
+wincln,1
+wntitle,'LAJES: MOM. FLETOR (-) [kNm/m]'
+
+/view,1,-1,-1,1
+/angle,1,0
+/auto,1
+eplot
+/user,1
+
+cmsel,a,COMPE_pile
+cmsel,s,compa_slab
+esla,u
+
+/plopts,leg3,on
+/udoc,1,cntr,right
+/gformat,F,1,1
+/edge,1,1
+
+! Bending moments on superstructure slabs
+go2png,1200
+  eplot
+  /noerase
+  cmsel,s,compa_slab
+  esla,s
+  nsle,s,active
+  /edge,1,0
+  clims
+  cleanplot,'pletab','ENEG_MX','1'
+endpng,'IMG02a_slabMx_neg',,,,,memoImgsFolder
+/erase
+/annot,dele
+clims
+
+!!
+!!
+*do,i,1,GEO_genSpanCount*5,1
+  MPATHPLOT_ARR_pathNames(i)=pthNames(i)
+  MPATHPLOT_ARR_labels(i)='EPOS_MX'
+*enddo
+
+nsel,none
+esel,none
+*do,nthSupport,1,GEO_supportCount,1
+  xSupport=GEO_supportX(nthSupport)
+  nsel,a,loc,x,xSupport-0.5,xSupport+0.5
+  esln,a
+*enddo
+cmsel,r,COMPE_slab
+cmsel,r,COMPN_slab
+cm,COMPE_slabIgnore,elem
+cm,COMPN_slabIgnore,node
+
+allsel
+esel,u,type,,3
+cmsel,u,COMPE_pile
+nsle,s,active
+
+view1w
+windefa,1
+wincln,1
+wntitle,'LAJES: MOM. FLETOR (+) [kNm/m]'
+
+/view,1,-1,-1,1
+/angle,1,0
+/auto,1
+eplot
+/user,1
+
+cmsel,a,COMPE_pile
+cmsel,s,compa_slab
+esla,u
+cmsel,a,COMPE_slabIgnore
+
+/plopts,leg3,on
+/udoc,1,cntr,right
+/gformat,F,1,1
+/edge,1,1
+
+! Bending moments on superstructure slabs
+go2png,1200
+  eplot
+  /noerase
+  cmsel,s,compa_slab
+  esla,s
+  cmsel,u,COMPE_slabIgnore
+  nsle,s,active
+  /edge,1,0
+  clims
+  cleanplot,'pletab','EPOS_MX','1'
+endpng,'IMG02b_slabMx_pos',,,,,memoImgsFolder
+/erase
+clims
+
+!!
+!!
+*do,i,1,GEO_genSpanCount*5,1
+  MPATHPLOT_ARR_pathNames(i)=pthNames(i)
+  MPATHPLOT_ARR_labels(i)='EAB_Q'
+*enddo
+
+nsel,none
+esel,none
+*do,nthGirder,1,GEO_girderCount,1
+  girderCS=CS_girders(nthGirder)
+  csys,girderCS
+  nsel,a,loc,y,-(SLAB_t+GIRDER_bfs0/2),(SLAB_t+GIRDER_bfs0/2)
+  esln,a
+  csys,0
+*enddo
+cmsel,r,COMPE_slab
+cmsel,r,COMPN_slab
+cmsel,a,COMPE_slabIgnore
+cmsel,a,COMPN_slabIgnore
+cm,COMPE_slabIgnore,elem
+cm,COMPN_slabIgnore,node
+
+allsel
+esel,u,type,,3
+cmsel,u,COMPE_pile
+nsle,s,active
+
+view1w
+windefa,1
+wincln,1
+wntitle,'LAJES: FOR. CORTANTE [kN/m]'
+
+/view,1,-1,-1,1
+/angle,1,0
+/auto,1
+eplot
+/user,1
+
+cmsel,a,COMPE_pile
+cmsel,s,compa_slab
+esla,u
+cmsel,a,COMPE_slabIgnore
+
+/plopts,leg3,on
+/udoc,1,cntr,right
+/gformat,F,1,1
+/edge,1,1
+
+! Shear force on superstructure slabs
+go2png,1200
+  eplot
+  /noerase
+  cmsel,s,compa_slab
+  esla,s
+  cmsel,u,COMPE_slabIgnore
+  nsle,s,active
+  ! nsel,u,loc,x,0,0.5
+  ! nsel,u,loc,x,GEO_deckLength,GEO_deckLength-0.5
+  /edge,1,0
+  clims
+  cleanplot,'pletab','EAB_Q','1'
+endpng,'IMG02c_slabQ',,,,,memoImgsFolder
+/erase
+clims
+
+
+!!                                                                                                !!
+!! Slab deflections                                                                               !!
+!!                                                                                                !!
+view1w
 windefa,1
 /device,font,3,Arial,1000,0,-64,0,0,,,
 /device,font,1,Arial,1000,0,-42,0,0,,,
@@ -10,8 +204,7 @@ windefa,1
 wincln,1
 /udoc,1,cntr,right
 /udoc,2,cntr,right
-/plopts,info,3
-/plopts,leg3,1
+/plopts,leg3,on
 /gformat,f,10,2
 /annot,dele
 
@@ -44,8 +237,8 @@ csys,CS_girders(1)
 nsel,r,loc,y,-1e9,0
 
 esln,r,1
-cm,COMPE_SlabSpab_SR,elem
-cm,COMPN_SlabSpab_SR,node
+cm,COMPE_SlabSpan_SR,elem
+cm,COMPN_SlabSpan_SR,node
 
 ! Left overhang
 cmsel,s,COMPE_Slab
@@ -58,8 +251,8 @@ csys,CS_girders(GEO_girderCount)
 nsel,r,loc,y,0,1e9
 
 esln,r,1
-cm,COMPE_SlabSpab_SL,elem
-cm,COMPN_SlabSpab_SL,node
+cm,COMPE_SlabSpan_SL,elem
+cm,COMPN_SlabSpan_SL,node
 
 !! Create paths                                                                                   !!
 pathCount=50
@@ -128,8 +321,8 @@ pathIdx=0
 *enddo
 
 ! Right overhang paths
-cmsel,s,COMPE_SlabSpab_SR
-cmsel,s,COMPN_SlabSpab_SR
+cmsel,s,COMPE_SlabSpan_SR
+cmsel,s,COMPN_SlabSpan_SR
 
 csA=CS_rightDeckEdge
 *get,csAy,cdsy,csA,loc,y
@@ -174,8 +367,8 @@ csB=CS_girders(1)
 *enddo
 
 ! Left overhang paths
-cmsel,s,COMPE_SlabSpab_SL
-cmsel,s,COMPN_SlabSpab_SL
+cmsel,s,COMPE_SlabSpan_SL
+cmsel,s,COMPN_SlabSpan_SL
 
 csA=CS_girders(GEO_girderCount)
 *get,csAy,cdsy,csA,loc,y
@@ -250,8 +443,8 @@ pthenv,'CLEAR','slab_envelope'
   *enddo
 
   ! Right overhang paths
-  cmsel,s,COMPE_SlabSpab_SR
-  cmsel,s,COMPN_SlabSpab_SR
+  cmsel,s,COMPE_SlabSpan_SR
+  cmsel,s,COMPN_SlabSpan_SR
   *do,nthPath,1,pathCount,1
     pthName='SR_P%nthPath%'
     path,pthName
@@ -262,8 +455,8 @@ pthenv,'CLEAR','slab_envelope'
   *enddo
 
   ! Left overhang paths
-  cmsel,s,COMPE_SlabSpab_SL
-  cmsel,s,COMPN_SlabSpab_SL
+  cmsel,s,COMPE_SlabSpan_SL
+  cmsel,s,COMPN_SlabSpan_SL
   *do,nthPath,1,pathCount,1
     pthName='SL_P%nthPath%'
     path,pthName
@@ -303,6 +496,12 @@ nsle,s,active
 /window,all,dele
 /window,1,-1,1.67,0,1
 /window,2,-1,1.67,-1,0
+wincln,1
+wincln,2
+/plopts,leg3,on
+/gformat,f,10,2
+/udoc,1,cntr,right
+/udoc,2,cntr,right
 /auto,all
 /angle,all,0
 /view,1,xView,0,zView
@@ -311,21 +510,18 @@ nsle,s,active
 /edge,all,1
 
 /annot  , dele
-wntitle , 'LAJE DO TABULEIRO:' , 1 , 0
-wntitle , 'FLECHA MAX. [mm]'   , 1 , 0 , 'C'
-wntitle , '(COMB. RARA)'       , 1 , 1 , 'R'
-wntitle , 'LAJE DO TABULEIRO:' , 2 , 0
-wntitle , 'FLECHA MIN. [mm]'   , 2 , 0 , 'C'
-wntitle , '(COMB. RARA)'       , 2 , 1 , 'R'
+wintitle,1,'LAJE DO TABULEIRO','FLECHA MAX.','ELS-Rara [mm]',,1,13
+wintitle,2,'LAJE DO TABULEIRO','FLECHA MIN.','ELS-Rara [mm]',,1,13
+
+/window,1,on
+/window,2,on
+cmsel,s,COMPE_Slab
+cmsel,a,COMPE_girder
+nsle,s,active
+/eshape,1
+/gline,all,-1
 
 go2png,1200
-  /window,1,on
-  /window,2,on
-  cmsel,s,COMPE_Slab
-  cmsel,a,COMPE_girder
-  nsle,s,active
-  /eshape,1
-  /gline,all,-1
   eplot
   /user,all
   /noerase
@@ -335,15 +531,13 @@ go2png,1200
 
   /window,1,on
   /window,2,off
-  mpathplot,5,,'all_path_names','max_envelope_labels'
+  cleanplot,'mpathplot','5',,'all_path_names','max_envelope_labels'
 
   /window,1,off
   /window,2,on
-  mpathplot,5,,'all_path_names','min_envelope_labels'
+  cleanplot,'mpathplot','5',,'all_path_names','min_envelope_labels'
 
-  /gline,all,0
-
-endpng,'slab_deflections',,,,,'memo_imgs'
+endpng,'IMG10a_slab_deflections',,,,,'memo_imgs'
 /erase
 /annot,dele
 clims

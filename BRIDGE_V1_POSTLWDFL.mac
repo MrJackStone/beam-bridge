@@ -145,8 +145,7 @@ wntitle , 'FLECHA RARA [mm]'  , 3 , 1 , 'R'
 
 /angle,all,0
 /udoc,all,cntr,top
-/plopts,info,3
-/plopts,leg3,1
+/plopts,leg3,on
 /triad,off
 /eshape,1
 /udoc,all,cntr,top
@@ -199,7 +198,7 @@ go2png,1200
   esla,s
   nsle,s,active
   eplot
-  mpathplot,10,,'envelope_left_path_names','envelope_path_labels'
+  cleanplot,'mpathplot','10',,'envelope_left_path_names','envelope_path_labels'
 
   /window,1,off
   /window,2,on
@@ -209,9 +208,9 @@ go2png,1200
   esla,s
   nsle,s,active
   eplot
-  mpathplot,10,,'envelope_right_path_names','envelope_path_labels'
+  cleanplot,'mpathplot','10',,'envelope_right_path_names','envelope_path_labels'
 
-endpng,'ABT%arg1%_LWALL_deflects',,,,,'memo_imgs'
+endpng,'IMG21a_ABT%arg1%_LWALL_deflects',,,,,'memo_imgs'
 /erase
 /annot,dele
 clims

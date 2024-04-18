@@ -28,7 +28,7 @@ mesoType=GEO_mesoType(arg1)
     nsel,u,node,,all
     cmsel,s,%lcmName%
     cmsel,r,COMPL_Column
-    orient,TYPE_BEAM188,MAT_Column,SEC_Column_num,-1,,,FEM_ElementSize
+    orient,TYPE_BEAM188,MAT_Column,SEC_Column_num,1,,,FEM_ElementSize
     lmesh,all
     nsle,r,active
     cmpadd,'COMPE_Column'
@@ -60,7 +60,7 @@ mesoType=GEO_mesoType(arg1)
     nsel,none
     cmsel,s,%lcmName%
     cmsel,r,COMPL_Column
-    orient,TYPE_BEAM188,MAT_Column,SEC_Pile_num,-1,,,FEM_ElementSize
+    orient,TYPE_BEAM188,MAT_Column,SEC_Pile_num,1,,,FEM_ElementSize
     lmesh,all
     nsle,r,active
     cmpadd,'COMPE_Column'
@@ -98,5 +98,3 @@ mesoType=GEO_mesoType(arg1)
     cmpadd,'COMPE_colCap'
 
 *endif
-
-

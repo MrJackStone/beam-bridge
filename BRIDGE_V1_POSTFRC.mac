@@ -8,6 +8,8 @@
 /tspec,15,1.5,4,0,0
 /gformat,f,2,1
 /annot,dele
+/pbc,f,,0
+/psf,pres,0
 
 *if,upcase(arg1),eq,'MY',then
   key='MY'
@@ -88,7 +90,6 @@ wincln,2
 wincln,3
 
 /plopts,leg3,on
-/plopts,info,3
 /udoc,1,cntr,right
 /udoc,2,cntr,right
 
@@ -117,7 +118,7 @@ go2png,1200
   /eshape,0
   cmsel,s,compe_fg1
   cmsel,s,compn_fg1
-  plls,%etab1%,%etab2%,,1
+  cleanplot,'plls',etab1,etab2,,'1'
 
   /window,1,off
   /window,2,on
@@ -133,7 +134,7 @@ go2png,1200
   /eshape,0
   cmsel,s,compe_fg2
   cmsel,s,compn_fg2
-  plls,%etab1%,%etab2%,,1
+  cleanplot,'plls',etab1,etab2,,'1'
 endpng,'FRAMECOLUMN_%key%',,,,,memoImgsFolder
 /erase
 /annot,dele

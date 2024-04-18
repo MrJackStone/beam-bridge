@@ -1,3 +1,5 @@
+! BRIDGE_V1_POSTSLABPATHS
+
 *del,pthNames
 *dim,pthNames,char,GEO_genSpanCount*5
 *do,nthSpan,1,GEO_genSpanCount,1

@@ -88,7 +88,8 @@ CMSEL,S,COMPN_Slab
     csys,0
 *endif
 *get,NodeCount,NODE,,COUNT
-NodalLoad=LOAD_deckWind*(GEO_barrierHeight+GIRDER_d+SLAB_t)*GEO_deckLength/NodeCount
+*vscfun,maxGirderDepth,max,GIRDER_d
+NodalLoad=LOAD_deckWind*(GEO_barrierHeight+maxGirderDepth+SLAB_t)*GEO_deckLength/NodeCount
 F,ALL,FY,NodalLoad
 
 ! Loads on abutments

@@ -1,0 +1,851 @@
+!!                                                                                                !!
+!!                                                                                                !!
+!! 1.  Input parameters                                                                           !!
+!!                                                                                                !!
+!!                                                                                                !!
+
+!!                                                                                                !!
+!! 1.0  Global definitions                                                                        !!
+!!                                                                                                !!
+! Bridge identification
+FILE_name='OAE'
+
+! Category:
+!    [0] Highway
+!    [1] Railway
+BRIDGE_type=0
+
+! Include cross-section offsets:
+!    [0] Do not apply section offsets
+!    [1] Apply section offsets
+SEC_offset=0
+
+
+
+!!                                                                                                !!
+!! 1.1  Superstructure                                                                            !!
+!!                                                                                                !!
+
+!! 1.1.1  Deck                                                                                    !!
+! Deck width at each end (straight bridges only)
+GEO_deckWidth_beg=5.1
+GEO_deckWidth_end=5.1
+
+! Position (Y offset) of the left edge of the deck
+GEO_deckOff_beg=0
+GEO_deckOff_end=0
+
+! Length of the bridge
+GEO_deckLength=24.2
+
+! Radius (for curved bridges)
+GEO_deckRadius=0
+
+! Connection between slabs of adjacent spans (does not include left and right cantilevers)
+!    [0] Pinned (free ROTY)
+!    [1] Rigid (couple ROTY)
+GEO_slabConnection=1
+
+! Left deck overhang
+GEO_leftSlabHang=0.9
+! Right deck overhang
+GEO_rightSlabHang=0.9
+
+! Thickness
+SLAB_t=0.22
+! Gap between slab & girder (pre-fabricated slab)
+SLAB_hF = 0.07
+
+! Longitudinal stiffness reduction, between 0 (full reduction) and 1 (no reduction)
+SLAB_longRedCoef=0.6
+
+! Material properties
+MAT_Slab_fck     = 40e6
+MAT_Slab_Poisson = 0.2
+MAT_Slab_dens    = 2500
+
+
+
+!! 1.1.2  Girders                                                                                 !!
+! Number of girders
+GEO_girderCount=3
+
+! Girder spacing
+!    [0] Custom positions
+!    [1] Uniform spacing
+GEO_uniGirderSpacing=1
+*if,GEO_uniGirderSpacing,EQ,0,THEN
+   *del,GEO_girderY_beg
+   *dim,GEO_girderY_beg,ARRAY,GEO_girderCount
+   *del,GEO_girderY_end
+   *dim,GEO_girderY_end,ARRAY,GEO_girderCount
+   GEO_girderY_beg(1)=
+   GEO_girderY_end(1)=
+*endif
+
+! Set girder cross-section per span:
+!    [0] Off (girder cross-sections corresponding to each span)
+!    [1] On (use same cross-section for all girders)
+GEO_uniGirderSection=0
+*if,GEO_uniGirderSection,eq,0,then
+  GEO_girderSectionCount=GEO_supportCount
+*else
+  GEO_girderSectionCount=1
+*endif
+
+! Cross-section
+*del,GIRDER_parms,,nopr
+*dim,GIRDER_parms,char,9
+GIRDER_parms(1)= 'GIRDER_d' , 'GIRDER_bfs' , 'GIRDER_bfi' , 'GIRDER_tfs' , 'GIRDER_tfi' , 'GIRDER_tw' , 'GIRDER_hs' , 'GIRDER_hi' , 'GIRDER_hw'
+arrinit,'GIRDER_parms',,GEO_girderSectionCount
+
+*del,GIRDER_name,,nopr
+*dim,GIRDER_name,char,GEO_girderSectionCount
+
+GIRDER_d   (1) = 1.5
+GIRDER_bfs (1) = 0.7
+GIRDER_bfi (1) = 0.6
+GIRDER_tfs (1) = 0.15
+GIRDER_tfi (1) = 0.20
+GIRDER_tw  (1) = 0.25
+GIRDER_hs  (1) = 0.1
+GIRDER_hi  (1) = 0.2
+GIRDER_hw  (1) = 0.85
+GIRDER_name(1) = 'G150x70'   ! CEDISAVS
+
+! Connection between girders (inner spans, does not include overhangs)
+!    [0] Pinned
+!    [1] Rigid (all DOFs)
+GEO_girderConnection=0
+
+! DOF coupling between girder and slab nodes
+!    [0] Do not couple DOF
+!    [1] Couple DOF
+FEM_sgCouple_UX=1
+FEM_sgCouple_UY=1
+FEM_sgCouple_UZ=1
+FEM_sgCouple_RX=1
+FEM_sgCouple_RY=1
+FEM_sgCouple_RZ=1
+
+! Type of horizontal (UX & UY) connection between girders and frame girders
+!    [0] Couple DOFs at both ends of the span (rigid link)
+!    [1] Couple DOFs at the beginning of the span (rigid link)
+!    [2] Use springs at both ends of the span (stiffness required)
+!    [3] Use springs at the beginning of the span (stiffness required)
+!    [4] Statically determinate couplings
+!    [5] Statically determinate spring connections
+FEM_GirderConnection_UXY=2
+
+! Type of vertical (UZ) connection between girders and frame girders
+!    [0] Couple DOFs (rigid link)
+!    [1] Use springs (stiffness required)
+FEM_GirderConnection_UZ=0
+
+! For spring-supported girders only:
+  ! Vertical stiffness in the connection between girders and frame girders [N/m]
+  FEM_Bearing_kv=1e10
+  ! Horizontal stiffness in the connection between girders and frame girders [N/m]
+  FEM_Bearing_kh=2e9
+
+! Material type
+!    [0] Concrete
+!    [1] Steel
+MAT_Girder_type = 0
+MAT_Girder_fck  = 40e6
+
+
+
+!! 1.1.3  Transverse beams                                                                        !!
+! Cross-section
+CROSSBEAM_b=0.3
+CROSSBEAM_h=0.7
+
+
+
+!!                                                                                                !!
+!! 1.2  Piers                                                                                     !!
+!!                                                                                                !!
+! Positions of the supports
+!   [<-1] Number of supports (absolute value), custom spans
+!   [>1]  Number of supports (equal spans)
+GEO_supports=2
+GEO_supportCount=ABS(GEO_supports)
+*if,GEO_supports,lt,0,THEN
+   *del,GEO_supportX
+   *dim,GEO_supportX,ARRAY,GEO_supportCount
+   GEO_supportX(1)=
+*endif
+
+! Pier type:
+!    [0] Frame (two columns + girder)
+!    [1] Tubular
+!    [2] Cap-beam directly supported by piles
+GEO_frameOpt=0
+
+! Height of the frame (base value)
+GEO_frameHeight=8
+
+! For frame pier only (GEO_frameOpt=0):
+    ! Distance between column centers
+    GEO_columnSpacing=16
+    ! Total width of the frame at the girder
+    GEO_frameWidth=20
+
+! For tubular pier only (GEO_frameOpt=1):
+    ! Column width
+    GEO_columnWidth=5.1-0.35
+    ! Column length
+    GEO_columnDepth=2-0.35
+
+! Frame top offset:
+!    [0] Off (flat deck)
+!    [1] On (sloped deck)
+GEO_frameTopOffStatus=0
+! Height increment for each frame at the top
+*del,GEO_frameTopOffset
+*dim,GEO_frameTopOffset,ARRAY,GEO_SupportCount
+*vfill,GEO_frameTopOffset,RAMP,0,0
+*if,GEO_frameTopOffStatus,EQ,1,THEN
+   GEO_frameTopOffset(1)=0, 0.22
+*endif
+
+! Frame base offset:
+!    [0] Off (coplanar pile caps)
+!    [1] On (stepped pile caps)
+GEO_frameBotOffStatus=0
+! Height increment for each frame at the base
+*del,GEO_frameBotOffset
+*dim,GEO_frameBotOffset,ARRAY,GEO_SupportCount
+*vfill,GEO_frameBotOffset,RAMP,0,0
+*if,GEO_frameBotOffStatus,EQ,1,THEN
+   GEO_frameBotOffset(1)=6.3, 0, 0, 0, 1.64, 8.3
+*endif
+
+! Frame column cross-section
+COLUMN_cx=1
+COLUMN_cy=1
+
+! Frame girder cross-section
+FRAMEGIRDER_b=1
+FRAMEGIRDER_h=2
+
+! Tubular column wall thickness
+COLUMN_tWall=0.35
+
+! Tubular column cap thickness
+COLUMN_tCap=2.2
+
+! Material properties
+MAT_Column_fck          = 40e6
+MAT_Column_Poisson      = 0.2
+MAT_Column_dens         = 2500
+MAT_FrameGirder_fck     = 40e6
+MAT_FrameGirder_Poisson = 0.2
+MAT_FrameGirder_dens    = 2500
+
+
+
+!!                                                                                                !!
+!! 1.3  Abutments                                                                                 !!
+!!                                                                                                !!
+
+!! 1.3.1  General attributes                                                                      !!
+! Status:
+!    [0] OFF
+!    [1] ON (both ends)
+!    [2] Beginning only
+!    [3] End only
+GEO_ABT_status=1
+
+! Beam depth (zero to deactivate)
+GEO_ABT_beamH=0.8
+
+! Column width (zero to deactivate)
+GEO_ABT_colW=0
+
+! Wing height at end
+GEO_ABT_wingHe=0
+
+! Pile center offset from pile cap faces
+GEO_ABT_pileOff=0.4
+
+! Pile overlap (for GEO_ABT_type=3 only)
+GEO_ABT_pileOvlap=0
+
+! Longitudinal wall thickness
+SEC_ABT_longWall_t=0.6
+
+! Transversal wall thickness
+SEC_ABT_tranWall_t=1.3
+
+! Thickness of thin segment of transversal wall
+SEC_ABT_thinTranWall_t=0.4
+
+! Column width
+SEC_ABT_col_W=0.4
+
+! Beam width
+SEC_ABT_beam_W=0.4
+
+! Wing thickness
+SEC_ABT_wing_t=0.6
+
+! Approach slab thickness
+SEC_ABT_appSlab_t=0.4
+
+! Piles
+SEC_ABT_pile_d=0.4
+
+! Pile cap height
+SEC_ABT_pileCap_h=1.5
+
+! Material properties
+MAT_Abutment_fck     = 40e6
+MAT_Abutment_Poisson = 0.2
+MAT_Abutment_dens    = 2500
+MAT_Approach_fck     = 40e6
+MAT_Approach_Poisson = 0.2
+MAT_Approach_dens    = 2500
+
+
+
+!! 1.3.2  First abutment                                                                          !!
+! Type:
+!    [1] Box (pile cap slab + transversal wall + longitudinal wall)
+!    [2] Block-beam (pile cap block-beam + transversal wall)
+!    [3] Pile curtain (piles as retention walls)
+!    [4] Wall-column with angled wings (pile caps + transversal wall + wings)
+GEO_ABT1_type=4
+
+! Length
+GEO_ABT1_length=1.3
+
+! Height
+GEO_ABT1_height=4.3
+
+! Width
+GEO_ABT1_width=4.2
+
+! Height increment at the end of the abutment (wall/wing interface)
+GEO_ABT1_topOffset=0
+
+! Depth of thin segment of transversal wall
+GEO_ABT1_thinTranWallDepth=2
+
+! Wing status
+!    [0] OFF
+!    [1] ON
+GEO_ABT1_wings=0
+
+! Wing length
+GEO_ABT1_wingL=7
+
+! Wing height at abutment
+GEO_ABT1_wingHa=2
+
+! Approach slab status:
+!    [0] OFF
+!    [1] ON
+GEO_ABT1_appSlab=1
+
+! Approach slab length
+GEO_ABT1_appSlabL=4
+
+! Pile cap width
+GEO_ABT1_pileCapW=3
+
+! Pile cap length
+GEO_ABT1_pileCapL=6
+
+! Number of piles along longitudinal walls
+GEO_ABT1_longPiles=2
+
+! Number of piles in transversal wall
+GEO_ABT1_tranPiles=4
+
+! Angle of piles closest to the span side
+GEO_ABT1_pileAngle=0
+
+! Pile length
+GEO_ABT1_pileL=10
+
+! Length of short piles
+GEO_ABT1_pileShort=4
+
+! Curtain depth along longitudinal walls (for GEO_ABT1_type=3 only)
+GEO_ABT1_curtainL=3
+
+! Unrestrained pile length
+GEO_ABT1_pileFree=0
+
+! Suppress longitudinal walls:
+!    [0] OFF (include longitudinal walls)
+!    [1] ON (suppress longitudinal walls)
+GEO_ABT1_suppressLW=1
+
+! Options for abutment type 4:
+GEO_ABT1_wingAngle     = 50
+GEO_ABT1_trvPileCols   = 2
+GEO_ABT1_wingPileCols  = 2
+GEO_ABT1_wingCapLength = 7
+GEO_ABT1_wingCapWidth  = 2
+
+
+
+!! 1.3.3  Second abutment                                                                         !!
+! Type:
+!    [1] Box (pile cap slab + transversal wall + longitudinal wall)
+!    [2] Block-beam (pile cap block-beam + transversal wall)
+!    [3] Pile curtain (piles as retention walls)
+!    [4] Wall-column with angled wings (pile caps + transversal wall + wings)
+GEO_ABT2_type=4
+
+! Length
+GEO_ABT2_length=1.3
+
+! Height
+GEO_ABT2_height=4.3
+
+! Width
+GEO_ABT2_width=4.2
+
+! Height increment at the end of the abutment (wall/wing interface)
+GEO_ABT2_topOffset=0
+
+! Depth of thin segment of transversal wall
+GEO_ABT2_thinTranWallDepth=2
+
+! Wing status
+!    [0] OFF
+!    [1] ON
+GEO_ABT2_wings=0
+
+! Wing length
+GEO_ABT2_wingL=7
+
+! Wing height at abutment
+GEO_ABT2_wingHa=2
+
+! Approach slab status:
+!    [0] OFF
+!    [1] ON
+GEO_ABT2_appSlab=1
+
+! Approach slab length
+GEO_ABT2_appSlabL=4
+
+! Pile cap width
+GEO_ABT2_pileCapW=3
+
+! Pile cap length
+GEO_ABT2_pileCapL=6
+
+! Number of piles along longitudinal walls
+GEO_ABT2_longPiles=2
+
+! Number of piles in transversal wall
+GEO_ABT2_tranPiles=4
+
+! Angle of piles closest to the span side
+GEO_ABT2_pileAngle=0
+
+! Pile length
+GEO_ABT2_pileL=10
+
+! Length of short piles
+GEO_ABT2_pileShort=4
+
+! Curtain depth along longitudinal walls (for GEO_ABT2_type=3 only)
+GEO_ABT2_curtainL=3
+
+! Unrestrained pile length
+GEO_ABT2_pileFree=0
+
+! Suppress longitudinal walls:
+!    [0] OFF (include longitudinal walls)
+!    [1] ON (suppress longitudinal walls)
+GEO_ABT2_suppressLW=1
+
+! Options for abutment type 4:
+GEO_ABT2_wingAngle     = 50
+GEO_ABT2_trvPileCols   = 2
+GEO_ABT2_wingPileCols  = 2
+GEO_ABT2_wingCapLength = 7
+GEO_ABT2_wingCapWidth  = 2
+
+
+
+!!                                                                                                !!
+!! 1.4  Infrastructure                                                                            !!
+!!                                                                                                !!
+! Pile type:
+!    [0] Driven pile
+!    [1] Bored pile
+GEO_pileType=0
+
+! Connection between pile cap and pile:
+!    [0] Pinned
+!    [1] Rigid
+FEM_PileTopConnection=0
+
+! Pile cap mode:
+!    [0] Individual blocks for each column, connected with grade beam
+!    [1] Single block for both columns
+GEO_capOpt=0
+
+! Length of the pile cap (Y direction)
+GEO_capLength=3
+! Width of the pile cap (X direction)
+GEO_capWidth=3
+
+! Number of piles
+GEO_pileCount=4
+! Configuration of the set of piles
+GEO_pileConfig='A'
+! Distance between piles
+GEO_pileDist=1.67
+! Inclination angle of the piles about the Y axis (off the frame plane)
+*del,GEO_pileYAngle
+*dim,GEO_pileYAngle,ARRAY,10
+GEO_pileYAngle(1)= 0 , 0 , 0 ,-0 ,-0 ,-0 , -0 ,-0 ,-0 , 0
+! Inclination angle of the piles about the X axis (in the frame plane)
+*del,GEO_pileXAngle
+*dim,GEO_pileXAngle,ARRAY,10
+GEO_pileXAngle(1)= 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0
+
+! Pile length option:
+!    [0] Uniform length
+!    [1] Different lengths
+GEO_pileOpt=0
+*if,GEO_pileOpt,eq,0,then
+    GEO_pileL=10
+*elseif,GEO_pileOpt,eq,1,then
+    *del,GEO_pileLengths
+    *dim,GEO_pileLengths,,GEO_SupportCount
+    GEO_pileLengths(1)=10.5+7.5, 10.5, 10.5, 10.5, 10.5+2, 10.5+9.4
+*endif
+
+! Pile diameter
+PILE_d=0.4
+
+! Grade beam cross-section
+GRADEBEAM_b=0.5
+GRADEBEAM_h=1.5
+
+! Pile cap cross-sectional depth
+PILECAP_h=1
+
+! Material properties
+MAT_PileCap_fck       = 40e6
+MAT_PileCap_Poisson   = 0.2
+MAT_PileCap_dens      = 2500
+MAT_GradeBeam_fck     = 30e6
+MAT_GradeBeam_Poisson = 0.2
+MAT_GradeBeam_dens    = 2500
+MAT_Pile_fck          = 20e6
+MAT_Pile_Poisson      = 0.2
+MAT_Pile_dens         = 2500
+
+
+
+!!                                                                                                !!
+!! 1.5  Gerber cantilever on girder support                                                       !!
+!!                                                                                                !!
+! Gerber status:
+!    [0] OFF
+!    [1] ON
+GEO_gerberStatus=0
+
+! Gerber length at each support
+*del,GEO_gerberL
+*dim,GEO_gerberL,,GEO_supportCount
+GEO_gerberL(1)=0
+
+! Material properties
+MAT_Gerber_fck     = 40e6
+MAT_Gerber_Poisson = 0.2
+MAT_Gerber_dens    = 2500
+
+! Gerber cantilever cross-section
+GERBER_b=2
+GERBER_h=2.8
+
+! Gerber console cross-section
+CONSOLE_b=1.1
+CONSOLE_h=0.75
+
+
+
+!!                                                                                                !!
+!! 1.6  Soil                                                                                      !!
+!!                                                                                                !!
+
+!! 1.6.1  Soil around piles                                                                       !!
+MAT_Soil_Poisson=0.2
+
+! Vertical stiffness
+MAT_SOIL_kv=10e6
+! Lateral stiffness
+MAT_SOIL_kh=10e6
+! End point stiffness
+MAT_SOIL_kp=38e6
+
+! Maximum allowable stress: horizontal soil reaction
+MAT_SOIL_shadm=100e3
+! Maximum allowable stress: vertical soil reaction (friction)
+MAT_SOIL_svadm=100e3
+! Pile tip max load (force)
+MAT_SOIL_tipNlim=150e3
+
+! Depth interval without soil (lateral/vertical stiffness):
+!    [0] Disabled
+!    [1] Enabled
+MAT_Soil_absentOpt=0
+! Depth at the top of weak soil layer
+MAT_Soil_absentTop=10
+! Depth at the bottom of weak soil layer
+MAT_Soil_absentBot=23
+
+
+
+!! 1.6.2  Soil inside abutments                                                                   !!
+MAT_ABT_Soil_Poisson=0.2
+
+! Vertical stiffness
+MAT_ABT_SOIL_kv=20e6
+! Lateral stiffness
+MAT_ABT_SOIL_kh=20e6
+
+! Mass density
+MAT_ABT_SOIL_dens=1700
+! Friction angle
+MAT_ABT_SOIL_fi=30
+! Cohesion
+MAT_ABT_SOIL_c=10e3
+
+
+
+!!                                                                                                !!
+!! 1.7  Loads & occupation                                                                        !!
+!!                                                                                                !!
+
+!! 1.7.0  Occupation scenarios                                                                    !!
+! Width of pedestrian footpath at the left side of the deck
+GEO_footpathLeft_beg=1.2
+GEO_footpathLeft_end=1.2
+
+! Width of pedestrian footpath at the right side of the deck
+GEO_footpathRight_beg=0
+GEO_footpathRight_end=0
+
+! Type of load combination
+!    [1] Ultimate load (ELU): load train as main
+!    [2] Ultimate load (ELU): wind/tide as main
+!    [3] Service load (ELS): deflections ("quase-permanente")
+!    [4] Service load (ELS): cracking ("rara"), load train as main
+!    [5] Service load (ELS): cracking ("rara"), wind/tide as main
+!    [6] Dead loads (characteristic values)
+!    [7] Live loads (characteristic values)
+!    [8] Fatigue analysis (ELS): "combinação frequente de fadiga" (K.2.1, NBR 8800:2008)
+LOAD_combination=1
+
+! Bridge deck cross-sectional occupation (live loads)
+!    [0] Fully occupied: live loads on all lanes and footpathes
+!    [1] Left half occupied: live loads on the left half of the deck area
+!           (might include lanes and/or footpaths)
+!    [2] Right half occupied: live loads on the right half of the deck area
+!           (might include lanes and/or footpaths)
+!    [3] Both overhangs occupied: live loads on the left and right deck overhangs
+!           (might include lanes and/or footpaths - applies only if overhangs exist)
+!    [4] Left overhang occupied: live loads on the left deck overhang
+!           (might include lanes and/or footpaths - applies only if left overhang exists)
+!    [5] Right overhang occupied: live loads on the right deck overhang
+!           (might include lanes and/or footpaths - applies only if right overhang exists)
+!    [6] Loop through all 6 occupation scenarios described above
+!    [7] Loop through scenarios 0, 1, 3, and 4 only.
+LOAD_transScenario=0
+
+! Bridge deck longitudinal occupation (live loads)
+!    [0] Fully occupied: live loads along all the length of the bridge
+!    [1] Mid span only: live loads between supports only (beginning and end cantilevers excluded)
+!    [2] Both cantilevers only: live loads on left & right cantilevers
+!           (applies only if cantilevers exist)
+!    [3] Left cantilever only: live loads on left cantilever
+!           (applies only if left cantilever exists)
+!    [4] Right cantilever only: live loads on right cantilever
+!           (applies only if right cantilever exists)
+LOAD_longScenario=0
+
+! Load train status
+!    [0] Load train off: point loads not included in the analysis
+!    [1] Load train on: change longitudinal position incrementally
+!    [2] Load train on: center of the load train in the middle of the length of the bridge
+!    [3] Load train on: center of the load train in the middle of the first span
+!    [4] Load train on: load train entering the bridge (last point load at the start of the bridge)
+!    [5] Load train on: load train exiting the bridge (first point load at the end of the bridge)
+!    [6] Load train on: position the load train at key places
+!           · middle of each span
+!           · over each support
+!           · at the beginning of the bridge
+!           · at the end of the bridge
+LOAD_ltScenario=6
+
+! Increment in displacement of the load train
+!    (for LOAD_ltScenario=1 only)
+LOAD_ltStep=1
+
+
+!! 1.7.1  Load combination coefficients                                                           !!
+! Dead load factor
+LOAD_gammaG=1.4
+
+! Live load factor
+LOAD_gammaQ=1.4
+
+! Live load reduction coefficients
+LOAD_psi0=0.7
+LOAD_psi1=0.6
+LOAD_psi2=0.4
+
+
+
+!! 1.7.2  Dead loads                                                                              !!
+! Gravitational acceleration
+LOAD_g_k=9.81
+
+! Pavement (dead weight, surface load)
+LOAD_pav_k=2e3
+
+! Barriers
+!    [0] Off (no barriers)
+!    [1] On
+LOAD_barrierStatus=1
+! Barrier dead weight (linear load value)
+LOAD_barrierValue_k=6300
+! Number of barriers
+LOAD_barrierCount=2
+! Barrier offsets (measured from Y=0)
+*del,LOAD_barrierOffset_beg
+*dim,LOAD_barrierOffset_beg,ARRAY,LOAD_barrierCount
+*del,LOAD_barrierOffset_end
+*dim,LOAD_barrierOffset_end,ARRAY,LOAD_barrierCount
+LOAD_barrierOffset_beg(1)=1.2, 5.1
+LOAD_barrierOffset_end(1)=1.2, 5.1
+
+! Tschebotarioff effect on piles:
+!    [0] Off
+!    [1] On
+LOAD_TSCHEBOTARIOFF_status=1
+! Tschebotarioff's attributes, formatted as follows:
+!        󱞬 zone index
+!    (1, i): support index
+!    (2, i): depth at the top of the Tschebotarioff layer
+!    (3, i): depth at the bottom of the Tschebotarioff layer
+!    (4, i): maximum pressure (N/m), at the center of the layer
+!    (5, i): load key (see BEAM188)
+!    (6, i): load shape:
+!              [0] constant pressure (de Beer)
+!              [1] triangular pressure (Tschebotarioff, zero-max-zero)
+!              [2] triangular pressure (max-zero)
+*del,LOAD_TSCHEBOTARIOFF_data,,nopr
+*dim,LOAD_TSCHEBOTARIOFF_data,,6,GEO_supportCount
+LOAD_TSCHEBOTARIOFF_data(1,1) = 1 , 0 , 2 , -30e3 , 1, 0
+LOAD_TSCHEBOTARIOFF_data(1,2) = 2 , 0 , 2 ,  30e3 , 1, 0
+
+
+
+
+!! 1.7.3 Live loads (static)                                                                      !!
+! Live load: uniform vehicle traffic
+LOAD_vehicleTraffic_k=5
+
+! Live load: uniform pedestrian traffic
+LOAD_pedestrianTraffic_k=3
+
+! Height of the barriers (used to calculate lateral wind force)
+GEO_barrierHeight=0.9
+! Wind pressure on the bridge deck [N/m²]
+LOAD_deckWind_k=2e3 !570*2.1*0.68
+
+! Wind pressure on the columns [N/m²]
+LOAD_columnWind_k=0 !2e3
+
+! Height of the water level (measured up from the base of the column)
+GEO_waterHeight=0
+! Water flow pressure [N/m²]
+LOAD_waterFlow_k=0
+
+!! 1.7.2  Load Train                                                                              !!
+! Load train name
+LOAD_ltName='TB-450'
+
+! Load train design speed (km/h)
+LOAD_speed=80
+
+! Axle width (distance between wheels on the same axle)
+LOAD_ltWidth=2
+
+! Line skewness (in degrees, 0 for parallel to bridge's axis)
+LOAD_ltSkewness=0
+
+! For highways:
+  ! Number of lanes
+  GEO_laneNumber=2
+
+! For railways:
+  ! Locomotive repetitions
+  LOAD_locRep=2
+  ! Number of follower railway cars
+  LOAD_railcarCount=4
+  ! Rail continuity option (for longitudinal load calculation according to AREMA):
+  !    [0] Discontinuous rail (more conservative)
+  !    [1] Continuous rail
+  LOAD_railOpt=1
+
+! Number of load trains
+LOAD_ltCount=2
+
+! Transversal position of each load train (measured from Y=0)
+*del,LOAD_ltLineOff
+*dim,LOAD_ltLineOff,array,LOAD_ltCount
+LOAD_ltLineOff(1)=2.425, 3.975
+
+
+
+!!                                                                                                !!
+!! 1.8  Solution                                                                                  !!
+!!                                                                                                !!
+!    [0] Static
+!    [1] Dynamic (modal + transient)
+SOLU_type=0
+
+! Number of substeps
+SOLU_nsubst=20
+
+! For dynamic analysis only:
+  ! Transient analysis time step increment
+  SOLU_dt=0.1
+  ! Number of free vibration modes to extract
+  SOLU_vibModes=5
+  ! Damping ratio
+  SOLU_ksi=0.02
+
+! Element size (slabs, girders, columns, etc.)
+FEM_ElementSize=0.2
+
+! Element size for tubular piers
+FEM_PierESize=0.5
+
+! Element size for the piles
+FEM_PileELength=0.2
+
+! Element size for abutment shells
+FEM_ABT_esize=0.2
+
+
+
+
+
+!! Run:                                                                                           !!
+BRIDGE_V1_MODEL
