@@ -2,107 +2,109 @@
 ! BRIDGE_V1_POSTFRC, arg1
 
 
-/device,font,3,Arial,1000,0,-64,0,0,,,
-/device,font,1,Arial,1000,0,-42,0,0,,,
-/device,text,1,100
-/tspec,15,1.5,4,0,0
-/gformat,f,2,1
-/annot,dele
-/pbc,f,,0
-/psf,pres,0
+*if,GEO_pierCount,gt,0,then
 
-*if,upcase(arg1),eq,'MY',then
-  key='MY'
-  name1='MOMENTO FLETOR'
-  unit='kNm'
-  etab1='eab_%key%i'
-  etab2='eab_%key%j'
-*elseif,upcase(arg1),eq,'MZ',then
-  key='MZ'
-  name1='MOMENTO FLETOR'
-  unit='kNm'
-  etab1='eab_%key%i'
-  etab2='eab_%key%j'
-*elseif,upcase(arg1),eq,'QZ',then
-  key='QZ'
-  unit='kN'
-  name1='FOR. CORTANTE'
-  etab1='eab_%key%i'
-  etab2='eab_%key%j'
-*elseif,upcase(arg1),eq,'QY',then
-  key='QY'
-  unit='kN'
-  name1='FOR. CORTANTE'
-  etab1='eab_%key%i'
-  etab2='eab_%key%j'
-*elseif,upcase(arg1),eq,'N',then
-  key='N'
-  unit='kN'
-  name1='FOR. NORMAL'
-  etab1='eab_%key%i'
-  etab2='eab_%key%j'
-*elseif,upcase(arg1),eq,'MOBL',then
-  key='M'
-  name1='MOMENTO FLETOR'
-  unit='kNm'
-  etab1='M_OBL'
-  etab2='M_OBL'
-*endif
+  /device,font,3,Arial,1000,0,-64,0,0,,,
+  /device,font,1,Arial,1000,0,-42,0,0,,,
+  /device,text,1,100
+  /tspec,15,1.5,4,0,0
+  /gformat,f,2,1
+  /annot,dele
+  /pbc,f,,0
+  /psf,pres,0
 
-cmsel,s,compl_frame_2
-esll,s
-nsle,s,active
-cm,compe_bg1,elem
-cm,compn_bg1,node
+  *if,upcase(arg1),eq,'MY',then
+    key='MY'
+    name1='MOMENTO FLETOR'
+    unit='kNm'
+    etab1='eab_%key%i'
+    etab2='eab_%key%j'
+  *elseif,upcase(arg1),eq,'MZ',then
+    key='MZ'
+    name1='MOMENTO FLETOR'
+    unit='kNm'
+    etab1='eab_%key%i'
+    etab2='eab_%key%j'
+  *elseif,upcase(arg1),eq,'QZ',then
+    key='QZ'
+    unit='kN'
+    name1='FOR. CORTANTE'
+    etab1='eab_%key%i'
+    etab2='eab_%key%j'
+  *elseif,upcase(arg1),eq,'QY',then
+    key='QY'
+    unit='kN'
+    name1='FOR. CORTANTE'
+    etab1='eab_%key%i'
+    etab2='eab_%key%j'
+  *elseif,upcase(arg1),eq,'N',then
+    key='N'
+    unit='kN'
+    name1='FOR. NORMAL'
+    etab1='eab_%key%i'
+    etab2='eab_%key%j'
+  *elseif,upcase(arg1),eq,'MOBL',then
+    key='M'
+    name1='MOMENTO FLETOR'
+    unit='kNm'
+    etab1='M_OBL'
+    etab2='M_OBL'
+  *endif
 
-cmsel,s,compl_frame_3
-esll,s
-nsle,s,active
-cm,compe_bg2,elem
-cm,compn_bg2,node
+  cmsel,s,compl_frame_2
+  esll,s
+  nsle,s,active
+  cm,compe_bg1,elem
+  cm,compn_bg1,node
 
-cmsel,s,compl_column
-esll,s
-nsle,s,active
-cmsel,r,compe_bg1
-cmsel,r,compn_bg1
-cm,compe_fg1,elem
-cm,compn_fg1,node
+  cmsel,s,compl_frame_3
+  esll,s
+  nsle,s,active
+  cm,compe_bg2,elem
+  cm,compn_bg2,node
 
-cmsel,s,compl_column
-esll,s
-nsle,s,active
-cmsel,r,compe_bg2
-cmsel,r,compn_bg2
-cm,compe_fg2,elem
-cm,compn_fg2,node
+  cmsel,s,compl_column
+  esll,s
+  nsle,s,active
+  cmsel,r,compe_bg1
+  cmsel,r,compn_bg1
+  cm,compe_fg1,elem
+  cm,compn_fg1,node
 
-/window , all , dele
-/window , 1   , -1   , 1.67 , -0.85 , 0.075
-/window , 2   , -1   , 1.67 , 0.075  , 1
-/window , 3   , -1   , 1.67 , -1   , -0.95
-/window , 3   , off
-/view,all,1,0,0
-/auto,all
-/focus,3,1e6,1e6
-wincln,1
-wincln,2
-wincln,3
+  cmsel,s,compl_column
+  esll,s
+  nsle,s,active
+  cmsel,r,compe_bg2
+  cmsel,r,compn_bg2
+  cm,compe_fg2,elem
+  cm,compn_fg2,node
 
-/plopts,leg3,on
-/udoc,1,cntr,right
-/udoc,2,cntr,right
+  /window , all , dele
+  /window , 1   , -1   , 1.67 , -0.85 , 0.075
+  /window , 2   , -1   , 1.67 , 0.075  , 1
+  /window , 3   , -1   , 1.67 , -1   , -0.95
+  /window , 3   , off
+  /view,all,1,0,0
+  /auto,all
+  /focus,3,1e6,1e6
+  wincln,1
+  wincln,2
+  wincln,3
 
-wntitle , 'PORT. 1'        , 1 , 1 , 'C'
-wntitle , 'PORT. 2'        , 2 , 1 , 'C'
-wntitle , 'PILARES'        , 3 , 0 ,
-wntitle , '%name1%'        , 3 , 0 , 'C'
-wntitle , 'ELU-N [%unit%]' , 3 , 1 , 'R'
+  /plopts,leg3,on
+  /udoc,1,cntr,right
+  /udoc,2,cntr,right
 
-axanno,1
-axanno,2
+  wntitle , 'PORT. 1'        , 1 , 1 , 'C'
+  wntitle , 'PORT. 2'        , 2 , 1 , 'C'
+  wntitle , 'PILARES'        , 3 , 0 ,
+  wntitle , '%name1%'        , 3 , 0 , 'C'
+  wntitle , 'ELU-N [%unit%]' , 3 , 1 , 'R'
 
-go2png,1200
+  axanno,1
+  axanno,2
+
+  go2png,1200
   /window,1,on
   /window,2,off
   cmsel,s,compe_fg1
@@ -135,8 +137,10 @@ go2png,1200
   cmsel,s,compe_fg2
   cmsel,s,compn_fg2
   cleanplot,'plls',etab1,etab2,,'1'
-endpng,'FRAMECOLUMN_%key%',,,,,memoImgsFolder
-/erase
-/annot,dele
-view1w
-windefa,1
+  endpng,'FRAMECOLUMN_%key%',,,,,memoImgsFolder
+  /erase
+  /annot,dele
+  view1w
+  windefa,1
+
+*endif
