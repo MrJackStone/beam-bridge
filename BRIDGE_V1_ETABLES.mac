@@ -90,6 +90,9 @@ etenv,2,LoadStepCount,'ETNames'
 ! Shell181 max shear
 smax,'EAB_Q','EAB_QX','EAB_QY'
 
+smax,'ENEG_MX','EMX_MX','ZEROS'
+smax,'EPOS_MX','EMN_MX','ZEROS',-1
+
 ! BEAM188 max oblique bending moment
 smax , 'M_y'   , 'EAB_MYi' , 'EAB_MYj'
 smax , 'M_z'   , 'EAB_MZi' , 'EAB_MZj'
