@@ -15,9 +15,11 @@
     ! Initialize load step
     allsel
     lsclear,all
+    sfcum,all,repl
+    fcum,repl
+    lsread,1
     sfcum,all,add
     fcum,add
-    lsread,1
 
     ! Get X position of leading load
     xLead=LTleadingPos(nthPos)
