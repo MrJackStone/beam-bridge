@@ -70,6 +70,10 @@ cm,COMPN_valid,node
 ! Approach slab
 cmsel,s,COMPA_ABT_appSlab
 nsla,s,1
+csbackup
+csys,arg3
+nsel,u,loc,x,0,FEM_unsupportedAppSlabLength
+csrestore
 cmsel,r,COMPN_valid
 sprsup,,,-FEM_ABT_springL,MAT_ABT_Soil,REAL_ABT_kv,TYPE_LINK180,'COMPN_sup','COMPE_sup',1,3
 cmsel,s,COMPN_sup

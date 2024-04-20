@@ -41,6 +41,8 @@ SEC_HSOIL_area=(MAT_Soil_kh*FEM_springL*FEM_PileELength)/MAT_Soil_E   !! SEC_HSO
 SEC_PSOIL_area=(MAT_Soil_kp*FEM_springL)/MAT_Soil_E
 SEC_SPRING_k=1E10
 
+FEM_unsupportedAppSlabLength = 2
+
 ! Mesostructure types
 CTE_MESO_frame    = 1
 CTE_MESO_tube     = 2
