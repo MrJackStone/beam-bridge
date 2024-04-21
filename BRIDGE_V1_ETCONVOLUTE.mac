@@ -1,0 +1,49 @@
+! _CONVOLUTE , radius
+! _CONVOLUTE , arg1
+
+ebackup
+nbackup
+
+cm,COMPE_valid,elem
+cm,COMPN_valid,node
+*get,ec,elem,,count
+
+enum=0
+*do,nthElem,1,ec,1
+  cmsel,s,COMPE_valid
+  enum=elnext(enum)
+  esel,s,elem,,enum
+  nsle,s
+
+  xCenter=centrx(enum)
+  yCenter=centry(enum)
+
+  nsel,s,loc,x,xCenter-arg1,xCenter+arg1
+  nsel,r,loc,y,yCenter-arg1,yCenter+arg1
+  esln,s,1
+  cmsel,r,COMPE_valid
+  *get,neighborCount,elem,,count
+
+  *del,neighbor_sums,,nopr
+  *dim,neighbor_sums,,convolutionTableCount
+  *vfill,neighbor_sums,ramp,0,0
+
+  neighborNum = 0
+  *do,nthNeighbor,1,neighborCount,1
+    neighborNum = elnext(neighborNum)
+    *do,nthEtable,1,convolutionTableCount,1
+      lab = convolution_etnames(nthEtable)
+      *get,nthValue,elem,neighborNum,etab,'%lab%'
+      neighbor_sums(nthEtable) = neighbor_sums(nthEtable)+nthValue
+    *enddo
+  *enddo
+
+  esel,s,elem,,enum
+  *do,nthEtable,1,convolutionTableCount,1
+    lab = convolution_etnames(nthEtable)
+    detab,enum,'A%lab%',neighbor_sums(nthEtable)/neighborCount
+  *enddo
+*enddo
+
+nrestore
+elrestore

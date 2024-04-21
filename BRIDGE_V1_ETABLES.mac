@@ -36,12 +36,12 @@ sadd,'DW_UY','DW_UY',,1
 sadd,'DW_UZ','DW_UZ',,1
 
 ! SHELL181
-defetabs,181,,1,0
-defetabs,181,'DW_',1,1
+defetabs , 181 ,       , 1 , 0
+defetabs , 181 , 'DW_' , 1 , 1
 
 ! BEAM188
-defetabs,188,,1,0
-defetabs,188,'DW_',1,1
+defetabs , 188 ,       , 1 , 0
+defetabs , 188 , 'DW_' , 1 , 1
 
 sabs,1
 smax,'DW_Q','DW_QX','DW_QY'
@@ -60,11 +60,11 @@ etenv,2,LoadStepCount,'ETNames'
 *del,env_etnames
 *dim,env_etnames,char,21*4
 *do,nthET,1,21,1
-    baseName=ETNames(nthET)
-    env_etnames(nthET*4-3)=strcat('EMN_',baseName)
-    env_etnames(nthET*4-2)=strcat('EMX_',baseName)
-    env_etnames(nthET*4-1)=strcat('EAB_',baseName)
-    env_etnames(nthET*4-0)=strcat('DW_',baseName)
+    baseName               = ETNames(nthET)
+    env_etnames(nthET*4-3) = strcat('EMN_',baseName)
+    env_etnames(nthET*4-2) = strcat('EMX_',baseName)
+    env_etnames(nthET*4-1) = strcat('EAB_',baseName)
+    env_etnames(nthET*4-0) = strcat('DW_',baseName)
 *enddo
 
 *do,i,1,21*4,1
@@ -158,3 +158,40 @@ sadd , 'Qdo_estr' , 'Qqk_o' , 'Qgk_o' , 1.4 , 1.4
 sadd , 'EMM_UX' , 'EAB_UX' ,  , 1e3
 sadd , 'EMM_UY' , 'EAB_UY' ,  , 1e3
 sadd , 'EMM_UZ' , 'EMN_UZ' ,  , 1e3
+
+! Perform spatial averaging in shell envelope element tables
+*get,t0,active,,time,wall
+
+*do,nthEtable,1,21,1
+  lab=ETNames(nthEtable)
+  sadd,'AMX_%lab%','EMX_%lab%',,1
+  sadd,'AMN_%lab%','EMN_%lab%',,1
+  sadd,'AAB_%lab%','EAB_%lab%',,1
+*enddo
+
+csys,0
+cmsel,s,COMPE_ABT_appSlab
+nsle,s,active
+BRIDGE_V1_ETCONVOLUTE,POST_convolutionRadius
+
+csys,0
+cmsel,s,COMPE_slab
+nsle,s,active
+BRIDGE_V1_ETCONVOLUTE,POST_convolutionRadius
+
+csys,0
+cmsel,s,COMPA_ABT_pileCap
+esla,s
+nsle,s,active
+BRIDGE_V1_ETCONVOLUTE,POST_convolutionRadius
+
+ctime,'deltaT',t0
+*cfopen,'convolution_elapsed',txt
+  *vwrite,deltaT
+  ('Elapsed time: ',A8)
+*cfclos
+
+allsel
+smax,'ANEG_MX','AMX_MX','ZEROS'
+smax,'APOS_MX','AMN_MX','ZEROS',-1
+smax,'AAB_Q','AAB_QX','AAB_QY'

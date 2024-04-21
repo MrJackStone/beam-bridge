@@ -1,0 +1,251 @@
+! BRIDGE_V2_ETABLES
+
+
+! Output element tables:
+
+! DOFs: --------------------------------------- 24
+! DW_UX     EMN_UX     EMX_UX     EAB_UX
+! DW_UY     EMN_UY     EMX_UY     EAB_UY
+! DW_UZ     EMN_UZ     EMX_UZ     EAB_UZ
+! DW_ROTX   EMN_ROTX   EMX_ROTX   EAB_ROTX
+! DW_ROTY   EMN_ROTY   EMX_ROTY   EAB_ROTY
+! DW_ROTZ   EMN_ROTZ   EMX_ROTZ   EAB_ROTZ
+
+! SHELL181 (raw): ----------------------------- 28
+! DW_MX     EMN_MX     EMX_MX     EAB_MX
+! DW_MY     EMN_MY     EMX_MY     EAB_MY
+! DW_NX     EMN_NX     EMX_NX     EAB_NX
+! DW_NY     EMN_NY     EMX_NY     EAB_NY
+! DW_QX     EMN_QX     EMX_QX     EAB_QX
+! DW_QY     EMN_QY     EMX_QY     EAB_QY
+! DW_Q      -          -          EAB_Q
+! -         -          ENEG_MX    -
+! -         EPOS_MX    -          -
+
+! SHELL181 (averaged by convolution): -------- 12
+! ADW_MX    AEMN_MX    AEMX_MX    AEAB_MX
+! ADW_MY    AEMN_MY    AEMX_MY    AEAB_MY
+! ADW_Q     -          -          AEAB_Q
+! -         -          AENEG_MX   -
+! -         AEPOS_MX   -          -
+
+! BEAM188 (raw DW or ENV): ------------------- 48
+! DW_Ni     EMN_Ni     EMX_Ni     EAB_Ni
+! DW_Nj     EMN_Nj     EMX_Nj     EAB_Nj
+! DW_QZi    EMN_QZi    EMX_QZi    EAB_QZi
+! DW_QZj    EMN_QZj    EMX_QZj    EAB_QZj
+! DW_QYi    EMN_QYi    EMX_QYi    EAB_QYi
+! DW_QYj    EMN_QYj    EMX_QYj    EAB_QYj
+! DW_MYi    EMN_MYi    EMX_MYi    EAB_MYi
+! DW_MYj    EMN_MYj    EMX_MYj    EAB_MYj
+! DW_MZi    EMN_MZi    EMX_MZi    EAB_MZi
+! DW_MZj    EMN_MZj    EMX_MZj    EAB_MZj
+! DW_TQi    EMN_TQi    EMX_TQi    EAB_TQi
+! DW_TQj    EMN_TQj    EMX_TQj    EAB_TQj
+
+! BEAM188 (calculated based on DW/ENV): ------- 12
+! M_ogk     M_oqk      M_od_geo   M_od_est
+! Q_ogk     Q_oqk      Q_od_geo   Q_od_est
+! N_cgk     N_cqk      N_cd_geo   N_cd_est
+!
+! Legend:
+! ?_#gk     -  characteristic value due to dead loads only
+! ?_#qk     -  characteristic value due to live loads only
+! ?_#d_geo  -  design value for geotechnical verifications of piles
+! ?_#d_est  -  design value for structural verifications of piles
+!
+!      ?: M - bending moment
+!         Q - shear force
+!         N - axial force
+!      #: o - oblique (vector sum, for bending moment & shear force)
+!         c - compression (for axial force)
+
+! TOTAL element table count: ----------------- 124
+
+
+/post1
+
+allsel
+
+! Auxiliary element tables
+etable , 'ZEROS' , u       , x
+sadd   , 'ZEROS' , 'ZEROS' , 'ZEROS' , 1 , -1
+
+
+!! Dead weight results (first load step) element tables                                           !!
+defetabs , 0   , 'DW_' , 1e3  , 1
+defetabs , 181 , 'DW_' , 1e-3 , 1
+defetabs , 188 , 'DW_' , 1e-3 , 1
+
+! SHELL181 oblique shear force
+etbsqsum , 'DW_Q' , 'DW_QX' , 'DW_QY'
+
+! BEAM188 oblique internal reactions
+smax     , 'M_y'   , 'DW_MYi' , 'DW_MYj'
+smax     , 'M_z'   , 'DW_MZi' , 'DW_MZj'
+etbsqsum , 'M_og'  , 'M_y'    , 'M_z'
+sadd     , 'M_ogk' , 'M_og'   ,          , 1/LOAD_gammaG
+etable   , 'M_y'   , eras
+etable   , 'M_z'   , eras
+
+smax     , 'Q_y'   , 'DW_QYi' , 'DW_QYj'
+smax     , 'Q_z'   , 'DW_QZi' , 'DW_QZj'
+etbsqsum , 'Q_og'  , 'Q_y'    , 'Q_z'
+sadd     , 'Q_ogk' , 'Q_og'   ,          , 1/LOAD_gammaG
+etable   , 'Q_y'   , eras
+etable   , 'Q_z'   , eras
+
+smin   , 'N_c0'  , 'DW_Ni' , 'DW_Nj'
+smin   , 'N_cg'  , 'N_c0'  , 'ZEROS'
+etable , 'N_c0'  , eras
+sadd   , 'N_cgk' , 'N_cg'  ,         , 1/LOAD_gammaG
+! smax   , 'N_t0'  , 'DW_Ni' , 'DW_Nj'
+! smax   , 'N_tg'  , 'N_t0'  , 'ZEROS'
+! etable , 'N_t0'  , eras
+
+
+!! Envelope including dead & live loads:                                                          !!
+baseTableCount = 21
+
+*del , etable_suffixes ,      , nopr
+*del , etable_scales   ,      , nopr
+*dim , etable_suffixes , char , baseTableCount
+*dim , etable_scales   ,      , baseTableCount
+
+etable_suffixes(1)  = 'UX' , 'UY' , 'UZ'
+etable_scales(1)    = 1e3  , 1e3  , 1e3
+etable_suffixes(4)  = 'MX' , 'MY' , 'NX'  , 'NY'  , 'QX'  , 'QY'
+etable_scales(4)    = 1e-3 , 1e-3 , 1e-3  , 1e-3  , 1e-3  , 1e-3  ,
+etable_suffixes(10) = 'Ni' , 'Nj' , 'QZi' , 'QZj' , 'QYi' , 'QYj' , 'MYi' , 'MYj' , 'MZi' , 'MZj' , 'TQi' , 'TQj'
+etable_scales(10)   = 1e-3 , 1e-3 , 1e-3  , 1e-3  , 1e-3  , 1e-3  , 1e-3  , 1e-3  , 1e-3  , 1e-3  , 1e-3  , 1e-3
+
+! Create element tables that update with REFL
+defetabs , 0   ,  , 1 , 0
+defetabs , 181 ,  , 1 , 0
+defetabs , 188 ,  , 1 , 0
+
+! Loop over load steps updating element tables
+etenv,1,LoadStepCount,'etable_suffixes'
+
+! Scale envelope element tables
+*do,nthEtable,1,baseTableCount,1
+  etSuffix = etable_suffixes(nthEtable)
+  etScale  = etable_scales(nthEtable)
+  sadd,'EMX_%etSuffix%','EMX_%etSuffix%',,etScale
+  sadd,'EMN_%etSuffix%','EMN_%etSuffix%',,etScale
+  sadd,'EAB_%etSuffix%','EAB_%etSuffix%',,etScale
+*enddo
+
+! Delete unused tables
+*do,nthEtable,1,baseTableCount,1
+  etSuffix=etable_suffixes(nthEtable)
+  etable,'%etSuffix%',eras
+*enddo
+
+! SHELL181 oblique shear force
+etbsqsum , 'EAB_Q' , 'EAB_QX' , 'EAB_QY'
+
+! SHELL181 positive/negative-only bending moments
+smax   , 'ENEG_MX' , 'EMX_MX' , 'ZEROS'
+smax   , 'EPOS_MX' , 'EMN_MX' , 'ZEROS'  , -1
+! smax   , 'ENEG_MY' , 'EMX_MY' , 'ZEROS'
+! smax   , 'EPOS_MY' , 'EMN_MY' , 'ZEROS'  , -1
+
+! BEAM188 oblique internal reactions
+smax     , 'M_y' , 'EAB_MYi' , 'EAB_MYj'
+smax     , 'M_z' , 'EAB_MZi' , 'EAB_MZj'
+etbsqsum , 'M_o' , 'M_y'     , 'M_z'
+etable   , 'M_y' , eras
+etable   , 'M_z' , eras
+
+smax     , 'Q_y' , 'EAB_QYi' , 'EAB_QYj'
+smax     , 'Q_z' , 'EAB_QZi' , 'EAB_QZj'
+etbsqsum , 'Q_o' , 'Q_y'     , 'Q_z'
+etable   , 'Q_y' , eras
+etable   , 'Q_z' , eras
+
+! BEAM188 positive/negative-only axial force
+smin   , 'N_c0' , 'EMN_Ni' , 'EMN_Nj'
+smin   , 'N_c'  , 'N_c0'   , 'ZEROS'
+etable , 'N_c0' , eras
+! smax   , 'N_t0' , 'EMX_Ni' , 'EMX_Nj'
+! smax   , 'N_t'  , 'N_t0'   , 'ZEROS'
+! etable , 'N_t0' , eras
+
+
+!! Element tables calculated based on DW & ENV values                                             !!
+! Internal reactions on piles (discounting impact coefficient & gammas)
+sadd   , 'N_cq'  , 'N_c'   , 'N_cg'  , 1                              , -1
+sadd   , 'N_cqk' , 'N_cq'  ,         , 1/(LOAD_gammaQ*LOAD_dynImpact)
+sadd   , 'N_ck'  , 'N_cgk' , 'N_cqk' , 1                              , 1
+etable , 'N_cq'  , eras
+etable , 'N_cg'  , eras
+
+sadd   , 'Q_oq'  , 'Q_o'   , 'Q_og'  , 1                              , -1
+sadd   , 'Q_oqk' , 'Q_oq'  ,         , 1/(LOAD_gammaQ*LOAD_dynImpact)
+sadd   , 'Q_ok'  , 'Q_ogk' , 'Q_oqk' , 1                              , 1
+etable , 'Q_oq'  , eras
+etable , 'Q_og'  , eras
+
+sadd   , 'M_oq'  , 'M_o'   , 'M_og'  , 1                              , -1
+sadd   , 'M_oqk' , 'M_oq'  ,         , 1/(LOAD_gammaQ*LOAD_dynImpact)
+sadd   , 'M_ok'  , 'M_ogk' , 'M_oqk' , 1                              , 1
+etable , 'M_oq'  , eras
+etable , 'M_og'  , eras
+
+sadd , 'N_cd_geo' , 'N_ck' ,  , 1
+sadd , 'M_od_geo' , 'M_ok' ,  , 1
+sadd , 'Q_od_geo' , 'Q_ok' ,  , 1
+
+sadd , 'N_cd_est' , 'N_cgk' , 'N_cqk' , LOAD_gammaQ , LOAD_gammaQ
+sadd , 'M_od_est' , 'M_ogk' , 'M_oqk' , LOAD_gammaG , LOAD_gammaQ
+sadd , 'Q_od_est' , 'Q_ogk' , 'Q_oqk' , LOAD_gammaG , LOAD_gammaQ
+
+etable , 'M_ok' , eras
+etable , 'Q_ok' , eras
+etable , 'N_ck' , eras
+etable , 'M_o'  , eras
+etable , 'Q_o'  , eras
+etable , 'N_c'  , eras
+
+
+!! Average results by performing convolution                                                      !!
+convolutionTableCount = 12
+*del , convolution_etnames ,      , nopr
+*dim , convolution_etnames , char , convolutionTableCount
+convolution_etnames(1)  = 'DW_MX'  , 'EMN_MX'  , 'EMX_MX' , 'EAB_MX'
+convolution_etnames(5)  = 'DW_MY'  , 'EMN_MY'  , 'EMX_MY' , 'EAB_MY'
+convolution_etnames(9)  = 'DW_Q'   , 'EAB_Q'
+convolution_etnames(11) = 'EPOS_M' , 'ENEG_MX'
+
+! Perform spatial averaging in shell envelope element tables
+*get,t0,active,,time,wall
+
+*do,nthConv,1,convolutionTableCount,1
+  lab = convolution_etnames(nthConv)
+  sadd,'A%lab%','%lab%',,1
+*enddo
+
+csys,0
+cmsel,s,COMPE_ABT_appSlab
+nsle,s,active
+BRIDGE_V1_ETCONVOLUTE,POST_convolutionRadius
+
+csys,0
+cmsel,s,COMPE_slab
+nsle,s,active
+BRIDGE_V1_ETCONVOLUTE,POST_convolutionRadius
+
+csys,0
+cmsel,s,COMPA_ABT_pileCap
+esla,s
+nsle,s,active
+BRIDGE_V1_ETCONVOLUTE,POST_convolutionRadius
+
+ctime,'deltaT',t0
+*cfopen,'convolution_elapsed',txt
+  *vwrite,deltaT
+  ('Elapsed time: ',A8)
+*cfclos
+
+allsel
