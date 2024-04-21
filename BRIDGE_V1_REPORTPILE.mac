@@ -14,18 +14,14 @@ esll,s
 cm,COMPE_allPiles,elem
 *get , ec , elem ,  , count
 
-*del , f_all
-*del , m_all
 *del , nd_all
 *del , nk_all
 *del , md_all
 *del , mk_all
 *del , z_all
 *del , i_all
-*dim , f_all  ,  , ec
 *dim , nd_all ,  , ec
 *dim , nk_all ,  , ec
-*dim , m_all  ,  , ec
 *dim , md_all ,  , ec
 *dim , mk_all ,  , ec
 *dim , z_all  ,  , ec
@@ -63,19 +59,14 @@ enum=0
   *endif
   elemDepth=zmax-elemCenterZ
 
-  *get,nth_f,elem,enum,etab,n_c
-  *get,nth_m,elem,enum,etab,m_obl
+  *get,nth_nd,elem,enum,etab,N_cd_est
+  *get,nth_nk,elem,enum,etab,N_cd_geo
 
-  *get,nth_nk,elem,enum,etab,ndc_pile
-  nth_nd=nth_nk*1.4
-  *get,nth_mk,elem,enum,etab,mdo_pile
-  nth_md=nth_mk*1.4
+  *get,nth_md,elem,enum,etab,M_od_est
+  *get,nth_mk,elem,enum,etab,M_od_geo
 
   i_all(ei)=pileLine
   z_all(ei)=elemDepth
-
-  f_all(ei)=nth_f
-  m_all(ei)=nth_m
 
   nk_all(ei)=nth_nk
   nd_all(ei)=nth_nd
@@ -85,11 +76,11 @@ enum=0
 
 *cfopen,'RES_pileSects_MN',txt
     *vwrite,
-    ('------------Geometria  ----------ELU-Normal-super  ----------ELU-Normal-infra  -------------ELU-Geotecnia')
+    ('------------Geometria  ------------ELU-Estrutural  -------------ELU-Geotecnia')
     *vwrite,
-    (' PILE #         Z [m]             N             M             N             M             N             M')
-    *vwrite,i_all(1),z_all(1),f_all(1),m_all(1),nd_all(1),md_all(1),nk_all(1),mk_all(1)
-    (F8.0,TL1,'  ',F12.2,'  ',F12.2,'  ',F12.2,'  ',F12.2,'  ',F12.2,'  ',F12.2,'  ',F12.2,'  ',F12.2,'  ',F12.2)
+    (' PILE #         Z [m]        N [kN]       M [kNm]        N [kN]       M [kNm]')
+    *vwrite,i_all(1),z_all(1),nd_all(1),md_all(1),nk_all(1),mk_all(1)
+    (F8.0,TL1,'  ',F12.2,'  ',F12.2,'  ',F12.2,'  ',F12.2,'  ',F12.2,'  ',F12.2,'  ',F12.2)
 *cfclos
 
 !!                                                                                                !!
