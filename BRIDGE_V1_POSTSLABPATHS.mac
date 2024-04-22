@@ -3,164 +3,162 @@
 *del,pthNames
 *dim,pthNames,char,GEO_genSpanCount*5
 *do,nthSpan,1,GEO_genSpanCount,1
-    x_i=GEO_genSpanLimits(nthSpan)
-    x_j=GEO_genSpanLimits(nthSpan+1)
-    x_mid=(x_i+x_j)/2
+  x_i=GEO_genSpanLimits(nthSpan)
+  x_j=GEO_genSpanLimits(nthSpan+1)
+  x_mid=(x_i+x_j)/2
 
-    x_gi=x_i
-    x_ge=x_j
-    *if,nthSpan,gt,1,then
-        gl=geo_gerberL(nthSpan-1)
-        *if,gl,gt,0,then
-            x_gi=x_i-(geo_columndepth/2)-gl
-            x_ge=x_i+(geo_columndepth/2)+gl
-        *endif
+  x_gi=x_i
+  x_ge=x_j
+  *if,nthSpan,gt,1,then
+    gl=geo_gerberL(nthSpan-1)
+    *if,gl,gt,0,then
+      x_gi=x_i-(geo_columndepth/2)-gl
+      x_ge=x_i+(geo_columndepth/2)+gl
+    *endif
+  *endif
+
+  !    *if,GEO_frameOpt,eq,1,then
+  !        ! Tubular pier column
+  !        *if,nthSpan,gt,2,and,nthSpan,ne,GEO_genSpanCount,then
+  !            i=i+GEO_columnDepth/2
+  !        *endif
+  !        *if,nthSpan,gt,1,and,nthSpan,lt,GEO_genSpanCount-1,then
+  !            j=j-GEO_columnDepth/2
+  !        *endif
+  !    *endif
+
+  pNameA=strcat('PA_',chrval(nthSpan))
+  pNameB=strcat('PB_',chrval(nthSpan))
+  pNameC=strcat('PC_',chrval(nthSpan))
+  pNameD=strcat('PD_',chrval(nthSpan))
+  pNameE=strcat('PE_',chrval(nthSpan))
+
+  *if,geo_deckradius,eq,0,then
+    cmsel,s,vn
+    *get,yMinDeck,node,,mnloc,y
+    *get,yMaxDeck,node,,mxloc,y
+
+    near_z_i=0
+    i=0
+    near_z_j=0
+    j=0
+    near_z_mid=0
+    mid=0
+
+    cmsel,s,vn
+    nsel,r,loc,x,x_i
+    firstNode=ndnext(0)
+    *if,firstNode,ne,0,then
+      near_z_i=nz(firstNode)
+      i=nx(firstNode)
     *endif
 
-!    *if,GEO_frameOpt,eq,1,then
-!        ! Tubular pier column
-!        *if,nthSpan,gt,2,and,nthSpan,ne,GEO_genSpanCount,then
-!            i=i+GEO_columnDepth/2
-!        *endif
-!        *if,nthSpan,gt,1,and,nthSpan,lt,GEO_genSpanCount-1,then
-!            j=j-GEO_columnDepth/2
-!        *endif
-!    *endif
-
-
-    pNameA=strcat('PA_',chrval(nthSpan))
-    pNameB=strcat('PB_',chrval(nthSpan))
-    pNameC=strcat('PC_',chrval(nthSpan))
-    pNameD=strcat('PD_',chrval(nthSpan))
-    pNameE=strcat('PE_',chrval(nthSpan))
-
-    *if,geo_deckradius,eq,0,then
-        cmsel,s,vn
-        *get,yMinDeck,node,,mnloc,y
-        *get,yMaxDeck,node,,mxloc,y
-
-        near_z_i=0
-        i=0
-        near_z_j=0
-        j=0
-        near_z_mid=0
-        mid=0
-
-        cmsel,s,vn
-        nsel,r,loc,x,x_i
-        firstNode=ndnext(0)
-        *if,firstNode,ne,0,then
-            near_z_i=nz(firstNode)
-            i=nx(firstNode)
-        *endif
-
-        cmsel,s,vn
-        nsel,r,loc,x,x_j
-        firstNode=ndnext(0)
-        *if,firstNode,ne,0,then
-            near_z_j=nz(firstNode)
-            j=nx(firstNode)
-        *endif
-
-        cmsel,s,vn
-        nsel,r,loc,x,x_mid
-        firstNode=ndnext(0)
-        *if,firstNode,ne,0,then
-            near_z_mid=nz(firstNode)
-            mid=nx(firstNode)
-        *endif
-
-        path,%pNameA%,2,,2000
-        ppath,1,,i,yMinDeck,near_z_i
-        ppath,2,,i,yMaxDeck,near_z_i
-        pdef,'EMX_MX',etab,'EMX_MX'
-        pdef,'EMN_MX',etab,'EMN_MX'
-        pdef,'EPOS_MX',etab,'EPOS_MX'
-        pdef,'ENEG_MX',etab,'ENEG_MX'
-
-        path,%pNameB%,2,,2000
-        ppath,1,,mid,yMinDeck,near_z_mid
-        ppath,2,,mid,yMaxDeck,near_z_mid
-        pdef,'EMX_MX',etab,'EMX_MX'
-        pdef,'EMN_MX',etab,'EMN_MX'
-        pdef,'EPOS_MX',etab,'EPOS_MX'
-        pdef,'ENEG_MX',etab,'ENEG_MX'
-
-        path,%pNameC%,2,,2000
-        ppath,1,,j,yMinDeck,near_z_j
-        ppath,2,,j,yMaxDeck,near_z_j
-        pdef,'EMX_MX',etab,'EMX_MX'
-        pdef,'EMN_MX',etab,'EMN_MX'
-        pdef,'EPOS_MX',etab,'EPOS_MX'
-        pdef,'ENEG_MX',etab,'ENEG_MX'
-
-    *else
-
-        bridge_v0_XatDY,'x_inner',x_i,-GEO_deckWidth/2
-        bridge_v0_XatDY,'x_outer',x_i,GEO_deckWidth/2
-        bridge_v0_DYtoY,'y_inner',x_i,-GEO_deckWidth/2
-        bridge_v0_DYtoY,'y_outer',x_i,GEO_deckWidth/2
-        path,%pNameA%,2,,2000
-        ppath,1,,x_outer, y_outer, 0
-        ppath,2,,x_inner, y_inner, 0
-        pdef,'EMX_MX',etab,'EMX_MX'
-        pdef,'EMN_MX',etab,'EMN_MX'
-        pdef,'EPOS_MX',etab,'EPOS_MX'
-        pdef,'ENEG_MX',etab,'ENEG_MX'
-
-        bridge_v0_XatDY,'x_inner',x_mid,-GEO_deckWidth/2
-        bridge_v0_XatDY,'x_outer',x_mid,GEO_deckWidth/2
-        bridge_v0_DYtoY,'y_inner',x_mid,-GEO_deckWidth/2
-        bridge_v0_DYtoY,'y_outer',x_mid,GEO_deckWidth/2
-        path,%pNameB%,2,,2000
-        ppath,1,,x_outer, y_outer, 0
-        ppath,2,,x_inner, y_inner, 0
-        pdef,'EMX_MX',etab,'EMX_MX'
-        pdef,'EMN_MX',etab,'EMN_MX'
-        pdef,'EPOS_MX',etab,'EPOS_MX'
-        pdef,'ENEG_MX',etab,'ENEG_MX'
-
-        bridge_v0_XatDY,'x_inner',x_j,-GEO_deckWidth/2
-        bridge_v0_XatDY,'x_outer',x_j,GEO_deckWidth/2
-        bridge_v0_DYtoY,'y_inner',x_j,-GEO_deckWidth/2
-        bridge_v0_DYtoY,'y_outer',x_j,GEO_deckWidth/2
-        path,%pNameC%,2,,2000
-        ppath,1,,x_outer, y_outer, 0
-        ppath,2,,x_inner, y_inner, 0
-        pdef,'EMX_MX',etab,'EMX_MX'
-        pdef,'EMN_MX',etab,'EMN_MX'
-        pdef,'EPOS_MX',etab,'EPOS_MX'
-        pdef,'ENEG_MX',etab,'ENEG_MX'
-
-        bridge_v0_XatDY,'x_inner',x_gi,-GEO_deckWidth/2
-        bridge_v0_XatDY,'x_outer',x_gi,GEO_deckWidth/2
-        bridge_v0_DYtoY,'y_inner',x_gi,-GEO_deckWidth/2
-        bridge_v0_DYtoY,'y_outer',x_gi,GEO_deckWidth/2
-        path,%pNameD%,2,,2000
-        ppath,1,,x_outer, y_outer, 0
-        ppath,2,,x_inner, y_inner, 0
-        pdef,'EMX_MX',etab,'EMX_MX'
-        pdef,'EMN_MX',etab,'EMN_MX'
-        pdef,'EPOS_MX',etab,'EPOS_MX'
-        pdef,'ENEG_MX',etab,'ENEG_MX'
-
-        bridge_v0_XatDY,'x_inner',x_ge,-GEO_deckWidth/2
-        bridge_v0_XatDY,'x_outer',x_ge,GEO_deckWidth/2
-        bridge_v0_DYtoY,'y_inner',x_ge,-GEO_deckWidth/2
-        bridge_v0_DYtoY,'y_outer',x_ge,GEO_deckWidth/2
-        path,%pNameE%,2,,2000
-        ppath,1,,x_outer, y_outer, 0
-        ppath,2,,x_inner, y_inner, 0
-        pdef,'EMX_MX',etab,'EMX_MX'
-        pdef,'EMN_MX',etab,'EMN_MX'
-        pdef,'EPOS_MX',etab,'EPOS_MX'
-        pdef,'ENEG_MX',etab,'ENEG_MX'
+    cmsel,s,vn
+    nsel,r,loc,x,x_j
+    firstNode=ndnext(0)
+    *if,firstNode,ne,0,then
+      near_z_j=nz(firstNode)
+      j=nx(firstNode)
     *endif
 
-    pthNames(5*nthSpan-4)=pNameA
-    pthNames(5*nthSpan-3)=pNameB
-    pthNames(5*nthSpan-2)=pNameC
-    pthNames(5*nthSpan-1)=pNameD
-    pthNames(5*nthSpan-0)=pNameE
+    cmsel,s,vn
+    nsel,r,loc,x,x_mid
+    firstNode=ndnext(0)
+    *if,firstNode,ne,0,then
+      near_z_mid=nz(firstNode)
+      mid=nx(firstNode)
+    *endif
+
+    path,%pNameA%,2,,2000
+    ppath,1,,i,yMinDeck,near_z_i
+    ppath,2,,i,yMaxDeck,near_z_i
+    pdef,'EMX_MX',etab,'EMX_MX'
+    pdef,'EMN_MX',etab,'EMN_MX'
+    pdef,'EPOS_MX',etab,'EPOS_MX'
+    pdef,'ENEG_MX',etab,'ENEG_MX'
+
+    path,%pNameB%,2,,2000
+    ppath,1,,mid,yMinDeck,near_z_mid
+    ppath,2,,mid,yMaxDeck,near_z_mid
+    pdef,'EMX_MX',etab,'EMX_MX'
+    pdef,'EMN_MX',etab,'EMN_MX'
+    pdef,'EPOS_MX',etab,'EPOS_MX'
+    pdef,'ENEG_MX',etab,'ENEG_MX'
+
+    path,%pNameC%,2,,2000
+    ppath,1,,j,yMinDeck,near_z_j
+    ppath,2,,j,yMaxDeck,near_z_j
+    pdef,'EMX_MX',etab,'EMX_MX'
+    pdef,'EMN_MX',etab,'EMN_MX'
+    pdef,'EPOS_MX',etab,'EPOS_MX'
+    pdef,'ENEG_MX',etab,'ENEG_MX'
+
+  *else
+
+    bridge_v0_XatDY,'x_inner',x_i,-GEO_deckWidth/2
+    bridge_v0_XatDY,'x_outer',x_i,GEO_deckWidth/2
+    bridge_v0_DYtoY,'y_inner',x_i,-GEO_deckWidth/2
+    bridge_v0_DYtoY,'y_outer',x_i,GEO_deckWidth/2
+    path,%pNameA%,2,,2000
+    ppath,1,,x_outer, y_outer, 0
+    ppath,2,,x_inner, y_inner, 0
+    pdef,'EMX_MX',etab,'EMX_MX'
+    pdef,'EMN_MX',etab,'EMN_MX'
+    pdef,'EPOS_MX',etab,'EPOS_MX'
+    pdef,'ENEG_MX',etab,'ENEG_MX'
+
+    bridge_v0_XatDY,'x_inner',x_mid,-GEO_deckWidth/2
+    bridge_v0_XatDY,'x_outer',x_mid,GEO_deckWidth/2
+    bridge_v0_DYtoY,'y_inner',x_mid,-GEO_deckWidth/2
+    bridge_v0_DYtoY,'y_outer',x_mid,GEO_deckWidth/2
+    path,%pNameB%,2,,2000
+    ppath,1,,x_outer, y_outer, 0
+    ppath,2,,x_inner, y_inner, 0
+    pdef,'EMX_MX',etab,'EMX_MX'
+    pdef,'EMN_MX',etab,'EMN_MX'
+    pdef,'EPOS_MX',etab,'EPOS_MX'
+    pdef,'ENEG_MX',etab,'ENEG_MX'
+
+    bridge_v0_XatDY,'x_inner',x_j,-GEO_deckWidth/2
+    bridge_v0_XatDY,'x_outer',x_j,GEO_deckWidth/2
+    bridge_v0_DYtoY,'y_inner',x_j,-GEO_deckWidth/2
+    bridge_v0_DYtoY,'y_outer',x_j,GEO_deckWidth/2
+    path,%pNameC%,2,,2000
+    ppath,1,,x_outer, y_outer, 0
+    ppath,2,,x_inner, y_inner, 0
+    pdef,'EMX_MX',etab,'EMX_MX'
+    pdef,'EMN_MX',etab,'EMN_MX'
+    pdef,'EPOS_MX',etab,'EPOS_MX'
+    pdef,'ENEG_MX',etab,'ENEG_MX'
+
+    bridge_v0_XatDY,'x_inner',x_gi,-GEO_deckWidth/2
+    bridge_v0_XatDY,'x_outer',x_gi,GEO_deckWidth/2
+    bridge_v0_DYtoY,'y_inner',x_gi,-GEO_deckWidth/2
+    bridge_v0_DYtoY,'y_outer',x_gi,GEO_deckWidth/2
+    path,%pNameD%,2,,2000
+    ppath,1,,x_outer, y_outer, 0
+    ppath,2,,x_inner, y_inner, 0
+    pdef,'EMX_MX',etab,'EMX_MX'
+    pdef,'EMN_MX',etab,'EMN_MX'
+    pdef,'EPOS_MX',etab,'EPOS_MX'
+    pdef,'ENEG_MX',etab,'ENEG_MX'
+
+    bridge_v0_XatDY,'x_inner',x_ge,-GEO_deckWidth/2
+    bridge_v0_XatDY,'x_outer',x_ge,GEO_deckWidth/2
+    bridge_v0_DYtoY,'y_inner',x_ge,-GEO_deckWidth/2
+    bridge_v0_DYtoY,'y_outer',x_ge,GEO_deckWidth/2
+    path,%pNameE%,2,,2000
+    ppath,1,,x_outer, y_outer, 0
+    ppath,2,,x_inner, y_inner, 0
+    pdef,'EMX_MX',etab,'EMX_MX'
+    pdef,'EMN_MX',etab,'EMN_MX'
+    pdef,'EPOS_MX',etab,'EPOS_MX'
+    pdef,'ENEG_MX',etab,'ENEG_MX'
+  *endif
+
+  pthNames(5*nthSpan-4)=pNameA
+  pthNames(5*nthSpan-3)=pNameB
+  pthNames(5*nthSpan-2)=pNameC
+  pthNames(5*nthSpan-1)=pNameD
+  pthNames(5*nthSpan-0)=pNameE
 *enddo
-
