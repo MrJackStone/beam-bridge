@@ -337,25 +337,18 @@ cmsel,s,compl_abt_piles
 cmsel,a,compl_pile
 cm,compl_temp,line
 *get , lc         , line ,      , count
-*del , F_all      ,      , nopr
 *del , Fk_min_all ,      , nopr
 *del , Fk_max_all ,      , nopr
-*del , Q_all      ,      , nopr
 *del , Qk_min_all ,      , nopr
 *del , Qk_max_all ,      , nopr
-*del , U_all      ,      , nopr
 *del , L_all      ,      , nopr
 *del , Len_all    ,      , nopr
-*dim , F_all      ,      , lc
 *dim , Fk_min_all ,      , lc
 *dim , Fk_max_all ,      , lc
-*dim , Q_all      ,      , lc
 *dim , Qk_min_all ,      , lc
 *dim , Qk_max_all ,      , lc
-*dim , M_all      ,      , lc
 *dim , Mk_min_all ,      , lc
 *dim , Mk_max_all ,      , lc
-*dim , U_all      ,      , lc
 *dim , L_all      ,      , lc
 *dim , Len_all    ,      , lc
 ln=0
@@ -365,11 +358,6 @@ ln=0
     lsel,s,line,,ln
     *get,nth_Len,line,ln,leng
 
-!    ksll,s
-!    ki=kpnext(0)
-!    kj=kpnext(ki)
-!    dkp=distkp(ki,kj)
-!    *if,dkp,eq,GEO_ABT2_pileL,or,dkp,eq,GEO_ABT1_pileL,then
         esll,s
         nsle,s,active
         pletab,'Ndc_pile',1
@@ -381,10 +369,6 @@ ln=0
         pletab,'EAB_UZ',1
         cntrlims,,,'nth_U'
         L_all(nthL)=ln
-        F_all(nthL)=nth_F
-        Q_all(nthL)=nth_Q
-        M_all(nthL)=nth_M
-        U_all(nthL)=nth_U
         Len_all(nthL)=nth_Len
 
         Fk_min_all(nthL)=abs(nth_min_F/1.0)
@@ -393,11 +377,6 @@ ln=0
         Qk_max_all(nthL)=abs(nth_max_Q/1.0)
         Mk_min_all(nthL)=abs(nth_min_M/1.0)
         Mk_max_all(nthL)=abs(nth_max_M/1.0)
-!    *else
-!        L_all(nthL)=ln
-!        F_all(nthL)=0
-!        U_all(nthL)=0
-!    *endif
 *enddo
 
 *cfopen,'RES_N_vari',txt
