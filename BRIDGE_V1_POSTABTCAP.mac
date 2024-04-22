@@ -61,19 +61,19 @@ go2png,1200
   *if,upcase(arg2),eq,'Q',then
     /window,1,on
     /window,2,off
-    cleanplot,'pletab','EAB_%arg2%','avg'
+    cleanplot,'pletab','AEAB_%arg2%','avg'
 
   *else
     /window,1,on
     /window,2,off
-    EMX_%arg2%='EMX_%arg2%'
-    cleanplot,'etbplpos','EMX_%arg2%','1'
+    AEMX_%arg2%='AEMX_%arg2%'
+    cleanplot,'etbplpos','AEMX_%arg2%','1'
     ! cleanplot,'pletab','EMX_%arg2%','avg'
 
     /window,1,off
     /window,2,on
-    EMN_%arg2%='EMN_%arg2%'
-    cleanplot,'etbplneg','EMN_%arg2%','1'
+    AEMN_%arg2%='AEMN_%arg2%'
+    cleanplot,'etbplneg','AEMN_%arg2%','1'
     ! cleanplot,'pletab','EMN_%arg2%','avg'
   *endif
 
