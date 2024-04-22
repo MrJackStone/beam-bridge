@@ -29,8 +29,6 @@ xLocal2=GEO_ABT%arg1%_appSlabL
 
 *del , path_names  ,      , nopr
 *dim , path_names  , char , pathCount
-*del , path_labels ,      , nopr
-*dim , path_labels , char , pathCount
 
 !! Create paths                                                                                   !!
 *do,nthPath,1,pathCount,1
@@ -38,9 +36,8 @@ xLocal2=GEO_ABT%arg1%_appSlabL
   loc2glo,xLocal1,yLocal,0,CS_ABT%arg1%,'x1g','y1g','z1g'
   loc2glo,xLocal2,yLocal,0,CS_ABT%arg1%,'x2g','y2g','z2g'
 
-  pathName='APS_P%nthPath%'
-  path_names(nthPath)=pathName
-  path_labels(nthPath)='NET_UZ'
+  pathName             = 'APS_P%nthPath%'
+  path_names(nthPath)  = pathName
 
   path,pathName,2,30,50
   *if,arg1,eq,1,then
@@ -57,8 +54,8 @@ xLocal2=GEO_ABT%arg1%_appSlabL
 *del,slab_envelope,,nopr
 *dim,slab_envelope,char,2,pathCount
 *do,nthPath,1,pathCount,1
-  slab_envelope(1,nthPath)=path_names(nthPath)
-  slab_envelope(2,nthPath)=path_labels(nthPath)
+  slab_envelope(1,nthPath) = path_names(nthPath)
+  slab_envelope(2,nthPath) = 'DFL_FRQ'
 *enddo
 
 pthenv,'CLEAR','slab_envelope'
@@ -75,8 +72,8 @@ nsle,s,active
   *do,nthPath,1,pathCount,1
     pathName='APS_P%nthPath%'
     path,pathName
-    pdef,'UZ',u,z,avg
-    pthrebase,'UZ',0,'NET_UZ',1e3/1.4
+    pdef      , 'UZ_frq' , etab , 'UZ_frq'  , 1
+    pthrebase , 'UZ_frq' , 0    , 'DFL_frq' , 1
   *enddo
 
   pthenv,'UPDATE','slab_envelope'
@@ -91,18 +88,19 @@ nsle,s,active
 *do,nthPath,1,pathCount,1
   envelope_path_names(nthPath*2-1)  = path_names(nthPath)
   envelope_path_names(nthPath*2)    = path_names(nthPath)
-  envelope_path_labels(nthPath*2-1) = 'NET_UZ+'
-  envelope_path_labels(nthPath*2)   = 'NET_UZ-'
+  envelope_path_labels(nthPath*2-1) = 'DFL_FRQ+'
+  envelope_path_labels(nthPath*2)   = 'DFL_FRQ-'
 *enddo
+
+envelopePathLabelsStr = 'envelope_path_labels'
+envelopePathNamesStr  = 'envelope_path_names'
 
 view1w
 wincln,1
 /view,1,1,1,1
 /plopts,leg3,on
 g_annobold,1
-wntitle , 'ENCONTRO 0%arg1%:'     , 1 , 0
-wntitle , 'LAJE DE APROX.'   , 1 , 0 , 'C'
-wntitle , 'FLECHA RARA [mm]' , 1 , 1 , 'R'
+wintitle,1,'ENCONTRO 0%arg1%: LAJE DE APROX.','FLECHA','ELS-Frequente [mm]',,1,13
 /triad,off
 /eshape,1
 /udoc,1,cntr,right
@@ -134,7 +132,7 @@ go2png,1200
   /eshape,0
   /edge,1,0
   eplot
-  cleanplot,'mpathplot','3',,'envelope_path_names','envelope_path_labels'
+  cleanplot,'mpathplot','3',,'envelopePathNamesStr','envelopePathLabelsStr'
 endpng,'IMG18a_ABT%arg1%_APPSLAB_deflects',,,,,POST_resultsFolder
 /erase
 /annot,dele
