@@ -82,7 +82,7 @@ pcalc , add , 'N_MAX'   , 'N_MAX'   ,  , 1e-3
 pcalc , add , 'N_MIN'   , 'N_MIN'   ,  , 1e-3
 pcalc , add , 'V_MAX'   , 'V_MAX'   ,  , 1e-3
 pcalc , add , 'V_MIN'   , 'V_MIN'   ,  , 1e-3
-pcalc , add , 'DXT_MIN' , 'DXT_MIN' ,  , 1e3/1.4
+pcalc , add , 'DXT_MIN' , 'DXT_MIN' ,  , 1e3/1.4 ! TODO: use new ETABLEs here?
 pcalc , add , 'DXT_MAX' , 'DXT_MAX' ,  , 1e3/1.4
 pcalc , add , 'DZT_MIN' , 'DZT_MIN' ,  , 1e3/1.4
 pcalc , add , 'DZT_MAX' , 'DZT_MAX' ,  , 1e3/1.4
