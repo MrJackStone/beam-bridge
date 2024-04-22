@@ -92,7 +92,7 @@ go2png,1200
 
   /window,1,on
   /window,2,off
-  cleanplot,'pletab','EAB_%arg2%','avg',,,,,,arg5
+  cleanplot,'pletab','AEAB_%arg2%','avg',,,,,,arg5
 
   /window,1,on
   /window,2,on
