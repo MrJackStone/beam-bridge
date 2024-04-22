@@ -33,6 +33,7 @@ wntitle,'LAJES: MOM. FLETOR (-) [kNm/m]'
 /auto,1
 eplot
 /user,1
+/dscale,,off
 
 cmsel,a,COMPE_pile
 cmsel,s,compa_slab
@@ -463,10 +464,13 @@ pthenv,'CLEAR','slab_envelope'
 maxEnvelopeLabel    = 'DFL_FRQ+'
 minEnvelopeLabel    = 'DFL_FRQ-'
 dwEnvelopeLabel     = 'DFL_GK'
+
 maxEnvelopeLabelStr = 'maxEnvelopeLabel'
 minEnvelopeLabelStr = 'minEnvelopeLabel'
 dwEnvelopeLabelStr  = 'dwEnvelopeLabel'
 allPathsNamesStr    = 'all_path_names'
+
+namesContainer      = 'allPathsNamesStr'
 
 *del,deltaZ,,nopr
 z1=zFrameTop+GEO_frameTopOffset(1)
@@ -517,11 +521,11 @@ go2png,1200
 
   /window,1,on
   /window,2,off
-  cleanplot,'mpathplot','5',,'allPathsNamesStr','maxEnvelopeLabelStr'
+  cleanplot,'mpathplot','5',,'namesContainer','maxEnvelopeLabelStr'
 
   /window,1,off
   /window,2,on
-  cleanplot,'mpathplot','5',,'allPathsNamesStr','minEnvelopeLabelStr'
+  cleanplot,'mpathplot','5',,'namesContainer','minEnvelopeLabelStr'
 
 endpng,'IMG10a_slab_deflections',,,,,POST_resultsFolder
 /erase

@@ -2,6 +2,7 @@
 ! BRIDGE_V1_POSTTWALDFL , arg1   , arg2
 
 !! Initial configs                                                                                !!
+view1w
 windefa,1
 /device,font,3,Arial,1000,0,-64,0,0,,,
 /device,font,1,Arial,1000,0,-42,0,0,,,
@@ -89,6 +90,7 @@ nsle,s,active
 view1w
 wincln,1
 clims
+gplot
 
 *if,arg1,eq,1,then
   /view,1,1,1,1
@@ -99,7 +101,7 @@ clims
 /angle,1,0
 /udoc,1,cntr,right
 /plopts,leg3,on
-wintitle,1,'ENCONTRO 0%arg1%: PAREDE TRANSVERSAL','FLECHA','ELS-Frequente [mm]',1,13
+wintitle,1,'PAREDE TRANSVERSAL (E0%arg1%):','FLECHA','ELS-Frequente [mm]',,1,13
 /triad,off
 /eshape,1
 /udoc,1,cntr,right

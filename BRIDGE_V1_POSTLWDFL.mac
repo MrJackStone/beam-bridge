@@ -120,6 +120,9 @@ nsle,s,active
 envelopeLeftPathNamesStr  = 'envelope_left_path_names'
 envelopeRightPathNamesStr = 'envelope_right_path_names'
 envelopePathLabelsStr     = 'envelope_path_labels'
+leftNamesContainer        = 'envelopeLeftPathNamesStr'
+rightNamesContainer       = 'envelopeRightPathNamesStr'
+labelContainer            = 'envelopePathLabelsStr'
 
 view2w
 /window,3,-1,1.67,-1,1
@@ -199,7 +202,7 @@ go2png,1200
   esla,s
   nsle,s,active
   eplot
-  cleanplot,'mpathplot','10',,'envelopeLeftPathNamesStr','envelopePathLabelsStr'
+  cleanplot,'mpathplot','10',,'leftNamesContainer','labelContainer'
 
   /window,1,off
   /window,2,on
@@ -209,7 +212,7 @@ go2png,1200
   esla,s
   nsle,s,active
   eplot
-  cleanplot,'mpathplot','10',,'envelopeRightPathNamesStr','envelopePathLabelsStr'
+  cleanplot,'mpathplot','10',,'rightNamesContainer','labelContainer'
 
 endpng,'IMG21a_ABT%arg1%_LWALL_deflects',,,,,POST_resultsFolder
 /erase

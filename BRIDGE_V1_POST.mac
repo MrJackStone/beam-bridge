@@ -207,6 +207,7 @@ allsel
 esel,u,type,,3
 view1w
 windefa,1
+clims
 /device,font
 set,1
 /triad,off

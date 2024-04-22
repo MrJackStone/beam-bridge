@@ -94,6 +94,8 @@ nsle,s,active
 
 envelopePathLabelsStr = 'envelope_path_labels'
 envelopePathNamesStr  = 'envelope_path_names'
+labelContainer        = 'envelopePathLabelsStr'
+namesContainer        = 'envelopePathNamesStr'
 
 view1w
 wincln,1
@@ -132,7 +134,7 @@ go2png,1200
   /eshape,0
   /edge,1,0
   eplot
-  cleanplot,'mpathplot','3',,'envelopePathNamesStr','envelopePathLabelsStr'
+  cleanplot,'mpathplot','3',,'namesContainer','labelContainer'
 endpng,'IMG18a_ABT%arg1%_APPSLAB_deflects',,,,,POST_resultsFolder
 /erase
 /annot,dele

@@ -118,6 +118,8 @@ nsle,s,active
 
 envelopePathNamesStr  = 'envelope_path_names'
 envelopePathLabelsStr = 'envelope_path_labels'
+namesContainer        = 'envelopePathNamesStr'
+labelContainer        = 'envelopePathLabelsStr'
 
 view1w
 wincln,1
@@ -167,7 +169,7 @@ go2png,1200
   /eshape,0
   /edge,1,0
   eplot
-  mpathplot,10,,'envelopePathNamesStr','envelopePathLabelsStr'
+  mpathplot,10,,'namesContainer','labelContainer'
 endpng,'IMG20a_ABT%arg1%_WING_deflects',,,,,POST_resultsFolder
 /erase
 /annot,dele
