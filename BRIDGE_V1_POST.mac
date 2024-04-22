@@ -142,12 +142,12 @@ GIRDER_name0 = GIRDER_name(1)
 
 
   !!  Abutment: wings                                                                               !!
-  ! BRIDGE_V1_POSTWINGS , etable , subtitle , imgName
-  BRIDGE_V1_POSTWINGS   , 'EAB_MX' , 'MOMENTO FLETOR (MX) [kNm/m]' , 'IMG15a_WINGS_MX'
-  BRIDGE_V1_POSTWINGS   , 'EAB_MY' , 'MOMENTO FLETOR (MY) [kNm/m]' , 'IMG15b_WINGS_MY'
-  BRIDGE_V1_POSTWINGS   , 'EAB_Q'  , 'F. CORTANTE [kN/m]'          , 'IMG15c_WINGS_Q'!, 0.55
-  BRIDGE_V1_POSTWINGS   , 'EAB_NX' , 'F. NORMAL (NX) [kN/m]'       , 'IMG15d_WINGS_NX'
-  BRIDGE_V1_POSTWINGS   , 'EAB_NY' , 'F. NORMAL (NY) [kN/m]'       , 'IMG15e_WINGS_NY'
+  ! BRIDGE_V1_POSTWINGS , etable    , subtitle                      , imgName
+  BRIDGE_V1_POSTWINGS   , 'AEAB_MX' , 'MOMENTO FLETOR (MX) [kNm/m]' , 'IMG15a_WINGS_MX'
+  BRIDGE_V1_POSTWINGS   , 'AEAB_MY' , 'MOMENTO FLETOR (MY) [kNm/m]' , 'IMG15b_WINGS_MY'
+  BRIDGE_V1_POSTWINGS   , 'AEAB_Q'  , 'F. CORTANTE [kN/m]'          , 'IMG15c_WINGS_Q'! , 0.55
+  BRIDGE_V1_POSTWINGS   , 'EAB_NX'  , 'F. NORMAL (NX) [kN/m]'       , 'IMG15d_WINGS_NX'
+  BRIDGE_V1_POSTWINGS   , 'EAB_NY'  , 'F. NORMAL (NY) [kN/m]'       , 'IMG15e_WINGS_NY'
 
   *if,GEO_ABT1_type,eq,4,then
     BRIDGE_V1_POSTWINGDFL,1
