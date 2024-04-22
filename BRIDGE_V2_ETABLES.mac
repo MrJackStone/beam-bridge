@@ -3,6 +3,9 @@
 
 ! Output element tables:
 
+! Auxiliary: ----------------------------------- 1
+! ZEROS
+
 ! DOFs: --------------------------------------- 24
 ! DW_UX     EMN_UX     EMX_UX     EAB_UX
 ! DW_UY     EMN_UY     EMX_UY     EAB_UY
@@ -60,7 +63,15 @@
 !      #: o - oblique (vector sum, for bending moment & shear force)
 !         c - compression (for axial force)
 
-! TOTAL element table count: ----------------- 124
+! Service limit state deflections: ------------- 4
+! UZ_gk   -  dead loads, characteristic value
+! UZ_qk   -  live loads, characteristic value
+! UZ_k    -  dead + live loads, characteristic values
+! UZ_frq  -  SLS frequent combination (uses PSI1)
+
+
+
+! TOTAL element table count: ----------------- 129
 
 
 /post1
@@ -174,6 +185,18 @@ etable , 'N_c0' , eras
 
 
 !! Element tables calculated based on DW & ENV values                                             !!
+! Deflections
+sadd   , 'UZ_g'   , 'DW_UZ'  ,         , 1
+sadd   , 'UZ_d'   , 'EMN_UZ' ,         , 1
+sadd   , 'UZ_gk'  , 'UZ_g'   ,         , 1/LOAD_gammaG
+sadd   , 'UZ_q'   , 'UZ_d'   , 'UZ_g'  , 1                              , -1
+sadd   , 'UZ_qk'  , 'UZ_q'   ,         , 1/(LOAD_gammaQ*LOAD_dynImpact)
+sadd   , 'UZ_k'   , 'UZ_g'   , 'UZ_q'  , 1                              , 1
+sadd   , 'UZ_frq' , 'UZ_gk'  , 'UZ_qk' , 1                              , LOAD_psi1
+etable , 'UZ_g'   , eras
+etable , 'UZ_d'   , eras
+etable , 'UZ_q'   , eras
+
 ! Internal reactions on piles (discounting impact coefficient & gammas)
 sadd   , 'N_cq'  , 'N_c'   , 'N_cg'  , 1                              , -1
 sadd   , 'N_cqk' , 'N_cq'  ,         , 1/(LOAD_gammaQ*LOAD_dynImpact)
