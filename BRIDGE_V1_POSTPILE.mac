@@ -41,7 +41,7 @@ go2png,1200
   /angle,1,-60,zs
   /gline,,-1
   /udoc,1,cntr,off
-  cleanplot,'plls','Ndc_estr','Ndc_estr','0.21',,'1'
+  cleanplot,'plls','N_cd_est','N_cd_est','0.21',,'1'
   /gline,,0
 
   /type,1,3
@@ -60,7 +60,7 @@ go2png,1200
   *get,fcz_auto,graph,1,focus,z
   /focus,1,1e6
   /udoc,1,cntr,right
-  cleanplot,'plls','Ndc_estr','Ndc_estr','0.1',,'1'
+  cleanplot,'plls','N_cd_est','N_cd_est','0.1',,'1'
   /focus,1,fcx_auto,fcy_auto,fcz_auto
   esel,s,type,,2
 
@@ -85,7 +85,7 @@ go2png,1200
   /vup,1,x
   /angle,1,-60,zs
   /gline,,-1
-  cleanplot,'plls','Mdo_estr','Mdo_estr','0.52',,'1'
+  cleanplot,'plls','M_od_est','M_od_est','0.52',,'1'
   /gline,,0
 
   /type,1,3
@@ -115,7 +115,7 @@ go2png,1200
   /vup,1,x
   /angle,1,-60,zs
   /gline,,-1
-  cleanplot,'plls','Qdo_estr','Qdo_estr','0.52',,'1'
+  cleanplot,'plls','Q_od_est','Q_od_est','0.52',,'1'
   /gline,,0
 
   /type,1,3
@@ -132,8 +132,6 @@ endpng,'IMG08c_pileQ',,,,,POST_resultsFolder
 
 
 !!  Individual piles                                                                              !!
-resultsFolder='memo_imgs'
-
 /annot,dele
 view1w
 clims
@@ -202,9 +200,6 @@ endpng,'IMG12a_pile_guide',,,,,POST_resultsFolder
 
 
 allsel
-! sadd , 'N_ck' , 'N_c'   ,  , 1/1.4
-! sadd , 'M_k'  , 'M_obl' ,  , 1/1.4
-! sadd , 'Q_zk' , 'Q_z'   ,  , 1/1.4
 sadd, 'EK_UZ', 'EMM_UZ',,1/1.4
 
 cmsel,s,compl_abt_piles
@@ -262,7 +257,7 @@ ln=0
     /dscale,1,off
     /udoc,1,cntr,right
     /gformat,f,1,0
-    cleanplot,'plls','Ndc_pile','Ndc_pile','1','0'
+    cleanplot,'plls','N_cd_geo','N_cd_geo','1','0'
     /device,vector,on
     eplot
     /device,vector,off
@@ -280,7 +275,7 @@ ln=0
     /udoc,2,cntr,right
     /device,vector,off
     /gformat,f,1,1
-    cleanplot,'plls','Mdo_pile','Mdo_pile','-1','0'
+    cleanplot,'plls','M_od_geo','M_od_geo','-1','0'
 
     /window,1,off
     /window,2,off
@@ -295,7 +290,7 @@ ln=0
     /udoc,3,cntr,right
     /device,vector,off
     /gformat,f,1,1
-    cleanplot,'plls','Qdo_pile','Qdo_pile','-1','0'
+    cleanplot,'plls','Q_od_geo','Q_od_geo','-1','0'
 
     /window,1,off
     /window,2,off
@@ -317,7 +312,7 @@ ln=0
     /focus,4,1e6,,,1
     /udoc,4,cntr,right
     /gformat,f,1,2
-    cleanplot,'pletab','EK_UZ'
+    cleanplot,'pletab','UZ_k'
   endpng,'IMG12b_PILE_%pileIdx%',,,,,POST_resultsFolder
   /erase
   /annot,dele
@@ -358,13 +353,13 @@ ln=0
 
   esll,s
   nsle,s,active
-  pletab,'Ndc_pile',1
+  pletab,'N_cd_geo',1
   cntrlims,'nth_min_F','nth_max_F','nth_F'
-  pletab,'Qdo_pile',1
+  pletab,'Q_od_geo',1
   cntrlims,'nth_min_Q','nth_max_Q','nth_Q'
-  pletab,'Mdo_pile',1
+  pletab,'M_od_geo',1
   cntrlims,'nth_min_M','nth_max_M','nth_M'
-  pletab,'EAB_UZ',1
+  pletab,'UZ_k',1
   cntrlims,,,'nth_U'
   L_all(nthL)=ln
   Len_all(nthL)=nth_Len
