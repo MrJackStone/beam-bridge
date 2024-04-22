@@ -28,8 +28,6 @@ zLocalBot=0
 
 *del , path_names  ,      , nopr
 *dim , path_names  , char , pathCount*2
-*del , path_labels ,      , nopr
-*dim , path_labels , char , pathCount*2
 
 !! Create paths                                                                                   !!
 *do,nthPath,1,pathCount,1
@@ -40,7 +38,6 @@ zLocalBot=0
 
   pathName='WNG_P%nthPath%'
   path_names(nthPath)=pathName
-  path_labels(nthPath)='NET_U'
 
   path,pathName,2,30,50
   ppath,1,,x1g,y1g,z1g
@@ -56,10 +53,9 @@ zerothIdx=nthPath
   loc2glo,0,yLocal,zLocalBot,CS_ABT%arg1%_rw,'x1g','y1g','z1g'
   loc2glo,0,yLocal,zLocalTop,CS_ABT%arg1%_rw,'x2g','y2g','z2g'
 
-  pathIdx=zerothIdx+nthPath
-  pathName='WNG_P%pathIdx%'
-  path_names(pathIdx)=pathName
-  path_labels(pathIdx)='NET_U'
+  pathIdx              = zerothIdx+nthPath
+  pathName             = 'WNG_P%pathIdx%'
+  path_names(pathIdx)  = pathName
 
   path,pathName,2,30,50
   ppath,1,,x1g,y1g,z1g
@@ -71,8 +67,8 @@ zerothIdx=nthPath
 *del,wing_envelope,,nopr
 *dim,wing_envelope,char,2,pathCount*2
 *do,nthPath,1,pathCount*2,1
-  wing_envelope(1,nthPath)=path_names(nthPath)
-  wing_envelope(2,nthPath)=path_labels(nthPath)
+  wing_envelope(1,nthPath) = path_names(nthPath)
+  wing_envelope(2,nthPath) = 'DFL_FRQ'
 *enddo
 
 pthenv,'CLEAR','wing_envelope'
@@ -89,16 +85,19 @@ nsle,s,active
   *do,nthPath,1,pathCount*2,1
     pathName='WNG_P%nthPath%'
     path,pathName
-    pdef  , 'UX' , u     , x     , avg
-    pdef  , 'UY' , u     , y     , avg
-    pcalc , exp  , 'USQ' , 'UX'  , 'UY' , 2   , 2
-    pcalc , exp  , 'U'   , 'USQ' ,      , 0.5
+
+    pdef  , 'UX_frq' , etab    , 'UX_frq' , 1
+    pdef  , 'UY_frq' , etab    , 'UY_frq' , 1
+    pcalc , exp      , 'USQ'   , 'UX_frq' , 'UY_frq' , 2   , 2
+    pcalc , exp      , 'U_frq' , 'USQ'    ,          , 0.5
+
     *if,nthPath,eq,1,or,nthPath,eq,pathCount+1,then
       dflType=0
     *else
       dflType=1
     *endif
-    pthrebase,'U',dflType,'NET_U',1e3/1.4
+
+    pthrebase,'U_frq',dflType,'DFL_FRQ',1
   *enddo
 
   pthenv,'UPDATE','wing_envelope'
@@ -113,9 +112,12 @@ nsle,s,active
 *do,nthPath,1,pathCount*2,1
   envelope_path_names(nthPath*2-1)  = path_names(nthPath)
   envelope_path_names(nthPath*2)    = path_names(nthPath)
-  envelope_path_labels(nthPath*2-1) = 'NET_U+'
-  envelope_path_labels(nthPath*2)   = 'NET_U-'
+  envelope_path_labels(nthPath*2-1) = 'DFL_FRQ+'
+  envelope_path_labels(nthPath*2)   = 'DFL_FRQ-'
 *enddo
+
+envelopePathNamesStr  = 'envelope_path_names'
+envelopePathLabelsStr = 'envelope_path_labels'
 
 view1w
 wincln,1
@@ -133,7 +135,7 @@ wincln,1
 /pspec,0,0,1
 wntitle , 'ENCONTRO 0%arg1%:' , 1 , 0
 wntitle , 'ALA OBLQ.'         , 1 , 0 , 'C'
-wntitle , 'FLECHA RARA [mm]'  , 1 , 1 , 'R'
+wntitle , 'FLECHA FREQUENTE [mm]'  , 1 , 1 , 'R'
 /triad,off
 /eshape,1
 /udoc,1,cntr,right
@@ -165,7 +167,7 @@ go2png,1200
   /eshape,0
   /edge,1,0
   eplot
-  mpathplot,10,,'envelope_path_names','envelope_path_labels'
+  mpathplot,10,,'envelopePathNamesStr','envelopePathLabelsStr'
 endpng,'IMG20a_ABT%arg1%_WING_deflects',,,,,POST_resultsFolder
 /erase
 /annot,dele
