@@ -225,3 +225,6 @@ BRIDGE_V1_POSTCOMPOSITE: reading load step %I/%I.
   /annot,dele
 
 *enddo
+
+etable , 'SHELL_MY' , eras
+etable , 'SHELL_QX' , eras
