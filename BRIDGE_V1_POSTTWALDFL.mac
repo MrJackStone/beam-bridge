@@ -28,8 +28,6 @@ zLocal2=-GEO_ABT%arg1%_height
 
 *del , path_names  ,      , nopr
 *dim , path_names  , char , pathCount
-*del , path_labels ,      , nopr
-*dim , path_labels , char , pathCount
 
 !! Create paths                                                                                   !!
 *do,nthPath,1,pathCount,1
@@ -39,7 +37,6 @@ zLocal2=-GEO_ABT%arg1%_height
 
   pathName='TRW_P%nthPath%'
   path_names(nthPath)=pathName
-  path_labels(nthPath)='NET_UX'
 
   path,pathName,2,30,50
   ppath,1,,x1g,y1g,z1g
@@ -51,8 +48,8 @@ zLocal2=-GEO_ABT%arg1%_height
 *del,twall_envelope,,nopr
 *dim,twall_envelope,char,2,pathCount
 *do,nthPath,1,pathCount,1
-  twall_envelope(1,nthPath)=path_names(nthPath)
-  twall_envelope(2,nthPath)=path_labels(nthPath)
+  twall_envelope(1,nthPath) = path_names(nthPath)
+  twall_envelope(2,nthPath) = 'DFL_FRQ'
 *enddo
 
 pthenv,'CLEAR','twall_envelope'
@@ -68,9 +65,9 @@ nsle,s,active
 
   *do,nthPath,1,pathCount,1
     pathName='TRW_P%nthPath%'
-    path,pathName
-    pdef,'UX',u,x,avg
-    pthrebase,'UX',arg2,'NET_UX',1e3/1.4 !! type 0 or 2
+    path      , pathName
+    pdef      , 'UX_frq' , etab , 'UX_frq'  , 1
+    pthrebase , 'UX_frq' , arg2 , 'DFL_FRQ' , 1
   *enddo
 
   pthenv,'UPDATE','twall_envelope'
@@ -85,8 +82,8 @@ nsle,s,active
 *do,nthPath,1,pathCount,1
   MPATHPLOT_ARR_pathNames(nthPath*2-1) = path_names(nthPath)
   MPATHPLOT_ARR_pathNames(nthPath*2)   = path_names(nthPath)
-  MPATHPLOT_ARR_labels(nthPath*2-1)    = 'NET_UX+'
-  MPATHPLOT_ARR_labels(nthPath*2)      = 'NET_UX-'
+  MPATHPLOT_ARR_labels(nthPath*2-1)    = 'DFL_FRQ+'
+  MPATHPLOT_ARR_labels(nthPath*2)      = 'DFL_FRQ-'
 *enddo
 
 view1w
@@ -102,9 +99,7 @@ clims
 /angle,1,0
 /udoc,1,cntr,right
 /plopts,leg3,on
-wntitle , 'ENCONTRO 0%arg1%:'  , 1 , 0
-wntitle , 'PAREDE TRANSVERSAL' , 1 , 0 , 'C'
-wntitle , 'FLECHA RARA [mm]'   , 1 , 1 , 'R'
+wintitle,1,'ENCONTRO 0%arg1%: PAREDE TRANSVERSAL','FLECHA','ELS-Frequente [mm]',1,13
 /triad,off
 /eshape,1
 /udoc,1,cntr,right
