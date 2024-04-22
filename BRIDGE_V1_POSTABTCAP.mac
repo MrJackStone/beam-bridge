@@ -87,7 +87,7 @@ go2png,1200
   /device,vector,on
   eplot
   /device,vector,off
-endpng,'IMG22a_ABT%arg1%_PILECAP_%arg2%',,,,,'memo_imgs'
+endpng,'IMG22a_ABT%arg1%_PILECAP_%arg2%',,,,,POST_resultsFolder
 /erase
 /annot,dele
 clims

@@ -106,7 +106,7 @@
   cmsel,s,compe_fg2
   cmsel,s,compn_fg2
   cleanplot,'plls','emx_%key%i','emx_%key%j'
-  endpng,'FRAMEGIRDER_%key%max',,,,,memoImgsFolder
+  endpng,'FRAMEGIRDER_%key%max',,,,,POST_resultsFolder
   /erase
   /annot,dele
 
@@ -165,7 +165,7 @@
   cmsel,s,compe_fg2
   cmsel,s,compn_fg2
   cleanplot,'plls','emn_%key%i','emn_%key%j'
-  endpng,'FRAMEGIRDER_%key%min',,,,,memoImgsFolder
+  endpng,'FRAMEGIRDER_%key%min',,,,,POST_resultsFolder
   /erase
   /annot,dele
 

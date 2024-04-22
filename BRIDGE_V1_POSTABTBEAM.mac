@@ -207,7 +207,7 @@ go2png,1200
   mpathplot,3,,'beam2_paths','mp_labels'
   /plopts,info,0
 
-endpng,'IMG25a_ABT_BEAM_MP',,,,,'memo_imgs'
+endpng,'IMG25a_ABT_BEAM_MP',,,,,POST_resultsFolder
 /erase
 /annot,dele
 clims
@@ -306,7 +306,7 @@ go2png,1200
   mpathplot,3,,'beam2_paths','mb_labels'
   /plopts,info,0
 
-endpng,'IMG25b_ABT_BEAM_MB',,,,,'memo_imgs'
+endpng,'IMG25b_ABT_BEAM_MB',,,,,POST_resultsFolder
 /erase
 /annot,dele
 clims
@@ -405,7 +405,7 @@ go2png,1200
   mpathplot,3,,'beam2_paths','n_labels'
   /plopts,info,0
 
-endpng,'IMG25c_ABT_BEAM_N',,,,,'memo_imgs'
+endpng,'IMG25c_ABT_BEAM_N',,,,,POST_resultsFolder
 /erase
 /annot,dele
 clims
@@ -504,7 +504,7 @@ go2png,1200
   mpathplot,3,,'beam2_paths','v_labels'
   /plopts,info,0
 
-endpng,'IMG25d_ABT_BEAM_V',,,,,'memo_imgs'
+endpng,'IMG25d_ABT_BEAM_V',,,,,POST_resultsFolder
 /erase
 /annot,dele
 clims
@@ -604,7 +604,7 @@ go2png,1200
   mpathplot,3,,'beam2_paths','ux_labels'
   /plopts,info,0
 
-endpng,'IMG25e_ABT_BEAM_UX',,,,,'memo_imgs'
+endpng,'IMG25e_ABT_BEAM_UX',,,,,POST_resultsFolder
 /erase
 /annot,dele
 clims
@@ -704,7 +704,7 @@ go2png,1200
   mpathplot,3,,'beam2_paths','uz_labels'
   /plopts,info,0
 
-endpng,'IMG25f_ABT_BEAM_UY',,,,,'memo_imgs'
+endpng,'IMG25f_ABT_BEAM_UY',,,,,POST_resultsFolder
 /erase
 /annot,dele
 clims

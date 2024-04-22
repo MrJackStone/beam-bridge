@@ -1,7 +1,5 @@
 ! BRIDGE_V1_POST
 
-memoImgsFolder='memo_imgs'
-
 /post1
 /uis,msgpop,3
 /output,outpost,out

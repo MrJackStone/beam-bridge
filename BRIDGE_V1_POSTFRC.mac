@@ -137,7 +137,7 @@
   cmsel,s,compe_fg2
   cmsel,s,compn_fg2
   cleanplot,'plls',etab1,etab2,,'1'
-  endpng,'FRAMECOLUMN_%key%',,,,,memoImgsFolder
+  endpng,'FRAMECOLUMN_%key%',,,,,POST_resultsFolder
   /erase
   /annot,dele
   view1w

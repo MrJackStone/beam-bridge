@@ -211,8 +211,7 @@ go2png,1200
   mpathplot,5,,'cap2_paths','mp_labels'
   /plopts,info,0
 
-endpng,'ABT_CAP_MP',,,,,'memo_imgs'
-! endpng,'ABT_CAP_MP_DW',,,,,'memo_imgs'
+endpng,'ABT_CAP_MP',,,,,POST_resultsFolder
 /erase
 /annot,dele
 clims
@@ -314,8 +313,7 @@ go2png,1200
   mpathplot,5,,'cap2_paths','mb_labels'
   /plopts,info,0
 
-endpng,'ABT_CAP_MB',,,,,'memo_imgs'
-! endpng,'ABT_CAP_MB_DW',,,,,'memo_imgs'
+endpng,'ABT_CAP_MB',,,,,POST_resultsFolder
 /erase
 /annot,dele
 clims
@@ -417,8 +415,7 @@ go2png,1200
   mpathplot,5,,'cap2_paths','n_labels'
   /plopts,info,0
 
-endpng,'ABT_CAP_N',,,,,'memo_imgs'
-! endpng,'ABT_CAP_N_DW',,,,,'memo_imgs'
+endpng,'ABT_CAP_N',,,,,POST_resultsFolder
 /erase
 /annot,dele
 clims
@@ -520,8 +517,7 @@ go2png,1200
   mpathplot,5,,'cap2_paths','v_labels'
   /plopts,info,0
 
-endpng,'ABT_CAP_V',,,,,'memo_imgs'
-! endpng,'ABT_CAP_V_DW',,,,,'memo_imgs'
+endpng,'ABT_CAP_V',,,,,POST_resultsFolder
 /erase
 /annot,dele
 clims
@@ -624,8 +620,7 @@ go2png,1200
   mpathplot,5,,'cap2_paths','ux_labels'
   /plopts,info,0
 
-endpng,'ABT_CAP_UX',,,,,'memo_imgs'
-! endpng,'ABT_CAP_UX_DW',,,,,'memo_imgs'
+endpng,'ABT_CAP_UX',,,,,POST_resultsFolder
 /erase
 /annot,dele
 clims
@@ -728,8 +723,7 @@ go2png,1200
   mpathplot,5,,'cap2_paths','uz_labels'
   /plopts,info,0
 
-endpng,'ABT_CAP_UY',,,,,'memo_imgs'
-! endpng,'ABT_CAP_UY_DW',,,,,'memo_imgs'
+endpng,'ABT_CAP_UY',,,,,POST_resultsFolder
 /erase
 /annot,dele
 clims

@@ -135,7 +135,7 @@ go2png,1200
   /edge,1,0
   eplot
   cleanplot,'mpathplot','3',,'envelope_path_names','envelope_path_labels'
-endpng,'IMG18a_ABT%arg1%_APPSLAB_deflects',,,,,'memo_imgs'
+endpng,'IMG18a_ABT%arg1%_APPSLAB_deflects',,,,,POST_resultsFolder
 /erase
 /annot,dele
 clims

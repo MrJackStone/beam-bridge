@@ -32,7 +32,7 @@ clims,-1,1
 /vscale,1,0.5
 eplot
 
-takepic,'IMG01a_loadSideView',1200,,,,memoImgsFolder
+takepic,'IMG01a_loadSideView',1200,,,,POST_resultsFolder
 
 
 !!
@@ -152,7 +152,7 @@ go2png,1200
     allsel
   *endif
   eplot
-endpng,'IMG01b_abtLoads',,,,,memoImgsFolder
+endpng,'IMG01b_abtLoads',,,,,POST_resultsFolder
 /erase
 
 
@@ -210,4 +210,4 @@ eplot
 
 eplot
 
-takepic,'IMG01c_mesh',,,,,memoImgsFolder
+takepic,'IMG01c_mesh',,,,,POST_resultsFolder

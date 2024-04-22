@@ -105,7 +105,7 @@ go2png,1200
   ! /type,1,0
   eplot
   /device,vector,off
-endpng,'IMG23a_ABT%arg1%_OVERHANG_%arg2%',,,,,'memo_imgs'
+endpng,'IMG23a_ABT%arg1%_OVERHANG_%arg2%',,,,,POST_resultsFolder
 /erase
 /annot,dele
 clims

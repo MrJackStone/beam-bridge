@@ -53,7 +53,7 @@ go2png,1200
   /edge,1,0
   clims
   cleanplot,'pletab','ENEG_MX','1'
-endpng,'IMG02a_slabMx_neg',,,,,memoImgsFolder
+endpng,'IMG02a_slabMx_neg',,,,,POST_resultsFolder
 /erase
 /annot,dele
 clims
@@ -114,7 +114,7 @@ go2png,1200
   /edge,1,0
   clims
   cleanplot,'pletab','EPOS_MX','1'
-endpng,'IMG02b_slabMx_pos',,,,,memoImgsFolder
+endpng,'IMG02b_slabMx_pos',,,,,POST_resultsFolder
 /erase
 clims
 
@@ -179,8 +179,8 @@ go2png,1200
   ! nsel,u,loc,x,GEO_deckLength,GEO_deckLength-0.5
   /edge,1,0
   clims
-  cleanplot,'pletab','EAB_Q','1'
-endpng,'IMG02c_slabQ',,,,,memoImgsFolder
+  cleanplot,'pletab','AAB_Q','1'
+endpng,'IMG02c_slabQ',,,,,POST_resultsFolder
 /erase
 clims
 
@@ -532,7 +532,7 @@ go2png,1200
   /window,2,on
   cleanplot,'mpathplot','5',,'all_path_names','min_envelope_labels'
 
-endpng,'IMG10a_slab_deflections',,,,,'memo_imgs'
+endpng,'IMG10a_slab_deflections',,,,,POST_resultsFolder
 /erase
 /annot,dele
 clims

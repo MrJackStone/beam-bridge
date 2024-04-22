@@ -210,7 +210,7 @@ go2png,1200
   eplot
   cleanplot,'mpathplot','10',,'envelope_right_path_names','envelope_path_labels'
 
-endpng,'IMG21a_ABT%arg1%_LWALL_deflects',,,,,'memo_imgs'
+endpng,'IMG21a_ABT%arg1%_LWALL_deflects',,,,,POST_resultsFolder
 /erase
 /annot,dele
 clims

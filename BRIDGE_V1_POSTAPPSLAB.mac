@@ -51,7 +51,7 @@ go2png,1200
   /edge,1,0
   clims
   cleanplot,'pletab','ENEG_MX','1'
-endpng,'IMG03a_approxMx_neg',,,,,memoImgsFolder
+endpng,'IMG03a_approxMx_neg',,,,,POST_resultsFolder
 /erase
 clims
 
@@ -99,7 +99,7 @@ go2png,1200
   /edge,1,0
   clims
   cleanplot,'pletab','EPOS_MX','1'
-endpng,'IMG03b_approxMx_pos',,,,,memoImgsFolder
+endpng,'IMG03b_approxMx_pos',,,,,POST_resultsFolder
 /erase
 clims
 
@@ -149,6 +149,6 @@ go2png,1200
   /edge,1,0
   clims
   cleanplot,'pletab','EAB_Q','1'
-endpng,'IMG03c_approxQ',,,,,memoImgsFolder
+endpng,'IMG03c_approxQ',,,,,POST_resultsFolder
 /erase
 clims

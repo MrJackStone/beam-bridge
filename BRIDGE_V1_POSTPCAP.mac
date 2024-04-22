@@ -45,7 +45,7 @@
     eplot
     /device,vector,off
 
-  endpng,'IMG07a_capMX',,,,,memoImgsFolder
+  endpng,'IMG07a_capMX',,,,,POST_resultsFolder
   /erase
   /annot,dele
 
@@ -80,7 +80,7 @@
     eplot
     /device,vector,off
 
-  endpng,'IMG07b_capQ',,,,,memoImgsFolder
+  endpng,'IMG07b_capQ',,,,,POST_resultsFolder
   /erase
   /annot,dele
 

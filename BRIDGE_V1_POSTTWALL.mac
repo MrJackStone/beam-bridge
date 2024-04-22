@@ -100,7 +100,7 @@ go2png,1200
   nsle,s
   cleanplot,'pletab',etabName,'1'
 
-endpng,arg3,,,,,'memo_imgs'
+endpng,arg3,,,,,POST_resultsFolder
 /erase
 /annot,dele
 clims

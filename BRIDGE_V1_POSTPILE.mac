@@ -64,7 +64,7 @@ go2png,1200
   /focus,1,fcx_auto,fcy_auto,fcz_auto
   esel,s,type,,2
 
-endpng,'IMG08a_pileN',,,,,memoImgsFolder
+endpng,'IMG08a_pileN',,,,,POST_resultsFolder
 /erase
 /annot,dele
 
@@ -95,7 +95,7 @@ go2png,1200
   /vup,1,z
   /angle,1,0,zs
 
-endpng,'IMG08b_pileM',,,,,memoImgsFolder
+endpng,'IMG08b_pileM',,,,,POST_resultsFolder
 /erase
 /annot,dele
 
@@ -125,7 +125,7 @@ go2png,1200
   /vup,1,z
   /angle,1,0,zs
 
-endpng,'IMG08c_pileQ',,,,,memoImgsFolder
+endpng,'IMG08c_pileQ',,,,,POST_resultsFolder
 /erase
 /annot,dele
 

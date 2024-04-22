@@ -171,7 +171,7 @@ go2png,1200
   nsle,s
   mpathplot,10,,'abt2_paths','n_labels'
 
-endpng,'IMG14a_ABT_COLUMN_N',,,,,'memo_imgs'
+endpng,'IMG14a_ABT_COLUMN_N',,,,,POST_resultsFolder
 /erase
 /annot,dele
 clims
@@ -259,7 +259,7 @@ go2png,1200
   nsle,s
   mpathplot,10,,'abt2_paths','m_labels'
 
-endpng,'IMG14b_ABT_COLUMN_M',,,,,'memo_imgs'
+endpng,'IMG14b_ABT_COLUMN_M',,,,,POST_resultsFolder
 /erase
 /annot,dele
 clims
@@ -347,7 +347,7 @@ go2png,1200
   nsle,s
   mpathplot,10,,'abt2_paths','q_labels'
 
-endpng,'IMG14c_ABT_COLUMN_Q',,,,,'memo_imgs'
+endpng,'IMG14c_ABT_COLUMN_Q',,,,,POST_resultsFolder
 /erase
 /annot,dele
 clims

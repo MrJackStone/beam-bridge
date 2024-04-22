@@ -137,7 +137,7 @@ go2png,1200
   /edge,1,0
   eplot
   cleanplot,'mpathplot','3'
-endpng,'IMG19a_ABT%arg1%_TRANWALL_deflects',,,,,'memo_imgs'
+endpng,'IMG19a_ABT%arg1%_TRANWALL_deflects',,,,,POST_resultsFolder
 /erase
 /annot,dele
 clims

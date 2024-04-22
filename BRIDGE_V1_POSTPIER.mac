@@ -41,7 +41,7 @@
       eplot
       /device,vector,off
 
-    endpng,'IMG09a_pierNY',,,,,memoImgsFolder
+    endpng,'IMG09a_pierNY',,,,,POST_resultsFolder
     /erase
     /annot,dele
 
@@ -71,7 +71,7 @@
       eplot
       /device,vector,off
 
-    endpng,'IMG09b_pierNX',,,,,memoImgsFolder
+    endpng,'IMG09b_pierNX',,,,,POST_resultsFolder
     /erase
     /annot,dele
 
@@ -101,7 +101,7 @@
       eplot
       /device,vector,off
 
-    endpng,'IMG09c_pierMX',,,,,memoImgsFolder
+    endpng,'IMG09c_pierMX',,,,,POST_resultsFolder
     /erase
     /annot,dele
 
@@ -131,7 +131,7 @@
       eplot
       /device,vector,off
 
-    endpng,'IMG09d_pierQ',,,,,memoImgsFolder
+    endpng,'IMG09d_pierQ',,,,,POST_resultsFolder
     /erase
     /annot,dele
 
@@ -178,7 +178,7 @@
       eplot
       /device,vector,off
 
-    endpng,'IMG09e_columnN',,,,,memoImgsFolder
+    endpng,'IMG09e_columnN',,,,,POST_resultsFolder
     /erase
     /annot,dele
 
@@ -228,7 +228,7 @@
       eplot
       /device,vector,off
 
-    endpng,'IMG09f_columnM',,,,,memoImgsFolder
+    endpng,'IMG09f_columnM',,,,,POST_resultsFolder
     /erase
     /annot,dele
 
@@ -277,7 +277,7 @@
       eplot
       /device,vector,off
 
-    endpng,'IMG09g_columnQ',,,,,memoImgsFolder
+    endpng,'IMG09g_columnQ',,,,,POST_resultsFolder
     /erase
     /annot,dele
 
@@ -306,7 +306,7 @@
       eplot
       /device,vector,off
 
-    endpng,'IMG09h_framegN',,,,,memoImgsFolder
+    endpng,'IMG09h_framegN',,,,,POST_resultsFolder
     /erase
     /annot,dele
 
@@ -352,7 +352,7 @@
       eplot
       /device,vector,off
 
-    endpng,'IMG09i_framegM',,,,,memoImgsFolder
+    endpng,'IMG09i_framegM',,,,,POST_resultsFolder
     /erase
     /annot,dele
 
@@ -397,7 +397,7 @@
       eplot
       /device,vector,off
 
-    endpng,'IMG09j_framegQ',,,,,memoImgsFolder
+    endpng,'IMG09j_framegQ',,,,,POST_resultsFolder
     /erase
     /annot,dele
 
