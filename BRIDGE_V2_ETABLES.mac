@@ -54,24 +54,29 @@
 ! N_cgk     N_cqk      N_cd_geo   N_cd_est
 !
 ! Legend:
-! ?_#gk     -  characteristic value due to dead loads only
-! ?_#qk     -  characteristic value due to live loads only
-! ?_#d_geo  -  design value for geotechnical verifications of piles
-! ?_#d_est  -  design value for structural verifications of piles
+!    ?_#gk     -  characteristic value due to dead loads only
+!    ?_#qk     -  characteristic value due to live loads only
+!    ?_#d_geo  -  design value for geotechnical verifications of piles
+!    ?_#d_est  -  design value for structural verifications of piles
 !
-!      ?: M - bending moment
-!         Q - shear force
-!         N - axial force
-!      #: o - oblique (vector sum, for bending moment & shear force)
-!         c - compression (for axial force)
+!    ?: M - bending moment
+!       Q - shear force
+!       N - axial force
+!    #: o - oblique (vector sum, for bending moment & shear force)
+!       c - compression (for axial force)
 
-! Service limit state deflections: ------------- 4
-! UZ_gk   -  dead loads, characteristic value
-! UZ_qk   -  live loads, characteristic value
-! UZ_k    -  dead + live loads, characteristic values
-! UZ_frq  -  SLS frequent combination (uses PSI1)
+! Service limit state deflections: ------------- 12
+! UX_gk     UX_qk     UX_k      UX_frq
+! UY_gk     UY_qk     UY_k      UY_frq
+! UZ_gk     UZ_qk     UZ_k      UZ_frq
+!
+! Legend:
+!    U?_gk   -  dead loads, characteristic value
+!    U?_qk   -  live loads, characteristic value
+!    U?_k    -  dead + live loads, characteristic values
+!    U?_frq  -  SLS frequent combination (uses PSI1)
 
-! TOTAL element table count: ----------------- 131
+! TOTAL element table count: ----------------- 139
 
 
 /post1
@@ -186,6 +191,28 @@ etable , 'N_t0' , eras
 
 !! Element tables calculated based on DW & ENV values                                             !!
 ! Deflections
+sadd   , 'UX_g'   , 'DW_UX'  ,         , 1
+sadd   , 'UX_d'   , 'EMN_UX' ,         , 1
+sadd   , 'UX_gk'  , 'UX_g'   ,         , 1/LOAD_gammaG
+sadd   , 'UX_q'   , 'UX_d'   , 'UX_g'  , 1                              , -1
+sadd   , 'UX_qk'  , 'UX_q'   ,         , 1/(LOAD_gammaQ*LOAD_dynImpact)
+sadd   , 'UX_k'   , 'UX_g'   , 'UX_q'  , 1                              , 1
+sadd   , 'UX_frq' , 'UX_gk'  , 'UX_qk' , 1                              , LOAD_psi1
+etable , 'UX_g'   , eras
+etable , 'UX_d'   , eras
+etable , 'UX_q'   , eras
+
+sadd   , 'UY_g'   , 'DW_UY'  ,         , 1
+sadd   , 'UY_d'   , 'EMN_UY' ,         , 1
+sadd   , 'UY_gk'  , 'UY_g'   ,         , 1/LOAD_gammaG
+sadd   , 'UY_q'   , 'UY_d'   , 'UY_g'  , 1                              , -1
+sadd   , 'UY_qk'  , 'UY_q'   ,         , 1/(LOAD_gammaQ*LOAD_dynImpact)
+sadd   , 'UY_k'   , 'UY_g'   , 'UY_q'  , 1                              , 1
+sadd   , 'UY_frq' , 'UY_gk'  , 'UY_qk' , 1                              , LOAD_psi1
+etable , 'UY_g'   , eras
+etable , 'UY_d'   , eras
+etable , 'UY_q'   , eras
+
 sadd   , 'UZ_g'   , 'DW_UZ'  ,         , 1
 sadd   , 'UZ_d'   , 'EMN_UZ' ,         , 1
 sadd   , 'UZ_gk'  , 'UZ_g'   ,         , 1/LOAD_gammaG
