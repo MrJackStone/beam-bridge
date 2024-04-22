@@ -353,30 +353,30 @@ cm,compl_temp,line
 *dim , Len_all    ,      , lc
 ln=0
 *do,nthL,1,lc,1
-    cmsel,s,compl_temp
-    ln=lsnext(ln)
-    lsel,s,line,,ln
-    *get,nth_Len,line,ln,leng
+  cmsel,s,compl_temp
+  ln=lsnext(ln)
+  lsel,s,line,,ln
+  *get,nth_Len,line,ln,leng
 
-        esll,s
-        nsle,s,active
-        pletab,'Ndc_pile',1
-        cntrlims,'nth_min_F','nth_max_F','nth_F'
-        pletab,'Qdo_pile',1
-        cntrlims,'nth_min_Q','nth_max_Q','nth_Q'
-        pletab,'Mdo_pile',1
-        cntrlims,'nth_min_M','nth_max_M','nth_M'
-        pletab,'EAB_UZ',1
-        cntrlims,,,'nth_U'
-        L_all(nthL)=ln
-        Len_all(nthL)=nth_Len
+  esll,s
+  nsle,s,active
+  pletab,'Ndc_pile',1
+  cntrlims,'nth_min_F','nth_max_F','nth_F'
+  pletab,'Qdo_pile',1
+  cntrlims,'nth_min_Q','nth_max_Q','nth_Q'
+  pletab,'Mdo_pile',1
+  cntrlims,'nth_min_M','nth_max_M','nth_M'
+  pletab,'EAB_UZ',1
+  cntrlims,,,'nth_U'
+  L_all(nthL)=ln
+  Len_all(nthL)=nth_Len
 
-        Fk_min_all(nthL)=abs(nth_min_F/1.0)
-        Fk_max_all(nthL)=abs(nth_max_F/1.0)
-        Qk_min_all(nthL)=abs(nth_min_Q/1.0)
-        Qk_max_all(nthL)=abs(nth_max_Q/1.0)
-        Mk_min_all(nthL)=abs(nth_min_M/1.0)
-        Mk_max_all(nthL)=abs(nth_max_M/1.0)
+  Fk_min_all(nthL)=abs(nth_min_F/1.0)
+  Fk_max_all(nthL)=abs(nth_max_F/1.0)
+  Qk_min_all(nthL)=abs(nth_min_Q/1.0)
+  Qk_max_all(nthL)=abs(nth_max_Q/1.0)
+  Mk_min_all(nthL)=abs(nth_min_M/1.0)
+  Mk_max_all(nthL)=abs(nth_max_M/1.0)
 *enddo
 
 *cfopen,'RES_N_vari',txt
