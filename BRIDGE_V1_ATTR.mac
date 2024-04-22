@@ -41,7 +41,12 @@ SEC_HSOIL_area=(MAT_Soil_kh*FEM_springL*FEM_PileELength)/MAT_Soil_E   !! SEC_HSO
 SEC_PSOIL_area=(MAT_Soil_kp*FEM_springL)/MAT_Soil_E
 SEC_SPRING_k=1E10
 
+! Length of approach slab under which there is no soil support (springs), measured from abutment face
 FEM_unsupportedAppSlabLength = 2
+
+POST_convolutionRadius = 0.50
+POST_resultsFolder     = 'memo_imgs'
+
 
 ! Mesostructure types
 CTE_MESO_frame    = 1
