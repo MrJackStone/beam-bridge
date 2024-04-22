@@ -31,10 +31,8 @@ zLocalBot=zLocalTop-height
 
 *del , left_path_names  ,      , nopr
 *del , right_path_names ,      , nopr
-*del , path_labels      ,      , nopr
 *dim , left_path_names  , char , pathCount*2
 *dim , right_path_names , char , pathCount*2
-*dim , path_labels      , char , pathCount*2
 
 !! Create paths                                                                                   !!
 *do,nthPath,1,pathCount,1
@@ -50,7 +48,6 @@ zLocalBot=zLocalTop-height
   rightPathName='LWR_P%nthPath%'
   left_path_names(nthPath)=leftPathName
   right_path_names(nthPath)=rightPathName
-  path_labels(nthPath)='NET_UY'
 
   path,leftPathName,2,30,50
   ppath,1,,x1Lg,y1Lg,z1Lg
@@ -70,9 +67,9 @@ zLocalBot=zLocalTop-height
 *dim , right_lwall_envelope , char , 2    , pathCount
 *do,nthPath,1,pathCount,1
   left_lwall_envelope(1,nthPath)  = left_path_names(nthPath)
-  left_lwall_envelope(2,nthPath)  = path_labels(nthPath)
+  left_lwall_envelope(2,nthPath)  = 'DFL_FRQ'
   right_lwall_envelope(1,nthPath) = right_path_names(nthPath)
-  right_lwall_envelope(2,nthPath) = path_labels(nthPath)
+  right_lwall_envelope(2,nthPath) = 'DFL_FRQ'
 *enddo
 
 pthenv,'CLEAR','left_lwall_envelope'
@@ -90,13 +87,13 @@ nsle,s,active
   *do,nthPath,1,pathCount,1
     pathName='LWL_P%nthPath%'
     path,pathName
-    pdef,'UY',u,y,avg
-    pthrebase,'UY',1,'NET_UY',1e3/1.4
+    pdef      , 'UY_frq' , etab , 'UY_frq'  , 1
+    pthrebase , 'UY_frq' , 1    , 'DFL_FRQ' , 1
 
     pathName='LWR_P%nthPath%'
     path,pathName
-    pdef,'UY',u,y,avg
-    pthrebase,'UY',1,'NET_UY',1e3/1.4
+    pdef      , 'UY_frq' , etab , 'UY_frq'  , 1
+    pthrebase , 'UY_frq' , 1    , 'DFL_FRQ' , 1
   *enddo
 
   pthenv,'UPDATE','left_lwall_envelope'
@@ -116,9 +113,13 @@ nsle,s,active
   envelope_left_path_names(nthPath*2)    = left_path_names(nthPath)
   envelope_right_path_names(nthPath*2-1) = right_path_names(nthPath)
   envelope_right_path_names(nthPath*2)   = right_path_names(nthPath)
-  envelope_path_labels(nthPath*2-1)      = 'NET_UY+'
-  envelope_path_labels(nthPath*2)        = 'NET_UY-'
+  envelope_path_labels(nthPath*2-1)      = 'DFL_FRQ+'
+  envelope_path_labels(nthPath*2)        = 'DFL_FRQ-'
 *enddo
+
+envelopeLeftPathNamesStr  = 'envelope_left_path_names'
+envelopeRightPathNamesStr = 'envelope_right_path_names'
+envelopePathLabelsStr     = 'envelope_path_labels'
 
 view2w
 /window,3,-1,1.67,-1,1
@@ -132,7 +133,7 @@ wntitle,' ',2,1
 wntitle , 'ENCONTRO 0%arg1%:' , 3 , 0
 /pspec,0,0,1
 wntitle , 'PAREDES LATERAIS'  , 3 , 0 , 'C'
-wntitle , 'FLECHA RARA [mm]'  , 3 , 1 , 'R'
+wntitle , 'FLECHA FREQUENTE [mm]'  , 3 , 1 , 'R'
 /window,3,off
 
 *if,arg1,eq,1,then
@@ -198,7 +199,7 @@ go2png,1200
   esla,s
   nsle,s,active
   eplot
-  cleanplot,'mpathplot','10',,'envelope_left_path_names','envelope_path_labels'
+  cleanplot,'mpathplot','10',,'envelopeLeftPathNamesStr','envelopePathLabelsStr'
 
   /window,1,off
   /window,2,on
@@ -208,7 +209,7 @@ go2png,1200
   esla,s
   nsle,s,active
   eplot
-  cleanplot,'mpathplot','10',,'envelope_right_path_names','envelope_path_labels'
+  cleanplot,'mpathplot','10',,'envelopeRightPathNamesStr','envelopePathLabelsStr'
 
 endpng,'IMG21a_ABT%arg1%_LWALL_deflects',,,,,POST_resultsFolder
 /erase
