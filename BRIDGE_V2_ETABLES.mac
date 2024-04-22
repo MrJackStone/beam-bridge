@@ -126,19 +126,19 @@ sadd   , 'N_cgk' , 'N_cg'  ,         , 1/LOAD_gammaG
 
 
 !! Envelope including dead & live loads:                                                          !!
-baseTableCount = 21
+baseTableCount = 24
 
 *del , etable_suffixes ,      , nopr
 *del , etable_scales   ,      , nopr
 *dim , etable_suffixes , char , baseTableCount
 *dim , etable_scales   ,      , baseTableCount
 
-etable_suffixes(1)  = 'UX' , 'UY' , 'UZ'
-etable_scales(1)    = 1e3  , 1e3  , 1e3
-etable_suffixes(4)  = 'MX' , 'MY' , 'NX'  , 'NY'  , 'QX'  , 'QY'
-etable_scales(4)    = 1e-3 , 1e-3 , 1e-3  , 1e-3  , 1e-3  , 1e-3  ,
-etable_suffixes(10) = 'Ni' , 'Nj' , 'QZi' , 'QZj' , 'QYi' , 'QYj' , 'MYi' , 'MYj' , 'MZi' , 'MZj' , 'TQi' , 'TQj'
-etable_scales(10)   = 1e-3 , 1e-3 , 1e-3  , 1e-3  , 1e-3  , 1e-3  , 1e-3  , 1e-3  , 1e-3  , 1e-3  , 1e-3  , 1e-3
+etable_suffixes(1)  = 'UX' , 'UY' , 'UZ'  , 'ROTX' , 'ROTY' , 'ROTZ'
+etable_scales(1)    = 1e3  , 1e3  , 1e3   , 1e3    , 1e3    , 1e3
+etable_suffixes(7)  = 'MX' , 'MY' , 'NX'  , 'NY'   , 'QX'   , 'QY'
+etable_scales(7)    = 1e-3 , 1e-3 , 1e-3  , 1e-3   , 1e-3   , 1e-3   ,
+etable_suffixes(13) = 'Ni' , 'Nj' , 'QZi' , 'QZj'  , 'QYi'  , 'QYj'  , 'MYi' , 'MYj' , 'MZi' , 'MZj' , 'TQi' , 'TQj'
+etable_scales(13)   = 1e-3 , 1e-3 , 1e-3  , 1e-3   , 1e-3   , 1e-3   , 1e-3  , 1e-3  , 1e-3  , 1e-3  , 1e-3  , 1e-3
 
 ! Create element tables that update with REFL
 defetabs , 0   ,  , 1 , 0
