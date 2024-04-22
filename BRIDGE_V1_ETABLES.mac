@@ -2,8 +2,6 @@
 
 /post1
 
-resultsFolder='results'
-
 *if,GEO_frameOpt,eq,1,then
   *if,GEO_pierCount,gt,0,then
     cmsel,s,COMPA_colTubeWall

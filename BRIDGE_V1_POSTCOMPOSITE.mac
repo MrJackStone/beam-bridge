@@ -1,7 +1,5 @@
 ! BRIDGE_V1_POSTCOMPOSITE
 
-resultsFolder='memo_imgs'
-
 secCount=101
 
 xPitch=GEO_deckLength/(secCount-1)
@@ -187,7 +185,7 @@ BRIDGE_V1_POSTCOMPOSITE: reading load step %I/%I.
     /device,vector,off
     cleanplot,'mpathplot','5','0'
     /type,,3
-  endpng,'IMG24_S%nthSpan%_a_COMPOSITE_SLAB_My',,,,,resultsFolder
+  endpng,'IMG24_S%nthSpan%_a_COMPOSITE_SLAB_My',,,,,POST_resultsFolder
   /erase
   clims
   /annot,dele
@@ -221,7 +219,7 @@ BRIDGE_V1_POSTCOMPOSITE: reading load step %I/%I.
     /device,vector,off
     cleanplot,'mpathplot','5','0'
     /type,,3
-  endpng,'IMG24_S%nthSpan%_b_COMPOSITE_SLAB_Qx',,,,,resultsFolder
+  endpng,'IMG24_S%nthSpan%_b_COMPOSITE_SLAB_Qx',,,,,POST_resultsFolder
   /erase
   clims
   /annot,dele
