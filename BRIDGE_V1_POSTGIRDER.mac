@@ -423,21 +423,10 @@ cm,COMPE_bg,elem
     ppath,1,n1
     ppath,2,n2
 
-    pdef , 'DW_UZ'  , etab , 'DW_UZ'  , avg
-    pdef , 'EMN_UZ' , etab , 'EMN_UZ' , avg
-
-    pcalc , add , 'UZG_MM'  , 'DW_UZ'  ,  , 1e3
-    pcalc , add , 'UZD_MM'  , 'EMN_UZ' ,  , 1e3
-    pcalc , add , 'ELS_UGK' , 'UZG_MM' ,  , 1/1.4
-    pcalc , add , 'ELS_URA' , 'UZD_MM' ,  , 1/1.4
-
-    pthrebase , 'UZD_MM'  , 0 , 'DEFL_RAW'
-    pthrebase , 'ELS_UGK' , 0 , 'DEFL_GK'
-    pthrebase , 'ELS_URA' , 0 , 'DEFL_RA'
-
-    pcalc , add , 'DEFL_QK'  , 'DEFL_RA' , 'DEFL_GK' , 1 , -1
-    pcalc , add , 'DEFL_FRQ' , 'DEFL_GK' , 'DEFL_QK' , 1 , 0.6
-    pcalc , add , 'DEFL_ATV' , 'DEFL_QK' ,           , 1
+    pdef      , 'UZ_qk'  , etab , 'UZ_qk'    , avg
+    pdef      , 'UZ_frq' , etab , 'UZ_frq'
+    pthrebase , 'UZ_qk'  , 0    , 'DEFL_ATV'
+    pthrebase , 'UZ_frq' , 0    , 'DEFL_FRQ'
 
     MPATHPLOT_ARR_pathNames(nthGirder) = girderPathName
 
@@ -447,7 +436,6 @@ cm,COMPE_bg,elem
   cmsel,s,COMPN_plot
   *do,nthGirder,1,GEO_girderCount,1
     MPATHPLOT_ARR_labels(nthGirder)='DEFL_FRQ'
-    ! MPATHPLOT_ARR_labels(nthGirder)='DEFL_RAW'
   *enddo
 
   view1w
