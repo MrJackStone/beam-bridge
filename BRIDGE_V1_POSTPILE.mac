@@ -200,7 +200,6 @@ endpng,'IMG12a_pile_guide',,,,,POST_resultsFolder
 
 
 allsel
-sadd, 'EK_UZ', 'EMM_UZ',,1/1.4
 
 cmsel,s,compl_abt_piles
 cmsel,a,compl_pile

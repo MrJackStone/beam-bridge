@@ -479,10 +479,6 @@ cm,COMPE_bg,elem
   /annot,dele
 
   !!
-  pletab,'ELSA_Zmm'
-  cntrlims,'deflMin','deflMax'
-  sadd,'DFL_AT_Z','ELSA_Zmm',,1,,-deflMax
-
   cmsel,s,COMPE_plot
   cmsel,s,COMPN_plot
   *do,nthGirder,1,GEO_girderCount,1
