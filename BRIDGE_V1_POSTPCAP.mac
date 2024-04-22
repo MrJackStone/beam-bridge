@@ -34,8 +34,7 @@
     /plopts,leg3,on
     /gformat,f,1,1
 
-    ! Vertical axial force (compression)
-    pletab,'EMN_MX',1
+    pletab,'AEMN_MX',1
     /noerase
 
     /device,vector,on
@@ -70,7 +69,7 @@
     /gformat,f,1,1
 
     ! Vertical axial force (compression)
-    pletab,'EAB_Q',1
+    pletab,'AEAB_Q',1
     /noerase
 
     /device,vector,on
