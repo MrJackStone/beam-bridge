@@ -32,7 +32,7 @@
 ! -         -          AENEG_MX   -
 ! -         AEPOS_MX   -          -
 
-! BEAM188 (raw DW or ENV): ------------------- 48
+! BEAM188 (raw DW or ENV): ------------------- 50
 ! DW_Ni     EMN_Ni     EMX_Ni     EAB_Ni
 ! DW_Nj     EMN_Nj     EMX_Nj     EAB_Nj
 ! DW_QZi    EMN_QZi    EMX_QZi    EAB_QZi
@@ -45,6 +45,8 @@
 ! DW_MZj    EMN_MZj    EMX_MZj    EAB_MZj
 ! DW_TQi    EMN_TQi    EMX_TQi    EAB_TQi
 ! DW_TQj    EMN_TQj    EMX_TQj    EAB_TQj
+! N_c  -  axial compression
+! N_t  -  axial tension
 
 ! BEAM188 (calculated based on DW/ENV): ------- 12
 ! M_ogk     M_oqk      M_od_geo   M_od_est
@@ -69,9 +71,7 @@
 ! UZ_k    -  dead + live loads, characteristic values
 ! UZ_frq  -  SLS frequent combination (uses PSI1)
 
-
-
-! TOTAL element table count: ----------------- 129
+! TOTAL element table count: ----------------- 131
 
 
 /post1
@@ -179,9 +179,9 @@ etable   , 'Q_z' , eras
 smin   , 'N_c0' , 'EMN_Ni' , 'EMN_Nj'
 smin   , 'N_c'  , 'N_c0'   , 'ZEROS'
 etable , 'N_c0' , eras
-! smax   , 'N_t0' , 'EMX_Ni' , 'EMX_Nj'
-! smax   , 'N_t'  , 'N_t0'   , 'ZEROS'
-! etable , 'N_t0' , eras
+smax   , 'N_t0' , 'EMX_Ni' , 'EMX_Nj'
+smax   , 'N_t'  , 'N_t0'   , 'ZEROS'
+etable , 'N_t0' , eras
 
 
 !! Element tables calculated based on DW & ENV values                                             !!
@@ -229,7 +229,6 @@ etable , 'Q_ok' , eras
 etable , 'N_ck' , eras
 etable , 'M_o'  , eras
 etable , 'Q_o'  , eras
-etable , 'N_c'  , eras
 
 
 !! Average results by performing convolution                                                      !!
