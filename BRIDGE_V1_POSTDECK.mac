@@ -15,7 +15,7 @@ BRIDGE_V1_POSTSLABPATHS
 *dim,MPATHPLOT_ARR_labels,char,GEO_genSpanCount*5
 *do,i,1,GEO_genSpanCount*5,1
   MPATHPLOT_ARR_pathNames(i)=pthNames(i)
-  MPATHPLOT_ARR_labels(i)='ENEG_MX'
+  MPATHPLOT_ARR_labels(i)='AENEG_MX'
 *enddo
 
 allsel
@@ -52,7 +52,7 @@ go2png,1200
   nsle,s,active
   /edge,1,0
   clims
-  cleanplot,'pletab','ENEG_MX','1'
+  cleanplot,'pletab','AENEG_MX','1'
 endpng,'IMG02a_slabMx_neg',,,,,POST_resultsFolder
 /erase
 /annot,dele
@@ -62,7 +62,7 @@ clims
 !!
 *do,i,1,GEO_genSpanCount*5,1
   MPATHPLOT_ARR_pathNames(i)=pthNames(i)
-  MPATHPLOT_ARR_labels(i)='EPOS_MX'
+  MPATHPLOT_ARR_labels(i)='AEPOS_MX'
 *enddo
 
 nsel,none
@@ -113,7 +113,7 @@ go2png,1200
   nsle,s,active
   /edge,1,0
   clims
-  cleanplot,'pletab','EPOS_MX','1'
+  cleanplot,'pletab','AEPOS_MX','1'
 endpng,'IMG02b_slabMx_pos',,,,,POST_resultsFolder
 /erase
 clims
@@ -122,7 +122,7 @@ clims
 !!
 *do,i,1,GEO_genSpanCount*5,1
   MPATHPLOT_ARR_pathNames(i)=pthNames(i)
-  MPATHPLOT_ARR_labels(i)='EAB_Q'
+  MPATHPLOT_ARR_labels(i)='AEAB_Q'
 *enddo
 
 nsel,none
@@ -179,7 +179,7 @@ go2png,1200
   ! nsel,u,loc,x,GEO_deckLength,GEO_deckLength-0.5
   /edge,1,0
   clims
-  cleanplot,'pletab','AAB_Q','1'
+  cleanplot,'pletab','AEAB_Q','1'
 endpng,'IMG02c_slabQ',,,,,POST_resultsFolder
 /erase
 clims
