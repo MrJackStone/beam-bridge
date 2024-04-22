@@ -261,10 +261,8 @@ xstep=(xmax-xmin)/(pathCount-1)
 *vfill,x_path,ramp,xmin,xstep
 
 totalPathCount=(GEO_girderCount+1)*pathCount
-*del,all_path_names
-*dim,all_path_names,char,totalPathCount
-*del,all_path_labels
-*dim,all_path_labels,char,totalPathCount
+*del , all_path_names
+*dim , all_path_names , char , totalPathCount
 pathIdx=0
 
 *do,nthSpan,1,GEO_girderCount-1,1
@@ -303,10 +301,9 @@ pathIdx=0
         spanLength=GEO_spanlengths(activeSpan)
         zCoord=(zj-zi)*((x-xi)/spanLength)+zi
 
-        pthName='S%nthSpan%_P%nthPath%'
-        pathIdx=pathIdx+1
-        all_path_names(pathIdx)=pthName
-        all_path_labels(pathIdx)='NET_UZ'
+        pthName                 = 'S%nthSpan%_P%nthPath%'
+        pathIdx                 = pathIdx+1
+        all_path_names(pathIdx) = pthName
 
         path,pthName,2,30,20
         ppath,1,,x,yA,zCoord
@@ -350,10 +347,9 @@ csB=CS_girders(1)
   spanLength=GEO_spanlengths(activeSpan)
   zCoord=(zj-zi)*((x-xi)/spanLength)+zi
 
-  pthName='SR_P%nthPath%'
-  pathIdx=pathIdx+1
-  all_path_names(pathIdx)=pthName
-  all_path_labels(pathIdx)='NET_UZ'
+  pthName                 = 'SR_P%nthPath%'
+  pathIdx                 = pathIdx+1
+  all_path_names(pathIdx) = pthName
 
   path,pthName,2,30,20
   ppath,1,,x,yA,zCoord
@@ -396,10 +392,9 @@ csB=CS_leftDeckEdge
   spanLength=GEO_spanlengths(activeSpan)
   zCoord=(zj-zi)*((x-xi)/spanLength)+zi
 
-  pthName='SL_P%nthPath%'
-  pathIdx=pathIdx+1
-  all_path_names(pathIdx)=pthName
-  all_path_labels(pathIdx)='NET_UZ'
+  pthName                 = 'SL_P%nthPath%'
+  pathIdx                 = pathIdx+1
+  all_path_names(pathIdx) = pthName
 
   path,pthName,2,30,20
   ppath,1,,x,yA,zCoord
@@ -411,8 +406,8 @@ csB=CS_leftDeckEdge
 *del,slab_envelope,,nopr
 *dim,slab_envelope,char,2,totalPathCount
 *do,nthPath,1,totalPathCount,1
-  slab_envelope(1,nthPath)=all_path_names(nthPath)
-  slab_envelope(2,nthPath)=all_path_labels(nthPath)
+  slab_envelope(1,nthPath) = all_path_names(nthPath)
+  slab_envelope(2,nthPath) = 'DFL_frq'
 *enddo
 
 pthenv,'CLEAR','slab_envelope'
@@ -429,11 +424,11 @@ pthenv,'CLEAR','slab_envelope'
     cmsel,s,COMPN_SlabSpan_S%nthSpan%
     *do,nthPath,1,pathCount,1
       pthName='S%nthSpan%_P%nthPath%'
-      path,pthName
-      pdef,'UZ',u,z,1
-      pdef,'DW_UZ',etab,'DW_UZ',1
-      pthrebase , 'UZ'    , 0 , 'NET_UZ'   , 1e3/1.4
-      pthrebase , 'DW_UZ' , 0 , 'NETDW_UZ' , 1e3/1.4
+      path      , pthName
+      pdef      , 'UZ_gk'  , etab , 'UZ_gk'   , 1
+      pdef      , 'UZ_frq' , etab , 'UZ_frq'  , 1
+      pthrebase , 'UZ_gk'  , 0    , 'DFL_gk'  , 1
+      pthrebase , 'UZ_frq' , 0    , 'DFL_frq' , 1
     *enddo
   *enddo
 
@@ -442,11 +437,11 @@ pthenv,'CLEAR','slab_envelope'
   cmsel,s,COMPN_SlabSpan_SR
   *do,nthPath,1,pathCount,1
     pthName='SR_P%nthPath%'
-    path,pthName
-    pdef,'UZ',u,z,1
-    pdef,'DW_UZ',etab,'DW_UZ',1
-    pthrebase , 'UZ'    , 2 , 'NET_UZ'   , 1e3/1.4
-    pthrebase , 'DW_UZ' , 2 , 'NETDW_UZ' , 1e3/1.4
+    path      , pthName
+    pdef      , 'UZ_gk'  , etab , 'UZ_gk'   , 1
+    pdef      , 'UZ_frq' , etab , 'UZ_frq'  , 1
+    pthrebase , 'UZ_gk'  , 2    , 'DFL_gk'  , 1
+    pthrebase , 'UZ_frq' , 2    , 'DFL_frq' , 1
   *enddo
 
   ! Left overhang paths
@@ -454,28 +449,24 @@ pthenv,'CLEAR','slab_envelope'
   cmsel,s,COMPN_SlabSpan_SL
   *do,nthPath,1,pathCount,1
     pthName='SL_P%nthPath%'
-    path,pthName
-    pdef,'UZ',u,z,1
-    pdef,'DW_UZ',etab,'DW_UZ',1
-    pthrebase , 'UZ'    , 1 , 'NET_UZ'   , 1e3/1.4
-    pthrebase , 'DW_UZ' , 1 , 'NETDW_UZ' , 1e3/1.4
+    path      , pthName
+    pdef      , 'UZ_gk'  , etab , 'UZ_gk'   , 1
+    pdef      , 'UZ_frq' , etab , 'UZ_frq'  , 1
+    pthrebase , 'UZ_gk'  , 1    , 'DFL_gk'  , 1
+    pthrebase , 'UZ_frq' , 1    , 'DFL_frq' , 1
   *enddo
 
   pthenv,'UPDATE','slab_envelope'
 *enddo
 
 !! Plot path items                                                                                !!
-*del,max_envelope_labels,,nopr
-*dim,max_envelope_labels,char,totalPathCount
-*del,min_envelope_labels,,nopr
-*dim,min_envelope_labels,char,totalPathCount
-*del,dw_envelope_labels,,nopr
-*dim,dw_envelope_labels,char,totalPathCount
-*do,nthPath,1,totalPathCount,1
-  max_envelope_labels(nthPath) = 'NET_UZ+'
-  min_envelope_labels(nthPath) = 'NET_UZ-'
-  dw_envelope_labels(nthPath)  = 'NETDW_UZ'
-*enddo
+maxEnvelopeLabel    = 'DFL_FRQ+'
+minEnvelopeLabel    = 'DFL_FRQ-'
+dwEnvelopeLabel     = 'DFL_GK'
+maxEnvelopeLabelStr = 'maxEnvelopeLabel'
+minEnvelopeLabelStr = 'minEnvelopeLabel'
+dwEnvelopeLabelStr  = 'dwEnvelopeLabel'
+allPathsNamesStr    = 'all_path_names'
 
 *del,deltaZ,,nopr
 z1=zFrameTop+GEO_frameTopOffset(1)
@@ -505,8 +496,8 @@ wincln,2
 /edge,all,1
 
 /annot  , dele
-wintitle,1,'LAJE DO TABULEIRO','FLECHA MAX.','ELS-Rara [mm]',,1,13
-wintitle,2,'LAJE DO TABULEIRO','FLECHA MIN.','ELS-Rara [mm]',,1,13
+wintitle,1,'LAJE DO TABULEIRO','FLECHA MAX.','ELS-Frequente [mm]',,1,13
+wintitle,2,'LAJE DO TABULEIRO','FLECHA MIN.','ELS-Frequente [mm]',,1,13
 
 /window,1,on
 /window,2,on
@@ -526,11 +517,11 @@ go2png,1200
 
   /window,1,on
   /window,2,off
-  cleanplot,'mpathplot','5',,'all_path_names','max_envelope_labels'
+  cleanplot,'mpathplot','5',,'allPathsNamesStr','maxEnvelopeLabelStr'
 
   /window,1,off
   /window,2,on
-  cleanplot,'mpathplot','5',,'all_path_names','min_envelope_labels'
+  cleanplot,'mpathplot','5',,'allPathsNamesStr','minEnvelopeLabelStr'
 
 endpng,'IMG10a_slab_deflections',,,,,POST_resultsFolder
 /erase
