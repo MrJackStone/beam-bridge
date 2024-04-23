@@ -1,0 +1,104 @@
+! BRIDGE_V2_POSTTWBEAM
+
+
+!! Display settings                                                                               !!
+/device,font,3,Arial,1000,0,-64,0,0,,,
+/device,font,1,Arial,1000,0,-42,0,0,,,
+/device,text,1,100
+/tspec,15,1.5,4,0,0
+/gformat,f,2,1
+/annot,dele
+
+!! Collect result envelope                                                                        !!
+tw1Depth     = GEO_ABT1_thinTranWallDepth
+tw1Width     = SEC_ABT_thinTranWall_t
+beam1Area    = tw1Width*tw1Depth
+beam1Modulus = (tw1Width*tw1Depth**2)/6
+
+tw2Depth     = GEO_ABT2_thinTranWallDepth
+tw2Width     = SEC_ABT_thinTranWall_t
+beam2Area    = tw2Width*tw2Depth
+beam2Modulus = (tw2Width*tw2Depth**2)/6
+
+csys,0
+
+cmsel,s,COMPA_ABT_thinTranWall
+cmsel,r,COMPA_ABT_1
+esla,s
+nsle,s,active
+ndbbox,'xmin',,'ymin','ymax','zmin','zmax'
+beam1Top1=node(xmin,ymin,zmax)
+beam1Top2=node(xmin,ymax,zmax)
+beam1Bot1=node(xmin,ymin,zmin)
+beam1Bot2=node(xmin,ymax,zmin)
+
+cmsel,s,COMPA_ABT_thinTranWall
+cmsel,r,COMPA_ABT_2
+esla,s
+nsle,s,active
+ndbbox,'xmin',,'ymin','ymax','zmin','zmax'
+beam2Top1=node(xmin,ymin,zmax)
+beam2Top2=node(xmin,ymax,zmax)
+beam2Bot1=node(xmin,ymin,zmin)
+beam2Bot2=node(xmin,ymax,zmin)
+
+cmsel,s,COMPA_ABT_thinTranWall
+esla,s
+nsle,s,active
+etable , 'M11'   , smisc , 4
+etable , 'SM_11' , smisc , 34
+etable , 'SM_12' , smisc , 36
+
+*del,thin_1_envelope,,nopr
+*del,thin_2_envelope,,nopr
+
+*do,nthLS,1,LoadStepCount,1
+  subset,nthLS,last
+  etable,refl
+  pth2beam,beam1Top1,beam1Top2,beam1Bot1,beam1Bot2,'THIN1',0,20,beam1Modulus,beam1Area,0,'thin_1_envelope'
+  pth2beam,beam2Top1,beam2Top2,beam2Bot1,beam2Bot2,'THIN2',0,20,beam2Modulus,beam2Area,0,'thin_2_envelope'
+*enddo
+
+! Scale results (kN, mm)
+path,'THIN1'
+pcalc , add , 'MP_MAX'  , 'MP_MAX'  ,  , 1e-3
+pcalc , add , 'MP_MIN'  , 'MP_MIN'  ,  , 1e-3
+pcalc , add , 'MB_MAX'  , 'MB_MAX'  ,  , 1e-3
+pcalc , add , 'MB_MIN'  , 'MB_MIN'  ,  , 1e-3
+pcalc , add , 'V_MAX'   , 'V_MAX'   ,  , 1e-3
+pcalc , add , 'V_MIN'   , 'V_MIN'   ,  , 1e-3
+
+path,'THIN2'
+pcalc , add , 'MP_MAX'  , 'MP_MAX'  ,  , 1e-3
+pcalc , add , 'MP_MIN'  , 'MP_MIN'  ,  , 1e-3
+pcalc , add , 'MB_MAX'  , 'MB_MAX'  ,  , 1e-3
+pcalc , add , 'MB_MIN'  , 'MB_MIN'  ,  , 1e-3
+pcalc , add , 'V_MAX'   , 'V_MAX'   ,  , 1e-3
+pcalc , add , 'V_MIN'   , 'V_MIN'   ,  , 1e-3
+
+!! Plot beam results                                                                              !!
+*del , thin1_paths ,      , nopr
+*del , thin2_paths ,      , nopr
+*dim , thin1_paths , char , 2
+*dim , thin2_paths , char , 2
+thin1_paths(1) = 'THIN1','THIN1'
+thin2_paths(1) = 'THIN2','THIN2'
+
+*del , mp_labels ,      , nopr
+*del , mb_labels ,      , nopr
+*del , v_labels  ,      , nopr
+*dim , mp_labels , char , 2
+*dim , mb_labels , char , 2
+*dim , v_labels  , char , 2
+mp_labels(1) = 'MP_MAX'  , 'MP_MIN'
+mb_labels(1) = 'MB_MAX'  , 'MB_MIN'
+v_labels(1)  = 'V_MAX'   , 'V_MIN'
+
+! In-plane bending
+BRIDGE_V1_POSTPLTBEAM , 'MOMENTO FLETOR (MZ)' , 'kNm' , 'mp_labels' , 'IMG13k_THINBEAM_MP'
+
+! Out-of-plane bending
+BRIDGE_V1_POSTPLTBEAM , 'MOMENTO FLETOR (MY)' , 'kNm' , 'mb_labels' , 'IMG13l_THINBEAM_MB'
+
+! Shear force
+BRIDGE_V1_POSTPLTBEAM , 'F. CORTANTE'         , 'kN'  , 'v_labels'  , 'IMG13m_THINBEAM_V'

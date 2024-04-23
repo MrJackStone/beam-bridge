@@ -1,0 +1,97 @@
+! BRIDGE_V1_POSTPLTBEAM , quantity , units , labels , imgName
+! BRIDGE_V1_POSTPLTBEAM , arg1     , arg2  , arg3   , arg4
+
+
+centerTitle  = arg1
+unitsTitle   = arg2
+labelsToPlot = arg3
+
+view4w
+wincln
+
+view1w
+wintitle,1,'CONTEN. TRANSVERSAL','%centerTitle%','ELU-Normal [%unitsTitle%]',,1,13
+/window,1,off
+
+view2w,,,1,1,2,3
+wintitle,2,' ','ENCONTRO 01',' ',,1
+wintitle,3,' ','ENCONTRO 02',' ',,1
+
+/view,2,-1,0,0
+/view,3,1,0,0
+/angle,all,0
+/udoc,all,cntr,bottom
+/plopts,leg3,on
+/triad,off
+/edge,all,0
+
+axanno,2
+axanno,3
+
+cmsel,s,COMPA_ABT_1
+cmsel,r,COMPA_ABT_thinTranWall
+esla,s
+nsle,s,active
+
+go2png,1200
+  /window,2,on
+  /window,3,off
+
+  cmsel,s,COMPA_ABT_1
+  cmsel,u,COMPA_ABT_thinTranWall
+  esla,s
+  nsle,s,active
+  /device,vector,on
+  /type,2,4
+  /eshape,1
+  /auto,2
+  eplot
+  /noerase
+  /device,vector,off
+  /user,2
+
+  cmsel,s,COMPA_ABT_1
+  cmsel,r,COMPA_ABT_thinTranWall
+  esla,s
+  nsle,s,active
+  /eshape,0
+  /edge,2,1
+  eplot
+
+  /plopts,info,3
+  mpathplot,10,,'thin1_paths',labelsToPlot
+  /plopts,info,0
+
+
+  /window,2,off
+  /window,3,on
+
+  cmsel,s,COMPA_ABT_2
+  cmsel,u,COMPA_ABT_thinTranWall
+  esla,s
+  nsle,s,active
+  /device,vector,on
+  /type,3,4
+  /eshape,1
+  /auto,3
+  eplot
+  /device,vector,off
+  /user,3
+
+  cmsel,s,COMPA_ABT_2
+  cmsel,r,COMPA_ABT_thinTranWall
+  esla,s
+  nsle,s,active
+  /eshape,0
+  /edge,3,1
+  eplot
+
+  /plopts,info,3
+  mpathplot,10,,'thin2_paths',labelsToPlot
+  /plopts,info,0
+
+endpng,'%arg4%',,,,,POST_resultsFolder
+/erase
+/annot,dele
+clims
+view1w
