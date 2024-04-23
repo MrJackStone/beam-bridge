@@ -15,8 +15,8 @@ enum=0
   esel,s,elem,,enum
   nsle,s
 
-  xCenter=centrx(enum)
-  yCenter=centry(enum)
+  *get,xCenter,elem,enum,cent,x
+  *get,yCenter,elem,enum,cent,y
 
   nsel,s,loc,x,xCenter-arg1,xCenter+arg1
   nsel,r,loc,y,yCenter-arg1,yCenter+arg1

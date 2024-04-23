@@ -296,6 +296,20 @@ esla,s
 nsle,s,active
 BRIDGE_V1_ETCONVOLUTE,POST_convolutionRadius
 
+csys,ESYS_ABT1_tw
+cmsel,s,COMPA_ABT_thinTranWall
+cmsel,r,COMPA_ABT_1
+esla,s
+nsle,s,active
+BRIDGE_V1_ETCONVOLUTE,POST_convolutionRadius
+
+csys,ESYS_ABT2_tw
+cmsel,s,COMPA_ABT_thinTranWall
+cmsel,r,COMPA_ABT_2
+esla,s
+nsle,s,active
+BRIDGE_V1_ETCONVOLUTE,POST_convolutionRadius
+
 ctime,'deltaT',t0
 *cfopen,'convolution_elapsed',txt
   *vwrite,deltaT
