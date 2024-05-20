@@ -1,5 +1,7 @@
 ! BRIDGE_V1_POSTPIER
 
+clims
+
 *if,GEO_pierCount,gt,0,then
 
   *if,GEO_frameOpt,eq,1,then
@@ -155,21 +157,28 @@
 
     go2png,1200
 
-      cmsel,s,compl_column
-      esll,s
-      nsle,s,active
-
       /udoc,1,cntr,right
       /plopts,leg3,on
       /gformat,f,1,1
 
+      /device,vector,on
+      allsel
+      esel,u,type,,3
+      nsle,s,active
+      eplot
+      /device,vector,off
+      /noerase
+
+      cmsel,s,compl_column
+      esll,s
+      nsle,s,active
+
       ! Vertical axial force (compression)
       /vup,1,x
       /angle,1,-60,zs
-      plls,EAB_Ni,EAB_Nj,3,,1
+      cleanplot,'plls','EAB_Ni','EAB_Nj','3',,'1'
       /vup,1,z
       /angle,1,0,zs
-      /noerase
 
       /device,vector,on
       allsel
@@ -195,29 +204,35 @@
 
     go2png,1200
 
+      /udoc,1,cntr,right
+      /plopts,leg3,on
+      /gformat,f,1,1
+
+      /device,vector,on
+      allsel
+      esel,u,type,,3
+      nsle,s,active
+      eplot
+      /device,vector,off
+      /noerase
+
       cmsel,s,compl_column
       esll,s
       nsle,s,active
-
-      /udoc,1,cntr,right
-      /plopts,leg3,on
-      ! /plopts,info,3
-      /gformat,f,1,1
 
       ! Y bending moment
       /vup,1,x
       /angle,1,-60,zs
       /udoc,1,cntr,left
-      plls,EAB_MYi,EAB_MYj,3,,1
+      cleanplot,'plls','EAB_MYi','EAB_MYj','3',,'1'
       /vup,1,z
       /angle,1,0,zs
-      /noerase
 
       ! Z bending moment
       /vup,1,y
       /angle,1,60,zs
       /udoc,1,cntr,right
-      plls,EAB_MZi,EAB_MZj,3,,1
+      cleanplot,'plls','EAB_MZi','EAB_MZj','3',,'1'
       /vup,1,z
       /angle,1,0,zs
 
@@ -244,29 +259,35 @@
 
     go2png,1200
 
+      /udoc,1,cntr,right
+      /plopts,leg3,on
+      /gformat,f,1,1
+
+      /device,vector,on
+      allsel
+      esel,u,type,,3
+      nsle,s,active
+      eplot
+      /device,vector,off
+      /noerase
+
       cmsel,s,compl_column
       esll,s
       nsle,s,active
-
-      /udoc,1,cntr,right
-      /plopts,leg3,on
-      ! /plopts,info,3
-      /gformat,f,1,1
 
       ! Z-Shear force
       /vup,1,x
       /angle,1,-60,zs
       /udoc,1,cntr,left
-      plls,EAB_QZi,EAB_QZj,3,,1
+      cleanplot,'plls','EAB_QZi','EAB_QZj','3',,'1'
       /vup,1,z
       /angle,1,0,zs
-      /noerase
 
       ! Y-Shear force
       /vup,1,y
       /angle,1,60,zs
       /udoc,1,cntr,right
-      plls,EAB_QYi,EAB_QYj,3,,1
+      cleanplot,'plls','EAB_QYi','EAB_QYj','3',,'1'
       /vup,1,z
       /angle,1,0,zs
 
@@ -286,18 +307,24 @@
 
     go2png,1200
 
+      /udoc,1,cntr,right
+      /plopts,leg3,on
+      /gformat,f,1,1
+
+      /device,vector,on
+      allsel
+      esel,u,type,,3
+      nsle,s,active
+      eplot
+      /device,vector,off
+      /noerase
+
       cmsel,s,compl_framegirder
       esll,s
       nsle,s,active
 
-      /udoc,1,cntr,right
-      /plopts,leg3,on
-      ! /plopts,info,3
-      /gformat,f,1,1
-
       ! Vertical axial force (compression)
-      plls,EAB_Ni,EAB_Nj,3,,1
-      /noerase
+      cleanplot,'plls','EAB_Ni','EAB_Nj','3',,'1'
 
       /device,vector,on
       allsel
@@ -323,25 +350,31 @@
 
     go2png,1200
 
+      /udoc,1,cntr,right
+      /plopts,leg3,on
+      /gformat,f,1,1
+
+      /device,vector,on
+      allsel
+      esel,u,type,,3
+      nsle,s,active
+      eplot
+      /device,vector,off
+      /noerase
+
       cmsel,s,compl_framegirder
       esll,s
       nsle,s,active
 
-      /udoc,1,cntr,right
-      /plopts,leg3,on
-      ! /plopts,info,3
-      /gformat,f,1,1
-
       ! Y bending moment
       /udoc,1,cntr,left
-      plls,EAB_MYi,EAB_MYj,3,,1
-      /noerase
+      cleanplot,'plls','EAB_MYi','EAB_MYj','3',,'1'
 
       ! Z bending moment
       /vup,1,x
       /angle,1,-60,zs
       /udoc,1,cntr,right
-      plls,EAB_MZi,EAB_MZj,-3,,1
+      cleanplot,'plls','EAB_MZi','EAB_MZj','-3',,'1'
       /vup,1,z
       /angle,1,0,zs
 
@@ -368,25 +401,31 @@
 
     go2png,1200
 
+      /udoc,1,cntr,right
+      /plopts,leg3,on
+      /gformat,f,1,1
+
+      /device,vector,on
+      allsel
+      esel,u,type,,3
+      nsle,s,active
+      eplot
+      /device,vector,off
+      /noerase
+
       cmsel,s,compl_framegirder
       esll,s
       nsle,s,active
 
-      /udoc,1,cntr,right
-      /plopts,leg3,on
-      ! /plopts,info,3
-      /gformat,f,1,1
-
       ! Z-Shear force
       /udoc,1,cntr,left
-      plls,EAB_QZi,EAB_QZj,3,,1
-      /noerase
+      cleanplot,'plls','EAB_QZi','EAB_QZj','3',,'1'
 
       ! Y-Shear force
       /vup,1,x
       /angle,1,-60,zs
       /udoc,1,cntr,right
-      plls,EAB_QYi,EAB_QYj,-3,,1
+      cleanplot,'plls','EAB_QYi','EAB_QYj','-3',,'1'
       /vup,1,z
       /angle,1,0,zs
 
