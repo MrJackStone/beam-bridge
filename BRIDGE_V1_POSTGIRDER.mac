@@ -373,6 +373,7 @@ boldfont, 1
 !! Deflection on girders                                                                          !!
 g_annobold , 1
 
+csys,0
 *do,nthSpan,1,GEO_spanCount,1
   xi=GEO_supportX(nthSpan)
   xj=GEO_supportX(nthSpan+1)
