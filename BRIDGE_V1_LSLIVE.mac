@@ -1,8 +1,25 @@
 ! BRIDGE_V1_LSLIVE
 
 
+SEARCH_TOL=0.5
+
 ! Write load steps
 *do,nthPos,1,posCount,1
+
+  targetSpan=LOAD_lt_span(nthPos)
+  *if,targetSpan,eq,0,then
+    allsel
+  *elseif,targetSpan,eq,-1,then
+    cmsel,s,COMPN_ABT_appSlab
+    cmsel,r,COMPN_ABT_1
+  *elseif,targetSpan,eq,-2,then
+    cmsel,s,COMPN_ABT_appSlab
+    cmsel,r,COMPN_ABT_2
+  *else
+    cmsel,s,COMPN_SLAB_%targetSpan%
+  *endif
+  cm,COMPN_preferredSpan,node
+  allsel
 
   *do,nthDir,1,2,1
 
@@ -181,6 +198,7 @@
             ! Load on the bridge (longitudinally):
             cmsel,s,COMPN_Slab
             cmsel,r,COMPN_LoadTrain
+            cm,COMPN_candidates,node
 
             ! Adjust Y coordinate to account for load train skewness
             *afun,deg
@@ -188,13 +206,23 @@
             yCoord=yCoord+nthSkewedDeltaY
             *afun,rad
 
-            ! Search for nearest node in delimited region
-            SEARCH_TOL=0.5
-            nsel,r,loc,x,xCoord-SEARCH_TOL,xCoord+SEARCH_TOL
+            ! Location filter
+            nsel,s,loc,x,xCoord-SEARCH_TOL,xCoord+SEARCH_TOL
             nsel,r,loc,y,yCoord-SEARCH_TOL,yCoord+SEARCH_TOL
+            cm,COMPN_nearby,node
+
+            ! Search for nearest node in delimited region
+            cmsel,s,COMPN_candidates
+            cmsel,r,COMPN_preferredSpan
+            cmsel,r,COMPN_nearby
+            *get,nc,node,,count
+            *if,nc,eq,0,then
+              cmsel,s,COMPN_candidates
+              cmsel,r,COMPN_nearby
+            *endif
             NodeNum=NODE(xCoord,yCoord,0)
-            cmsel,s,COMPN_Slab
-            cmsel,r,COMPN_LoadTrain
+
+            cmsel,s,COMPN_candidates
 
             *if,NodeNum,gt,0,then
               *if,GEO_deckRadius,eq,0,then
