@@ -635,14 +635,16 @@ LOAD_wheelCount=LOAD_ltCount*2
 skewedDeltaY=GEO_deckLength*tan(LOAD_ltSkewness)
 *afun,rad
 *del,LOAD_ltWheelOff_beg
-*dim,LOAD_ltWheelOff_beg,,LOAD_wheelCount
+*dim,LOAD_ltWheelOff_beg,,LOAD_wheelCount,LOAD_ltTransScenarioCount
 *del,LOAD_ltWheelOff_end
-*dim,LOAD_ltWheelOff_end,,LOAD_wheelCount
-*do,nthLine,1,LOAD_ltCount,1
-  LOAD_ltWheelOff_beg(nthLine*2-1) = LOAD_ltLineOff(nthLine)-(LOAD_ltWidth/2)
-  LOAD_ltWheelOff_beg(nthLine*2)   = LOAD_ltLineOff(nthLine)+(LOAD_ltWidth/2)
-  LOAD_ltWheelOff_end(nthLine*2-1) = LOAD_ltLineOff(nthLine)-(LOAD_ltWidth/2)+skewedDeltaY
-  LOAD_ltWheelOff_end(nthLine*2)   = LOAD_ltLineOff(nthLine)+(LOAD_ltWidth/2)+skewedDeltaY
+*dim,LOAD_ltWheelOff_end,,LOAD_wheelCount,LOAD_ltTransScenarioCount
+*do,nthLTtransScenario,1,LOAD_ltTransScenarioCount,1
+  *do,nthLine,1,LOAD_ltCount,1
+    LOAD_ltWheelOff_beg(nthLine*2-1 , nthLTtransScenario) = LOAD_ltLineOff(nthLine, nthLTtransScenario)-(LOAD_ltWidth/2)
+    LOAD_ltWheelOff_beg(nthLine*2   , nthLTtransScenario) = LOAD_ltLineOff(nthLine, nthLTtransScenario)+(LOAD_ltWidth/2)
+    LOAD_ltWheelOff_end(nthLine*2-1 , nthLTtransScenario) = LOAD_ltLineOff(nthLine, nthLTtransScenario)-(LOAD_ltWidth/2)+skewedDeltaY
+    LOAD_ltWheelOff_end(nthLine*2   , nthLTtransScenario) = LOAD_ltLineOff(nthLine, nthLTtransScenario)+(LOAD_ltWidth/2)+skewedDeltaY
+  *enddo
 *enddo
 
 ! Calculate X coordinates of gerber connections
