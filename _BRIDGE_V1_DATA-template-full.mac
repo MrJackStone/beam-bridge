@@ -689,6 +689,12 @@ LOAD_longScenario=0
 !           · over each support
 !           · at the beginning of the bridge
 !           · at the end of the bridge
+!    [7] Load train on: position the load train at key places
+!           · middle of each span
+!           · at the beginning of each span
+!           · at the end of each span
+!           · over each support
+!           · over each approach slab
 LOAD_ltScenario=6
 
 ! Increment in displacement of the load train
