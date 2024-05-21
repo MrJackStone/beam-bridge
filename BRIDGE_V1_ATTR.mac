@@ -634,9 +634,9 @@ LOAD_wheelCount=LOAD_ltCount*2
 *afun,deg
 skewedDeltaY=GEO_deckLength*tan(LOAD_ltSkewness)
 *afun,rad
-*del,LOAD_ltWheelOff_beg
+*del,LOAD_ltWheelOff_beg,,nopr
 *dim,LOAD_ltWheelOff_beg,,LOAD_wheelCount,LOAD_ltTransScenarioCount
-*del,LOAD_ltWheelOff_end
+*del,LOAD_ltWheelOff_end,,nopr
 *dim,LOAD_ltWheelOff_end,,LOAD_wheelCount,LOAD_ltTransScenarioCount
 *do,nthLTtransScenario,1,LOAD_ltTransScenarioCount,1
   *do,nthLine,1,LOAD_ltCount,1
@@ -715,13 +715,18 @@ BRIDGE_V1_SKEWEDCSYS , 'CS_rightDeckEdge' , GEO_deckOff_beg                   , 
     CS_girders(nthGirder)=nthCS
 *enddo
 
+LOAD_ltWheelPathCount=LOAD_wheelCount*LOAD_ltTransScenarioCount
 *del,CS_loadTrains
-*dim,CS_loadTrains,,LOAD_wheelCount
-*do,nthLT,1,LOAD_wheelCount,1
-    yBeg=LOAD_ltWheelOff_beg(nthLT)
-    yEnd=LOAD_ltWheelOff_end(nthLT)
+*dim,CS_loadTrains,,LOAD_ltWheelPathCount
+nthPath=0
+*do,nthLTtransScenario,1,LOAD_ltTransScenarioCount,1
+  *do,nthLT,1,LOAD_wheelCount,1
+    yBeg=LOAD_ltWheelOff_beg(nthLT,nthLTtransScenario)
+    yEnd=LOAD_ltWheelOff_end(nthLT,nthLTtransScenario)
     BRIDGE_V1_SKEWEDCSYS, 'nthCS', yBeg, yEnd
-    CS_loadTrains(nthLT)=nthCS
+    nthPath=nthPath+1
+    CS_loadTrains(nthPath)=nthCS
+  *enddo
 *enddo
 
 *del,CS_barriers

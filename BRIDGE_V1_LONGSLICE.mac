@@ -12,7 +12,7 @@ csbackup
     wpcsys,-1,0
 *enddo
 
-*do,nthLT,1,LOAD_wheelCount,1
+*do,nthLT,1,LOAD_wheelPathCount,1
     nthCS=CS_loadTrains(nthLT)
     csys,nthCS
     wpcsys,-1,nthCS
