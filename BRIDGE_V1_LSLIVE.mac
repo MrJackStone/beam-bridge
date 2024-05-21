@@ -4,7 +4,7 @@
 SEARCH_TOL=0.5
 
 ! Write load steps
-*do,nthTransvPos,1,LOAD_ltTransversalCount,1
+*do,nthTransvPos,1,LOAD_ltTransScenarioCount,1
 
   *do,nthPos,1,posCount,1
 
@@ -114,8 +114,8 @@ SEARCH_TOL=0.5
             *afun,deg
             ySkewOffset=tan(LOAD_ltSkewness)*x_center
             *afun,rad
-            y_min=ySkewOffset+LOAD_ltWheelOff_beg(nthLT*2-1)
-            y_max=ySkewOffset+LOAD_ltWheelOff_beg(nthLT*2)
+            y_min=ySkewOffset+LOAD_ltWheelOff_beg(nthLT*2-1,nthTransvPos)
+            y_max=ySkewOffset+LOAD_ltWheelOff_beg(nthLT*2,nthTransvPos)
             nsel,s,loc,y,y_min,y_max
             nsel,r,loc,x,x_min,x_max
             cmsel,r,COMPN_occupied
@@ -192,7 +192,7 @@ SEARCH_TOL=0.5
           *do,nthWheel,1,LOAD_wheelCount,1
             ! Point load transversal position
             *afun,deg
-            yWheel=LOAD_ltWheelOff_beg(nthWheel)
+            yWheel=LOAD_ltWheelOff_beg(nthWheel,nthTransvPos)
             yCoord=(GEO_deckRadius+yWheel)*sin(chiAngle)-GEO_chordOff
             *afun,rad
 
