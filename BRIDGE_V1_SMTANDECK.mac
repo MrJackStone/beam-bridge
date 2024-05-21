@@ -93,7 +93,7 @@ ksel,u,kp,,all
 
 ! Create component with load train path lines
 lsel,u,line,,all
-*do,nthLT,1,LOAD_wheelPathCount,1
+*do,nthLT,1,LOAD_ltWheelPathCount,1
     ltCS=CS_loadTrains(nthLT)
     csys,ltCS
     lsel,a,loc,y,0
