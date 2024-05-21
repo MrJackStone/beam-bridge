@@ -217,10 +217,66 @@ CM,COMPN_occupied,NODE
    arruniq,'LTleadingPos','LTleadingPos',1
    *get,posCount,PARM,LTleadingPos,DIM,X
 
+*elseif,LOAD_ltScenario,eq,7,then
+  ! Load train at key positions (more coverage than 6)
+  posCount=GEO_spanCount*3+GEO_supportCount
+  *if,GEO_ABT1_status,eq,1,then
+    posCount=posCount+1
+  *endif
+  *if,GEO_ABT2_status,eq,1,then
+    posCount=posCount+1
+  *endif
+
+  *del,LTleadingPos,,nopr
+  *dim,LTleadingPos,,posCount
+  *del,LOAD_lt_span,,nopr
+  *dim,LOAD_lt_span,,posCount
+
+  ! Beginning, middle, & end of each span
+  *do,nthSpan,1,GEO_spanCount,1
+    spanStart                 = GEO_supportX(nthSpan)
+    spanEnd                   = GEO_supportX(nthSpan+1)
+    LTleadingPos(nthSpan*3-2) = (spanStart+spanEnd)/2
+    LTleadingPos(nthSpan*3-1) = spanStart+LOAD_ltLength
+    LTleadingPos(nthSpan*3-0) = spanEnd
+    LOAD_lt_span(nthSpan*3-2) = nthSpan
+    LOAD_lt_span(nthSpan*3-1) = nthSpan
+    LOAD_lt_span(nthSpan*3-0) = nthSpan
+  *enddo
+  posIndex = GEO_spanCount*3
+
+  ! Over each support
+  *do,nthSupport,1,GEO_supportCount,1
+    posIndex               = posIndex+1
+    nthSupportPosition     = GEO_supportX(nthSupport)
+    LTleadingPos(posIndex) = nthSupportPosition
+  *enddo
+
+  ! Over first abutment
+  *if,GEO_ABT1_status,eq,1,then
+    posIndex               = posIndex+1
+    LTleadingPos(posIndex) = 0
+    LOAD_lt_span(posIndex) = -1
+  *endif
+
+  ! Over second abutment
+  *if,GEO_ABT2_status,eq,1,then
+    posIndex               = posIndex+1
+    LTleadingPos(posIndex) = GEO_deckLength+GEO_ABT2_length
+    LOAD_lt_span(posIndex) = -2
+  *endif
+
+
 *else
    ! Load train off
    posCount=0
-   *del,LTleadingPos
+   *del,LTleadingPos,,nopr
 
 *endif
 
+! Default affected spans: unspecified
+*get,parType,parm,LOAD_lt_span,type
+*if,parType,ne,1,then
+  *del,LOAD_lt_span,,nopr
+  *dim,LOAD_lt_span,,(posCount>1)
+*endif
