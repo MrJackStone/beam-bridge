@@ -712,9 +712,12 @@ LOAD_ltSkewness = 0
 LOAD_ltCount = 2
 
 ! Transversal position of each load train (measured from Y=0)
+LOAD_ltTransScenarioCount=2
+
 *del,LOAD_ltLineOff
-*dim,LOAD_ltLineOff,array,LOAD_ltCount
-LOAD_ltLineOff(1) = 2.425, 3.975
+*dim,LOAD_ltLineOff,array,LOAD_ltCount,LOAD_ltTransScenarioCount
+LOAD_ltLineOff(1,1) =  2.425 ,  3.975
+LOAD_ltLineOff(1,2) = -2.425 , -3.975
 
 
 
