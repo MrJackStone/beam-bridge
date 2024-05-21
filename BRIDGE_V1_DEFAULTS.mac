@@ -61,6 +61,8 @@ LOAD_longScenario  = 0
 LOAD_TSCHEBOTARIOFF_status = 0
 *del,LOAD_TSCHEBOTARIOFF_data,,nopr
 
+*get,LOAD_ltTransScenarioCount,parm,LOAD_ltLineOff,dim,y
+
 
 
 !!                                                                                                !!
