@@ -36,7 +36,7 @@ csbackup
 
 *if,GEO_footpathLeft_beg,gt,0,or,GEO_footpathLeft_end,gt,0,then
     csys,CS_leftFootpath
-    wpcsys,-1,nthCS
+    wpcsys,-1
     wprota,,90
     asbw,all,,delete
     csys,0
@@ -45,7 +45,7 @@ csbackup
 
 *if,GEO_footpathRight_beg,gt,0,or,GEO_footpathRight_end,gt,0,then
     csys,CS_rightFootpath
-    wpcsys,-1,nthCS
+    wpcsys,-1
     wprota,,90
     asbw,all,,delete
     csys,0
