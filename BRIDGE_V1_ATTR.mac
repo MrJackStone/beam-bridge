@@ -1270,19 +1270,13 @@ nthPier=0
     ! Highway bridge
 
     ! Basic impact coefficient (NBR 7188)
-    impactCoefficient=1+1.06*(20/(minSpanLength+50))
-    *if,impactCoefficient,GT,1.35,THEN
-        impactCoefficient=1.35
-    *endif
-    ! Additional impact coefficient
-    additionalImpactCoefficient=1.25
-    ! Lane number coefficient
-    laneCoefficient=1-0.05*(GEO_laneNumber-2)
-    *if,laneCoefficient,LT,0.9,THEN
-        laneCoefficient=0.9
-    *endif
+    LOAD_baseImpactCoefficient       = (1.35<1+1.06*(20/(minSpanLength+50)))
+    ! Additional impact coefficient (used only for slabs less than 5 meters away from a joint -- unused for now)
+    LOAD_additionalImpactCoefficient = 1.25
+    ! Lane number coefficient (should not be used for slabs -- unused for now)
+    LOAD_laneCoefficient             = (0.9>1-0.05*(GEO_laneNumber-2))
     ! Final impact coefficient applied to vehicle loads
-    LOAD_dynImpact=impactCoefficient*laneCoefficient*additionalImpactCoefficient
+    LOAD_dynImpact                   = LOAD_baseImpactCoefficient
 
 *elseif,BRIDGE_type,eq,1,then
     ! Railway bridge (VALE)
