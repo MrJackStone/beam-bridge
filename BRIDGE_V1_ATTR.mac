@@ -1349,14 +1349,12 @@ LOAD_ltLength=LOADTRAIN_VAR_length
 
 *endif
 
-! LOAD_vehicleTraffic=LOAD_dynImpact*LOAD_vehicleTraffic_k
-
 ! Combination type: ELU or ELS
 *if,LOAD_combination,EQ,1,THEN
    ! Ultimate load: load train as main
    ! Live loads
    *voper,LOAD_plValue,LOAD_gammaQ*LOAD_dynImpact,MULT,LOAD_plValue
-   LOAD_vehicleTraffic    = LOAD_vehicleTraffic_k*LOAD_gammaQ*LOAD_psi0
+   LOAD_vehicleTraffic    = LOAD_vehicleTraffic_k*LOAD_dynImpact*LOAD_gammaQ*LOAD_psi0
    LOAD_pedestrianTraffic = LOAD_pedestrianTraffic_k*LOAD_gammaQ*LOAD_psi0
    LOAD_waterFlow         = LOAD_waterFlow_k*LOAD_gammaQ*LOAD_psi0
    LOAD_columnWind        = LOAD_columnWind_k*LOAD_gammaQ*LOAD_psi0
@@ -1370,7 +1368,7 @@ LOAD_ltLength=LOADTRAIN_VAR_length
    ! Ultimate load: wind/tide as main
    ! Live loads
    *voper,LOAD_plValue,LOAD_gammaQ*LOAD_dynImpact*LOAD_psi0,MULT,LOAD_plValue
-   LOAD_vehicleTraffic    = LOAD_vehicleTraffic_k*LOAD_gammaQ
+   LOAD_vehicleTraffic    = LOAD_vehicleTraffic_k*LOAD_dynImpact*LOAD_gammaQ
    LOAD_pedestrianTraffic = LOAD_pedestrianTraffic_k*LOAD_gammaQ
    LOAD_waterFlow         = LOAD_waterFlow_k*LOAD_gammaQ*LOAD_psi0
    LOAD_columnWind        = LOAD_columnWind_k*LOAD_gammaQ*LOAD_psi0
