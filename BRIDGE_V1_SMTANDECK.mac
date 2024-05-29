@@ -190,7 +190,7 @@ cm,COMPK_GerberSupported,kp
 *endif
 
 ! Create component with left pedestrian footpath areas
-*if,GEO_footpathLeft,GT,0,THEN
+*if,GEO_footpathLeft_beg,GT,0,or,GEO_footpathLeft_end,gt,0,THEN
     csys,CS_leftFootpath
     asel,s,loc,y,0,(GEO_footpathLeft_beg>GEO_footpathLeft_end)
     cm,COMPA_LeftFootpath,area
@@ -201,7 +201,7 @@ cm,COMPK_GerberSupported,kp
 *endif
 
 ! Create component with right pedestrian footpath areas
-*if,GEO_footpathRight,GT,0,THEN
+*if,GEO_footpathRight_beg,GT,0,or,GEO_footpathRight_end,gt,0,THEN
     csys,CS_rightFootpath
     asel,s,loc,y,-(GEO_footpathRight_beg>GEO_footpathRight_end),0
     cm,COMPA_RightFootpath,area
@@ -210,4 +210,3 @@ cm,COMPK_GerberSupported,kp
     asel,u,area,,all
     cm,COMPA_RightFootPath,area
 *endif
-

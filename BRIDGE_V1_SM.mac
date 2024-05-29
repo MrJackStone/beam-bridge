@@ -247,14 +247,14 @@ cm,COMPA_ABT_Lanes,area
     *if,GEO_footpathLeft_beg,gt,0,or,GEO_footpathLeft_end,gt,0,then
         csys,CS_leftFootpath
         cmsel,s,COMPA_ABT_appSlab
-        asel,r,loc,y,0,GEO_footpathLeft
+        asel,r,loc,y,0,(GEO_footpathLeft_beg>GEO_footpathLeft_end)
         cm,COMPA_ABT_LeftFootpath,area
     *endif
 
     *if,GEO_footpathRight_beg,gt,0,or,GEO_footpathRight_end,gt,0,then
         csys,CS_rightFootpath
         cmsel,s,COMPA_ABT_appSlab
-        asel,r,loc,y,-GEO_footpathRight,0
+        asel,r,loc,y,-(GEO_footpathRight_beg>GEO_footpathRight_end),0
         cm,COMPA_ABT_RightFootpath,area
     *endif
 
@@ -270,5 +270,3 @@ allsel
 *endif
 
 csys,0
-
-
