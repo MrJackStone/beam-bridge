@@ -107,6 +107,8 @@ SEARCH_TOL=0.5
         cm,COMPN_LTshadow,node
         *vscfun,x_min,min,LOAD_pos
         *vscfun,x_max,max,LOAD_pos
+        x_min=x_min-LOAD_ltGapLength
+        x_max=x_max+LOAD_ltGapLength
         x_center=(x_min+x_max)/2
         *if,GEO_deckRadius,eq,0,then
           ! Tangent deck:
@@ -114,8 +116,8 @@ SEARCH_TOL=0.5
             *afun,deg
             ySkewOffset=tan(LOAD_ltSkewness)*x_center
             *afun,rad
-            y_min=ySkewOffset+LOAD_ltWheelOff_beg(nthLT*2-1,nthTransvPos)
-            y_max=ySkewOffset+LOAD_ltWheelOff_beg(nthLT*2,nthTransvPos)
+            y_min = ySkewOffset+LOAD_ltWheelOff_beg(nthLT*2-1,nthTransvPos)-LOAD_ltGapWidth
+            y_max = ySkewOffset+LOAD_ltWheelOff_beg(nthLT*2,nthTransvPos)+LOAD_ltGapWidth
             nsel,s,loc,y,y_min,y_max
             nsel,r,loc,x,x_min,x_max
             cmsel,r,COMPN_occupied

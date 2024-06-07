@@ -63,6 +63,9 @@ LOAD_TSCHEBOTARIOFF_status = 0
 
 *get,LOAD_ltTransScenarioCount,parm,LOAD_ltLineOff,dim,y
 
+LOAD_ltGapWidth  = 0
+LOAD_ltGapLength = 0
+
 
 
 !!                                                                                                !!

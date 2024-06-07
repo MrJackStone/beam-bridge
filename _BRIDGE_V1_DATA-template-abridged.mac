@@ -691,6 +691,12 @@ LOAD_speed = 80
 ! Axle width (distance between wheels on the same axle)
 LOAD_ltWidth = 2
 
+! Longitudinal (X-direction) distance between point load and vehicle edge (shadow)
+LOAD_ltGapLength = 0
+
+! Transversal (Y-direction) distance between point load and vehicle edge (shadow)
+LOAD_ltGapWidth = 0
+
 ! Line skewness (in degrees, 0 for parallel to bridge's axis)
 LOAD_ltSkewness = 0
 
