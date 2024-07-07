@@ -1,12 +1,16 @@
 ! BRIDGE_V1_LSLIVE
 
 
-SEARCH_TOL=0.5
+SEARCH_TOL                 = 0.5
+totalLiveLoadScenarioCount = LOAD_ltTransScenarioCount*posCount
 
 ! Write load steps
 *do,nthTransvPos,1,LOAD_ltTransScenarioCount,1
 
   *do,nthPos,1,posCount,1
+
+    *msg,ui,nthLoadStep+1,totalLiveLoadScenarioCount
+Writing load step #%I out of %I...
 
     targetSpan=LOAD_lt_span(nthPos)
     *if,targetSpan,eq,0,then
