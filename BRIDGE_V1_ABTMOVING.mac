@@ -22,7 +22,7 @@ nbackup
     *if,GEO_ABT1_appSlab,eq,1,and,_xVal,ge,0-GEO_ABT1_appSlabL,then
       cmsel,s,COMPN_ABT_appSlab
       ndNum=node(_xVal,_yVal,zVal)
-      f,ndNum,fz,-_Fz
+      f,ndNum,fz,-(_Fz)
       f,ndNum,fx,arg4  !! *arg6  REMOVED ON 19/08/22: ARG4 is multiplied by horDir_fct before being passed as argument to this subroutine
       f,ndNum,fy,arg5
     *endif
@@ -48,7 +48,7 @@ nbackup
     asel,r,loc,y,0,GEO_deckWidth_beg
     csys,0
     nsla,s,1
-    boussinesq,'LOAD_ABT1_F','LOAD_ABT1_nn','LOAD_ABT1_nc',-_Fz, _xVal, _yVal, zVal, 'H', 'Z', 1, impactCoefOpt
+    boussinesq,'LOAD_ABT1_F','LOAD_ABT1_nn','LOAD_ABT1_nc',-(_Fz), _xVal, _yVal, zVal, 'H', 'Z', 1, impactCoefOpt
     f,LOAD_ABT1_nn(1:LOAD_ABT1_nc),fy,LOAD_ABT1_F(1:LOAD_ABT1_nc)
 
     ! Transversal wall
@@ -62,7 +62,7 @@ nbackup
     cmsel,s,COMPA_ABT_pileCap
     cmsel,r,COMPA_ABT_1
     nsla,s,1
-    boussinesq,'LOAD_ABT1_F','LOAD_ABT1_nn','LOAD_ABT1_nc',-_Fz, _xVal, _yVal, zVal, 'V', 'Z', 1, impactCoefOpt
+    boussinesq,'LOAD_ABT1_F','LOAD_ABT1_nn','LOAD_ABT1_nc',-(_Fz), _xVal, _yVal, zVal, 'V', 'Z', 1, impactCoefOpt
     f,LOAD_ABT1_nn(1:LOAD_ABT1_nc),fz,LOAD_ABT1_F(1:LOAD_ABT1_nc)
 
   *endif
@@ -77,7 +77,7 @@ nbackup
     *if,GEO_ABT2_appSlab,eq,1,and,_xVal,le,GEO_deckLength+GEO_ABT2_appSlabL,then
       cmsel,s,COMPN_ABT_appSlab
       ndNum=node(_xVal,_yVal,zVal)
-      f,ndNum,fz,-_Fz
+      f,ndNum,fz,-(_Fz)
       f,ndNum,fx,arg4  !! *arg6  REMOVED ON 19/08/22: ARG4 is multiplied by horDir_fct before being passed as argument to this subroutine
       f,ndNum,fy,arg5
     *endif
@@ -92,7 +92,7 @@ nbackup
     asel,r,loc,y,-GEO_deckWidth_end,0
     csys,0
     nsla,s,1
-    boussinesq,'LOAD_ABT2_F','LOAD_ABT2_nn','LOAD_ABT2_nc',-_Fz, _xVal, _yVal, zVal, 'H', 'Z', 1, impactCoefOpt
+    boussinesq,'LOAD_ABT2_F','LOAD_ABT2_nn','LOAD_ABT2_nc',-(_Fz), _xVal, _yVal, zVal, 'H', 'Z', 1, impactCoefOpt
     f,LOAD_ABT2_nn(1:LOAD_ABT2_nc),fy,LOAD_ABT2_F(1:LOAD_ABT2_nc)
 
     ! Longitudinal wall and wing (Y>0)
@@ -110,14 +110,14 @@ nbackup
     cmsel,s,COMPA_ABT_tranWall
     cmsel,r,COMPA_ABT_2
     nsla,s,1
-    boussinesq,'LOAD_ABT2_F','LOAD_ABT2_nn','LOAD_ABT2_nc',-_Fz, _xVal, _yVal, zVal, 'H', 'Z', 1, impactCoefOpt
+    boussinesq,'LOAD_ABT2_F','LOAD_ABT2_nn','LOAD_ABT2_nc',-(_Fz), _xVal, _yVal, zVal, 'H', 'Z', 1, impactCoefOpt
     f,LOAD_ABT2_nn(1:LOAD_ABT2_nc),fx,LOAD_ABT2_F(1:LOAD_ABT2_nc)
 
     ! Pile cap
     cmsel,s,COMPA_ABT_pileCap
     cmsel,r,COMPA_ABT_2
     nsla,s,1
-    boussinesq,'LOAD_ABT2_F','LOAD_ABT2_nn','LOAD_ABT2_nc',-_Fz, _xVal, _yVal, zVal, 'V', 'Z', 1, impactCoefOpt
+    boussinesq,'LOAD_ABT2_F','LOAD_ABT2_nn','LOAD_ABT2_nc',-(_Fz), _xVal, _yVal, zVal, 'V', 'Z', 1, impactCoefOpt
     f,LOAD_ABT2_nn(1:LOAD_ABT2_nc),fz,LOAD_ABT2_F(1:LOAD_ABT2_nc)
 
   *endif
