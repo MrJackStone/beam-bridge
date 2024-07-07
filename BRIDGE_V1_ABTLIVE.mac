@@ -69,6 +69,7 @@ nbackup
       ndNum=node(arg1,arg2,zVal)
       f,ndNum,fz,-arg3
       f,ndNum,fx,arg4  !! *arg6  REMOVED ON 19/08/22: ARG4 is multiplied by horDir_fct before being passed as argument to this subroutine
+      f,ndNum,fy,arg5
     *endif
 
     ! Apply stress increases on second abutment:
