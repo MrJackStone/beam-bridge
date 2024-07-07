@@ -1083,6 +1083,20 @@ GEO_ABT2_appSlab=nint(((GEO_ABT2_appSlab>0)<1))
 GEO_ABT1_yc=GEO_deckOff_beg+(GEO_deckWidth_beg/2)
 GEO_ABT2_yc=GEO_deckOff_end+(GEO_deckWidth_end/2)
 
+! Surface area at the top of each abutment
+*if,GEO_ABT1_appSlab,eq,1,then
+  GEO_ABT1_topSurfArea = GEO_ABT1_width*GEO_ABT1_appSlabL
+*else
+  GEO_ABT1_topSurfArea = GEO_ABT1_width*GEO_ABT1_length
+*endif
+
+*if,GEO_ABT2_appSlab,eq,1,then
+  GEO_ABT2_topSurfArea = GEO_ABT2_width*GEO_ABT2_appSlabL
+*else
+  GEO_ABT2_topSurfArea = GEO_ABT2_width*GEO_ABT2_length
+*endif
+
+
 ! Calculate number of piles (for curtain option)
 pileWidth=SEC_ABT_pile_d-2*GEO_ABT_pileOvlap
 *if,GEO_ABT1_type,eq,3,then
