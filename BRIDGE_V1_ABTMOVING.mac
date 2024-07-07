@@ -28,7 +28,8 @@ nbackup
     *endif
 
     ! Apply stress increases on first abutment:
-    topPressure = _Fz/GEO_ABT1_topSurfArea
+    topPressure  = _Fz/GEO_ABT1_topSurfArea
+    soilPressure = topPressure*MAT_ABT_SOIL_ka
 
     ! Longitudinal wall and wing (Y<0)
     cmsel,s,COMPA_ABT_longWalls
@@ -41,7 +42,7 @@ nbackup
     *if,LOAD_ltPresMethod,eq,'BOUSSNSQ',then
       boussinesq,'LOAD_ABT1_F','LOAD_ABT1_nn','LOAD_ABT1_nc',_Fz, _xVal, _yVal, zVal, 'H', 'Z', 1, impactCoefOpt
     *elseif,LOAD_ltPresMethod,eq,'HYDROSTA',then
-      BRIDGE_V1_ABTPRES2FORCE ,'LOAD_ABT1_F','LOAD_ABT1_nn','LOAD_ABT1_nc', topPressure
+      BRIDGE_V1_ABTPRES2FORCE ,'LOAD_ABT1_F','LOAD_ABT1_nn','LOAD_ABT1_nc', soilPressure
     *endif
     f,LOAD_ABT1_nn(1:LOAD_ABT1_nc),fy,LOAD_ABT1_F(1:LOAD_ABT1_nc)
 
@@ -56,7 +57,7 @@ nbackup
     *if,LOAD_ltPresMethod,eq,'BOUSSNSQ',then
       boussinesq,'LOAD_ABT1_F','LOAD_ABT1_nn','LOAD_ABT1_nc',-(_Fz), _xVal, _yVal, zVal, 'H', 'Z', 1, impactCoefOpt
     *elseif,LOAD_ltPresMethod,eq,'HYDROSTA',then
-      BRIDGE_V1_ABTPRES2FORCE ,'LOAD_ABT1_F','LOAD_ABT1_nn','LOAD_ABT1_nc', -topPressure
+      BRIDGE_V1_ABTPRES2FORCE ,'LOAD_ABT1_F','LOAD_ABT1_nn','LOAD_ABT1_nc', -soilPressure
     *endif
     f,LOAD_ABT1_nn(1:LOAD_ABT1_nc),fy,LOAD_ABT1_F(1:LOAD_ABT1_nc)
 
@@ -67,7 +68,7 @@ nbackup
     *if,LOAD_ltPresMethod,eq,'BOUSSNSQ',then
       boussinesq,'LOAD_ABT1_F','LOAD_ABT1_nn','LOAD_ABT1_nc',_Fz, _xVal, _yVal, zVal, 'H', 'Z', 1, impactCoefOpt
     *elseif,LOAD_ltPresMethod,eq,'HYDROSTA',then
-      BRIDGE_V1_ABTPRES2FORCE ,'LOAD_ABT1_F','LOAD_ABT1_nn','LOAD_ABT1_nc', topPressure
+      BRIDGE_V1_ABTPRES2FORCE ,'LOAD_ABT1_F','LOAD_ABT1_nn','LOAD_ABT1_nc', soilPressure
     *endif
     f,LOAD_ABT1_nn(1:LOAD_ABT1_nc),fx,LOAD_ABT1_F(1:LOAD_ABT1_nc)
 
@@ -78,7 +79,7 @@ nbackup
     *if,LOAD_ltPresMethod,eq,'BOUSSNSQ',then
       boussinesq,'LOAD_ABT1_F','LOAD_ABT1_nn','LOAD_ABT1_nc',-(_Fz), _xVal, _yVal, zVal, 'V', 'Z', 1, impactCoefOpt
     *elseif,LOAD_ltPresMethod,eq,'HYDROSTA',then
-      BRIDGE_V1_ABTPRES2FORCE ,'LOAD_ABT1_F','LOAD_ABT1_nn','LOAD_ABT1_nc', -topPressure
+      BRIDGE_V1_ABTPRES2FORCE ,'LOAD_ABT1_F','LOAD_ABT1_nn','LOAD_ABT1_nc', -soilPressure
     *endif
     f,LOAD_ABT1_nn(1:LOAD_ABT1_nc),fz,LOAD_ABT1_F(1:LOAD_ABT1_nc)
 
@@ -100,7 +101,8 @@ nbackup
     *endif
 
     ! Apply stress increases on second abutment:
-    topPressure = _Fz/GEO_ABT2_topSurfArea
+    topPressure  = _Fz/GEO_ABT2_topSurfArea
+    soilPressure = topPressure*MAT_ABT_SOIL_ka
 
     ! Longitudinal wall and wing (Y<0)
     cmsel,s,COMPA_ABT_longWalls
@@ -113,7 +115,7 @@ nbackup
     *if,LOAD_ltPresMethod,eq,'BOUSSNSQ',then
       boussinesq,'LOAD_ABT2_F','LOAD_ABT2_nn','LOAD_ABT2_nc',-(_Fz), _xVal, _yVal, zVal, 'H', 'Z', 1, impactCoefOpt
     *elseif,LOAD_ltPresMethod,eq,'HYDROSTA',then
-      BRIDGE_V1_ABTPRES2FORCE ,'LOAD_ABT2_F','LOAD_ABT2_nn','LOAD_ABT2_nc', -topPressure
+      BRIDGE_V1_ABTPRES2FORCE ,'LOAD_ABT2_F','LOAD_ABT2_nn','LOAD_ABT2_nc', -soilPressure
     *endif
     f,LOAD_ABT2_nn(1:LOAD_ABT2_nc),fy,LOAD_ABT2_F(1:LOAD_ABT2_nc)
 
@@ -128,7 +130,7 @@ nbackup
     *if,LOAD_ltPresMethod,eq,'BOUSSNSQ',then
       boussinesq,'LOAD_ABT2_F','LOAD_ABT2_nn','LOAD_ABT2_nc',_Fz, _xVal, _yVal, zVal, 'H', 'Z', 1, impactCoefOpt
     *elseif,LOAD_ltPresMethod,eq,'HYDROSTA',then
-      BRIDGE_V1_ABTPRES2FORCE ,'LOAD_ABT2_F','LOAD_ABT2_nn','LOAD_ABT2_nc', topPressure
+      BRIDGE_V1_ABTPRES2FORCE ,'LOAD_ABT2_F','LOAD_ABT2_nn','LOAD_ABT2_nc', soilPressure
     *endif
     f,LOAD_ABT2_nn(1:LOAD_ABT2_nc),fy,LOAD_ABT2_F(1:LOAD_ABT2_nc)
 
@@ -139,7 +141,7 @@ nbackup
     *if,LOAD_ltPresMethod,eq,'BOUSSNSQ',then
       boussinesq,'LOAD_ABT2_F','LOAD_ABT2_nn','LOAD_ABT2_nc',-(_Fz), _xVal, _yVal, zVal, 'H', 'Z', 1, impactCoefOpt
     *elseif,LOAD_ltPresMethod,eq,'HYDROSTA',then
-      BRIDGE_V1_ABTPRES2FORCE ,'LOAD_ABT2_F','LOAD_ABT2_nn','LOAD_ABT2_nc', -topPressure
+      BRIDGE_V1_ABTPRES2FORCE ,'LOAD_ABT2_F','LOAD_ABT2_nn','LOAD_ABT2_nc', -soilPressure
     *endif
     f,LOAD_ABT2_nn(1:LOAD_ABT2_nc),fx,LOAD_ABT2_F(1:LOAD_ABT2_nc)
 
@@ -150,7 +152,7 @@ nbackup
     *if,LOAD_ltPresMethod,eq,'BOUSSNSQ',then
       boussinesq,'LOAD_ABT2_F','LOAD_ABT2_nn','LOAD_ABT2_nc',-(_Fz), _xVal, _yVal, zVal, 'V', 'Z', 1, impactCoefOpt
     *elseif,LOAD_ltPresMethod,eq,'HYDROSTA',then
-      BRIDGE_V1_ABTPRES2FORCE ,'LOAD_ABT2_F','LOAD_ABT2_nn','LOAD_ABT2_nc', -topPressure
+      BRIDGE_V1_ABTPRES2FORCE ,'LOAD_ABT2_F','LOAD_ABT2_nn','LOAD_ABT2_nc', -soilPressure
     *endif
     f,LOAD_ABT2_nn(1:LOAD_ABT2_nc),fz,LOAD_ABT2_F(1:LOAD_ABT2_nc)
 
