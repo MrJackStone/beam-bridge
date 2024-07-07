@@ -2,7 +2,7 @@
 
 
 SEARCH_TOL                 = 0.5
-totalLiveLoadScenarioCount = LOAD_ltTransScenarioCount*posCount
+totalLiveLoadScenarioCount = LOAD_ltTransScenarioCount*posCount*2
 
 ! Write load steps
 *do,nthTransvPos,1,LOAD_ltTransScenarioCount,1
