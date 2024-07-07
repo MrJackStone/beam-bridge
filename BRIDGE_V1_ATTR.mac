@@ -1349,6 +1349,18 @@ LOAD_ltLength=LOADTRAIN_VAR_length
 
 *endif
 
+! Point-load generated soil pressure calculation method
+*get,parType,parm,LOAD_ltPresMethod,type
+*if,parType,eq,3,then
+  *if,upcase(LOAD_ltPresMethod),eq,'HYDROSTA',then
+    LOAD_ltPresMethod = 'HYDROSTA'
+  *else
+    LOAD_ltPresMethod = 'BOUSSNSQ'
+  *endif
+*else
+  LOAD_ltPresMethod = 'BOUSSNSQ'
+*endif
+
 ! Combination type: ELU or ELS
 *if,LOAD_combination,EQ,1,THEN
    ! Ultimate load: load train as main

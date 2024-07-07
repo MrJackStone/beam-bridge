@@ -725,6 +725,10 @@ LOAD_ltTransScenarioCount=2
 LOAD_ltLineOff(1,1) =  2.425 ,  3.975
 LOAD_ltLineOff(1,2) = -2.425 , -3.975
 
+! Soil pressure calculation method:
+!   ['BOUSSNSQ'] Calculate stress increase according to Boussinesq formulation (default)
+!   ['HYDROSTA'] Apply uniform hydrostatic pressure to all faces
+LOAD_ltPresMethod = 'HYDROSTA'
 
 
 !!                                                                                                !!
