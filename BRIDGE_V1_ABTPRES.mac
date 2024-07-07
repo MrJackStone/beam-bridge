@@ -104,7 +104,7 @@ f, N_n(1:nc), fx, F_h(1:nc)
 cmsel,s,COMPA_ABT_pileCap
 cmsel,r,COMPA_ABT_%ARG1%
 nsla,s,1
-nslcomp,'F_v','N_n','nc','forc_vert',-ARG4
+nslcomp,'F_v','N_n','nc','forc_vert',-abs(ARG4)
 f, N_n(1:nc), fz, F_v(1:nc)
 
 ! Pile curtain
