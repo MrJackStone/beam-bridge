@@ -1,0 +1,142 @@
+! BRIDGE_V1_ABTPRES , abtIndex , dwStatus , scStatus , hSign , verticalOffset
+! BRIDGE_V1_ABTPRES , ARG1     , ARG2     , ARG3     , ARG4  , ARG5
+
+allsel
+
+! Initialize arrays
+*get,nodeCount,parm,NLIST_apportioned,dim,x
+*del , top_level     ,  , nopr
+*del , height_above  ,  , nopr
+*del , dw_pres_vert  ,  , nopr
+*del , sc_pres_vert  ,  , nopr
+*del , dw_pres_horz  ,  , nopr
+*del , sc_pres_horz  ,  , nopr
+*del , pres_cohesion ,  , nopr
+*dim , top_level     ,  , nodeCount
+*dim , height_above  ,  , nodeCount
+*dim , dw_pres_vert  ,  , nodeCount
+*dim , sc_pres_vert  ,  , nodeCount
+*dim , dw_pres_horz  ,  , nodeCount
+*dim , sc_pres_horz  ,  , nodeCount
+*dim , pres_cohesion ,  , nodeCount
+
+! Calculate soil height above each node
+*voper , top_level    , NLIST_x   , mult , ABT%ARG1%_angCoef
+*voper , top_level    , top_level , add  , ABT%ARG1%_linCoef+verticalOffset
+*voper , height_above , top_level , sub  , NLIST_z
+
+! Calculate pressures due to dead loads
+*voper , dw_pres_vert , height_above , mult , MAT_ABT_soil_dens*LOAD_g
+*voper , dw_pres_vert , dw_pres_vert , add  , LOAD_pav
+*vfact , 1 , 1 , GEO_ABT%ARG1%_appSlab
+*voper , dw_pres_vert , dw_pres_vert , add  , MAT_Approach_dens*LOAD_g*SEC_ABT_appSlab_t
+*voper , dw_pres_horz , dw_pres_vert , mult , MAT_ABT_SOIL_ka
+
+! Calculate pressures due to surcharge
+cteSurcharge = LOAD_vehicleTraffic
+*vfill , sc_pres_vert , ramp , cteSurcharge                 , 0
+*vfill , sc_pres_horz , ramp , cteSurcharge*MAT_ABT_SOIL_ka , 0
+
+! Calculate negative horizontal pressure due to soil cohesion
+*vfill , ch_pres_horz , ramp , 2*MAT_ABT_SOIL_c*sqrt(MAT_ABT_SOIL_ka)
+
+! Calculate total pressures
+*vfact , 1 , dwStatus , scStatus
+*voper , pres_vert , dw_pres_vert , add , sc_pres_vert
+
+*vfact , 1 , dwStatus , scStatus
+*voper , pres_horz , dw_pres_horz , add , sc_pres_horz
+*voper , pres_horz , pres_horz    , sub , ch_pres_horz
+*voper , pres_horz , pres_horz    , max , 0
+
+! Calculate nodal forces
+*voper , forc_vert , pres_vert , mult , NLIST_apportioned
+*voper , forc_horz , pres_horz , mult , NLIST_apportioned
+
+! Longitudinal wall and wing (right side, Y<0)
+cmsel,s,COMPA_ABT_longWalls
+cmsel,a,COMPA_ABT_wings
+cmsel,r,COMPA_ABT_%ARG1%
+csys,CS_ABT%ARG1%
+asel,r,loc,y,-1e6,0
+csys,0
+nsla,s,1
+*if,GEO_ABT%ARG1%_type,eq,4,then
+  *afun,deg
+  nslcomp,'F_hx','N_n','nc','forc_horz',(ARG4)*sin(GEO_ABT%ARG1%_wingAngle)
+  nslcomp,'F_hy','N_n','nc','forc_horz',(ARG4)*cos(GEO_ABT%ARG1%_wingAngle)
+  f, N_n(1:nc), fx, F_hx(1:nc)
+  f, N_n(1:nc), fy, F_hy(1:nc)
+  *afun,rad
+*else
+  nslcomp,'F_h','N_n','nc','forc_horz',ARG4
+  f, N_n(1:nc), fy, F_h(1:nc)
+*endif
+
+! Longitudinal wall and wing (left side, Y>0)
+cmsel,s,COMPA_ABT_longWalls
+cmsel,a,COMPA_ABT_wings
+cmsel,r,COMPA_ABT_%ARG1%
+csys,CS_ABT%ARG1%
+asel,r,loc,y,0,1e6
+csys,0
+nsla,s,1
+*if,GEO_ABT%ARG1%_type,eq,4,then
+  *afun,deg
+  nslcomp,'F_hx','N_n','nc','forc_horz',(ARG4)*sin(GEO_ABT%ARG1%_wingAngle)
+  nslcomp,'F_hy','N_n','nc','forc_horz',(-ARG4)*cos(GEO_ABT%ARG1%_wingAngle)
+  f, N_n(1:nc), fx, F_hx(1:nc)
+  f, N_n(1:nc), fy, F_hy(1:nc)
+  *afun,rad
+*else
+  nslcomp,'F_h','N_n','nc','forc_horz',-ARG4
+  f, N_n(1:nc), fy, F_h(1:nc)
+*endif
+
+! Transversal wall
+cmsel,s,COMPA_ABT_tranWall
+cmsel,r,COMPA_ABT_%ARG1%
+nsla,s,1
+nslcomp,'F_h','N_n','nc','forc_horz',ARG4
+f, N_n(1:nc), fx, F_h(1:nc)
+
+! Pile cap
+cmsel,s,COMPA_ABT_pileCap
+cmsel,r,COMPA_ABT_%ARG1%
+nsla,s,1
+nslcomp,'F_v','N_n','nc','forc_vert',-ARG4
+f, N_n(1:nc), fz, F_v(1:nc)
+
+! Pile curtain
+*if,GEO_ABT%ARG1%_type,eq,3,and,GEO_ABT%ARG1%_pileFree,gt,0,then
+  ! Transversal wall
+  cmsel,s,COMPL_ABT_twPiles
+  esll,s
+  nsle,s,active
+  cmsel,r,COMPN_ABT%ARG1%_pileFree
+  nslcomp,'F_h','N_n','nc','forc_horz',ARG4
+  f, N_n(1:nc), fx, F_h(1:nc)
+
+  ! Longitudinal wall (Y<0)
+  cmsel,s,COMPL_ABT_lwPiles
+  esll,s
+  nsle,s,active
+  cmsel,r,COMPN_ABT%ARG1%_pileFree
+  csys,CS_ABT%ARG1%
+  nsel,r,loc,y,0,-1e6
+  csys,0
+  nslcomp,'F_h','N_n','nc','forc_horz',ARG4
+  f, N_n(1:nc), fy, F_h(1:nc)
+
+  ! Longitudinal wall (Y>0)
+  cmsel,s,COMPL_ABT_lwPiles
+  esll,s
+  nsle,s,active
+  cmsel,r,COMPN_ABT%ARG1%_pileFree
+  csys,CS_ABT%ARG1%
+  nsel,r,loc,y,0,1e6
+  csys,0
+  nslcomp,'F_h','N_n','nc','forc_horz',-ARG4
+  f, N_n(1:nc), fy, F_h(1:nc)
+
+*endif
