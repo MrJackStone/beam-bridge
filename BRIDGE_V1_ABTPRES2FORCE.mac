@@ -1,0 +1,20 @@
+! BRIDGE_V1_ABTPRES2FORCE , parmNF , parmNN , selCount , pressure
+! BRIDGE_V1_ABTPRES2FORCE , ARG1   , ARG2   , ARG3     , ARG4
+
+
+*del , forces     ,  , nopr
+*del , %ARG1%     ,  , nopr
+*del , %ARG2%     ,  , nopr
+*del , NLIST_nsel ,  , nopr
+
+*voper , forces , NLIST_apportioned , mult , ARG4
+
+*vget , NLIST_nsel , node ,  , nsel
+
+*vmask , NLIST_nsel
+*vfun  , %ARG1%     , comp , forces
+
+*vmask , NLIST_nsel
+*vfun  , %ARG2%     , comp , NLIST_num
+
+*get,%ARG3%,parm,%ARG2%,dim,x
