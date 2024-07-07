@@ -1,0 +1,79 @@
+! BRIDGE_V1_LIVEMOVING
+! BRIDGE_V1_LIVEMOVING
+
+! Apply moving live loads
+*do,nthLoad,1,LOAD_count,1
+
+  ! Point load longitudinal position
+  xCoord=LOAD_pos(nthLoad)
+  BRIDGE_V1_XTOCHI,'chiAngle',xCoord
+
+  ! Load values
+  F_vert=LOAD_ltCount*LOAD_vert(nthLoad)/LOAD_wheelCount
+  F_long=LOAD_ltCount*(LOAD_long(nthLoad)/LOAD_wheelCount)*horDir_fct
+  F_cen=F_vert*(LOAD_centrifugalPct/100)
+
+  *do,nthWheel,1,LOAD_wheelCount,1
+    ! Point load transversal position
+    *afun,deg
+    yWheel=LOAD_ltWheelOff_beg(nthWheel,nthTransvPos)
+    yCoord=(GEO_deckRadius+yWheel)*sin(chiAngle)-GEO_chordOff
+    *afun,rad
+
+    *if,xCoord,GE,0,AND,xCoord,LE,GEO_deckLength,THEN
+      ! Load on the bridge (longitudinally):
+      cmsel,s,COMPN_Slab
+      cmsel,r,COMPN_LoadTrain
+      cm,COMPN_candidates,node
+
+      ! Adjust Y coordinate to account for load train skewness
+      *afun,deg
+      nthSkewedDeltaY=xCoord*tan(LOAD_ltSkewness)
+      yCoord=yCoord+nthSkewedDeltaY
+      *afun,rad
+
+      ! Location filter
+      nsel,s,loc,x,xCoord-SEARCH_TOL,xCoord+SEARCH_TOL
+      nsel,r,loc,y,yCoord-SEARCH_TOL,yCoord+SEARCH_TOL
+      cm,COMPN_nearby,node
+
+      ! Search for nearest node in delimited region
+      cmsel,s,COMPN_candidates
+      cmsel,r,COMPN_preferredSpan
+      cmsel,r,COMPN_nearby
+      *get,nc,node,,count
+      *if,nc,eq,0,then
+        cmsel,s,COMPN_candidates
+        cmsel,r,COMPN_nearby
+      *endif
+      NodeNum=NODE(xCoord,yCoord,0)
+
+      cmsel,s,COMPN_candidates
+
+      *if,NodeNum,gt,0,then
+        *if,GEO_deckRadius,eq,0,then
+          ! Straight deck, no force decomposition:
+          F,NodeNum,FZ,-F_vert
+          F,NodeNum,FX, F_long
+          ! Transversal impact load (straight deck only)
+          *if,nthLoad,eq,1,and,LOAD_latImpact,ne,0,then
+            F,NodeNum,FY, LOAD_latImpact/LOAD_wheelCount
+          *endif
+        *else
+          ! Curved deck: centrifugal force and vector decomposition:
+          BRIDGE_V1_XTOCHI,'chiAngle',xCoord
+          *afun,deg
+          F_x=F_long*sin(chiAngle)-F_cen*cos(chiAngle)
+          F_y=F_long*cos(chiAngle)+F_cen*sin(chiAngle)
+          *afun,rad
+          F,NodeNum,FZ,-F_vert
+          F,NodeNum,FX, F_x
+          F,NodeNum,FY, F_y
+        *endif
+      *endif
+    *else
+      ! Load on abutment
+      BRIDGE_V1_ABTLIVE, xCoord, yWheel, F_vert, F_long, F_cen, horDir_fct
+    *endif
+  *enddo
+*enddo

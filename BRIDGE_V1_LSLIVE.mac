@@ -40,22 +40,34 @@ SEARCH_TOL=0.5
       sfcum,all,add
       fcum,add
 
+      *del , LOAD_x              ,  , nopr
+      *del , LOAD_in             ,  , nopr
+      *del , LOAD_notOut         ,  , nopr
+      *del , LOAD_true           ,  , nopr
+      *del , LOAD_vert           ,  , nopr
+      *del , LOAD_pos            ,  , nopr
+      *del , span_before         ,  , nopr
+      *del , span_after          ,  , nopr
+      *del , ahead               ,  , nopr
+      *del , behind              ,  , nopr
+      *del , loaded_spans        ,  , nopr
+      *del , LOAD_long           ,  , nopr
+      *del , loaded_longitudinal ,  , nopr
+      *del , loaded_lengths      ,  , nopr
+      *del , LOAD_long           ,  , nopr
+
       ! Get X position of leading load
       xLead=LTleadingPos(nthPos)
 
       ! Calculate X coordinates of each point load
-      *del,LOAD_x
-      *dim,LOAD_x,,LOAD_plCount
-      *voper,LOAD_x,xLead,sub,LOAD_plDist
+      *dim   , LOAD_x ,       , LOAD_plCount
+      *voper , LOAD_x , xLead , sub          , LOAD_plDist
 
       ! Determine which point loads are on the bridge (including abutments)
-      *del,LOAD_in
-      *del,LOAD_notOut
-      *voper,LOAD_in,LOAD_x,ge,GEO_ABT1_xMin
-      *voper,LOAD_notOut,LOAD_x,le,GEO_ABT2_xmax
-      *del,LOAD_true
-      *voper,LOAD_true,LOAD_in,mult,LOAD_notOut
-      *vscfun,LOAD_count,sum,LOAD_true
+      *voper  , LOAD_in     , LOAD_x  , ge        , GEO_ABT1_xMin
+      *voper  , LOAD_notOut , LOAD_x  , le        , GEO_ABT2_xmax
+      *voper  , LOAD_true   , LOAD_in , mult      , LOAD_notOut
+      *vscfun , LOAD_count  , sum     , LOAD_true
 
       *if,LOAD_count,eq,0,then
         ! No point loads over bridge + abutments
@@ -69,29 +81,22 @@ SEARCH_TOL=0.5
       *else
 
         ! Compress load-train arrays: keep only point loads on the bridge
-        *del,LOAD_vert
-        *vmask,LOAD_true
-        *vfun,LOAD_vert,comp,LOAD_plValue
-        *del,LOAD_pos
-        *vmask,LOAD_true
-        *vfun,LOAD_pos,comp,LOAD_x
+        *vmask , LOAD_true
+        *vfun  , LOAD_vert , comp , LOAD_plValue
+        *vmask , LOAD_true
+        *vfun  , LOAD_pos  , comp , LOAD_x
 
         ! Determine loaded spans
-        *vscfun,LOAD_xMin,min,LOAD_pos
-        *vscfun,LOAD_xMax,max,LOAD_pos
-        *del,span_before
-        *del,span_after
-        *voper, span_before , LOAD_xMin , lt , GEO_genSpanLimits
-        *voper, span_after  , LOAD_xMax , gt , GEO_genSpanLimits
-        *del,ahead
-        *dim,ahead,,GEO_genSpanCount
-        *del,behind
-        *dim,behind,,GEO_genSpanCount
-        *vfun,ahead(1),copy,span_after(1)
-        *vfun,behind(1),copy,span_before(2)
-        *del,loaded_spans
-        *voper,loaded_spans,ahead,mult,behind
-        esel,u,elem,,all
+        *vscfun , LOAD_xMin    , min       , LOAD_pos
+        *vscfun , LOAD_xMax    , max       , LOAD_pos
+        *voper  , span_before  , LOAD_xMin , lt               , GEO_genSpanLimits
+        *voper  , span_after   , LOAD_xMax , gt               , GEO_genSpanLimits
+        *dim    , ahead        ,           , GEO_genSpanCount
+        *dim    , behind       ,           , GEO_genSpanCount
+        *vfun   , ahead(1)     , copy      , span_after(1)
+        *vfun   , behind(1)    , copy      , span_before(2)
+        *voper  , loaded_spans , ahead     , mult             , behind
+        esel,none
         *do,nthSpan,1,GEO_genSpanCount,1
           loaded_check=loaded_spans(nthSpan)
           *if,loaded_check,eq,1,then
@@ -147,7 +152,6 @@ SEARCH_TOL=0.5
         *if,BRIDGE_type,eq,0,then
           ! Highway bridge:
 
-          *del,LOAD_long
           *voper,LOAD_long,LOAD_vert,mult,1/3
 
         *elseif,BRIDGE_type,eq,1,then
@@ -155,12 +159,10 @@ SEARCH_TOL=0.5
 
           *if,LOAD_railOpt,eq,0,then
             ! Discontinuous rail
-            *del,loaded_longitudinal
             *voper,loaded_longitudinal,arr_f_longitudinal,mult,loaded_spans
             *vscfun,f_longitudinal,sum,loaded_longitudinal
           *elseif,LOAD_railOpt,eq,1,then
             ! Continuous rail
-            *del,loaded_lengths
             *voper,loaded_lengths,GEO_genSpanLengths,mult,loaded_spans
             *vscfun,loaded_length,sum,loaded_lengths
             f_braking=200+17.5*loaded_length
@@ -171,7 +173,6 @@ SEARCH_TOL=0.5
           *vscfun,Fvert_total,sum,LOAD_vert
           vl_ratio=f_longitudinal/Fvert_total
           long_fact=(vl_ratio<0.25)
-          *del,LOAD_long
           *voper,LOAD_long,LOAD_vert,mult,long_fact
 
         *endif
@@ -180,81 +181,7 @@ SEARCH_TOL=0.5
         BRIDGE_V1_LIVELOADS
 
         ! Apply moving live loads
-        *do,nthLoad,1,LOAD_count,1
-
-          ! Point load longitudinal position
-          xCoord=LOAD_pos(nthLoad)
-          BRIDGE_V1_XTOCHI,'chiAngle',xCoord
-
-          ! Load values
-          F_vert=LOAD_ltCount*LOAD_vert(nthLoad)/LOAD_wheelCount
-          F_long=LOAD_ltCount*(LOAD_long(nthLoad)/LOAD_wheelCount)*horDir_fct
-          F_cen=F_vert*(LOAD_centrifugalPct/100)
-
-          *do,nthWheel,1,LOAD_wheelCount,1
-            ! Point load transversal position
-            *afun,deg
-            yWheel=LOAD_ltWheelOff_beg(nthWheel,nthTransvPos)
-            yCoord=(GEO_deckRadius+yWheel)*sin(chiAngle)-GEO_chordOff
-            *afun,rad
-
-            *if,xCoord,GE,0,AND,xCoord,LE,GEO_deckLength,THEN
-              ! Load on the bridge (longitudinally):
-              cmsel,s,COMPN_Slab
-              cmsel,r,COMPN_LoadTrain
-              cm,COMPN_candidates,node
-
-              ! Adjust Y coordinate to account for load train skewness
-              *afun,deg
-              nthSkewedDeltaY=xCoord*tan(LOAD_ltSkewness)
-              yCoord=yCoord+nthSkewedDeltaY
-              *afun,rad
-
-              ! Location filter
-              nsel,s,loc,x,xCoord-SEARCH_TOL,xCoord+SEARCH_TOL
-              nsel,r,loc,y,yCoord-SEARCH_TOL,yCoord+SEARCH_TOL
-              cm,COMPN_nearby,node
-
-              ! Search for nearest node in delimited region
-              cmsel,s,COMPN_candidates
-              cmsel,r,COMPN_preferredSpan
-              cmsel,r,COMPN_nearby
-              *get,nc,node,,count
-              *if,nc,eq,0,then
-                cmsel,s,COMPN_candidates
-                cmsel,r,COMPN_nearby
-              *endif
-              NodeNum=NODE(xCoord,yCoord,0)
-
-              cmsel,s,COMPN_candidates
-
-              *if,NodeNum,gt,0,then
-                *if,GEO_deckRadius,eq,0,then
-                  ! Straight deck, no force decomposition:
-                  F,NodeNum,FZ,-F_vert
-                  F,NodeNum,FX, F_long
-                  ! Transversal impact load (straight deck only)
-                  *if,nthLoad,eq,1,and,LOAD_latImpact,ne,0,then
-                    F,NodeNum,FY, LOAD_latImpact/LOAD_wheelCount
-                  *endif
-                *else
-                  ! Curved deck: centrifugal force and vector decomposition:
-                  BRIDGE_V1_XTOCHI,'chiAngle',xCoord
-                  *afun,deg
-                  F_x=F_long*sin(chiAngle)-F_cen*cos(chiAngle)
-                  F_y=F_long*cos(chiAngle)+F_cen*sin(chiAngle)
-                  *afun,rad
-                  F,NodeNum,FZ,-F_vert
-                  F,NodeNum,FX, F_x
-                  F,NodeNum,FY, F_y
-                *endif
-              *endif
-            *else
-              ! Load on abutment
-              BRIDGE_V1_ABTLIVE, xCoord, yWheel, F_vert, F_long, F_cen, horDir_fct
-            *endif
-          *enddo
-        *enddo
+        BRIDGE_V1_LIVEMOVING
 
       *endif
 
