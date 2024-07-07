@@ -1,18 +1,22 @@
-! BRIDGE_V1_ABTLIVE, xVal, yVal,  F_z,  F_x,  F_y, horDir_fct
-! BRIDGE_V1_ABTLIVE, arg1, arg2, arg3, arg4, arg5,       arg6
+! BRIDGE_V1_ABTLIVE , xVal , yVal , F_z  , F_x  , F_y  , horDir_fct
+! BRIDGE_V1_ABTLIVE , arg1 , arg2 , arg3 , arg4 , arg5 , arg6
+
+_xVal = ARG1
+_yVal = ARG2
+_Fz   = ARG3
 
 nbackup
 
-*if,arg1,ge,GEO_ABT1_xMin,and,arg1,lt,GEO_ABT1_xmax,then
+*if,_xVal,ge,GEO_ABT1_xMin,and,_xVal,lt,GEO_ABT1_xmax,then
   *if,GEO_ABT1_status,eq,1,then
 
-    zVal=ABT1_angCoef*arg1+ABT1_linCoef
+    zVal=ABT1_angCoef*_xVal+ABT1_linCoef
 
     ! Apply vertical and longitudinal forces on approach slab
-    *if,GEO_ABT1_appSlab,eq,1,and,arg1,ge,0-GEO_ABT1_appSlabL,then
+    *if,GEO_ABT1_appSlab,eq,1,and,_xVal,ge,0-GEO_ABT1_appSlabL,then
       cmsel,s,COMPN_ABT_appSlab
-      ndNum=node(arg1,arg2,zVal)
-      f,ndNum,fz,-arg3
+      ndNum=node(_xVal,_yVal,zVal)
+      f,ndNum,fz,-_Fz
       f,ndNum,fx,arg4  !! *arg6  REMOVED ON 19/08/22: ARG4 is multiplied by horDir_fct before being passed as argument to this subroutine
       f,ndNum,fy,arg5
     *endif
@@ -27,7 +31,7 @@ nbackup
     asel,r,loc,y,-GEO_deckWidth_beg,0
     csys,0
     nsla,s,1
-    boussinesq,'LOAD_ABT1_F','LOAD_ABT1_nn','LOAD_ABT1_nc',arg3, arg1, arg2, zVal, 'H', 'Z', 1
+    boussinesq,'LOAD_ABT1_F','LOAD_ABT1_nn','LOAD_ABT1_nc',_Fz, _xVal, _yVal, zVal, 'H', 'Z', 1
     f,LOAD_ABT1_nn(1:LOAD_ABT1_nc),fy,LOAD_ABT1_F(1:LOAD_ABT1_nc)
 
     ! Longitudinal wall and wing (Y>0)
@@ -38,36 +42,36 @@ nbackup
     asel,r,loc,y,0,GEO_deckWidth_beg
     csys,0
     nsla,s,1
-    boussinesq,'LOAD_ABT1_F','LOAD_ABT1_nn','LOAD_ABT1_nc',-arg3, arg1, arg2, zVal, 'H', 'Z', 1
+    boussinesq,'LOAD_ABT1_F','LOAD_ABT1_nn','LOAD_ABT1_nc',-_Fz, _xVal, _yVal, zVal, 'H', 'Z', 1
     f,LOAD_ABT1_nn(1:LOAD_ABT1_nc),fy,LOAD_ABT1_F(1:LOAD_ABT1_nc)
 
     ! Transversal wall
     cmsel,s,COMPA_ABT_tranWall
     cmsel,r,COMPA_ABT_1
     nsla,s,1
-    boussinesq,'LOAD_ABT1_F','LOAD_ABT1_nn','LOAD_ABT1_nc',arg3, arg1, arg2, zVal, 'H', 'Z', 1
+    boussinesq,'LOAD_ABT1_F','LOAD_ABT1_nn','LOAD_ABT1_nc',_Fz, _xVal, _yVal, zVal, 'H', 'Z', 1
     f,LOAD_ABT1_nn(1:LOAD_ABT1_nc),fx,LOAD_ABT1_F(1:LOAD_ABT1_nc)
 
     ! Pile cap
     cmsel,s,COMPA_ABT_pileCap
     cmsel,r,COMPA_ABT_1
     nsla,s,1
-    boussinesq,'LOAD_ABT1_F','LOAD_ABT1_nn','LOAD_ABT1_nc',-arg3, arg1, arg2, zVal, 'V', 'Z', 1
+    boussinesq,'LOAD_ABT1_F','LOAD_ABT1_nn','LOAD_ABT1_nc',-_Fz, _xVal, _yVal, zVal, 'V', 'Z', 1
     f,LOAD_ABT1_nn(1:LOAD_ABT1_nc),fz,LOAD_ABT1_F(1:LOAD_ABT1_nc)
 
   *endif
 
 
-*elseif,arg1,gt,GEO_ABT2_xMin,and,arg1,le,GEO_ABT2_xmax,then
+*elseif,_xVal,gt,GEO_ABT2_xMin,and,_xVal,le,GEO_ABT2_xmax,then
   *if,GEO_ABT2_status,eq,1,then
 
-    zVal=ABT2_angCoef*arg1+ABT2_linCoef
+    zVal=ABT2_angCoef*_xVal+ABT2_linCoef
 
     ! Apply vertical and longitudinal forces on approach slab
-    *if,GEO_ABT2_appSlab,eq,1,and,arg1,le,GEO_deckLength+GEO_ABT2_appSlabL,then
+    *if,GEO_ABT2_appSlab,eq,1,and,_xVal,le,GEO_deckLength+GEO_ABT2_appSlabL,then
       cmsel,s,COMPN_ABT_appSlab
-      ndNum=node(arg1,arg2,zVal)
-      f,ndNum,fz,-arg3
+      ndNum=node(_xVal,_yVal,zVal)
+      f,ndNum,fz,-_Fz
       f,ndNum,fx,arg4  !! *arg6  REMOVED ON 19/08/22: ARG4 is multiplied by horDir_fct before being passed as argument to this subroutine
       f,ndNum,fy,arg5
     *endif
@@ -82,7 +86,7 @@ nbackup
     asel,r,loc,y,-GEO_deckWidth_end,0
     csys,0
     nsla,s,1
-    boussinesq,'LOAD_ABT2_F','LOAD_ABT2_nn','LOAD_ABT2_nc',-arg3, arg1, arg2, zVal, 'H', 'Z', 1
+    boussinesq,'LOAD_ABT2_F','LOAD_ABT2_nn','LOAD_ABT2_nc',-_Fz, _xVal, _yVal, zVal, 'H', 'Z', 1
     f,LOAD_ABT2_nn(1:LOAD_ABT2_nc),fy,LOAD_ABT2_F(1:LOAD_ABT2_nc)
 
     ! Longitudinal wall and wing (Y>0)
@@ -93,21 +97,21 @@ nbackup
     asel,r,loc,y,0,GEO_deckWidth_end
     csys,0
     nsla,s,1
-    boussinesq,'LOAD_ABT2_F','LOAD_ABT2_nn','LOAD_ABT2_nc',arg3, arg1, arg2, zVal, 'H', 'Z', 1
+    boussinesq,'LOAD_ABT2_F','LOAD_ABT2_nn','LOAD_ABT2_nc',_Fz, _xVal, _yVal, zVal, 'H', 'Z', 1
     f,LOAD_ABT2_nn(1:LOAD_ABT2_nc),fy,LOAD_ABT2_F(1:LOAD_ABT2_nc)
 
     ! Transversal wall
     cmsel,s,COMPA_ABT_tranWall
     cmsel,r,COMPA_ABT_2
     nsla,s,1
-    boussinesq,'LOAD_ABT2_F','LOAD_ABT2_nn','LOAD_ABT2_nc',-arg3, arg1, arg2, zVal, 'H', 'Z', 1
+    boussinesq,'LOAD_ABT2_F','LOAD_ABT2_nn','LOAD_ABT2_nc',-_Fz, _xVal, _yVal, zVal, 'H', 'Z', 1
     f,LOAD_ABT2_nn(1:LOAD_ABT2_nc),fx,LOAD_ABT2_F(1:LOAD_ABT2_nc)
 
     ! Pile cap
     cmsel,s,COMPA_ABT_pileCap
     cmsel,r,COMPA_ABT_2
     nsla,s,1
-    boussinesq,'LOAD_ABT2_F','LOAD_ABT2_nn','LOAD_ABT2_nc',-arg3, arg1, arg2, zVal, 'V', 'Z', 1
+    boussinesq,'LOAD_ABT2_F','LOAD_ABT2_nn','LOAD_ABT2_nc',-_Fz, _xVal, _yVal, zVal, 'V', 'Z', 1
     f,LOAD_ABT2_nn(1:LOAD_ABT2_nc),fz,LOAD_ABT2_F(1:LOAD_ABT2_nc)
 
   *endif
