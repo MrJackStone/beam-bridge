@@ -22,7 +22,7 @@ allsel
 
 ! Calculate soil height above each node
 *voper , top_level    , NLIST_x   , mult , ABT%ARG1%_angCoef
-*voper , top_level    , top_level , add  , ABT%ARG1%_linCoef+verticalOffset
+*voper , top_level    , top_level , add  , ABT%ARG1%_linCoef+ARG5
 *voper , height_above , top_level , sub  , NLIST_z
 
 ! Calculate pressures due to dead loads
@@ -41,10 +41,10 @@ cteSurcharge = LOAD_vehicleTraffic
 *vfill , ch_pres_horz , ramp , 2*MAT_ABT_SOIL_c*sqrt(MAT_ABT_SOIL_ka)
 
 ! Calculate total pressures
-*vfact , 1 , dwStatus , scStatus
+*vfact , 1 , ARG2 , ARG3
 *voper , pres_vert , dw_pres_vert , add , sc_pres_vert
 
-*vfact , 1 , dwStatus , scStatus
+*vfact , 1 , ARG2 , ARG3
 *voper , pres_horz , dw_pres_horz , add , sc_pres_horz
 *voper , pres_horz , pres_horz    , sub , ch_pres_horz
 *voper , pres_horz , pres_horz    , max , 0
