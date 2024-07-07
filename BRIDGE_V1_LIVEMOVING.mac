@@ -73,7 +73,7 @@
       *endif
     *else
       ! Load on abutment
-      BRIDGE_V1_ABTLIVE, xCoord, yWheel, F_vert, F_long, F_cen, horDir_fct
+      BRIDGE_V1_ABTMOVING, xCoord, yWheel, F_vert, F_long, F_cen, horDir_fct
     *endif
   *enddo
 *enddo

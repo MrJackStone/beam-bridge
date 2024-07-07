@@ -1,5 +1,5 @@
-! BRIDGE_V1_ABTLIVE , xVal , yVal , F_z  , F_x  , F_y  , horDir_fct
-! BRIDGE_V1_ABTLIVE , arg1 , arg2 , arg3 , arg4 , arg5 , arg6
+! BRIDGE_V1_ABTMOVING , xVal , yVal , F_z  , F_x  , F_y  , horDir_fct
+! BRIDGE_V1_ABTMOVING , arg1 , arg2 , arg3 , arg4 , arg5 , arg6
 
 _xVal = ARG1
 _yVal = ARG2
