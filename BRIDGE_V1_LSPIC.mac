@@ -1,0 +1,106 @@
+! BRIDGE_V1_LSPIC, lsNum
+! BRIDGE_V1_LSPIC, ARG1
+
+
+/window,all,dele
+
+/window , 1 , -1 , 1.00 , -1.00 ,  1.00
+/window , 2 ,  1 , 1.67 ,  0.34 ,  1.00
+/window , 3 ,  1 , 1.67 , -0.33 ,  0.34
+/window , 4 ,  1 , 1.67 , -1.00 , -0.33
+
+wincln
+boldfont , 1
+wintitle , 1 , ' ' , 'BC: LOADS (LOAD STEP #%ARG1%)' , ' ' ,  , 1 , 13
+wintitle , 2 , ' ' , 'ABUTMENT 01'                   , ' ' ,  , 1
+wintitle , 3 , ' ' , 'ABUTMENT 02'                   , ' ' ,  , 1
+wintitle , 4 , ' ' , 'SLABS'                         , ' ' ,  , 1
+
+/view,1,0,1,0
+/view,2,1,0,0
+/view,3,1,0,0
+/view,4,0,0,1
+
+/triad,on
+/angle,all,0
+/auto,all
+/eshape,0
+/edge,all,1
+/pbc,f,,1
+/psf,pres,norm,2,1,off
+/plopts,leg3,on
+/udoc,2,cntr,right
+
+allsel
+lplot
+/user,1
+
+cmsel,s,COMPA_ABT_1
+aplot
+/user,2
+
+cmsel,s,COMPA_ABT_2
+aplot
+/user,3
+
+cmsel,s,COMPA_slab
+cmsel,a,COMPA_ABT_appSlab
+aplot
+/user,4
+
+allsel
+
+go2png,1200
+  /window,1,on
+  /window,2,off
+  /window,3,off
+  /window,4,off
+  /device,vector,on
+  /type,all,0
+  allsel
+  esel,u,type,,TYPE_link180
+  nsle
+  eplot
+  /noerase
+
+  /window,1,off
+  /window,2,on
+  /window,3,off
+  /window,4,off
+  cmsel,s,COMPA_ABT_1
+  esla,s
+  nsle,s
+  eplot
+
+  /window,1,off
+  /window,2,off
+  /window,3,on
+  /window,4,off
+  cmsel,s,COMPA_ABT_2
+  esla,s
+  nsle,s
+  eplot
+
+  /window,1,off
+  /window,2,off
+  /window,3,off
+  /window,4,on
+  /device,vector,off
+  cmsel,s,COMPA_slab
+  cmsel,a,COMPA_ABT_appSlab
+  esla,s
+  nsle,s
+  /pbc,f,,0
+  /psf,pres,norm,3,1,on
+  cleanplot,'eplot'
+endpng,'LS_#%ARG1%',,,,,'bcs'
+/erase
+
+allsel
+view1w
+wincln,1
+windefa,1
+/type,all,3
+/device,vector,off
+/pbc,f,,0
+/psf,pres,norm,0,0,on

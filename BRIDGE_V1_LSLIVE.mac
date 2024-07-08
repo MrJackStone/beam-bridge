@@ -197,6 +197,8 @@ Writing load step #%I out of %I...
       OUTRES,ALL,last
       LSWRITE,nthLoadStep
 
+      BRIDGE_V1_LSPIC, nthLoadStep
+
     *enddo
 
   *enddo
