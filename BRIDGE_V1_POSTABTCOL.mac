@@ -115,11 +115,8 @@ cmsel,a,COMPE_ABT_2
 eplot
 /user,all
 
-wntitle , 'ENCONTRO 01: PILAR' , 1 , 0
-wntitle , 'F. NORMAL [kN]'     , 1 , 1 , 'R'
-
-wntitle , 'ENCONTRO 02: PILAR' , 2 , 0
-wntitle , 'F. NORMAL [kN]'     , 2 , 1 , 'R'
+wintitle , 1 , 'ENCONTRO 01: PILAR' , ' ' , 'F. NORMAL [kN]' ,  , 1
+wintitle , 2 , 'ENCONTRO 02: PILAR' , ' ' , 'F. NORMAL [kN]' ,  , 1
 
 go2png,1200
   /window,1,on
@@ -203,11 +200,8 @@ cmsel,a,COMPE_ABT_2
 eplot
 /user,all
 
-wntitle , 'ENCONTRO 01: PILAR'   , 1 , 0
-wntitle , 'MOMENTO FLETOR [kNm]' , 1 , 1 , 'R'
-
-wntitle , 'ENCONTRO 02: PILAR'   , 2 , 0
-wntitle , 'MOMENTO FLETOR [kNm]' , 2 , 1 , 'R'
+wintitle , 1 , 'ENCONTRO 01: PILAR' , ' ' , 'MOMENTO FLETOR [kNm]' ,  , 1
+wintitle , 2 , 'ENCONTRO 02: PILAR' , ' ' , 'MOMENTO FLETOR [kNm]' ,  , 1
 
 go2png,1200
   /window,1,on
@@ -291,11 +285,8 @@ cmsel,a,COMPE_ABT_2
 eplot
 /user,all
 
-wntitle , 'ENCONTRO 01: PILAR' , 1 , 0
-wntitle , 'F. CORTANTE [kN]'   , 1 , 1 , 'R'
-
-wntitle , 'ENCONTRO 02: PILAR' , 2 , 0
-wntitle , 'F. CORTANTE [kN]'   , 2 , 1 , 'R'
+wintitle , 1 , 'ENCONTRO 01: PILAR' , ' ' , 'F. CORTANTE [kN]' ,  , 1
+wintitle , 2 , 'ENCONTRO 02: PILAR' , ' ' , 'F. CORTANTE [kN]' ,  , 1
 
 go2png,1200
   /window,1,on

@@ -16,7 +16,7 @@
 
 
   !!
-  wntitle,'M. FLETOR NOS BLOCOS [kNm/m]'
+  wintitle,1,' ','M. FLETOR NOS BLOCOS [kNm/m]',' ',,1
 
   go2png,1200
 
@@ -49,7 +49,7 @@
   /annot,dele
 
   !!
-  wntitle,'F. CORTANTE NOS BLOCOS [kN/m]'
+  wintitle,1,' ','F. CORTANTE NOS BLOCOS [kN/m]',' ',,1
 
   go2png,1200
 

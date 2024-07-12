@@ -135,9 +135,7 @@ wincln,1
 /plopts,info,3
 /plopts,leg3,1
 /pspec,0,0,1
-wntitle , 'ENCONTRO 0%arg1%:' , 1 , 0
-wntitle , 'ALA OBLQ.'         , 1 , 0 , 'C'
-wntitle , 'FLECHA FREQUENTE [mm]'  , 1 , 1 , 'R'
+wintitle ,1, 'ENCONTRO 0%arg1%:' , 'ALA OBLQ.' , 'FLECHA FREQUENTE [mm]' ,  , 1
 /triad,off
 /eshape,1
 /udoc,1,cntr,right

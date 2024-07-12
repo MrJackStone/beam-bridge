@@ -123,16 +123,13 @@ wincln,2
 wincln,3
 
 /pspec,0,1,1
-wntitle,' ',1,1
-wntitle,' ',2,1
-wntitle , 'VIGA CINTA'          , 3 , 0
+wintitle,1,' ',' ',' ',,1
+wintitle,2,' ',' ',' ',,1
 /pspec,0,0,1
-wntitle , 'MOMENTO FLETOR (MZ)' , 3 , 0 , 'C'
-wntitle , 'ELU-Normal [kNm]'    , 3 , 1 , 'R'
+wintitle , 3 , 'VIGA CINTA' , 'MOMENTO FLETOR (MZ)' , 'ELU-Normal [kNm]'
+wintitle , 1 , ' ' , 'ENCONTRO 01' , ' ' ,  , 1
+wintitle , 2 , ' ' , 'ENCONTRO 02' , ' ' ,  , 1
 /window,3,off
-
-wntitle,'ENCONTRO 01',1,1,'C'
-wntitle,'ENCONTRO 02',2,1,'C'
 
 /view,1,-1,0,0
 /view,2,1,0,0
@@ -222,16 +219,13 @@ wincln,2
 wincln,3
 
 /pspec,0,1,1
-wntitle,' ',1,1
-wntitle,' ',2,1
-wntitle , 'VIGA CINTA'          , 3 , 0
+wintitle,1,' ',' ',' ',,1
+wintitle,2,' ',' ',' ',,1
 /pspec,0,0,1
-wntitle , 'MOMENTO FLETOR (MY)' , 3 , 0 , 'C'
-wntitle , 'ELU-Normal [kNm]'    , 3 , 1 , 'R'
+wintitle , 3 , 'VIGA CINTA' , 'MOMENTO FLETOR (MY)' , 'ELU-Normal [kNm]'
+wintitle , 1 , ' ' , 'ENCONTRO 01' , ' ' ,  , 1
+wintitle , 2 , ' ' , 'ENCONTRO 02' , ' ' ,  , 1
 /window,3,off
-
-wntitle,'ENCONTRO 01',1,1,'C'
-wntitle,'ENCONTRO 02',2,1,'C'
 
 /view,1,-1,0,0
 /view,2,1,0,0
@@ -321,16 +315,13 @@ wincln,2
 wincln,3
 
 /pspec,0,1,1
-wntitle,' ',1,1
-wntitle,' ',2,1
-wntitle , 'VIGA CINTA'      , 3 , 0
+wintitle,1,' ',' ',' ',,1
+wintitle,2,' ',' ',' ',,1
 /pspec,0,0,1
-wntitle , 'F. AXIAL'        , 3 , 0 , 'C'
-wntitle , 'ELU-Normal [kN]' , 3 , 1 , 'R'
+wintitle , 3 , 'VIGA CINTA' , 'F. AXIAL' , 'ELU-Normal [kN]'
+wintitle , 1 , ' ' , 'ENCONTRO 01' , ' ' ,  , 1
+wintitle , 2 , ' ' , 'ENCONTRO 02' , ' ' ,  , 1
 /window,3,off
-
-wntitle,'ENCONTRO 01',1,1,'C'
-wntitle,'ENCONTRO 02',2,1,'C'
 
 /view,1,-1,0,0
 /view,2,1,0,0
@@ -420,16 +411,13 @@ wincln,2
 wincln,3
 
 /pspec,0,1,1
-wntitle,' ',1,1
-wntitle,' ',2,1
-wntitle , 'VIGA CINTA'      , 3 , 0
+wintitle,1,' ',' ',' ',,1
+wintitle,2,' ',' ',' ',,1
 /pspec,0,0,1
-wntitle , 'F. CORTANTE'     , 3 , 0 , 'C'
-wntitle , 'ELU-Normal [kN]' , 3 , 1 , 'R'
+wintitle , 3 , 'VIGA CINTA' , 'F. CORTANTE' , 'ELU-Normal [kN]'
+wintitle , 1 , ' ' , 'ENCONTRO 01' , ' ' ,  , 1
+wintitle , 2 , ' ' , 'ENCONTRO 02' , ' ' ,  , 1
 /window,3,off
-
-wntitle,'ENCONTRO 01',1,1,'C'
-wntitle,'ENCONTRO 02',2,1,'C'
 
 /view,1,-1,0,0
 /view,2,1,0,0
@@ -520,16 +508,13 @@ wincln,2
 wincln,3
 
 /pspec,0,1,1
-wntitle,' ',1,1
-wntitle,' ',2,1
-wntitle , 'VIGA CINTA'    , 3 , 0
+wintitle,1,' ',' ',' ',,1
+wintitle,2,' ',' ',' ',,1
 /pspec,0,0,1
-wntitle , 'FLECHA (UZ)'   , 3 , 0 , 'C'
-wntitle , 'ELS-Rara [mm]' , 3 , 1 , 'R'
+wintitle , 3 , 'VIGA CINTA' , 'FLECHA (UZ)' , 'ELS-Rara [mm]'
+wintitle , 1 , ' ' , 'ENCONTRO 01' , ' ' ,  , 1
+wintitle , 2 , ' ' , 'ENCONTRO 02' , ' ' ,  , 1
 /window,3,off
-
-wntitle,'ENCONTRO 01',1,1,'C'
-wntitle,'ENCONTRO 02',2,1,'C'
 
 /view,1,-1,0,0
 /view,2,1,0,0
@@ -620,16 +605,13 @@ wincln,2
 wincln,3
 
 /pspec,0,1,1
-wntitle,' ',1,1
-wntitle,' ',2,1
-wntitle , 'VIGA CINTA'    , 3 , 0
+wintitle,1,' ',' ',' ',,1
+wintitle,2,' ',' ',' ',,1
 /pspec,0,0,1
-wntitle , 'FLECHA (UY)'   , 3 , 0 , 'C'
-wntitle , 'ELS-Rara [mm]' , 3 , 1 , 'R'
+wintitle , 3 , 'VIGA CINTA' , 'FLECHA (UY)' , 'ELS-Rara [mm]'
+wintitle , 1 , ' ' , 'ENCONTRO 01' , ' ' ,  , 1
+wintitle , 2 , ' ' , 'ENCONTRO 02' , ' ' ,  , 1
 /window,3,off
-
-wntitle,'ENCONTRO 01',1,1,'C'
-wntitle,'ENCONTRO 02',2,1,'C'
 
 /view,1,-1,0,0
 /view,2,1,0,0

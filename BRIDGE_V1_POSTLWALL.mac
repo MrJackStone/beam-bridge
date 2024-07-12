@@ -21,13 +21,8 @@ wincln,1
 wincln,2
 wincln,3
 
-/pspec,0,1,1
-wntitle,' ',1,1
-wntitle,' ',2,1
-wntitle , 'ENCONTRO 0%arg1%:' , 3 , 0
-/pspec,0,0,1
-wntitle , 'PAREDES LATERAIS' , 3 , 0 , 'C'
-wntitle , arg3               , 3 , 1 , 'R'
+_arg3 = ARG3
+wintitle , 3 , 'ENCONTRO 0%arg1%:' , 'PAREDES LATERAIS' , _arg3 ,  , 1
 /window,3,off
 
 *if,arg1,eq,1,then

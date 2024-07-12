@@ -63,14 +63,9 @@ aplot
 /user,all
 /eshape,1
 
-wntitle , 'ENCONTRO 0%arg1%: BAL. LAJE' , 1 , 0
-wntitle , arg3                          , 1 , 0 , 'C'
-wntitle , 'VALOR MAX. [%arg4%]'         , 1 , 1 , 'R'
-
-wntitle , 'ENCONTRO 0%arg1%: BAL. LAJE' , 2 , 0
-wntitle , arg3                          , 2 , 0 , 'C'
-wntitle , 'VALOR MIN. [%arg4%]'         , 2 , 1 , 'R'
-
+_arg3 = ARG3
+wintitle ,1, 'ENCONTRO 0%arg1%: BAL. LAJE' , _arg3 , 'VALOR MAX. [%arg4%]'
+wintitle ,2, 'ENCONTRO 0%arg1%: BAL. LAJE' , _arg3 , 'VALOR MIN. [%arg4%]'
 
 go2png,1200
   /window,1,on

@@ -23,7 +23,7 @@ nsle,s,active
 view1w
 windefa,1
 wincln,1
-wntitle,'APROX: MOM. FLETOR (-) [kNm/m]'
+wintitle,1,' ','APROX: MOM. FLETOR (-) [kNm/m]',' ',,1
 
 /eshape,0
 /view,1,-1,-1,1
@@ -70,7 +70,7 @@ nsle,s,active
 view1w
 windefa,1
 wincln,1
-wntitle,'APROX: MOM. FLETOR (+) [kNm/m]'
+wintitle,1,' ','APROX: MOM. FLETOR (+) [kNm/m]',' ',,1
 
 /view,1,-1,-1,1
 /angle,1,0
@@ -118,7 +118,7 @@ nsle,s,active
 view1w
 windefa,1
 wincln,1
-wntitle,'APROX: FOR. CORTANTE [kN/m]'
+wintitle,1,' ','APROX: FOR. CORTANTE [kN/m]',' ',,1
 
 /view,1,-1,-1,1
 /angle,1,0

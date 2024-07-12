@@ -19,7 +19,7 @@ clims
     eplot
     /user,1
 
-    wntitle,'F. AXIAL (V) NOS PILARES [kN/m]'
+    wintitle,1,' ','F. AXIAL (V) NOS PILARES [kN/m]',' ',,1
 
     go2png,1200
 
@@ -48,7 +48,7 @@ clims
     /annot,dele
 
     !!
-    wntitle,'F. AXIAL (H) NOS PILARES [kN/m]'
+    wintitle,1,' ','F. AXIAL (H) NOS PILARES [kN/m]',' ',,1
 
     go2png,1200
 
@@ -78,7 +78,7 @@ clims
     /annot,dele
 
     !!
-    wntitle,'M. FLETOR NOS PILARES [kNm/m]'
+    wintitle,1,' ','M. FLETOR NOS PILARES [kNm/m]',' ',,1
 
     go2png,1200
 
@@ -108,7 +108,7 @@ clims
     /annot,dele
 
     !!
-    wntitle,'F. CORTANTE NOS PILARES [kN/m]'
+    wintitle,1,' ','F. CORTANTE NOS PILARES [kN/m]',' ',,1
 
     go2png,1200
 
@@ -153,7 +153,7 @@ clims
     eplot
     /user,1
 
-    wntitle,'F. AXIAL NOS PILARES [kN]'
+    wintitle,1,' ','F. AXIAL NOS PILARES [kN]',' ',,1
 
     go2png,1200
 
@@ -192,7 +192,7 @@ clims
     /annot,dele
 
     !!
-    wntitle,'M. FLETOR NOS PILARES [kNm]'
+    wintitle,1,' ','M. FLETOR NOS PILARES [kNm]',' ',,1
 
     /anum,,1
     /tspec,15,1,4
@@ -248,7 +248,7 @@ clims
     /annot,dele
 
     !!
-    wntitle,'F. CORTANTE NOS PILARES [kN]'
+    wintitle,1,' ','F. CORTANTE NOS PILARES [kN]',' ',,1
 
     /anum,,1
     /tspec,15,1,4
@@ -303,7 +303,7 @@ clims
     /annot,dele
 
     !!
-    wntitle,'F. AXIAL NA TRAVESSA [kN]'
+    wintitle,1,' ','F. AXIAL NA TRAVESSA [kN]',' ',,1
 
     go2png,1200
 
@@ -338,7 +338,7 @@ clims
     /annot,dele
 
     !!
-    wntitle,'M. FLETOR NA TRAVESSA [kNm]'
+    wintitle,1,' ','M. FLETOR NA TRAVESSA [kNm]',' ',,1
 
     /anum,,1
     /tspec,15,1,4
@@ -390,7 +390,7 @@ clims
     /annot,dele
 
     !!
-    wntitle,'F. CORTANTE NA TRAVESSA [kN]'
+    wintitle,1,' ','F. CORTANTE NA TRAVESSA [kN]',' ',,1
 
     /anum,,1
     /tspec,15,1,4

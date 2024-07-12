@@ -146,8 +146,8 @@ clims
 /auto,all
 /angle,all,0
 
-wntitle,'ENCONTRO 01: ID. ESTACAS',1,1,'C'
-wntitle,'ENCONTRO 02: ID. ESTACAS',2,1,'C'
+wintitle , 1 , ' ' , 'ENCONTRO 01: ID. ESTACAS' , ' ' ,  , 1
+wintitle , 2 , ' ' , 'ENCONTRO 02: ID. ESTACAS' , ' ' ,  , 1
 
 go2png,1200
 
@@ -237,11 +237,11 @@ ln=0
   /angle,all,0
   /edge,all,1
 
-  wntitle , 'F. NORMAL [kN]'    , 1 , 1 , 'C'
-  wntitle , 'M. FLETOR [kNm]'   , 2 , 1 , 'C'
-  wntitle , 'F. CORTANTE [kN]'  , 3 , 1 , 'C'
-  wntitle , 'RECALQUE [mm]'     , 4 , 1 , 'C'
-  wntitle , 'ESTACA #%pileIdx%' , 5 , 0 , 'C'
+  wintitle , 1 , ' ' , 'F. NORMAL [kN]'    , ' ' ,  , 1
+  wintitle , 2 , ' ' , 'M. FLETOR [kNm]'   , ' ' ,  , 1
+  wintitle , 3 , ' ' , 'F. CORTANTE [kN]'  , ' ' ,  , 1
+  wintitle , 4 , ' ' , 'RECALQUE [mm]'     , ' ' ,  , 1
+  wintitle , 5 , ' ' , 'ESTACA #%pileIdx%' , ' ' ,  , 1
 
   go2png,1200
     /window,1,on
