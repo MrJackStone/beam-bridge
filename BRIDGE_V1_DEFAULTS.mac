@@ -25,12 +25,33 @@ FEM_sgCouple_RY = 1
 FEM_sgCouple_RZ = 1
 
 
+!!                                                                                                !!
+!! 1.2  Piers                                                                                     !!
+!!                                                                                                !!
+COLUMN_cx     = 1
+COLUMN_cy     = 1
+FRAMEGIRDER_b = 1
+FRAMEGIRDER_h = 2
+
+COLUMN_tWall = 0.35
+
+
 
 !!                                                                                                !!
 !! 1.3  Abutments                                                                                 !!
 !!                                                                                                !!
 GEO_ABT1_suppressLW=0
 GEO_ABT2_suppressLW=0
+
+GEO_ABT1_topOffset = 0
+
+
+!!                                                                                                !!
+!! 1.4  Infrastructure                                                                            !!
+!!                                                                                                !!
+GRADEBEAM_b = 1
+GRADEBEAM_h = 1
+PILECAP_h   = 1
 
 
 

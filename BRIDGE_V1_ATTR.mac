@@ -1072,6 +1072,8 @@ GEO_ABT2_appSlab=nint(((GEO_ABT2_appSlab>0)<1))
 
 ! Correct height increment at the beginning of the abutments
 *if,GEO_frameTopOffStatus,EQ,0,THEN
+  *del,GEO_frameTopOffset
+  *dim,GEO_frameTopOffset,ARRAY,GEO_SupportCount
   GEO_ABT1_topOffset=0
   GEO_ABT2_topOffset=0
 *else
@@ -1210,12 +1212,17 @@ GEO_pierCount=GEO_supportCount
 *endif
 
 ! XZ coordinates of each pier
-*del,GEO_pierX
-*dim,GEO_pierX,,GEO_pierCount
-*del,GEO_pierZBot
-*dim,GEO_pierZBot,,GEO_pierCount
-*del,GEO_pierZTop
-*dim,GEO_pierZTop,,GEO_pierCount
+*if,GEO_frameBotOffStatus,eq,0,then
+  *del,GEO_frameBotOffset,,nopr
+  *dim,GEO_frameBotOffset,ARRAY,GEO_SupportCount
+*endif
+
+*del , GEO_pierX    ,  , nopr
+*del , GEO_pierZBot ,  , nopr
+*del , GEO_pierZTop ,  , nopr
+*dim , GEO_pierX    ,  , GEO_pierCount
+*dim , GEO_pierZBot ,  , GEO_pierCount
+*dim , GEO_pierZTop ,  , GEO_pierCount
 nthPier=0
 *do,nthSupport,1,GEO_supportCount,1
     skip=0
