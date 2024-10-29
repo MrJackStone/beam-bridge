@@ -152,3 +152,36 @@ MAT_SOIL_shadm   = 0
 MAT_SOIL_svadm   = 0
 
 MAT_Soil_absentOpt = 0
+
+
+/eof
+
+! TODO  check if absence of these params breaks code
+
+! Barrier dead weight (linear load value)
+LOAD_barrierValue_k = 6300
+! Number of barriers
+LOAD_barrierCount=2
+! Barrier offsets (measured from Y=0)
+*del,LOAD_barrierOffset_beg
+*dim,LOAD_barrierOffset_beg,ARRAY,LOAD_barrierCount
+*del,LOAD_barrierOffset_end
+*dim,LOAD_barrierOffset_end,ARRAY,LOAD_barrierCount
+LOAD_barrierOffset_beg(1) = 1.2, 5.1
+LOAD_barrierOffset_end(1) = 1.2, 5.1
+
+! Tschebotarioff's attributes, formatted as follows:
+!        󱞬 zone index
+!    (1, i): support index
+!    (2, i): depth at the top of the Tschebotarioff layer
+!    (3, i): depth at the bottom of the Tschebotarioff layer
+!    (4, i): maximum pressure (N/m), at the center of the layer
+!    (5, i): load key (see BEAM188)
+!    (6, i): load shape:
+!              [0] constant pressure (de Beer)
+!              [1] triangular pressure (Tschebotarioff, zero-max-zero)
+!              [2] triangular pressure (max-zero)
+*del,LOAD_TSCHEBOTARIOFF_data,,nopr
+*dim,LOAD_TSCHEBOTARIOFF_data,,6,GEO_supportCount
+LOAD_TSCHEBOTARIOFF_data(1,1) = 1 , 0 , 2 , -30e3 , 1, 0
+LOAD_TSCHEBOTARIOFF_data(1,2) = 2 , 0 , 2 ,  30e3 , 1, 0
