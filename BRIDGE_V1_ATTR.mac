@@ -757,7 +757,7 @@ BRIDGE_V1_SKEWEDCSYS, 'CS_leftFootpath', GEO_deckOff_beg+GEO_footpathLeft_beg, G
 BRIDGE_V1_SKEWEDCSYS, 'CS_rightFootpath', GEO_deckOff_beg+GEO_deckWidth_beg-GEO_footpathRight_beg, GEO_deckOff_end+GEO_deckWidth_end-GEO_footpathRight_end
 
 ! List all CSYS that will be used to slice longitudinally
-arrconcat,'CS_slice','CS_girders','CS_loadTrains','CS_barriers','CS_leftFootpath','CS_rightFootpath'
+arrjoin,'CS_slice','CS_girders','CS_loadTrains','CS_barriers','CS_leftFootpath','CS_rightFootpath'
 *get,XZsliceCount,parm,CS_slice,dim,x
 !
 !
