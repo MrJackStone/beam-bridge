@@ -20,11 +20,12 @@ exists=0
 *else
   ! Coordinate system does not exist: create and make current
   xCenter=GEO_supportX(arg1)
+  yOffset=GEO_deckOff_beg+(GEO_deckOff_end-GEO_deckOff_beg)*(xCenter/GEO_deckLength)
 
   *if,GEO_deckRadius,eq,0,then
     ! Straight deck:
-    yCenter=0
-    zAngle=0
+    yCenter = yOffset+(GEO_deckWidth_beg/2)
+    zAngle  = 0
   *else
     ! Curved deck:
     *afun,deg

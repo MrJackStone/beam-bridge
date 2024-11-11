@@ -1,14 +1,17 @@
 ! BRIDGE_V1_SMCTUBE, nthSupport
 ! BRIDGE_V1_SMCTUBE, arg1
 
-BRIDGE_V1_CSMESO, arg1
+
+_supportIdx = ARG1
+
+BRIDGE_V1_CSMESO,_supportIdx
 *get,CS_num,active,,csys
 
-acmName=strcat('COMPA_TUBE_',chrval(arg1))
+acmName=strcat('COMPA_TUBE_',chrval(_supportIdx))
 
 ! Top and bottom Z coordinates of the frame
-nthFrameZTop=zFrameTop+GEO_frameTopOffset(arg1)
-nthFrameZBot=zFrameBot+GEO_frameBotOffset(arg1)
+nthFrameZTop=zFrameTop+GEO_frameTopOffset(_supportIdx)
+nthFrameZBot=zFrameBot+GEO_frameBotOffset(_supportIdx)
 
 x_i=-GEO_columnDepth/2
 x_j=GEO_columnDepth/2
