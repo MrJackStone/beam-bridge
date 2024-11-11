@@ -1,45 +1,44 @@
 ! BRIDGE_V1_CSMESO, nthSupport
 ! BRIDGE_V1_CSMESO,       arg1
 
+
 CS_name=strcat('CS_MESO_',chrval(arg1))
 
 exists=0
 *get,parType,parm,%CS_name%,type
 *if,parType,eq,0,then
-    ! Parameter defined: check if corresponding coordinate system exists
-    *if,csyiqr(%CS_name%,1),eq,1,then
-        exists=1
-    *endif
+  ! Parameter defined: check if corresponding coordinate system exists
+  *if,csyiqr(%CS_name%,1),eq,1,then
+    exists=1
+  *endif
 *endif
 
 *if,exists,eq,1,then
-    ! Coordinate system exists: make it current
-    csys,%CS_name%
+  ! Coordinate system exists: make it current
+  csys,%CS_name%
 
 *else
-    ! Coordinate system does not exist: create and make current
-    xCenter=GEO_supportX(arg1)
+  ! Coordinate system does not exist: create and make current
+  xCenter=GEO_supportX(arg1)
 
-    *if,GEO_deckRadius,eq,0,then
-        ! Straight deck:
-        yCenter=0
-        zAngle=0
-    *else
-        ! Curved deck:
-        *afun,deg
-        chi_i=GEO_supportChi(arg1)
-        yCenter=GEO_deckRadius*sin(chi_i)-GEO_chordOff
-        zAngle=90-chi_i
-        *afun,rad
-    *endif
+  *if,GEO_deckRadius,eq,0,then
+    ! Straight deck:
+    yCenter=0
+    zAngle=0
+  *else
+    ! Curved deck:
+    *afun,deg
+    chi_i=GEO_supportChi(arg1)
+    yCenter=GEO_deckRadius*sin(chi_i)-GEO_chordOff
+    zAngle=90-chi_i
+    *afun,rad
+  *endif
 
-    ! TODO: get rid of this hardcoded 40, check for CSYS conflicts elsewhere
-    CS_num=40+(10*arg1)
-    %CS_name%=CS_num
-    csys,0
-    local,CS_num,cart,xCenter,yCenter,0,zAngle
-    csys,CS_num
+  ! TODO: get rid of this hardcoded 40, check for CSYS conflicts elsewhere
+  CS_num=40+(10*arg1)
+  %CS_name%=CS_num
+  csys,0
+  local,CS_num,cart,xCenter,yCenter,0,zAngle
+  csys,CS_num
 
 *endif
-
-
