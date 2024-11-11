@@ -462,7 +462,8 @@ GEO_pileCount = 4
 ! Configuration of the set of piles
 GEO_pileConfig = 'A'
 ! Distance between piles
-GEO_pileDist = 1.67
+GEO_pileDistLong=1.67
+GEO_pileDistTran=1.67
 ! Inclination angle of the piles about the Y axis (off the frame plane)
 *del,GEO_pileYAngle
 *dim,GEO_pileYAngle,ARRAY,10
