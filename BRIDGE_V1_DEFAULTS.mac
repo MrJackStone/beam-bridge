@@ -24,6 +24,9 @@ FEM_sgCouple_RX = 1
 FEM_sgCouple_RY = 1
 FEM_sgCouple_RZ = 1
 
+FEM_Bearing_kv = 1e3
+FEM_Bearing_kh = 1e3
+
 
 !!                                                                                                !!
 !! 1.2  Piers                                                                                     !!
@@ -88,6 +91,9 @@ LOAD_ltGapWidth  = 0
 LOAD_ltGapLength = 0
 
 LOAD_ltPresMethod = 'BOUSSNSQ'
+
+LOAD_barrierCount   = 0
+LOAD_barrierValue_k = 0
 
 
 !!                                                                                                !!
@@ -159,9 +165,7 @@ MAT_Soil_absentOpt = 0
 ! TODO  check if absence of these params breaks code
 
 ! Barrier dead weight (linear load value)
-LOAD_barrierValue_k = 6300
 ! Number of barriers
-LOAD_barrierCount=2
 ! Barrier offsets (measured from Y=0)
 *del,LOAD_barrierOffset_beg
 *dim,LOAD_barrierOffset_beg,ARRAY,LOAD_barrierCount
