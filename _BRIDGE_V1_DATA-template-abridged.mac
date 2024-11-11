@@ -71,12 +71,8 @@ GEO_uniGirderSpacing = 1
 ! Set girder cross-section per span:
 !    [0] Off (girder cross-sections corresponding to each span)
 !    [1] On (use same cross-section for all girders)
-GEO_uniGirderSection=0
-*if,GEO_uniGirderSection,eq,0,then
-  GEO_girderSectionCount=GEO_supportCount
-*else
-  GEO_girderSectionCount=1
-*endif
+GEO_uniGirderSection   = 0
+GEO_girderSectionCount = GEO_supportCount-1
 
 ! Cross-section
 *del,GIRDER_parms,,nopr
