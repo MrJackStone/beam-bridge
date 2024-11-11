@@ -558,6 +558,7 @@ SECDATA,COLUMN_tWall,MAT_Column
 !! 2.1.3.20 TUBULAR COLUMN CAP                                                                    !!
 SECTYPE,SEC_COLCAP,SHELL,,'COLCAP'
 SECDATA,COLUMN_tCap,MAT_Column
+secoffset,top
 !
 !! 2.1.4 COORDINATE SYSTEMS                                                                       !!
 !!                                                                                                !!
