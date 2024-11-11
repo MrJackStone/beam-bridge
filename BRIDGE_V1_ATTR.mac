@@ -874,119 +874,119 @@ WARNING: Water level incompatible with frame height. GEO_WATERHEIGHT reduced to 
    ! Two piles
    *if,GEO_pileConfig,EQ,'A',THEN
       GEO_pileXL(1)=0,0
-      GEO_pileYL(1)=-GEO_pileDist/2,GEO_pileDist/2
-      GEO_pileCapMinLength=(GEO_pileDist)+(2*PILE_d)
+      GEO_pileYL(1)=-GEO_pileDistTran/2,GEO_pileDistTran/2
+      GEO_pileCapMinLength=(GEO_pileDistTran)+(2*PILE_d)
       GEO_pileCapMinWidth=(2*PILE_d)
    *elseif,GEO_pileConfig,EQ,'B',THEN
-      GEO_pileXL(1)=GEO_pileDist/2,-GEO_pileDist/2
+      GEO_pileXL(1)=GEO_pileDistLong/2,-GEO_pileDistLong/2
       GEO_pileYL(1)=0,0
       GEO_pileCapMinLength=(2*PILE_d)
-      GEO_pileCapMinWidth=(GEO_pileDist)+(2*PILE_d)
+      GEO_pileCapMinWidth=(GEO_pileDistLong)+(2*PILE_d)
    *endif
 
 *elseif,GEO_pileCount,EQ,3,THEN
    ! Three piles
    *if,GEO_pileConfig,EQ,'A',THEN
       GEO_pileXL(1)=0,0,0
-      GEO_pileYL(1)=-GEO_pileDist,0,GEO_pileDist
-      GEO_pileCapMinLength=(2*GEO_pileDist)+(2*PILE_d)
+      GEO_pileYL(1)=-GEO_pileDistTran,0,GEO_pileDistTran
+      GEO_pileCapMinLength=(2*GEO_pileDistTran)+(2*PILE_d)
       GEO_pileCapMinWidth=(2*PILE_d)
    *elseif,GEO_pileConfig,EQ,'B',THEN
-      GEO_pileXL(1)=GEO_pileDist,0,-GEO_pileDist
+      GEO_pileXL(1)=GEO_pileDistLong,0,-GEO_pileDistLong
       GEO_pileYL(1)=0,0,0
       GEO_pileCapMinLength=(2*PILE_d)
-      GEO_pileCapMinWidth=(2*GEO_pileDist)+(2*PILE_d)
+      GEO_pileCapMinWidth=(2*GEO_pileDistLong)+(2*PILE_d)
    *elseif,GEO_pileConfig,EQ,'C',THEN
-      GEO_pileXL(1)=GEO_pileDist*(SQRT(3)/6),GEO_pileDist*(SQRT(3)/6),-GEO_pileDist*(SQRT(3)/3)
-      GEO_pileYL(1)=-GEO_pileDist/2,GEO_pileDist/2,0
-      GEO_pileCapMinLength=(GEO_pileDist)+(2*PILE_d)
-      GEO_pileCapMinWidth=((2/3)*(SQRT(3))*GEO_pileDist)+(2*PILE_d)
+      GEO_pileXL(1)=GEO_pileDistLong*(SQRT(3)/6),GEO_pileDistLong*(SQRT(3)/6),-GEO_pileDistLong*(SQRT(3)/3)
+      GEO_pileYL(1)=-GEO_pileDistTran/2,GEO_pileDistTran/2,0
+      GEO_pileCapMinLength=(GEO_pileDistTran)+(2*PILE_d)
+      GEO_pileCapMinWidth=((2/3)*(SQRT(3))*GEO_pileDistLong)+(2*PILE_d)
    *endif
 
 *elseif,GEO_pileCount,EQ,4,THEN
    ! Four piles
    *if,GEO_pileConfig,EQ,'A',THEN
-      GEO_pileXL(1)=GEO_pileDist/2,GEO_pileDist/2,-GEO_pileDist/2,-GEO_pileDist/2
-      GEO_pileYL(1)=-GEO_pileDist/2,GEO_pileDist/2,-GEO_pileDist/2,GEO_pileDist/2
-      GEO_pileCapMinLength=(GEO_pileDist)+(2*PILE_d)
-      GEO_pileCapMinWidth=(GEO_pileDist)+(2*PILE_d)
+      GEO_pileXL(1)=GEO_pileDistLong/2,GEO_pileDistLong/2,-GEO_pileDistLong/2,-GEO_pileDistLong/2
+      GEO_pileYL(1)=-GEO_pileDistTran/2,GEO_pileDistTran/2,-GEO_pileDistTran/2,GEO_pileDistTran/2
+      GEO_pileCapMinLength=(GEO_pileDistTran)+(2*PILE_d)
+      GEO_pileCapMinWidth=(GEO_pileDistLong)+(2*PILE_d)
    *elseif,GEO_pileConfig,EQ,'B',THEN
       GEO_pileXL(1)=0,0,0,0
-      GEO_pileYL(1)=-1.5*GEO_pileDist,-GEO_pileDist/2,GEO_pileDist/2,1.5*GEO_pileDist
-      GEO_pileCapMinLength=(3*GEO_pileDist)+(2*PILE_d)
+      GEO_pileYL(1)=-1.5*GEO_pileDistTran,-GEO_pileDistTran/2,GEO_pileDistTran/2,1.5*GEO_pileDistTran
+      GEO_pileCapMinLength=(3*GEO_pileDistTran)+(2*PILE_d)
       GEO_pileCapMinWidth=(2*PILE_d)
    *elseif,GEO_pileConfig,EQ,'C',THEN
-      GEO_pileXL(1)=1.5*GEO_pileDist,GEO_pileDist/2,-GEO_pileDist/2,-1.5*GEO_pileDist
+      GEO_pileXL(1)=1.5*GEO_pileDistLong,GEO_pileDistLong/2,-GEO_pileDistLong/2,-1.5*GEO_pileDistLong
       GEO_pileYL(1)=0,0,0,0
       GEO_pileCapMinLength=(2*PILE_d)
-      GEO_pileCapMinWidth=(3*GEO_pileDist)+(2*PILE_d)
+      GEO_pileCapMinWidth=(3*GEO_pileDistLong)+(2*PILE_d)
    *endif
 
 *elseif,GEO_pileCount,EQ,5,THEN
    ! Five piles
    *if,GEO_pileConfig,EQ,'A',THEN
-      GEO_pileXL(1)=GEO_pileDist*(SQRT(2)/2),GEO_pileDist*(SQRT(2)/2),0,-GEO_pileDist*(SQRT(2)/2),-GEO_pileDist*(SQRT(2)/2)
-      GEO_pileYL(1)=-GEO_pileDist*(SQRT(2)/2),GEO_pileDist*(SQRT(2)/2),0,-GEO_pileDist*(SQRT(2)/2),GEO_pileDist*(SQRT(2)/2)
-      GEO_pileCapMinLength=((SQRT(2)*GEO_pileDist)+(2*PILE_d)
-      GEO_pileCapMinWidth=((SQRT(2)*GEO_pileDist)+(2*PILE_d)
+      GEO_pileXL(1)=GEO_pileDistLong*(SQRT(2)/2),GEO_pileDistLong*(SQRT(2)/2),0,-GEO_pileDistLong*(SQRT(2)/2),-GEO_pileDistLong*(SQRT(2)/2)
+      GEO_pileYL(1)=-GEO_pileDistTran*(SQRT(2)/2),GEO_pileDistTran*(SQRT(2)/2),0,-GEO_pileDistTran*(SQRT(2)/2),GEO_pileDistTran*(SQRT(2)/2)
+      GEO_pileCapMinLength=((SQRT(2)*GEO_pileDistTran)+(2*PILE_d)
+      GEO_pileCapMinWidth=((SQRT(2)*GEO_pileDistLong)+(2*PILE_d)
    *elseif,GEO_pileConfig,EQ,'B',THEN
-      GEO_pileXL(1)=(0.85065)*GEO_pileDist,(0.26287)*GEO_pileDist,(0.26287)*GEO_pileDist,-(0.68819)*GEO_pileDist,-(0.68819)*GEO_pileDist
-      GEO_pileYL(1)=0,-(0.80902)*GEO_pileDist,(0.80902)*GEO_pileDist,-(0.5)*GEO_pileDist,(0.5)*GEO_pileDist
-      GEO_pileCapMinLength=((1.61804)*GEO_pileDist)+(2*PILE_d)
-      GEO_pileCapMinWidth=((1.70130)*GEO_pileDist)+(2*PILE_d)
+      GEO_pileXL(1)=(0.85065)*GEO_pileDistLong,(0.26287)*GEO_pileDistLong,(0.26287)*GEO_pileDistLong,-(0.68819)*GEO_pileDistLong,-(0.68819)*GEO_pileDistLong
+      GEO_pileYL(1)=0,-(0.80902)*GEO_pileDistTran,(0.80902)*GEO_pileDistTran,-(0.5)*GEO_pileDistTran,(0.5)*GEO_pileDistTran
+      GEO_pileCapMinLength=((1.61804)*GEO_pileDistTran)+(2*PILE_d)
+      GEO_pileCapMinWidth=((1.70130)*GEO_pileDistLong)+(2*PILE_d)
    *endif
 
 *elseif,GEO_pileCount,EQ,6,THEN
    ! Six piles
    *if,GEO_pileConfig,EQ,'A',THEN
-      GEO_pileXL(1)=GEO_pileDist/2,GEO_pileDist/2,GEO_pileDist/2,-GEO_pileDist/2,-GEO_pileDist/2,-GEO_pileDist/2
-      GEO_pileYL(1)=-GEO_pileDist,0,GEO_pileDist,-GEO_pileDist,0,GEO_pileDist
-      GEO_pileCapMinLength=(2*GEO_pileDist)+(2*PILE_d)
-      GEO_pileCapMinWidth=(GEO_pileDist)+(2*PILE_d)
+      GEO_pileXL(1)=GEO_pileDistLong/2,GEO_pileDistLong/2,GEO_pileDistLong/2,-GEO_pileDistLong/2,-GEO_pileDistLong/2,-GEO_pileDistLong/2
+      GEO_pileYL(1)=-GEO_pileDistTran,0,GEO_pileDistTran,-GEO_pileDistTran,0,GEO_pileDistTran
+      GEO_pileCapMinLength=(2*GEO_pileDistTran)+(2*PILE_d)
+      GEO_pileCapMinWidth=(GEO_pileDistLong)+(2*PILE_d)
    *elseif,GEO_pileConfig,EQ,'B',THEN
-      GEO_pileXL(1)=GEO_pileDist,GEO_pileDist,0,0,-GEO_pileDist,-GEO_pileDist
-      GEO_pileYL(1)=-GEO_pileDist/2,GEO_pileDist/2,-GEO_pileDist/2,GEO_pileDist/2,-GEO_pileDist/2,GEO_pileDist/2
-      GEO_pileCapMinLength=(GEO_pileDist)+(2*PILE_d)
-      GEO_pileCapMinWidth=(2*GEO_pileDist)+(2*PILE_d)
+      GEO_pileXL(1)=GEO_pileDistLong,GEO_pileDistLong,0,0,-GEO_pileDistLong,-GEO_pileDistLong
+      GEO_pileYL(1)=-GEO_pileDistTran/2,GEO_pileDistTran/2,-GEO_pileDistTran/2,GEO_pileDistTran/2,-GEO_pileDistTran/2,GEO_pileDistTran/2
+      GEO_pileCapMinLength=(GEO_pileDistTran)+(2*PILE_d)
+      GEO_pileCapMinWidth=(2*GEO_pileDistLong)+(2*PILE_d)
    *endif
 
 *elseif,GEO_pileCount,EQ,8,THEN
    ! Eight piles:
-   d_1=GEO_pileDist
-   d_2=GEO_pileDist/2
+   d_1=GEO_pileDistTran
+   d_2=GEO_pileDistLong/2
    *if,GEO_pileConfig,EQ,'A',THEN
       GEO_pileXL(1)=      d_2 ,      d_2 ,     d_2 ,     d_2 ,     -d_2 ,     -d_2 ,    -d_2 ,    -d_2
       GEO_pileYL(1)= -1.5*d_1 , -0.5*d_1 , 0.5*d_1 , 1.5*d_1 , -1.5*d_1 , -0.5*d_1 , 0.5*d_1 , 1.5*d_1
-      GEO_pileCapMinLength=(3*GEO_pileDist)+(2*PILE_d)
-      GEO_pileCapMinWidth=(GEO_pileDist)+(2*PILE_d)
+      GEO_pileCapMinLength=(3*GEO_pileDistTran)+(2*PILE_d)
+      GEO_pileCapMinWidth=(GEO_pileDistLong)+(2*PILE_d)
    *elseif,GEO_pileConfig,EQ,'B',THEN
-      !GEO_pileXL(1)=GEO_pileDist,GEO_pileDist,0,0,-GEO_pileDist,-GEO_pileDist
-      !GEO_pileYL(1)=-GEO_pileDist/2,GEO_pileDist/2,-GEO_pileDist/2,GEO_pileDist/2,-GEO_pileDist/2,GEO_pileDist/2
-      !GEO_pileCapMinLength=(GEO_pileDist)+(2*PILE_d)
-      !GEO_pileCapMinWidth=(2*GEO_pileDist)+(2*PILE_d)
+      !GEO_pileXL(1)=GEO_pileDistLong,GEO_pileDistLong,0,0,-GEO_pileDistLong,-GEO_pileDistLong
+      !GEO_pileYL(1)=-GEO_pileDistTran/2,GEO_pileDistTran/2,-GEO_pileDistTran/2,GEO_pileDistTran/2,-GEO_pileDistTran/2,GEO_pileDistTran/2
+      !GEO_pileCapMinLength=(GEO_pileDistTran)+(2*PILE_d)
+      !GEO_pileCapMinWidth=(2*GEO_pileDistLong)+(2*PILE_d)
    *endif
 
 *elseif,GEO_pileCount,EQ,9,THEN
    ! Nine piles
-   GEO_pileXL(1)=  GEO_pileDist , GEO_pileDist , GEO_pileDist ,             0 , 0 ,            0 , -GEO_pileDist , -GEO_pileDist , -GEO_pileDist
-   GEO_pileYL(1)= -GEO_pileDist ,            0 , GEO_pileDist , -GEO_pileDist , 0 , GEO_pileDist , -GEO_pileDist ,             0 , GEO_pileDist
-   GEO_pileCapMinLength=(2*GEO_pileDist)+(2*PILE_d)
-   GEO_pileCapMinWidth=(2*GEO_pileDist)+(2*PILE_d)
+   GEO_pileXL(1)=  GEO_pileDistLong , GEO_pileDistLong , GEO_pileDistLong ,             0 , 0 ,            0 , -GEO_pileDistLong , -GEO_pileDistLong , -GEO_pileDistLong
+   GEO_pileYL(1)= -GEO_pileDistTran ,            0 , GEO_pileDistTran , -GEO_pileDistTran , 0 , GEO_pileDistTran , -GEO_pileDistTran ,             0 , GEO_pileDistTran
+   GEO_pileCapMinLength=(2*GEO_pileDistTran)+(2*PILE_d)
+   GEO_pileCapMinWidth=(2*GEO_pileDistLong)+(2*PILE_d)
 
 *elseif,GEO_pileCount,EQ,10,THEN
    ! Ten piles:
-   d_1=GEO_pileDist
-   d_2=GEO_pileDist/2
+   d_1=GEO_pileDistTran
+   d_2=GEO_pileDistLong/2
    *if,GEO_pileConfig,EQ,'A',THEN
       GEO_pileXL(1)=    d_2 ,  d_2 , d_2 , d_2 ,   d_2 ,   -d_2 , -d_2 , -d_2 , -d_2 ,  -d_2
       GEO_pileYL(1)=- 2*d_1 , -d_1 ,   0 , d_1 , 2*d_1 , -2*d_1 , -d_1 ,    0 ,  d_1 , 2*d_1
-      GEO_pileCapMinLength=(4*GEO_pileDist)+(2*PILE_d)
-      GEO_pileCapMinWidth=(GEO_pileDist)+(2*PILE_d)
+      GEO_pileCapMinLength=(4*GEO_pileDistTran)+(2*PILE_d)
+      GEO_pileCapMinWidth=(GEO_pileDistLong)+(2*PILE_d)
    *elseif,GEO_pileConfig,EQ,'B',THEN
-      !GEO_pileXL(1)=GEO_pileDist,GEO_pileDist,0,0,-GEO_pileDist,-GEO_pileDist
-      !GEO_pileYL(1)=-GEO_pileDist/2,GEO_pileDist/2,-GEO_pileDist/2,GEO_pileDist/2,-GEO_pileDist/2,GEO_pileDist/2
-      !GEO_pileCapMinLength=(GEO_pileDist)+(2*PILE_d)
-      !GEO_pileCapMinWidth=(2*GEO_pileDist)+(2*PILE_d)
+      !GEO_pileXL(1)=GEO_pileDistLong,GEO_pileDistLong,0,0,-GEO_pileDistLong,-GEO_pileDistLong
+      !GEO_pileYL(1)=-GEO_pileDistTran/2,GEO_pileDistTran/2,-GEO_pileDistTran/2,GEO_pileDistTran/2,-GEO_pileDistTran/2,GEO_pileDistTran/2
+      !GEO_pileCapMinLength=(GEO_pileDistTran)+(2*PILE_d)
+      !GEO_pileCapMinWidth=(2*GEO_pileDistLong)+(2*PILE_d)
    *endif
 
 *endif
