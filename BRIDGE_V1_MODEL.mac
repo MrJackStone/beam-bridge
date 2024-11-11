@@ -30,24 +30,22 @@ ctime,'MODEL_t0'
 !!                                                                                                !!
 !!                                                                                                !!
 BRIDGE_V1_ATTR
-!
-!
-!
-!
-!
+
+
+
+
+
 !!                                                                                                !!
 !!                                                                                                !!
 !! 3. SOLID MODEL                                                                                 !!
 !!                                                                                                !!
 !!                                                                                                !!
 BRIDGE_V1_SM
-!
-!
+
 !/eof
 ! /input,'D:\Ansys\03 Design\51 Ponte Ramal JP\vf01-ramal-jp\manual_interventions',mac
 ! /input,'C:\ansys_models\bridge-ramal-jp\manual_interventions',mac
-!
-!
+
 !!                                                                                                !!
 !!                                                                                                !!
 !! 4. FINITE ELEMENT MODEL                                                                        !!
@@ -56,7 +54,7 @@ BRIDGE_V1_SM
 IMMED,0
 /uis,REPLOT,0
 BRIDGE_V1_MESH
-!
+
 !/eof
 !/input,'_manfix_mesh',mac
 !allsel
