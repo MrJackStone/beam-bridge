@@ -856,6 +856,11 @@ WARNING: Water level incompatible with frame height. GEO_WATERHEIGHT reduced to 
 !
 !! 2.2.3 INFRASTRUCTURE   *** this needs revising ***                                             !!
 !!                                                                                                !!
+! Force single pile cap option for tubular piers
+*if,GEO_frameOpt,eq,1,then
+  GEO_capOpt = 1
+*endif
+
 ! Calculate pile lengths
 *if,GEO_pileOpt,eq,0,then
     ! Uniform lengths

@@ -7,7 +7,7 @@ xCenter = GEO_supportX(arg1)
   xLeft  = xCenter
   xRight = xCenter
 
-  yCenter = 0
+  yCenter = GEO_deckOff_beg+(GEO_deckOff_end-GEO_deckOff_beg)*(xCenter/GEO_deckLength)+(GEO_deckWidth_beg/2)
   yLeft   = yCenter+GEO_columnY_%arg1%(1)
   yRight  = yCenter+GEO_columnY_%arg1%(2)
 
@@ -45,11 +45,8 @@ rCS_name = strcat('CS_INFRA_R',chrval(arg1))
 %lCS_name% = CS_left
 %rCS_name% = CS_right
 
-csys  , 0
 local , CS_center , cart , xCenter , yCenter , nthFrameZBot , zAngle
-csys  , 0
 local , CS_left   , cart , xLeft   , yLeft   , nthFrameZBot , zAngle
-csys  , 0
 local , CS_right  , cart , xRight  , yRight  , nthFrameZBot , zAngle
 csys  , 0
 
