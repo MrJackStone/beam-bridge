@@ -230,7 +230,7 @@ k , K06 , x05 , y02 , z05
 k , K07 , x05 , y01 , z03
 k , K08 , x05 , y02 , z03
 
-asel,u,area,,all
+asel,none
 a, K01, K02, K04, K03
 
 *if,GEO_ABT_suppressLW,ne,1,then
@@ -252,7 +252,7 @@ cmpadd,'COMPA_ABT_walls'
     k , K11 , x05 , y11 , z05
     k , K12 , x05 , y11 , z03
 
-    asel,u,area,,all
+    asel,none
     a, K05, K09, K10, K07
     a, K11, K06, K08, K12
 
@@ -269,7 +269,7 @@ cmpadd,'COMPA_ABT_walls'
     k , K17 , x13, y02, z14
     k , K18 , x05, y02, z15
 
-    asel,u,area,,all
+    asel,none
     a, K05, K15, K14, K13
     a, K06, K16, K17, K18
 
@@ -306,7 +306,7 @@ cmpadd,'COMPA_ABT_walls'
     k , K19 , x05 , y01 , z19
     k , K20 , x05 , y02 , z19
 
-    asel,u,area,,all
+    asel,none
     a, K15, K19, K20, K18
 
     cmpadd,'COMPA_ABT_beam'
@@ -361,7 +361,7 @@ asel,none
 cmpadd,'COMPA_ABT_pileCap'
 
 ! Draw approach slab
-asel,u,area,,all
+asel,none
 *if,GEO_ABT_appSlab,eq,1,then
     k , KA , x01 , y01 , z01
     k , KB , x01 , y02 , z01
@@ -375,7 +375,7 @@ cmpadd,'COMPA_ABT_appSlab'
 
 ! Draw left overhang
 *if,GEO_ABT_deckWidth,ne,GEO_ABT_width,then
-  asel,u,area,,all
+  asel,none
   k , KE , x01 , y02 , z01
   k , KF , x01 , y26 , z01
   k , KG , x05 , y02 , z05
@@ -385,7 +385,7 @@ cmpadd,'COMPA_ABT_appSlab'
   cmpadd,'COMPA_ABT_leftOverhang'
 
   ! Draw right overhang
-  asel,u,area,,all
+  asel,none
   k , KI , x01 , y27 , z01
   k , KJ , x01 , y01 , z01
   k , KK , x05 , y27 , z05
@@ -552,8 +552,8 @@ cmpadd,'COMPA_ABT_appSlab'
 *else
   ! Abutment types 1 through 3:
   *if,GEO_ABT_longPiles,gt,0,then
-    deltaZT=GEO_ABT_width/(GEO_ABT_tranPiles+1)
-    firstZT=0
+    deltaZT = GEO_ABT_width/(GEO_ABT_tranPiles+1)
+    firstZT = deltaZT
   *else
     deltaZT=(GEO_ABT_width-2*GEO_ABT_pileOff)/(GEO_ABT_tranPiles-1)
     firstZT=GEO_ABT_pileOff
@@ -562,7 +562,7 @@ cmpadd,'COMPA_ABT_appSlab'
 
 cmsel,s,COMPA_ABT_tranWall
 cmsel,u,COMPA_prev
-ksel,s,kp,,all
+ksel,all
 kwplan,,K04,K08,K02
 wpoffs,,,firstZT
 *do,nthPile,1,GEO_ABT_tranPiles,1
@@ -578,7 +578,7 @@ wpcsys,,arg1
 *if,GEO_ABT_pileCap,eq,1,then
     cmsel,s,COMPA_ABT_pileCap
     cmsel,u,COMPA_prev
-    ksel,s,kp,,all
+    ksel,all
     kwplan,,K04,K08,K02
     wpoffs,,,firstZT
     *do,nthPile,1,GEO_ABT_tranPiles,1
@@ -680,7 +680,7 @@ cmsel,r,COMPK_ABT_base
 cm,COMPK_tWallBot,kp
 
 ! Keypoints at the top of each longitudinal pile
-ksel,u,kp,,all
+ksel,none
 cm,COMPK_ABT_temp2,kp
 *if,GEO_ABT_suppressLW,ne,1,then
     x_i=firstZL
@@ -698,7 +698,7 @@ cm,COMPK_ABT_temp2,kp
 *endif
 
 ! Keypoints at the top of each transversal pile
-ksel,u,kp,,all
+ksel,none
 y_i=y02-firstZT
 *do,nthPile,1,GEO_ABT_tranPiles,1
     ksel,a,loc,y,y_i
@@ -708,7 +708,7 @@ cmsel,r,COMPK_ABT_base
 cm,COMPK_ABT_temp1,kp
 
 *if,GEO_ABT_type,eq,4,then
-  ksel,u,kp,,all
+  ksel,none
   x_i=x01+firstZL
   *do,nthPile,1,GEO_ABT_longPiles,1
     ksel,a,loc,x,x_i
@@ -730,7 +730,7 @@ cmpadd,'COMPK_ABT_pileTop'
 *if,GEO_ABT_suppressLW,ne,1,then
     cmsel,s,COMPK_lwPileTop
     cmsel,u,COMPK_prev
-    lsel,u,line,,all
+    lsel,none
     *get,kxmx,kp,,mxloc,x
     *get,kxmn,kp,,mnloc,x
     *get,kc,kp,,count
@@ -779,7 +779,7 @@ cmpadd,'COMPK_ABT_pileTop'
 ! Draw transversal wall pile lines
 cmsel,s,COMPK_twPileTop
 cmsel,u,COMPK_prev
-lsel,u,line,,all
+lsel,none
 *get,kmnx,kp,,mnloc,x
 *get,kmxx,kp,,mxloc,x
 *get,kc,kp,,count
@@ -821,7 +821,7 @@ cmpadd,'COMPL_ABT_piles'
     lslk,r
     cmpadd,'COMPL_ABT_vxPiles'
 *else
-    lsel,u,line,,all
+    lsel,none
     cmpadd,'COMPL_ABT_vxPiles'
 *endif
 !
@@ -831,7 +831,7 @@ cmpadd,'COMPL_ABT_piles'
 !! F. SELECTION COMPONENTS                                                                        !!
 !!                                                                                                !!
 ! Barrier lines
-lsel,u,line,,all
+lsel,none
 *if,GEO_ABT_appSlab,eq,1,and,LOAD_barrierStatus,EQ,1,THEN
     *do,nthBarrier,1,LOAD_barrierCount,1
         nthCS=CS_barriers(nthBarrier)
