@@ -1,0 +1,50 @@
+! BRIDGE_V1_FEMBEARING , bearingType , girderNode , mesoNode
+! BRIDGE_V1_FEMBEARING , ARG1        , ARG2       , ARG3
+
+
+! Parse inputs
+_bearingType = ARG1
+_girderNode  = ARG2
+_mesoNode    = ARG3
+
+! Set constants
+bitCount = 6
+
+*del , bit_dofs ,      , nopr
+*dim , bit_dofs , char , bitCount
+bit_dofs(1) = 'UX' , 'UY' , 'UZ' , 'ROTX' , 'ROTY' , 'ROTZ'
+
+*del , dof_rcs ,  , nopr
+*dim , dof_rcs ,  , bitCount
+dof_rcs(1) = SEC_BEARINGX_num , SEC_BEARINGY_num , SEC_BEARINGZ_num , 0 , 0 , 0
+
+! Prepare environment
+nsel , s , node ,  , _mesoNode
+nsel , a , node ,  , _girderNode
+
+! Connect nodes
+*do,nthBit,1,bitCount,1
+
+  ! Connection settings
+  bitValue = strsub(_bearingType,nthBit,1)
+  bitDOF   = bit_dofs(nthBit)
+  rcNum    = dof_rcs(nthBit)
+
+  *if,bitValue,eq,'0',then
+    ! No connection
+
+  *elseif,bitValue,eq,'1',then
+    ! Coupling
+    cp,next,%bitDOF%,_mesoNode,_girderNode
+
+  *elseif,bitValue,eq,'2',then
+    ! Spring
+    *if,rcNum,eq,0,cycle
+    ! TODO  torsional springs for ROT DOFs not implemented
+    type , TYPE_matrix27
+    mat  , MAT_matrix
+    real , rcNum
+    e,_mesoNode,_girderNode
+
+  *endif
+*enddo
