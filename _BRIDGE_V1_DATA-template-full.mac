@@ -78,10 +78,10 @@ GEO_girderCount=3
 !    [1] Uniform spacing
 GEO_uniGirderSpacing=1
 *if,GEO_uniGirderSpacing,EQ,0,THEN
-   *del,GEO_girderY_beg
-   *dim,GEO_girderY_beg,ARRAY,GEO_girderCount
-   *del,GEO_girderY_end
-   *dim,GEO_girderY_end,ARRAY,GEO_girderCount
+   *del , GEO_girderY_beg ,  , nopr
+   *del , GEO_girderY_end ,  , nopr
+   *dim , GEO_girderY_beg ,  , GEO_girderCount
+   *dim , GEO_girderY_end ,  , GEO_girderCount
    GEO_girderY_beg(1)=
    GEO_girderY_end(1)=
 *endif
