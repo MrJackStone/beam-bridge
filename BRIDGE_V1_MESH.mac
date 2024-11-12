@@ -783,7 +783,7 @@ cm,COMPN_base,node
   cm,COMPN_ABT1_pileSpringSupported,node
 
   *get,nc,node,,count
-  *if,nc,gt,0,,then
+  *if,nc,gt,0,then
 
     *if,MAT_Soil_kv,GT,0,THEN
       cmsel,s,COMPN_ABT1_pileSpringSupported
@@ -838,7 +838,7 @@ cm,COMPN_base,node
   cm,COMPN_ABT2_pileSpringSupported,node
 
   *get,nc,node,,count
-  *if,nc,gt,0,,then
+  *if,nc,gt,0,then
 
     *if,MAT_Soil_kv,GT,0,THEN
       cmsel,s,COMPN_ABT2_pileSpringSupported
