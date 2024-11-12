@@ -84,8 +84,8 @@
     ! Couple DOFs: girders & supports
     *do,nthGirder,1,GEO_girderCount,1
         ncmName       = 'COMPN_S%nthSpan%_G%nthGirder%'
-        connectionBeg = FEM_GIRDER_bearings(nthGirder,begSupportIdx)
-        connectionEnd = FEM_GIRDER_bearings(nthGirder,endSupportIdx)
+        connectionBeg = FEM_GIRDER_bearings(1,nthGirder,nthSpan)
+        connectionEnd = FEM_GIRDER_bearings(2,nthGirder,nthSpan)
 
         ! Girder node at the beginning
         cmsel,s,%ncmName%

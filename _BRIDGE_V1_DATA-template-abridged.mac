@@ -99,25 +99,26 @@ GIRDER_name(1) = 'G150x70'   ! CEDISAVS
 
 ! Connection between girders and mesostructure. Table formatted as follows:
 !
-!        girder index       support index
-!                    ↖️    ↗️
-! FEM_GIRDER_bearings(i, j) = '111001'
-!                              ⬆️⬆️⬆️⬆️⬆️⬆️
-!                              UUURRR
-!                              XYZXYZ (according to global CSYS)
+!           girder index       span index
+!                       ↖️    ↗️
+! FEM_GIRDER_bearings(i, j, k) = '112001'
+!                   ↙️             \|/\|/
+!     position index:              U  R
+!     1: beginning                /|\/|\
+!     2: end                      XYZXYZ (according to global CSYS)
 !
 ! Each entry in the table is an ordered string representing the DOF association.
 ! Each character in the string (bit) represents one DOF.
 ! Possible bit values are:
-!   [0] Not connected
-!   [1] DOF coupling
-!   [2] DOF connected through springs
+!   ['0'] Not connected
+!   ['1'] DOF coupling
+!   ['2'] DOF connected through springs
 *del , FEM_GIRDER_bearings ,      , nopr
-*dim , FEM_GIRDER_bearings , char , GEO_girderCount , GEO_supportCount
-FEM_GIRDER_bearings(1,1) = '111000'
-FEM_GIRDER_bearings(2,1) = '101000'
-FEM_GIRDER_bearings(1,2) = '011000'
-FEM_GIRDER_bearings(2,2) = '001000'
+*dim , FEM_GIRDER_bearings , char , 2    , GEO_girderCount , GEO_supportCount-1
+FEM_GIRDER_bearings(1,1,1) = '111000' , '011000'
+FEM_GIRDER_bearings(1,2,1) = '101000' , '001000'
+FEM_GIRDER_bearings(1,1,2) = '011000' , '111000'
+FEM_GIRDER_bearings(1,2,2) = '001000' , '101000'
 
 ! For spring-supported girders only:
   ! Vertical stiffness in the connection between girders and frame girders [N/m]
