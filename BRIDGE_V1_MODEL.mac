@@ -55,14 +55,11 @@ IMMED,0
 /uis,REPLOT,0
 BRIDGE_V1_MESH
 
-!/eof
 !/input,'_manfix_mesh',mac
 !allsel
 !csys,0
 !nrotat,all
-!
-!
-!
+
 !!                                                                                                !!
 !!                                                                                                !!
 !! 5. SOLUTION                                                                                    !!
