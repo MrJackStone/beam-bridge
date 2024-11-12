@@ -743,6 +743,8 @@ cm,COMPN_PILE_absentSoil,node
 ! Pier piles
 cmsel,s,COMPN_PIER_piles
 cmsel,u,COMPN_PILE_absentSoil
+cmsel,u,COMPN_rockSupport
+cm,COMPN_base,node
 *if,MAT_Soil_kv,GT,0,THEN
     sprsup,0,0,-FEM_springL,MAT_PileLat,SEC_VSOIL_num,TYPE_LINK180,'COMPN_PIER_VSoil','COMPE_PIER_VSoil',,3
 *endif
@@ -771,6 +773,7 @@ cmsel,u,COMPN_PILE_absentSoil
 
     cmsel,s,COMPN_ABT1_pileRestrained
     cmsel,u,COMPN_PILE_absentSoil
+    cmsel,u,COMPN_rockSupport
     cm,COMPN_ABT1_pileSpringSupported,node
 
     *if,MAT_Soil_kv,GT,0,THEN
@@ -824,6 +827,7 @@ cmsel,u,COMPN_PILE_absentSoil
 
     cmsel,s,COMPN_ABT2_pileRestrained
     cmsel,u,COMPN_PILE_absentSoil
+    cmsel,u,COMPN_rockSupport
     cm,COMPN_ABT2_pileSpringSupported,node
 
     *if,MAT_Soil_kv,GT,0,THEN
