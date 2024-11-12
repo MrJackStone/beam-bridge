@@ -87,15 +87,17 @@ GIRDER_name0 = GIRDER_name(1)
   !!  Pier: frame                                                                                   !!
   BRIDGE_V1_POSTPIER
 
-  BRIDGE_V1_POSTFRC , 'MY'
-  BRIDGE_V1_POSTFRC , 'MZ'
-  BRIDGE_V1_POSTFRC , 'QZ'
-  BRIDGE_V1_POSTFRC , 'QY'
-  BRIDGE_V1_POSTFRC , 'N'
-  BRIDGE_V1_POSTFRC , 'MOBL'
+  *if,GEO_frameOpt,eq,0,then
+    BRIDGE_V1_POSTFRC , 'MY'
+    BRIDGE_V1_POSTFRC , 'MZ'
+    BRIDGE_V1_POSTFRC , 'QZ'
+    BRIDGE_V1_POSTFRC , 'QY'
+    BRIDGE_V1_POSTFRC , 'N'
+    BRIDGE_V1_POSTFRC , 'MOBL'
 
-  BRIDGE_V1_POSTFRG, 'MY'
-  BRIDGE_V1_POSTFRG, 'QZ'
+    BRIDGE_V1_POSTFRG, 'MY'
+    BRIDGE_V1_POSTFRG, 'QZ'
+  *endif
 
 
   !!  Piles                                                                                         !!
