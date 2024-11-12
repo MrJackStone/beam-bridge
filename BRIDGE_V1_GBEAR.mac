@@ -112,11 +112,6 @@
 
 *enddo
 
-esel,s,real,,SEC_Bearing_num
-nsle,s,active
-cm,COMPE_Bearing,elem
-cm,COMPN_Bearing,node
-
 ! Connect gerber to tubular column cap
 *if,GEO_gerberStatus,eq,1,then
     cmsel,s,COMPN_GerberSupported
