@@ -5,20 +5,20 @@ allsel
 
 ! Initialize arrays
 *get,nodeCount,parm,NLIST_apportioned,dim,x
-*del , top_level     ,  , nopr
-*del , height_above  ,  , nopr
-*del , dw_pres_vert  ,  , nopr
-*del , sc_pres_vert  ,  , nopr
-*del , dw_pres_horz  ,  , nopr
-*del , sc_pres_horz  ,  , nopr
-*del , pres_cohesion ,  , nopr
-*dim , top_level     ,  , nodeCount
-*dim , height_above  ,  , nodeCount
-*dim , dw_pres_vert  ,  , nodeCount
-*dim , sc_pres_vert  ,  , nodeCount
-*dim , dw_pres_horz  ,  , nodeCount
-*dim , sc_pres_horz  ,  , nodeCount
-*dim , pres_cohesion ,  , nodeCount
+*del , top_level    ,  , nopr
+*del , height_above ,  , nopr
+*del , dw_pres_vert ,  , nopr
+*del , sc_pres_vert ,  , nopr
+*del , dw_pres_horz ,  , nopr
+*del , sc_pres_horz ,  , nopr
+*del , ch_pres_horz ,  , nopr
+*dim , top_level    ,  , nodeCount
+*dim , height_above ,  , nodeCount
+*dim , dw_pres_vert ,  , nodeCount
+*dim , sc_pres_vert ,  , nodeCount
+*dim , dw_pres_horz ,  , nodeCount
+*dim , sc_pres_horz ,  , nodeCount
+*dim , ch_pres_horz ,  , nodeCount
 
 ! Calculate soil height above each node
 *voper , top_level    , NLIST_x   , mult , ABT%ARG1%_angCoef
