@@ -485,7 +485,7 @@ cm,COMPN_ABT_Barrier,node
         cmsel,s,COMPA_ABT_appSlab
         lsla,s
         nsla,r,1
-        cmadd,'COMPN_ABT_Barrier'
+        cmpadd,'COMPN_ABT_Barrier'
     *endif
 *endif
 
@@ -749,8 +749,8 @@ cmsel,u,COMPN_PILE_absentSoil
     sprsup,0,-FEM_springL,0,MAT_Soil,SEC_HSOIL_num,TYPE_LINK180,'COMPN_temp' ,'COMPE_temp',,4
     cmsel,s,COMPN_temp
     cmsel,s,COMPE_temp
-    cmadd,'COMPN_PIER_HSoil'
-    cmadd,'COMPE_PIER_HSoil'
+    cmpadd,'COMPN_PIER_HSoil'
+    cmpadd,'COMPE_PIER_HSoil'
 *endif
 
 ! First abutment
@@ -796,8 +796,8 @@ cmsel,u,COMPN_PILE_absentSoil
         *endif
         cmsel,s,COMPN_temp
         cmsel,s,COMPE_temp
-        cmadd,'COMPN_ABT1_HSoil'
-        cmadd,'COMPE_ABT1_HSoil'
+        cmpadd,'COMPN_ABT1_HSoil'
+        cmpadd,'COMPE_ABT1_HSoil'
     *endif
 
     cmsel,s,COMPN_ABT1_piles
@@ -849,8 +849,8 @@ cmsel,u,COMPN_PILE_absentSoil
         *endif
         cmsel,s,COMPN_temp
         cmsel,s,COMPE_temp
-        cmadd,'COMPN_ABT2_HSoil'
-        cmadd,'COMPE_ABT2_HSoil'
+        cmpadd,'COMPN_ABT2_HSoil'
+        cmpadd,'COMPE_ABT2_HSoil'
     *endif
 
     cmsel,s,COMPN_ABT2_piles
