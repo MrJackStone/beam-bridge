@@ -99,9 +99,9 @@ SEC_PILE_num         = 7
 SEC_VSOIL_num        = 8
 SEC_HSOIL_num        = 9
 SEC_SPRING_num       = 10
-SEC_Bearing_num      = 11
-SEC_BearingXZ_num    = 12
-SEC_BearingYZ_num    = 13
+SEC_BEARINGX_num     = 11
+SEC_BEARINGY_num     = 12
+SEC_BEARINGZ_num     = 13
 SEC_FRICTION_num     = 14
 SEC_ABT_longWall     = 15
 SEC_ABT_tranWall     = 16
@@ -411,75 +411,6 @@ R,SEC_PSOIL_num,SEC_PSOIL_area,,-1
 !! 2.1.3.13 SPRINGS                                                                               !!
 R,SEC_SPRING_num,SEC_SPRING_k
 
-!! 2.1.3.14 BEARING (XYZ)                                                                         !!
-! Set stiffness matrix values:
-!    C1 = KX     C19 =-KY     C58 = KX
-!    C7 =-KX     C24 = KZ     C64 = KY
-!    C13= KY     C30 =-KZ     C69 = KZ
-!    Remaining values = 0
-KX = FEM_BEARING_kh
-KY = FEM_BEARING_kh
-KZ = FEM_BEARING_kv
-R,SEC_BEARING_num,   KX,  0,  0,  0,  0,   0  ! C1  - C6
-RMORE,              -KX,  0,  0,  0,  0,   0  ! C7  - C12
-RMORE,               KY,  0,  0,  0,  0,   0  ! C13 - C18
-RMORE,              -KY,  0,  0,  0,  0,  KZ  ! C19 - C24
-RMORE,                0,  0,  0,  0,  0, -KZ  ! C25 - C30
-RMORE,                0,  0,  0,  0,  0,   0  ! C31 - C36
-RMORE,                0,  0,  0,  0,  0,   0  ! C36 - C42
-RMORE,                0,  0,  0,  0,  0,   0  ! C43 - C48
-RMORE,                0,  0,  0,  0,  0,   0  ! C49 - C54
-RMORE,                0,  0,  0, KX,  0,   0  ! C55 - C60
-RMORE,                0,  0,  0, KY,  0,   0  ! C61 - C66
-RMORE,                0,  0, KZ,  0,  0,   0  ! C67 - C72
-RMORE,                0,  0,  0,  0,  0,   0  ! C73 - C78
-
-!! 2.1.3.15 BEARING (XZ)                                                                          !!
-! Set stiffness matrix values:
-!    C1 = KX     C19 =-KY     C58 = KX
-!    C7 =-KX     C24 = KZ     C64 = KY
-!    C13= KY     C30 =-KZ     C69 = KZ
-!    Remaining values = 0
-KX=FEM_BEARING_kh
-KY=0
-KZ=FEM_BEARING_kv
-R,SEC_BEARINGXZ_num, KX,  0,  0,  0,  0,   0  ! C1  - C6
-RMORE,              -KX,  0,  0,  0,  0,   0  ! C7  - C12
-RMORE,               KY,  0,  0,  0,  0,   0  ! C13 - C18
-RMORE,              -KY,  0,  0,  0,  0,  KZ  ! C19 - C24
-RMORE,                0,  0,  0,  0,  0, -KZ  ! C25 - C30
-RMORE,                0,  0,  0,  0,  0,   0  ! C31 - C36
-RMORE,                0,  0,  0,  0,  0,   0  ! C36 - C42
-RMORE,                0,  0,  0,  0,  0,   0  ! C43 - C48
-RMORE,                0,  0,  0,  0,  0,   0  ! C49 - C54
-RMORE,                0,  0,  0, KX,  0,   0  ! C55 - C60
-RMORE,                0,  0,  0, KY,  0,   0  ! C61 - C66
-RMORE,                0,  0, KZ,  0,  0,   0  ! C67 - C72
-RMORE,                0,  0,  0,  0,  0,   0  ! C73 - C78
-
-!! 2.1.3.16 BEARING (YZ)                                                                          !!
-! Set stiffness matrix values:
-!    C1 = KX     C19 =-KY     C58 = KX
-!    C7 =-KX     C24 = KZ     C64 = KY
-!    C13= KY     C30 =-KZ     C69 = KZ
-!    Remaining values = 0
-KX=0
-KY=FEM_BEARING_kh
-KZ=FEM_BEARING_kv
-R,SEC_BEARINGYZ_num, KX,  0,  0,  0,  0,   0  ! C1  - C6
-RMORE,              -KX,  0,  0,  0,  0,   0  ! C7  - C12
-RMORE,               KY,  0,  0,  0,  0,   0  ! C13 - C18
-RMORE,              -KY,  0,  0,  0,  0,  KZ  ! C19 - C24
-RMORE,                0,  0,  0,  0,  0, -KZ  ! C25 - C30
-RMORE,                0,  0,  0,  0,  0,   0  ! C31 - C36
-RMORE,                0,  0,  0,  0,  0,   0  ! C36 - C42
-RMORE,                0,  0,  0,  0,  0,   0  ! C43 - C48
-RMORE,                0,  0,  0,  0,  0,   0  ! C49 - C54
-RMORE,                0,  0,  0, KX,  0,   0  ! C55 - C60
-RMORE,                0,  0,  0, KY,  0,   0  ! C61 - C66
-RMORE,                0,  0, KZ,  0,  0,   0  ! C67 - C72
-RMORE,                0,  0,  0,  0,  0,   0  ! C73 - C78
-
 !! 2.1.3.14 BEARING (X)                                                                           !!
 ! Set stiffness matrix values:
 !    C1  =  KX
@@ -571,7 +502,12 @@ RMORE,                0,  0,  0, KX,  0,   0  ! C55 - C60
 RMORE,                0,  0,  0, KY,  0,   0  ! C61 - C66
 RMORE,                0,  0, KZ,  0,  0,   0  ! C67 - C72
 RMORE,                0,  0,  0,  0,  0,   0  ! C73 - C78
-!
+
+! Clean up
+*del,kx,,nopr
+*del,ky,,nopr
+*del,kz,,nopr
+
 !! 2.1.3.18 ABUTMENTS                                                                             !!
 
 ! LONGITUDINAL WALLS
