@@ -607,7 +607,7 @@ GEO_deckOffsets(1)=GEO_deckOff_beg,GEO_deckOff_end
 *endif
 
 ! Determine position of the supports
-*if,GEO_supports,GT,1,THEN
+*if,GEO_supportOpt,eq,0,then
     ! Evenly spaced supports
     supportDist=GEO_deckLength/(GEO_supportCount-1)
     *del,GEO_supportX

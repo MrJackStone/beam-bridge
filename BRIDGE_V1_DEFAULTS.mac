@@ -31,6 +31,8 @@ FEM_Bearing_kh = 1e3
 !!                                                                                                !!
 !! 1.2  Piers                                                                                     !!
 !!                                                                                                !!
+GEO_supportOpt = 0
+
 COLUMN_cx     = 1
 COLUMN_cy     = 1
 FRAMEGIRDER_b = 1

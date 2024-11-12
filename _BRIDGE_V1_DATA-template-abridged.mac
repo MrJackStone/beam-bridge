@@ -15,6 +15,9 @@ FILE_name = 'OAE'
 !    [1] Railway
 BRIDGE_type = 0
 
+! Number of supports (>= 2)
+GEO_supportCount = 2
+
 
 
 !!                                                                                                !!
@@ -132,17 +135,6 @@ CROSSBEAM_h = 0.7
 !!                                                                                                !!
 !! 1.2  Piers                                                                                     !!
 !!                                                                                                !!
-! Positions of the supports
-!   [<-1] Number of supports (absolute value), custom spans
-!   [>1]  Number of supports (equal spans)
-GEO_supports     = 2
-GEO_supportCount = ABS(GEO_supports)
-*if,GEO_supports,lt,0,THEN
-   *del,GEO_supportX
-   *dim,GEO_supportX,ARRAY,GEO_supportCount
-   GEO_supportX(1) =
-*endif
-
 ! Pier type:
 !    [0] Frame (two columns + girder)
 !    [1] Tubular
