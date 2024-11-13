@@ -911,22 +911,7 @@ d,all,uz,0
 allsel
 
 numcmp,node
-
-prevCP = cpinqr(0,14)
-diffCP = 1
-*dowhile,diffCP
-  cpmerge,ux
-  cpmerge,uy
-  cpmerge,uz
-  cpmerge,rotx
-  cpmerge,roty
-  cpmerge,rotz
-  newCP = cpinqr(0,14)
-  *if,prevCP,eq,newCP,then
-    diffCP = 0
-  *endif
-  prevCP = newCP
-*enddo
+cpsmerge
 
 ! Capture image of the mesh
 ALLSEL
@@ -945,10 +930,3 @@ BRIDGE_V1_TAKEPIC,'02_MESH'
 IMMED,0
 /uis,REPLOT,0
 /uis,MSGPOP,3
-
-
-
-
-
-
-
