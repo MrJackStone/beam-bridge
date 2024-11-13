@@ -61,8 +61,7 @@ asel,u,loc,y,-GEO_columnWidth/2
 asel,u,loc,y, GEO_columnWidth/2
 
 ! Slice at superstructure positions
-wpcsys,,CS_num
-batch_slicexz,'XZslice',1
+BRIDGE_V1_LONGSLICE
 
 ! Slice at infrastructure positions
 wpcsys,,CS_num
@@ -99,7 +98,3 @@ asel,r,loc,y,GEO_columnWidth/2
 cmpadd,'COMPA_tubeWindFace'
 
 csys,0
-
-
-
-

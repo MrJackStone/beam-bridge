@@ -159,7 +159,11 @@ csys  , 0
 
   *if,GEO_frameOpt,eq,1,then
     ! Tubular pier column: slice at superstructure positions
+    *del,XZslice,,nopr
+    *dim,XZslice,,2
+    XZslice(1)=-GEO_columnWidth/2,GEO_columnWidth/2
     batch_slicexz,'XZslice',1
+    BRIDGE_V1_LONGSLICE
   *endif
 
   cmsel,a,COMPA_centerPileCaps
