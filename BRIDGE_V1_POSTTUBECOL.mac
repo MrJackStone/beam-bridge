@@ -1,5 +1,5 @@
-! BRIDGE_V1_POSTPCAP , etabName , centerTitle , rightTitle , imgName
-! BRIDGE_V1_POSTPCAP , ARG1     , ARG2        , ARG3       , ARG4
+! BRIDGE_V1_POSTTUBECOL , etabName , centerTitle , rightTitle , imgName
+! BRIDGE_V1_POSTTUBECOL , ARG1     , ARG2        , ARG3       , ARG4
 
 
 _etabName    = ARG1
@@ -19,7 +19,7 @@ boldfont,1
 /type,1,4
 /psymb,cs,0
 
-/view,1,-1,-1,-1
+/view,1,-1,-1,1
 /angle,1,0
 /auto,1
 /eshape,0
@@ -34,18 +34,18 @@ eplot
 
 /plopts,leg3,on
 /udoc,1,cntr,right
-/gformat,f,1,1
+/gformat,F,1,1
 
-wintitle,1,'BLOCO DE COROAMENTO',_centerTitle,_rightTitle,,1,13
+wintitle,1,'PILAR TUBULAR - PAREDES',_centerTitle,_rightTitle,,1,13
 
 go2png,1200
-  cmsel,s,COMPA_colTubeWall
+  cmsel,s,COMPA_colTubeCap
   esla
   nsle
   eplot
   /noerase
 
-  cmsel,s,COMPA_pileCap
+  cmsel,s,COMPA_colTubeWall
   esla
   nsle
 
@@ -53,36 +53,19 @@ go2png,1200
 
   allsel
   esel,u,ename,,180
-  cmsel,s,COMPL_pile
-  esll,u
   nsle
   /device,vector,on
   /type,1,3
   /edge,1,1
   eplot
 
-  cmsel,s,COMPL_pile
-  esll
-  nsle
-  /eshape,1
-  eplot
-  /eshape,0
-
-  cmsel,s,COMPA_colTubeWall
+  cmsel,s,COMPA_colTubeCap
   esla
   nsle
   /edge,1,0
   eplot
   /device,vector,off
   /type,1,4
-
-  /triad,on
-  cmsel,s,COMPA_pileCap
-  esla
-  nsle
-  ksel,s,kp,,1
-  pltesys,,'KPLOT',1,
-  /triad,off
 
 endpng,_imgName,,,,,POST_resultsFolder
 

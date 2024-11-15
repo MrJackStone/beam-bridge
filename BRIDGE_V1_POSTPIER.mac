@@ -6,136 +6,18 @@ clims
 
   *if,GEO_frameOpt,eq,1,then
     ! Tubular pier columns
-    /annot,dele
 
-    allsel
-    esel,u,type,,3
+    BRIDGE_V1_POSTTUBECOL , 'EAB_MX' , 'MOMENTO FLETOR (MX)' , 'ELU-Normal [kNm/m]' , 'PIERTUBE_MX'
+    BRIDGE_V1_POSTTUBECOL , 'EAB_MY' , 'MOMENTO FLETOR (MY)' , 'ELU-Normal [kNm/m]' , 'PIERTUBE_MY'
+    BRIDGE_V1_POSTTUBECOL , 'EAB_Q'  , 'FOR. CORTANTE'       , 'ELU-Normal [kN/m]'  , 'PIERTUBE_Q'
+    BRIDGE_V1_POSTTUBECOL , 'EAB_NX' , 'FOR. NORMAL (NX)'    , 'ELU-Normal [kN/m]'  , 'PIERTUBE_NX'
+    BRIDGE_V1_POSTTUBECOL , 'EAB_NY' , 'FOR. NORMAL (NY)'    , 'ELU-Normal [kN/m]'  , 'PIERTUBE_NY'
 
-    view1w
-    windefa,1
-    wincln,1
-    /view,1,-1,-1,1
-    /auto,1
-    eplot
-    /user,1
-
-    wintitle,1,' ','F. AXIAL (V) NOS PILARES [kN/m]',' ',,1
-
-    go2png,1200
-
-      cmsel,s,compa_coltubewall
-      cmsel,a,compa_coltubecap
-      esla,s
-      nsle,s,active
-
-      /udoc,1,cntr,right
-      /plopts,leg3,on
-      /gformat,f,1,1
-
-      ! Vertical axial force (compression)
-      pletab,'EMN_NY',1
-      /noerase
-
-      /device,vector,on
-      allsel
-      esel,u,type,,3
-      nsle,s,active
-      eplot
-      /device,vector,off
-
-    endpng,'IMG09a_pierNY',,,,,POST_resultsFolder
-    /erase
-    /annot,dele
-
-    !!
-    wintitle,1,' ','F. AXIAL (H) NOS PILARES [kN/m]',' ',,1
-
-    go2png,1200
-
-      cmsel,s,compa_coltubewall
-      cmsel,a,compa_coltubecap
-      esla,s
-      nsle,s,active
-
-      /udoc,1,cntr,right
-      /plopts,leg3,on
-      ! /plopts,info,3
-      /gformat,f,1,1
-
-      ! Vertical axial force (compression)
-      pletab,'EMX_NX',1
-      /noerase
-
-      /device,vector,on
-      allsel
-      esel,u,type,,3
-      nsle,s,active
-      eplot
-      /device,vector,off
-
-    endpng,'IMG09b_pierNX',,,,,POST_resultsFolder
-    /erase
-    /annot,dele
-
-    !!
-    wintitle,1,' ','M. FLETOR NOS PILARES [kNm/m]',' ',,1
-
-    go2png,1200
-
-      cmsel,s,compa_coltubewall
-      cmsel,a,compa_coltubecap
-      esla,s
-      nsle,s,active
-
-      /udoc,1,cntr,right
-      /plopts,leg3,on
-      ! /plopts,info,3
-      /gformat,f,1,1
-
-      ! Vertical axial force (compression)
-      pletab,'EMN_MX',1
-      /noerase
-
-      /device,vector,on
-      allsel
-      esel,u,type,,3
-      nsle,s,active
-      eplot
-      /device,vector,off
-
-    endpng,'IMG09c_pierMX',,,,,POST_resultsFolder
-    /erase
-    /annot,dele
-
-    !!
-    wintitle,1,' ','F. CORTANTE NOS PILARES [kN/m]',' ',,1
-
-    go2png,1200
-
-      cmsel,s,compa_coltubewall
-      cmsel,a,compa_coltubecap
-      esla,s
-      nsle,s,active
-
-      /udoc,1,cntr,right
-      /plopts,leg3,on
-      ! /plopts,info,3
-      /gformat,f,1,1
-
-      ! Vertical axial force (compression)
-      pletab,'EAB_Q',1
-      /noerase
-
-      /device,vector,on
-      allsel
-      esel,u,type,,3
-      nsle,s,active
-      eplot
-      /device,vector,off
-
-    endpng,'IMG09d_pierQ',,,,,POST_resultsFolder
-    /erase
-    /annot,dele
+    BRIDGE_V1_POSTTUBECAP , 'EAB_MX' , 'MOMENTO FLETOR (MX)' , 'ELU-Normal [kNm/m]' , 'PIERCAP_MX'
+    BRIDGE_V1_POSTTUBECAP , 'EAB_MY' , 'MOMENTO FLETOR (MY)' , 'ELU-Normal [kNm/m]' , 'PIERCAP_MY'
+    BRIDGE_V1_POSTTUBECAP , 'EAB_Q'  , 'FOR. CORTANTE'       , 'ELU-Normal [kN/m]'  , 'PIERCAP_Q'
+    BRIDGE_V1_POSTTUBECAP , 'EAB_NX' , 'FOR. NORMAL (NX)'    , 'ELU-Normal [kN/m]'  , 'PIERCAP_NX'
+    BRIDGE_V1_POSTTUBECAP , 'EAB_NY' , 'FOR. NORMAL (NY)'    , 'ELU-Normal [kN/m]'  , 'PIERCAP_NY'
 
   *elseif,GEO_frameOpt,eq,0,or,GEO_frameOpt,eq,2,then
     ! Column-girder frame
