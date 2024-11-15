@@ -6,12 +6,12 @@ etabName    = arg1
 centerTitle = arg2
 units       = arg3
 
-
 view4w
 clims
 boldfont,1
 /gformat,f,2,1
 /annot,dele
+/psymb,cs,0
 
 cmsel,s,COMPA_ABT_thinTranWall
 esla,s
@@ -41,9 +41,8 @@ cmsel,a,COMPE_ABT_2
 eplot
 /user,all
 
-
-wintitle,1,'ENCONTRO 01: PAREDE TRANSVERSAL',centerTitle,units,,1,13
-wintitle,2,'ENCONTRO 02: PAREDE TRANSVERSAL',centerTitle,units,,1,13
+wintitle , 1 , 'E01: PAREDE TRANSVERSAL' , centerTitle , units ,  , 1 , 13
+wintitle , 2 , 'E02: PAREDE TRANSVERSAL' , centerTitle , units ,  , 1 , 13
 
 axanno,1
 axanno,2

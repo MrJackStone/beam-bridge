@@ -129,12 +129,11 @@ GIRDER_name0 = GIRDER_name(1)
 
 
   !!  Abutment: transversal wall                                                                    !!
-  ! BRIDGE_V1_POSTTWALL , etable    , subtitle                      , imgName
-  BRIDGE_V1_POSTTWALL   , 'AEAB_MX' , 'MOMENTO FLETOR (MX) [kNm/m]' , 'IMG13a_TRAN_MX'
-  BRIDGE_V1_POSTTWALL   , 'AEAB_MY' , 'MOMENTO FLETOR (MY) [kNm/m]' , 'IMG13b_TRAN_MY'
-  BRIDGE_V1_POSTTWALL   , 'AEAB_Q'  , 'F. CORTANTE [kN/m]'          , 'IMG13c_TRAN_Q'
-  BRIDGE_V1_POSTTWALL   , 'EAB_NX'  , 'F. NORMAL (NX) [kN/m]'       , 'IMG13d_TRAN_NX'
-  BRIDGE_V1_POSTTWALL   , 'EAB_NY'  , 'F. NORMAL (NY) [kN/m]'       , 'IMG13e_TRAN_NY'
+  BRIDGE_V1_POSTTWALL , 'AEAB_MX' , 'MOMENTO FLETOR (MX)' , 'ELU-Normal [kNm/m]' , 'IMG13a_TRAN_MX'
+  BRIDGE_V1_POSTTWALL , 'AEAB_MY' , 'MOMENTO FLETOR (MY)' , 'ELU-Normal [kNm/m]' , 'IMG13b_TRAN_MY'
+  BRIDGE_V1_POSTTWALL , 'AEAB_Q'  , 'F. CORTANTE'         , 'ELU-Normal [kN/m]'  , 'IMG13c_TRAN_Q'
+  BRIDGE_V1_POSTTWALL , 'EAB_NX'  , 'F. NORMAL (NX)'      , 'ELU-Normal [kN/m]'  , 'IMG13d_TRAN_NX'
+  BRIDGE_V1_POSTTWALL , 'EAB_NY'  , 'F. NORMAL (NY)'      , 'ELU-Normal [kN/m]'  , 'IMG13e_TRAN_NY'
 
   BRIDGE_V1_POSTTHINWALL , 'AEAB_MX' , 'MOMENTO FLETOR (MX)' , 'ELU-Normal [kNm/m]' , 'IMG13f_TRAN_MX'
   BRIDGE_V1_POSTTHINWALL , 'AEAB_MY' , 'MOMENTO FLETOR (MY)' , 'ELU-Normal [kNm/m]' , 'IMG13g_TRAN_MY'

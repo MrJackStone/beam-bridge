@@ -1,8 +1,11 @@
-! BRIDGE_V1_POSTTWALL , etable , subtitle , imgName
-! BRIDGE_V1_POSTTWALL , arg1   , arg2     , arg3
+! BRIDGE_V1_POSTTWALL , etabName , centerTitle , rightTitle , imgName
+! BRIDGE_V1_POSTTWALL , ARG1     , ARG2        , ARG3       , ARG4
 
 
-etabName=arg1
+_etabName    = ARG1
+_centerTitle = ARG2
+_rightTitle  = ARG3
+_imgName     = ARG4
 
 /device,font,3,Arial,1000,0,-64,0,0,,,
 /device,font,1,Arial,1000,0,-42,0,0,,,
@@ -14,8 +17,10 @@ etabName=arg1
 view4w
 clims
 erase
+/psymb,cs,0
 
 cmsel,s,COMPA_ABT_tranwall
+cmsel,u,COMPA_ABT_thinTranWall
 esla,s
 cm,COMPE_temp,elem
 
@@ -43,9 +48,8 @@ cmsel,a,COMPE_ABT_2
 eplot
 /user,all
 
-_arg2=ARG2
-wintitle , 1 , 'ENCONTRO 01: PAREDE TRANSVERSAL' , ' ' , _arg2 ,  , 1
-wintitle , 2 , 'ENCONTRO 02: PAREDE TRANSVERSAL' , ' ' , _arg2 ,  , 1
+wintitle , 1 , 'E01: PILAR-PAREDE' , _centerTitle , _rightTitle ,  , 1 , 13
+wintitle , 2 , 'E02: PILAR-PAREDE' , _centerTitle , _rightTitle ,  , 1 , 13
 
 axanno,1
 axanno,2
@@ -88,7 +92,7 @@ go2png,1200
   cmsel,s,COMPA_ABT_1
   esla,r
   nsle,s
-  cleanplot,'pletab',etabName,'1'
+  cleanplot,'pletab',_etabName,'1'
 
   /window,1,off
   /window,2,on
@@ -96,9 +100,9 @@ go2png,1200
   cmsel,s,COMPA_ABT_2
   esla,r
   nsle,s
-  cleanplot,'pletab',etabName,'1'
+  cleanplot,'pletab',_etabName,'1'
 
-endpng,arg3,,,,,POST_resultsFolder
+endpng,_imgName,,,,,POST_resultsFolder
 /erase
 /annot,dele
 clims
