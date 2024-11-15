@@ -172,18 +172,17 @@ GIRDER_name0 = GIRDER_name(1)
 
 
   !!  Abutment: longitudinal wall                                                                   !!
-  BRIDGE_V1_POSTLWALL , 1 , 'AEAB_MX' , 'MOMENTO FLETOR (MX) [kNm/m]' , 'IMG16a_LWALL_MX'
-  BRIDGE_V1_POSTLWALL , 1 , 'AEAB_MY' , 'MOMENTO FLETOR (MY) [kNm/m]' , 'IMG16b_LWALL_MY'
-  BRIDGE_V1_POSTLWALL , 1 , 'AEAB_Q'  , 'F. CORTANTE [kN/m]'          , 'IMG16c_LWALL_Q'  ! , 0.55
-  BRIDGE_V1_POSTLWALL , 1 , 'EAB_NX'  , 'F. NORMAL (NX) [kN/m]'       , 'IMG16d_LWALL_NX'
-  BRIDGE_V1_POSTLWALL , 1 , 'EAB_NY'  , 'F. NORMAL (NY) [kN/m]'       , 'IMG16e_LWALL_NY'
+  BRIDGE_V1_POSTLWALL , 1 , 'AEAB_MX' , 'MOMENTO FLETOR (MX)' , 'ELU-Normal [kNm/m]' , 'IMG16a_LWALL_MX'
+  BRIDGE_V1_POSTLWALL , 1 , 'AEAB_MY' , 'MOMENTO FLETOR (MY)' , 'ELU-Normal [kNm/m]' , 'IMG16b_LWALL_MY'
+  BRIDGE_V1_POSTLWALL , 1 , 'AEAB_Q'  , 'F. CORTANTE'         , 'ELU-Normal [kN/m]'  , 'IMG16c_LWALL_Q'  ! , 0.55
+  BRIDGE_V1_POSTLWALL , 1 , 'EAB_NX'  , 'F. NORMAL (NX) '     , 'ELU-Normal [kN/m]'  , 'IMG16d_LWALL_NX'
+  BRIDGE_V1_POSTLWALL , 1 , 'EAB_NY'  , 'F. NORMAL (NY) '     , 'ELU-Normal [kN/m]'  , 'IMG16e_LWALL_NY'
 
-  BRIDGE_V1_POSTLWALL , 2 , 'AEAB_MX' , 'MOMENTO FLETOR (MX) [kNm/m]' , 'IMG17a_LWALL_MX'
-  BRIDGE_V1_POSTLWALL , 2 , 'AEAB_MY' , 'MOMENTO FLETOR (MY) [kNm/m]' , 'IMG17b_LWALL_MY'
-  BRIDGE_V1_POSTLWALL , 2 , 'AEAB_Q'  , 'F. CORTANTE [kN/m]'          , 'IMG17c_LWALL_Q'  ! , 0.55
-  BRIDGE_V1_POSTLWALL , 2 , 'EAB_NX'  , 'F. NORMAL (NX) [kN/m]'       , 'IMG17d_LWALL_NX'
-  BRIDGE_V1_POSTLWALL , 2 , 'EAB_NY'  , 'F. NORMAL (NY) [kN/m]'       , 'IMG17e_LWALL_NY'
-
+  BRIDGE_V1_POSTLWALL , 2 , 'AEAB_MX' , 'MOMENTO FLETOR (MX)' , 'ELU-Normal [kNm/m]' , 'IMG17a_LWALL_MX'
+  BRIDGE_V1_POSTLWALL , 2 , 'AEAB_MY' , 'MOMENTO FLETOR (MY)' , 'ELU-Normal [kNm/m]' , 'IMG17b_LWALL_MY'
+  BRIDGE_V1_POSTLWALL , 2 , 'AEAB_Q'  , 'F. CORTANTE'         , 'ELU-Normal [kN/m]'  , 'IMG17c_LWALL_Q'  ! , 0.55
+  BRIDGE_V1_POSTLWALL , 2 , 'EAB_NX'  , 'F. NORMAL (NX) '     , 'ELU-Normal [kN/m]'  , 'IMG17d_LWALL_NX'
+  BRIDGE_V1_POSTLWALL , 2 , 'EAB_NY'  , 'F. NORMAL (NY) '     , 'ELU-Normal [kN/m]'  , 'IMG17e_LWALL_NY'
 
   !!  Abutment: overhangs                                                                           !!
   BRIDGE_V1_POSTABTOVHANG , 1 , 'MX' , 'MOMENTO FLETOR' , 'kNm/m' , 0.7

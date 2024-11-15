@@ -1,12 +1,15 @@
-! BRIDGE_V1_POSTLWALL , abtNum , etable , subtitle , imgName , etabScaleFactor
-! BRIDGE_V1_POSTLWALL , arg1   , arg2   , arg3     , arg4    , arg5
+! BRIDGE_V1_POSTLWALL , abtNum , etName , centerTitle , rightTitle , imgName , etabScaleFactor
+! BRIDGE_V1_POSTLWALL , ARG1   , ARG2   , ARG3        , ARG4       , ARG5    , ARG6
 
-etabName=arg2
+_abtNum          = ARG1
+_etName          = ARG2
+_centerTitle     = ARG3
+_rightTitle      = ARG4
+_imgName         = ARG5
+_etabScaleFactor = ARG6
 
-/device,font,3,Arial,1000,0,-64,0,0,,,
-/device,font,1,Arial,1000,0,-42,0,0,,,
-/device,text,1,100
-/tspec,15,1.5,4,0,0
+boldfont,1
+g_picres,1200
 /gformat,f,2,1
 /annot,dele
 
@@ -15,26 +18,24 @@ cmsel,u,COMPA_ABT_tranwall
 esla,s
 cm,COMPE_temp,elem
 
-view2w
-/window,3,-1,1.67,-1,1
+view4w
 wincln,1
 wincln,2
 wincln,3
 
-_arg3 = ARG3
-wintitle , 3 , 'ENCONTRO 0%arg1%:' , 'PAREDES LATERAIS' , _arg3 ,  , 1
-/window,3,off
+view1w
+wintitle , 1 , 'E0%_abtNum%: PAREDES LATERAIS' , _centerTitle , _rightTitle ,  , 1 , 13
+view2w,,,1,,1,2
 
-*if,arg1,eq,1,then
-  /view,1,0,1,0
-  /view,2,0,-1,0
-*elseif,arg1,eq,2,then
-  /view,1,0,-1,0
-  /view,2,0,1,0
+*if,_abtNum,eq,1,then
+  /view , 1 , 0 , 1  , 0
+  /view , 2 , 0 , -1 , 0
+*elseif,_abtNum,eq,2,then
+  /view , 1 , 0 , -1 , 0
+  /view , 2 , 0 , 1  , 0
 *endif
 
 /angle,all,0
-! /plopts,info,3
 /plopts,leg3,on
 /triad,off
 /eshape,1
@@ -43,7 +44,7 @@ wintitle , 3 , 'ENCONTRO 0%arg1%:' , 'PAREDES LATERAIS' , _arg3 ,  , 1
 
 /window,1,on
 /window,2,off
-cmsel,s,COMPA_ABT_%arg1%
+cmsel,s,COMPA_ABT_%_abtNum%
 esla,s
 nsle,s,active
 /auto,1
@@ -52,14 +53,14 @@ eplot
 
 /window,1,off
 /window,2,on
-cmsel,s,COMPA_ABT_%arg1%
+cmsel,s,COMPA_ABT_%_abtNum%
 esla,s
 nsle,s,active
 /auto,2
 eplot
 /user,2
 
-cmsel,s,COMPA_ABT_%arg1%
+cmsel,s,COMPA_ABT_%_abtNum%
 cmsel,u,COMPA_ABT_longWalls
 esla,s
 nsle,s,active
@@ -76,35 +77,35 @@ go2png,1200
   eplot
   /noerase
   cmsel,s,COMPL_ABT_piles
-  cmsel,r,COMPL_ABT_%arg1%
+  cmsel,r,COMPL_ABT_%_abtNum%
   esll,a
   nsle,s,active
   eplot
 
   /device,vector,off
   /eshape,0
-  /edge,all,0
+  /edge,all,1
 
   /window,1,on
   /window,2,off
   cmsel,s,COMPA_ABT_longWalls
-  cmsel,r,COMPA_ABT_%arg1%
+  cmsel,r,COMPA_ABT_%_abtNum%
   cmsel,r,COMPA_ABT_rightSide
   esla,s
   nsle,s,active
-  cleanplot,'pletab',etabName,'1',,,,,,arg5,1
+  cleanplot,'pletab',_etName,'1',,,,,,_etabScaleFactor,1
 
   /window,1,off
   /window,2,on
   cmsel,s,COMPA_ABT_longWalls
-  cmsel,r,COMPA_ABT_%arg1%
+  cmsel,r,COMPA_ABT_%_abtNum%
   cmsel,r,COMPA_ABT_leftSide
   esla,s
   nsle,s,active
   eplot
-  cleanplot,'pletab',etabName,'1',,,,,,arg5,2
+  cleanplot,'pletab',_etName,'1',,,,,,_etabScaleFactor,2
 
-endpng,'ABT%arg1%_%arg4%',,,,,POST_resultsFolder
+endpng,'%_imgName%_ABT%_abtNum%',,,,,POST_resultsFolder
 /erase
 /annot,dele
 clims
