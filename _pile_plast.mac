@@ -10,12 +10,11 @@ etenv,1,LoadStepCount,'etNames'
 
 
 
-esel,s,elem,,11677
 
 esel,s,type,,3
 esel,r,real,,9
 nsle,s,active
-/eshape,10
+/eshape,100
 /dscale,,off
 cm,e,elem
 
@@ -65,7 +64,7 @@ go2png
 
     cmsel,s,e2
     nsle,s,active
-    /eshape,10 !0.8
+    /eshape,100
     clims,0,1e-9
     plnsol,eppl,eqv
 endpng,'IMG26a_soilPL'
