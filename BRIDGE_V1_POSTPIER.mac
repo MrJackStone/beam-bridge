@@ -19,6 +19,8 @@ clims
     BRIDGE_V1_POSTTUBECAP , 'EAB_NX' , 'FOR. NORMAL (NX)'    , 'ELU-Normal [kN/m]'  , 'PIERCAP_NX'
     BRIDGE_V1_POSTTUBECAP , 'EAB_NY' , 'FOR. NORMAL (NY)'    , 'ELU-Normal [kN/m]'  , 'PIERCAP_NY'
 
+    BRIDGE_V1_POSTTUBEGENSTRESS
+
   *elseif,GEO_frameOpt,eq,0,or,GEO_frameOpt,eq,2,then
     ! Column-girder frame
     boldfont,1

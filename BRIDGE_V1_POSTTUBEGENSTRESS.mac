@@ -1,0 +1,122 @@
+! BRIDGE_V1_POSTTUBEGENSTRESS
+
+
+*cfopen,'RES_Pier',txt
+  *vwrite
+  ('PIER GENERALIZED STRESS RESULTS')
+  *vwrite
+  (' ')
+  *vwrite
+  ('UNITS: kN & kNm')
+  *vwrite
+  (' ')
+*cfclos
+
+*del , RES_Piers     ,  , nopr
+*del , RES_Piers_ENV ,  , nopr
+*dim , RES_Piers     ,  , GEO_pierCount*2 , 6
+*dim , RES_Piers_ENV ,  , GEO_pierCount*2 , 6
+
+*do,nthLS,1,LoadStepCount
+
+  set,nthLS
+
+  *do,nthPier,1,GEO_pierCount,1
+    x_c   = GEO_pierX(nthPier)
+    x_min = x_c-(GEO_columnDepth/2)
+    x_max = x_c+(GEO_columnDepth/2)
+    y_c   = 0
+    z_bot = GEO_pierZBot(nthPier)
+    z_top = GEO_pierZTop(nthPier)
+
+    cmsel,s,COMPA_colTubeWall
+    asel,r,loc,x,x_min,x_max
+    esla,s
+    nsle,s,active
+
+    cm,COMPE_nthCol,elem
+    cm,COMPN_nthCol,node
+
+    ! Top of the column
+    cmsel,s,COMPN_nthCol
+    cmsel,s,COMPE_nthCol
+    nsel,r,loc,z,z_top
+    esln,r
+    cm,COMPN_top,node
+    cm,COMPE_top,elem
+
+    ! Bottom of the column
+    cmsel,s,COMPN_nthCol
+    cmsel,s,COMPE_nthCol
+    nsel,r,loc,z,z_bot
+    esln,r
+    cm,COMPN_bot,node
+    cm,COMPE_bot,elem
+
+    ! Calculate generalized internal reactions: top of the column
+    cmsel,s,COMPN_top
+    cmsel,s,COMPE_top
+    genstress,'TOP_QX','TOP_QY','TOP_N','TOP_MX','TOP_MY',,x_c,y_c
+
+    ! Calculate generalized internal reactions: bottom of the column
+    cmsel,s,COMPN_bot
+    cmsel,s,COMPE_bot
+    genstress,'BOT_QX','BOT_QY','BOT_N','BOT_MX','BOT_MY',,x_c,y_c
+
+    i_top = nthPier*2-1
+    i_bot = nthPier*2
+
+    RES_Piers(i_top,1) = nthPier
+    RES_Piers(i_bot,1) = nthPier
+    RES_Piers(i_top,2) = TOP_N*1e-3
+    RES_Piers(i_bot,2) = BOT_N*1e-3
+    RES_Piers(i_top,3) = TOP_MX*1e-3
+    RES_Piers(i_bot,3) = BOT_MX*1e-3
+    RES_Piers(i_top,4) = TOP_MY*1e-3
+    RES_Piers(i_bot,4) = BOT_MY*1e-3
+    RES_Piers(i_top,5) = TOP_QX*1e-3
+    RES_Piers(i_bot,5) = BOT_QX*1e-3
+    RES_Piers(i_top,6) = TOP_QY*1e-3
+    RES_Piers(i_bot,6) = BOT_QY*1e-3
+
+    *do,i,1,6,1
+      RES_Piers_ENV(i_top,i) = (abs(RES_Piers_ENV(i_top,i))>abs(RES_Piers(i_top,i)))
+      RES_Piers_ENV(i_bot,i) = (abs(RES_Piers_ENV(i_bot,i))>abs(RES_Piers(i_bot,i)))
+    *enddo
+
+  *enddo
+
+
+  *cfopen,'RES_Pier',txt,,append
+    *vwrite,
+    (' ')
+    *vwrite,nthLS,LoadStepCount
+    ('LOAD STEP:', F3.0,TL1,'/',F3.0,TL1,' ')
+    *vwrite,
+    ('   #             N            MX            MY            QX            QY')
+    *vwrite,RES_Piers(1,1),RES_Piers(1,2),RES_Piers(1,3),RES_Piers(1,4),RES_Piers(1,5),RES_Piers(1,6)
+    (F5.0,TL1,'  ',F12.2,'  ',F12.2,'  ',F12.2,'  ',F12.2,'  ',F12.2)
+  *cfclos
+
+*enddo
+
+*cfopen,'RES_Pier',txt,,append
+  *vwrite,
+  (' ')
+  *vwrite,
+  (' ')
+  *vwrite,
+  (' ')
+  *vwrite,
+  ('--------------------------------')
+  *vwrite,
+  (' ')
+  *vwrite,
+  ('ENVELOPE:')
+  *vwrite,
+  (' ')
+  *vwrite,
+  ('   #             N            MX            MY            QX            QY')
+  *vwrite,RES_Piers_ENV(1,1),RES_Piers_ENV(1,2),RES_Piers_ENV(1,3),RES_Piers_ENV(1,4),RES_Piers_ENV(1,5),RES_Piers_ENV(1,6)
+  (F5.0,TL1,'  ',F12.2,'  ',F12.2,'  ',F12.2,'  ',F12.2,'  ',F12.2)
+*cfclos
