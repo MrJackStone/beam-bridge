@@ -351,6 +351,11 @@ GEO_ABT1_wingL=7
 ! Wing height at abutment
 GEO_ABT1_wingHa=2
 
+! Tie beam option:
+!   [0] Beam below wings
+!   [1] Half-wall above pile cap
+GEO_ABT1_beamOpt = 0
+
 ! Approach slab status:
 !    [0] OFF
 !    [1] ON
@@ -433,6 +438,11 @@ GEO_ABT2_wingL=7
 
 ! Wing height at abutment
 GEO_ABT2_wingHa=2
+
+! Tie beam option:
+!   [0] Beam below wings
+!   [1] Half-wall above pile cap
+GEO_ABT2_beamOpt = 0
 
 ! Approach slab status:
 !    [0] OFF

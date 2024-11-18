@@ -43,6 +43,7 @@ GEO_ABT_pileFree   = %arg2%(21)
 GEO_ABT_pileShort  = %arg2%(22)
 GEO_ABT_width      = %arg2%(28)
 GEO_ABT_thinDepth  = %arg2%(29)
+GEO_ABT_beamOpt    = %arg2%(30)
 
 GEO_ABT_pileCap=1
 *if,GEO_ABT_type,eq,2,then
@@ -189,7 +190,11 @@ z05=z01+GEO_ABT_topOffset
 z13=z01+GEO_ABT_topOffset*((GEO_ABT_length+GEO_ABT_wingL)/GEO_ABT_length)
 z14=z13-GEO_ABT_wingHe
 z15=z05-GEO_ABT_wingHa
-z19=z15-GEO_ABT_beamH
+*if,GEO_ABT_beamOpt,eq,0,then
+  z19=z15-GEO_ABT_beamH
+*elseif,GEO_ABT_beamOpt,eq,1,then
+  z19=z03+GEO_ABT_beamH
+*endif
 zc =z01+GEO_ABT_topOffset*(GEO_ABT_appSlabL/GEO_ABT_length)
 z25=z01-GEO_ABT_thinDepth
 ! z02=z01 ; z04=z03 ; z06=z05
@@ -303,13 +308,22 @@ cmpadd,'COMPA_ABT_walls'
 
 ! Draw beam
 *if,GEO_ABT_suppressLW,eq,0,and,GEO_ABT_beamH,gt,0,then
-    k , K19 , x05 , y01 , z19
-    k , K20 , x05 , y02 , z19
+  asel,none
 
-    asel,none
+  k , K19 , x05 , y01 , z19
+  k , K20 , x05 , y02 , z19
+
+  *if,GEO_ABT_beamOpt,eq,0,then
+    ! Beam below wings
     a, K15, K19, K20, K18
 
-    cmpadd,'COMPA_ABT_beam'
+  *elseif,GEO_ABT_beamOpt,eq,1,then
+    ! Half-wall above pile cap
+    a, K07, K19, K20, K08
+
+  *endif
+
+  cmpadd,'COMPA_ABT_beam'
 *endif
 
 

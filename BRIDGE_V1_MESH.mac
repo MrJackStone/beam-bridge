@@ -435,11 +435,11 @@ cm,COMPN_ABT_girder,node
 !!                                                                                                !!
 csys,CS_ABT1
 cmsel,s,COMPN_ABT_1
-BRIDGE_V1_ABTSPRSUP, GEO_deckWidth_beg, GEO_ABT1_type, CS_ABT1, CS_ABT1_trv, CS_ABT1_lw, CS_ABT1_rw
+BRIDGE_V1_ABTSPRSUP, GEO_deckWidth_beg, GEO_ABT1_type, CS_ABT1, CS_ABT1_trv, CS_ABT1_lw, CS_ABT1_rw, GEO_ABT1_beamOpt
 
 csys,CS_ABT2
 cmsel,s,COMPN_ABT_2
-BRIDGE_V1_ABTSPRSUP, GEO_deckWidth_end, GEO_ABT2_type, CS_ABT2, CS_ABT2_trv, CS_ABT2_lw, CS_ABT2_rw
+BRIDGE_V1_ABTSPRSUP, GEO_deckWidth_end, GEO_ABT2_type, CS_ABT2, CS_ABT2_trv, CS_ABT2_lw, CS_ABT2_rw, GEO_ABT2_beamOpt
 
 csys,0
 !
