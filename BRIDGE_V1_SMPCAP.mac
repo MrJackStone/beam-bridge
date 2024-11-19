@@ -163,7 +163,11 @@ csys  , 0
     *dim,XZslice,,2
     XZslice(1)=-GEO_columnWidth/2,GEO_columnWidth/2
     batch_slicexz,'XZslice',1
-    BRIDGE_V1_LONGSLICE
+    *if,GEO_deckRadius,eq,0,then
+      BRIDGE_V1_LONGSLICE
+    *else
+      BRIDGE_V1_ARCSLICE , 1
+    *endif
   *endif
 
   cmsel,a,COMPA_centerPileCaps

@@ -36,18 +36,7 @@ allsel
 csys,0
 
 ! Perform curved slicing
-wpcsys,,CS_deck
-*do,nthY,1,partial_XZsliceCount,1
-  lsel,u,line,,all
-  circle,GEO_centerKP,GEO_deckRadius+partial_XZslice(nthY)
-  cm,COMPL_slicer,line
-
-  allsel
-  asbl,all,COMPL_slicer,,delete,keep
-  cmsel,s,COMPL_slicer
-  cmdele,COMPL_slicer
-  ldele,all,,,1
-*enddo
+BRIDGE_V1_ARCSLICE , 0
 
 ! Perform linear slicing at girders
 wpcsys,,CS_deck

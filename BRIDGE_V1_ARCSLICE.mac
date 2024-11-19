@@ -1,0 +1,20 @@
+! BRIDGE_V1_ARCSLICE , sliceAtGirders
+! BRIDGE_V1_ARCSLICE , ARG1
+
+
+_sliceAtGirders = ARG1
+
+cm,COMPA_temp,area
+
+*if,_sliceAtGirders,eq,1,then
+  arrjoin , 'arc_offsets' , 'GEO_arc_offsets' , 'GEO_girderY_beg'
+*else
+  arrjoin , 'arc_offsets' , 'GEO_arc_offsets'
+*endif
+*get,arcOffsetCount,parm,arc_offsets,dim,x
+
+wpcsys,-1,CS_deck
+*do,nthY,1,arcOffsetCount,1
+  nthRadius = GEO_deckRadius+arc_offsets(nthY)
+  radslice,'COMPA_temp',nthRadius
+*enddo
