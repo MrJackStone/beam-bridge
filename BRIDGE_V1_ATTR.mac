@@ -587,12 +587,17 @@ csys,0
 GEO_longPosKey(1)='BEG','END'
 
 ! Deck width at bridge's extremities
-*del,GEO_deckWidths
+*del,GEO_deckWidths,,nopr
 *dim,GEO_deckWidths,,2
 GEO_deckWidths(1)=GEO_deckWidth_beg,GEO_deckWidth_end
 
 ! Deck offsets (along Y)
-*del,GEO_deckOffsets
+*if,GEO_deckRadius,ne,0,then
+  GEO_deckOff_beg = -GEO_deckWidth_beg/2
+  GEO_deckOff_end = -GEO_deckWidth_end/2
+*endif
+
+*del,GEO_deckOffsets,,nopr
 *dim,GEO_deckOffsets,,2
 GEO_deckOffsets(1)=GEO_deckOff_beg,GEO_deckOff_end
 
@@ -702,13 +707,6 @@ skewedDeltaY=GEO_deckLength*tan(LOAD_ltSkewness)
     *vfun,GEO_gerberX_i,comp,GEO_gerberX_sub
     *vmask,activeGerber
     *vfun,GEO_gerberX_j,comp,GEO_gerberX_add
-*endif
-
-! Y chord offset for curved deck
-*if,GEO_deckRadius,ne,0,then
-    GEO_chordOff=(1/2)*sqrt(4*(GEO_deckRadius**2)-(GEO_deckLength**2))
-*else
-    GEO_chordOff=0
 *endif
 
 ! Calculate angular positions: supports, midspans, gerber connections
