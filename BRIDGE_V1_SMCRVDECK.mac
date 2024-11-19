@@ -19,12 +19,6 @@ BRIDGE_V1_RADSLICE,'GEO_midspanChi',0
   BRIDGE_V1_RADSLICE,'GEO_gerberChi_j',1
 *endif
 
-! Cut at tubular column faces
-*if,GEO_pierCount,gt,0,then
-  BRIDGE_V1_RADSLICE,'GEO_pierChi_i',0
-  BRIDGE_V1_RADSLICE,'GEO_pierChi_j',0
-*endif
-
 ! Delete ring areas outside bridge length
 csys,CS_deck
 allsel
