@@ -25,45 +25,34 @@ seltol,1e-8
 csys,0
 wpcsys,-1,0
 
-!    ! Orient slab areas correctly (upwards)
-!    asel,u,area,,all
-!    ptxy, -1e3,-1e3,1e3,-1e3,1e3,1e3,-1e3,1e3
-!    poly
-!    *get,dummyArea,area,,num,min
-!    allsel
-!    anorm,dummyArea
-!    adele,dummyArea,,,1
-
-! Create component with slab areas
+! Orient slab areas & girder lines
 allsel
-areverse,all !! for now this needs to be checked visually
-CM,COMPA_Slab,AREA
+arzori,1
 
-! Create component with vehicle lanes
-ALLSEL
-CMSEL,U,COMPA_LeftFootpath
-CMSEL,U,COMPA_RightFootpath
-CM,COMPA_Lanes,AREA
-
-! Reorient girder lines
-/uis,MSGPOP,3
 cmsel,s,COMPL_Girder
 ksll,s
 lnxori,1
-!
-!
-!
+
+! Create components
+allsel
+cm,COMPA_Slab,area
+
+cmsel,u,COMPA_LeftFootpath
+cmsel,u,COMPA_RightFootpath
+cm,COMPA_Lanes,area
+
+
 !!                                                                                                !!
 !! 3.2 MESOSTRUCTURE                                                                              !!
 !!                                                                                                !!
 ! Create frames
-ksel,none
-lsel,none
-CM,COMPK_FrameGirder,KP
-CM,COMPL_FrameGirder,LINE
-CM,COMPK_Column,KP
-CM,COMPL_Column,LINE
-CM,COMPK_FrameBottom,KP
+ksel , none
+lsel , none
+cm   , COMPK_FrameGirder , kp
+cm   , COMPK_Column      , kp
+cm   , COMPK_FrameBottom , kp
+cm   , COMPL_FrameGirder , line
+cm   , COMPL_Column      , line
 
 *do,nthSupport,1,GEO_supportCount,1
 
