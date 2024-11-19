@@ -138,8 +138,8 @@ Writing load step #%I out of %I...
           BRIDGE_V1_XTOCHI,'chi_min',x_min
           BRIDGE_V1_XTOCHI,'chi_max',x_max
           *do,nthLT,1,LOAD_ltCount,1
-            y_min=LOAD_ltWheelOff(nthLT*2-1)
-            y_max=LOAD_ltWheelOff(nthLT*2)
+            y_min=LOAD_ltWheelOff_beg(nthLT*2-1)
+            y_max=LOAD_ltWheelOff_beg(nthLT*2)
             nsel,s,loc,x,GEO_deckRadius+y_min,GEO_deckRadius+y_max
             nsel,r,loc,y,180-chi_min,180-chi_max
             cmsel,r,COMPN_occupied
