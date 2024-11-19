@@ -735,20 +735,25 @@ BRIDGE_V1_SKEWEDCSYS , 'CS_rightDeckEdge' , GEO_deckOff_beg                   , 
 *enddo
 
 LOAD_ltWheelPathCount=LOAD_wheelCount*LOAD_ltTransScenarioCount
-*del,CS_loadTrains
-*dim,CS_loadTrains,,LOAD_ltWheelPathCount
-nthPath=0
+
+*del , CS_loadTrains            ,  , nopr
+*del , GEO_WHEELPATH_arcOffsets ,  , nopr
+*dim , CS_loadTrains            ,  , LOAD_ltWheelPathCount
+*dim , GEO_WHEELPATH_arcOffsets ,  , LOAD_ltWheelPathCount
+
+nthPath = 0
 *do,nthLTtransScenario,1,LOAD_ltTransScenarioCount,1
   *do,nthLT,1,LOAD_wheelCount,1
-    yBeg=LOAD_ltWheelOff_beg(nthLT,nthLTtransScenario)
-    yEnd=LOAD_ltWheelOff_end(nthLT,nthLTtransScenario)
+    yBeg    = LOAD_ltWheelOff_beg(nthLT,nthLTtransScenario)
+    yEnd    = LOAD_ltWheelOff_end(nthLT,nthLTtransScenario)
+    nthPath = nthPath+1
     BRIDGE_V1_SKEWEDCSYS, 'nthCS', yBeg, yEnd
-    nthPath=nthPath+1
-    CS_loadTrains(nthPath)=nthCS
+    CS_loadTrains(nthPath)            = nthCS
+    GEO_WHEELPATH_arcOffsets(nthPath) = yBeg
   *enddo
 *enddo
 
-*del,CS_barriers
+*del,CS_barriers,,nopr
 *dim,CS_barriers,,LOAD_barrierCount
 *do,nthBarrier,1,LOAD_barrierCount,1
     yBeg=LOAD_barrierOffset_beg(nthBarrier)
@@ -760,12 +765,19 @@ nthPath=0
 BRIDGE_V1_SKEWEDCSYS, 'CS_leftFootpath', GEO_deckOff_beg+GEO_footpathLeft_beg, GEO_deckOff_end+GEO_footpathLeft_end
 BRIDGE_V1_SKEWEDCSYS, 'CS_rightFootpath', GEO_deckOff_beg+GEO_deckWidth_beg-GEO_footpathRight_beg, GEO_deckOff_end+GEO_deckWidth_end-GEO_footpathRight_end
 
-! List all CSYS that will be used to slice longitudinally
+*del,GEO_FOOTPATH_arcOffsets,,nopr
+*dim,GEO_FOOTPATH_arcOffsets,,2
+GEO_FOOTPATH_arcOffsets(1) = GEO_deckOff_beg+GEO_footpathLeft_beg
+GEO_FOOTPATH_arcOffsets(2) = GEO_deckOff_beg+GEO_deckWidth_beg-GEO_footpathRight_beg
+
+! Positions used to slice longitudinally
 arrjoin,'CS_slice','CS_girders','CS_loadTrains','CS_barriers','CS_leftFootpath','CS_rightFootpath'
-*get,XZsliceCount,parm,CS_slice,dim,x
-!
-!
-!! 2.2.2 MESOSTRUCTURE  **** this needs revising ***                                              !!
+
+arrjoin , 'GEO_arc_offsets' , 'GEO_WHEELPATH_arcOffsets' , 'GEO_FOOTPATH_arcOffsets' , 'LOAD_barrierOffset_beg'
+
+
+
+!! 2.2.2 MESOSTRUCTURE  *** this needs revising ***                                               !!
 !!                                                                                                !!
 
 ! TODO: check temporarily removed (has to be redesigned for skewed multi-span bridges)
