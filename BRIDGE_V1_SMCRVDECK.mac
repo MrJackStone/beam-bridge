@@ -5,7 +5,7 @@ k,GEO_centerKP,GEO_deckLength/2,-GEO_chordOff,0
 
 wpcsys,,CS_deck
 
-cyl4,0,0,GEO_deckRadius-(GEO_deckWidth/2),,GEO_deckRadius+(GEO_deckWidth/2)
+cyl4,0,0,GEO_deckRadius-(GEO_deckWidth_beg/2),,GEO_deckRadius+(GEO_deckWidth_beg/2)
 
 ! Cut spans
 BRIDGE_V1_RADSLICE,'GEO_supportChi',1
@@ -55,13 +55,13 @@ wpcsys,,CS_deck
 
   girderCompName=strcat('COMPL_GIRDER_',chrval(nthGirder))
 
-  girder_yOff=GEO_girderY(nthGirder)
-  lsel,u,line,,all
+  girder_yOff=GEO_girderY_beg(nthGirder)
+  lsel,none
   ksel,s,kp,,GEO_centerKP
   circle,GEO_centerKP,GEO_deckRadius+girder_yOff
   cm,COMPL_slicer,line
 
-  *do,nthSpan,1,GEO_supportCount-1,1
+  *do,nthSpan,1,GEO_spanCount,1
     csys,CS_deck
     chi_i=GEO_supportChi(nthSpan)
     chi_j=GEO_supportChi(nthSpan+1)
@@ -84,7 +84,7 @@ wpcsys,,CS_deck
 
     k_i=kpnext(0)
     k_j=kpnext(k_i)
-    lsel,u,line,,all
+    lsel,none
     lstr,k_i,k_j
     l_slicer=lsnext(0)
     cmsel,s,COMPA_temp
@@ -112,8 +112,8 @@ ksll,s
 cm,COMPK_Girder,kp
 
 ! Create component with gerber beams
-lsel,u,line,,all
-ksel,u,kp,,all
+lsel,none
+ksel,none
 *if,GEO_gerberStatus,eq,1,then
   *do,nthGerber,1,GEO_gerberCount,1
     chi_i=GEO_gerberChi_i(nthGerber)
@@ -146,9 +146,9 @@ ksel,u,kp,,all
 *endif
 
 ! Create component with load train path lines
-lsel,u,line,,all
+lsel,none
 *do,nthLT,1,LOAD_wheelCount,1
-  center_off=LOAD_ltWheelOff(nthLT)
+  center_off=LOAD_ltWheelOff_beg(nthLT)
   lsel,a,loc,x,GEO_deckRadius+center_off
 *enddo
 ksll,s
@@ -156,7 +156,7 @@ cm,COMPL_LoadTrain,line
 cm,COMPK_LoadTrain,kp
 
 ! Create component with barrier lines
-lsel,u,line,,all
+lsel,none
 cm,COMPL_Barrier,line
 *if,LOAD_barrierStatus,EQ,1,THEN
   *do,nthBarrier,1,LOAD_barrierCount,1
@@ -167,7 +167,7 @@ cm,COMPL_Barrier,line
 *endif
 
 ! Create component with girder support keypoints
-ksel,u,kp,,all
+ksel,none
 *do,nthSupport,1,GEO_supportCount
   chi_i=GEO_supportChi(nthSupport)
   ksel,a,loc,y,180-chi_i
@@ -184,12 +184,12 @@ cmsel,r,COMPK_Girder
 cm,COMPK_GirderSupport,kp
 
 ! Create component with gerber support keypoints
-ksel,u,kp,,all
+ksel,none
 cm,COMPK_GerberTip,kp
 cm,COMPK_GerberSupported,kp
 *if,GEO_gerberStatus,eq,1,then
   ! Gerber tip (cantilever-girder connection)
-  ksel,u,kp,,all
+  ksel,none
   *do,nthGerber,1,GEO_gerberCount,1
     chi_i=GEO_gerberChi_i(nthGerber)
     chi_j=GEO_gerberChi_j(nthGerber)
@@ -199,7 +199,7 @@ cm,COMPK_GerberSupported,kp
   cmsel,r,COMPK_Gerber
   cm,COMPK_GerberTip,kp
   ! Cantilever support (over tubular column)
-  ksel,u,kp,,all
+  ksel,none
   *do,nthGerber,1,GEO_gerberCount,1
     chi_m=GEO_gerberChi_m(nthGerber)
     chi_n=GEO_gerberChi_n(nthGerber)
@@ -210,7 +210,7 @@ cm,COMPK_GerberSupported,kp
 *endif
 
 ! Create gerber consoles
-lsel,u,line,,all
+lsel,none
 *if,GEO_gerberStatus,eq,1,then
   *do,nthGerber,1,GEO_gerberCount,1
     chi_tip=GEO_gerberChi_i(nthGerber)
@@ -255,16 +255,16 @@ cm,COMPK_Console,kp
 ! Create component with left pedestrian footpath areas
 csys,CS_deck
 *if,GEO_footpathLeft,GT,0,THEN
-  asel,s,loc,x,GEO_deckRadius-(GEO_deckWidth/2),GEO_deckRadius-(GEO_deckWidth/2)+GEO_footpathLeft
+  asel,s,loc,x,GEO_deckRadius-(GEO_deckWidth_beg/2),GEO_deckRadius-(GEO_deckWidth_beg/2)+GEO_footpathLeft
   cm,COMPA_LeftFootpath,area
 *else
-  asel,u,area,,all
+  asel,none
   cm,COMPA_LeftFootpath,area
 *endif
 
 ! Create component with right pedestrian footpath areas
 *if,GEO_footpathRight,GT,0,THEN
-  asel,s,loc,x,GEO_deckRadius+(GEO_deckWidth/2)-GEO_footpathRight,GEO_deckRadius+(GEO_deckWidth/2)
+  asel,s,loc,x,GEO_deckRadius+(GEO_deckWidth_beg/2)-GEO_footpathRight,GEO_deckRadius+(GEO_deckWidth_beg/2)
   cm,COMPA_RightFootpath,area
 *else
   asel,u,area,,all
