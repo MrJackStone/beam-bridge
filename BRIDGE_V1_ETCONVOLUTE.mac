@@ -1,5 +1,6 @@
-! _CONVOLUTE , radius
-! _CONVOLUTE , arg1
+! BRIDGE_V1_ETCONVOLUTE , radius
+! BRIDGE_V1_ETCONVOLUTE , ARG1
+
 
 ebackup
 nbackup
@@ -22,6 +23,7 @@ enum=0
   nsel,r,loc,y,yCenter-arg1,yCenter+arg1
   esln,s,1
   cmsel,r,COMPE_valid
+  esel,a,elem,,enum
   *get,neighborCount,elem,,count
 
   *del,neighbor_sums,,nopr
