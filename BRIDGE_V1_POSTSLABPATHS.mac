@@ -97,10 +97,10 @@ key = 'AE' ! For averaged: AE ; for raw: E
 
   *else
 
-    bridge_v0_XatDY , 'x_inner' , x_i , -GEO_deckWidth/2
-    bridge_v0_XatDY , 'x_outer' , x_i , GEO_deckWidth/2
-    bridge_v0_DYtoY , 'y_inner' , x_i , -GEO_deckWidth/2
-    bridge_v0_DYtoY , 'y_outer' , x_i , GEO_deckWidth/2
+    bridge_v1_XatDY , 'x_inner' , x_i , -GEO_deckWidth/2
+    bridge_v1_XatDY , 'x_outer' , x_i , GEO_deckWidth/2
+    bridge_v1_DYtoY , 'y_inner' , x_i , -GEO_deckWidth/2
+    bridge_v1_DYtoY , 'y_outer' , x_i , GEO_deckWidth/2
     path,%pNameA%,2,,100
     ppath , 1 ,  , x_outer , y_outer , 0
     ppath , 2 ,  , x_inner , y_inner , 0
@@ -109,10 +109,10 @@ key = 'AE' ! For averaged: AE ; for raw: E
     pdef , '%key%POS_MX' , etab , '%key%POS_MX'
     pdef , '%key%NEG_MX' , etab , '%key%NEG_MX'
 
-    bridge_v0_XatDY , 'x_inner' , x_mid , -GEO_deckWidth/2
-    bridge_v0_XatDY , 'x_outer' , x_mid , GEO_deckWidth/2
-    bridge_v0_DYtoY , 'y_inner' , x_mid , -GEO_deckWidth/2
-    bridge_v0_DYtoY , 'y_outer' , x_mid , GEO_deckWidth/2
+    bridge_v1_XatDY , 'x_inner' , x_mid , -GEO_deckWidth/2
+    bridge_v1_XatDY , 'x_outer' , x_mid , GEO_deckWidth/2
+    bridge_v1_DYtoY , 'y_inner' , x_mid , -GEO_deckWidth/2
+    bridge_v1_DYtoY , 'y_outer' , x_mid , GEO_deckWidth/2
     path,%pNameB%,2,,100
     ppath , 1 ,  , x_outer , y_outer , 0
     ppath , 2 ,  , x_inner , y_inner , 0
@@ -121,10 +121,10 @@ key = 'AE' ! For averaged: AE ; for raw: E
     pdef , '%key%POS_MX' , etab , '%key%POS_MX'
     pdef , '%key%NEG_MX' , etab , '%key%NEG_MX'
 
-    bridge_v0_XatDY , 'x_inner' , x_j , -GEO_deckWidth/2
-    bridge_v0_XatDY , 'x_outer' , x_j , GEO_deckWidth/2
-    bridge_v0_DYtoY , 'y_inner' , x_j , -GEO_deckWidth/2
-    bridge_v0_DYtoY , 'y_outer' , x_j , GEO_deckWidth/2
+    bridge_v1_XatDY , 'x_inner' , x_j , -GEO_deckWidth/2
+    bridge_v1_XatDY , 'x_outer' , x_j , GEO_deckWidth/2
+    bridge_v1_DYtoY , 'y_inner' , x_j , -GEO_deckWidth/2
+    bridge_v1_DYtoY , 'y_outer' , x_j , GEO_deckWidth/2
     path,%pNameC%,2,,100
     ppath , 1 ,  , x_outer , y_outer , 0
     ppath , 2 ,  , x_inner , y_inner , 0
@@ -133,10 +133,10 @@ key = 'AE' ! For averaged: AE ; for raw: E
     pdef , '%key%POS_MX' , etab , '%key%POS_MX'
     pdef , '%key%NEG_MX' , etab , '%key%NEG_MX'
 
-    bridge_v0_XatDY , 'x_inner' , x_gi , -GEO_deckWidth/2
-    bridge_v0_XatDY , 'x_outer' , x_gi , GEO_deckWidth/2
-    bridge_v0_DYtoY , 'y_inner' , x_gi , -GEO_deckWidth/2
-    bridge_v0_DYtoY , 'y_outer' , x_gi , GEO_deckWidth/2
+    bridge_v1_XatDY , 'x_inner' , x_gi , -GEO_deckWidth/2
+    bridge_v1_XatDY , 'x_outer' , x_gi , GEO_deckWidth/2
+    bridge_v1_DYtoY , 'y_inner' , x_gi , -GEO_deckWidth/2
+    bridge_v1_DYtoY , 'y_outer' , x_gi , GEO_deckWidth/2
     path,%pNameD%,2,,100
     ppath , 1 ,  , x_outer , y_outer , 0
     ppath , 2 ,  , x_inner , y_inner , 0
@@ -145,10 +145,10 @@ key = 'AE' ! For averaged: AE ; for raw: E
     pdef , '%key%POS_MX' , etab , '%key%POS_MX'
     pdef , '%key%NEG_MX' , etab , '%key%NEG_MX'
 
-    bridge_v0_XatDY , 'x_inner' , x_ge , -GEO_deckWidth/2
-    bridge_v0_XatDY , 'x_outer' , x_ge , GEO_deckWidth/2
-    bridge_v0_DYtoY , 'y_inner' , x_ge , -GEO_deckWidth/2
-    bridge_v0_DYtoY , 'y_outer' , x_ge , GEO_deckWidth/2
+    bridge_v1_XatDY , 'x_inner' , x_ge , -GEO_deckWidth/2
+    bridge_v1_XatDY , 'x_outer' , x_ge , GEO_deckWidth/2
+    bridge_v1_DYtoY , 'y_inner' , x_ge , -GEO_deckWidth/2
+    bridge_v1_DYtoY , 'y_outer' , x_ge , GEO_deckWidth/2
     path,%pNameE%,2,,100
     ppath , 1 ,  , x_outer , y_outer , 0
     ppath , 2 ,  , x_inner , y_inner , 0

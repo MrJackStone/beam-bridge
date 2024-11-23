@@ -1,5 +1,5 @@
-! BRIDGE_V0_TAKEPIC, FileName, FileSize, VectorMode, graphMode
-! BRIDGE_V0_TAKEPIC,     arg1,     arg2,       arg3,      arg4
+! BRIDGE_V1_TAKEPIC, FileName, FileSize, VectorMode, graphMode
+! BRIDGE_V1_TAKEPIC,     arg1,     arg2,       arg3,      arg4
 
 ! Switch to image folder
 /cwd,'%PATH_img(1)%'
