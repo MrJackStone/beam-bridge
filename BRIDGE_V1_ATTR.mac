@@ -27,7 +27,7 @@ mkdirs,1
 pi=acos(-1)
 
 ! Element size for pile soil springs
-FEM_springL=0.1
+FEM_springL = 1
 
 ! Element size for abutment springs (soil)
 FEM_ABT_springL=0.5*(FEM_ABT_esize**2)
