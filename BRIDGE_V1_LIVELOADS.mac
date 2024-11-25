@@ -84,7 +84,7 @@ CMSEL,S,COMPN_Slab
     csys,0
 *else
     csys,CS_deck
-    nsel,r,loc,x,GEO_deckRadius
+    nsel,r,loc,x,GEO_deckRadius-(GEO_deckWidth_beg/2)
     csys,0
 *endif
 *get,NodeCount,NODE,,COUNT
