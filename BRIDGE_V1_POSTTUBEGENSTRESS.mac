@@ -22,13 +22,16 @@
   set,nthLS
 
   *do,nthPier,1,GEO_pierCount,1
-    x_c   = GEO_pierX(nthPier)
+    csNum = 41+(10*(nthPier+1))
+
+    x_c   = 0 ! GEO_pierX(nthPier)
     x_min = x_c-(GEO_columnDepth/2)
     x_max = x_c+(GEO_columnDepth/2)
     y_c   = 0
     z_bot = GEO_pierZBot(nthPier)
     z_top = GEO_pierZTop(nthPier)
 
+    csys,csNum
     cmsel,s,COMPA_colTubeWall
     asel,r,loc,x,x_min,x_max
     esla,s
@@ -38,6 +41,7 @@
     cm,COMPN_nthCol,node
 
     ! Top of the column
+    csys,0
     cmsel,s,COMPN_nthCol
     cmsel,s,COMPE_nthCol
     nsel,r,loc,z,z_top
@@ -46,6 +50,7 @@
     cm,COMPE_top,elem
 
     ! Bottom of the column
+    csys,0
     cmsel,s,COMPN_nthCol
     cmsel,s,COMPE_nthCol
     nsel,r,loc,z,z_bot
@@ -54,14 +59,18 @@
     cm,COMPE_bot,elem
 
     ! Calculate generalized internal reactions: top of the column
+    csys,csNum
     cmsel,s,COMPN_top
     cmsel,s,COMPE_top
     genstress,'TOP_QX','TOP_QY','TOP_N','TOP_MX','TOP_MY',,x_c,y_c
 
     ! Calculate generalized internal reactions: bottom of the column
+    csys,csNum
     cmsel,s,COMPN_bot
     cmsel,s,COMPE_bot
     genstress,'BOT_QX','BOT_QY','BOT_N','BOT_MX','BOT_MY',,x_c,y_c
+
+    csys,0
 
     i_top = nthPier*2-1
     i_bot = nthPier*2
