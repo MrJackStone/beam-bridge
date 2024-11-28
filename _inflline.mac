@@ -1,0 +1,33 @@
+
+! spanLength
+! LOAD_plDist
+
+spanLength = 10
+*get,loadCount,parm,LOAD_plDist,dim,x
+
+*del,v_left,,nopr
+*dim,v_left,table,4
+v_left(1) = 0 , 1 , 0 , 0
+*taxis,v_left(1),1,0-1e-6,0,spanLength,spanLength+1e-6
+
+*del,v_left_envelope,,nopr
+*dim,v_left_envelope,table,loadCount
+
+*do,mthLoad,1,loadCount,1
+  leadPos = LOAD_plDist(mthLoad)
+  sumV    = 0
+  *do,nthLoad,1,loadCount,1
+    loadPos     = LOAD_plDist(nthLoad)
+    loadValue   = LOAD_plValue(nthLoad)
+    relativePos = loadPos-leadPos
+    nthV        = v_left(relativePos)*(loadValue*1e-3)
+    sumV        = sumV+nthV
+  *enddo
+  *taxis,v_left_envelope(mthLoad),1,leadPos
+  v_left_envelope(mthLoad) = sumV
+*enddo
+
+*vplot,v_left_envelope(1,0),v_left_envelope(1,1)
+
+*vscfun,vMax,max,v_left_envelope
+*vscfun,lMax,lmax,v_left_envelope
