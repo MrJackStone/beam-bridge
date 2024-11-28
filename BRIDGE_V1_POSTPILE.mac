@@ -381,3 +381,76 @@ ln=0
   *vwrite,L_all(1),Len_all(1),Fk_min_all(1),Fk_max_all(1),Qk_max_all(1),Qk_min_all(1),Mk_max_all(1),Mk_min_all(1)
   (F9.0,TL1,' | ',F12.2,' | ',F15.2,' | ',F15.2,' | ',F15.2,' | ',F15.2,' | ',F15.2,' | ',F15.2)
 *cfclos
+
+
+!!  Plastic strain                                                                                !!
+allsel
+rsys,solu
+etable,'EPL',eppl,eqv
+*del,etNames
+*dim,etNames,char,1
+etNames(1)='EPL'
+etenv,1,LoadStepCount,'etNames'
+
+esel,s,type,,TYPE_link180
+esel,r,real,,9
+nsle,s,active
+/eshape,100
+/dscale,,off
+cm,e,elem
+
+*get,ec,elem,,count
+en=0
+*do,i,1,ec,1
+    en=elnext(en)
+    n1=nelem(en,1)
+    n2=nelem(en,2)
+    *if,nx(n1),eq,nx(n2),then
+        esel,u,elem,,en
+    *endif
+*enddo
+cm,e2,elem
+
+/window,all,dele
+view1w
+/view,1,0,-1,0
+/angle,1,0
+/auto,1
+wincln,1
+
+allsel
+/eshape,0
+esel,u,type,,3
+/type,1,3
+/edge,1,1
+eplot
+/user,1
+/dist,1,0.95,1
+
+go2png
+  /device,vector,on
+  eplot
+  /noerase
+
+  cmsel,s,compl_pile
+  cmsel,a,compl_abt_piles
+  esll,s
+  nsle,s,active
+  cm,pls,elem
+  /color,cm,dgra,pls
+  /device,vector,off
+  /gline,,-1
+  /eshape,1
+  eplot
+
+  cmsel,s,e2
+  nsle,s,active
+  /eshape,100
+  clims,0,1e-9
+  plnsol,eppl,eqv
+endpng,'IMG26a_soilPL'
+/erase
+/gline,,0
+
+clims
+rsys
