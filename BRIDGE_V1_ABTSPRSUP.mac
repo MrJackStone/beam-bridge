@@ -96,7 +96,7 @@ nn=0
         cmsel,s,COMPN_remoteSup
         nsel,a,node,,nn
         rn=nnear(nn)
-        safe_cp,'UZ',rn,nn
+        cp,next,'UZ',rn,nn
       *else
         d,nn,uz,0
       *endif

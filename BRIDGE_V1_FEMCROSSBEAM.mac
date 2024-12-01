@@ -43,11 +43,11 @@ esys,CS_base
     nsel,s,node,,cbNode
     nsel,a,node,,slabNode
 
-    safe_cp , 'UX'   , slabNode , cbNode
-    safe_cp , 'UY'   , slabNode , cbNode
-    safe_cp , 'UZ'   , slabNode , cbNode
-    safe_cp , 'ROTX' , slabNode , cbNode
-    safe_cp , 'ROTY' , slabNode , cbNode
-    safe_cp , 'ROTZ' , slabNode , cbNode
+    cp , next , 'UX'   , slabNode , cbNode
+    cp , next , 'UY'   , slabNode , cbNode
+    cp , next , 'UZ'   , slabNode , cbNode
+    cp , next , 'ROTX' , slabNode , cbNode
+    cp , next , 'ROTY' , slabNode , cbNode
+    cp , next , 'ROTZ' , slabNode , cbNode
   *enddo
 *enddo

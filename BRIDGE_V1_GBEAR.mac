@@ -123,8 +123,8 @@
         nsel,s,node,,nn
         cmsel,a,COMPN_colCap
         ns=nnear(nn)
-        safe_CP,'UX',nn,ns
-        safe_CP,'UY',nn,ns
-        safe_CP,'UZ',nn,ns
+        cp,next,'UX',nn,ns
+        cp,next,'UY',nn,ns
+        cp,next,'UZ',nn,ns
     *enddo
 *endif

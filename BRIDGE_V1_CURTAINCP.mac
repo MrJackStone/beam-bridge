@@ -86,7 +86,7 @@ ln=0
         cmsel,s,COMPN_refPile_t
         nsel,a,node,,nn
         nref=nnear(nn)
-        safe_cp,'UX',nref,nn
+        cp,next,'UX',nref,nn
     *enddo
 *enddo
 
@@ -113,7 +113,7 @@ ln=0
         cmsel,s,COMPN_refPile_lmn
         nsel,a,node,,nn
         nref=nnear(nn)
-        safe_cp,'UY',nref,nn
+        cp,next,'UY',nref,nn
     *enddo
 *enddo
 

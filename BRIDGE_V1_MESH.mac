@@ -672,13 +672,13 @@ NodeNum=0
    cmsel,u,COMPN_temp
    PCNode=nnear(NodeNum)
    NSEL,A,NODE,,NodeNum
-   safe_CP,'UX',PCNode,NodeNum
-   safe_CP,'UY',PCNode,NodeNum
-   safe_CP,'UZ',PCNode,NodeNum
-   safe_CP,'ROTZ',PCNode,NodeNum
+   cp,next,'UX',PCNode,NodeNum
+   cp,next,'UY',PCNode,NodeNum
+   cp,next,'UZ',PCNode,NodeNum
+   cp,next,'ROTZ',PCNode,NodeNum
    *if,FEM_PileTopConnection,eq,1,then
-       safe_CP,'ROTX',PCNode,NodeNum
-       safe_CP,'ROTY',PCNode,NodeNum
+       cp,next,'ROTX',PCNode,NodeNum
+       cp,next,'ROTY',PCNode,NodeNum
    *endif
 *enddo
 
