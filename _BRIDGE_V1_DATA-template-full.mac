@@ -1,3 +1,5 @@
+*del,all,,nopr
+
 !!                                                                                                !!
 !!                                                                                                !!
 !! 1.  Input parameters                                                                           !!
@@ -497,8 +499,8 @@ GEO_ABT2_wingCapWidth  = 2
 !! 1.4  Infrastructure                                                                            !!
 !!                                                                                                !!
 ! Pile type:
-!    [0] Driven pile
-!    [1] Bored pile
+!    [0] Fixed support at the tip
+!    [1] Spring support at the tip
 GEO_pileType=0
 
 ! Connection between pile cap and pile:
@@ -539,7 +541,7 @@ GEO_pileOpt=0
 *if,GEO_pileOpt,eq,0,then
     GEO_pileL=10
 *elseif,GEO_pileOpt,eq,1,then
-    *del,GEO_pileLengths
+    *del,GEO_pileLengths,,nopr
     *dim,GEO_pileLengths,,GEO_SupportCount
     GEO_pileLengths(1)=10.5+7.5, 10.5, 10.5, 10.5, 10.5+2, 10.5+9.4
 *endif
@@ -799,6 +801,7 @@ LOAD_columnWind_k=0 !2e3
 GEO_waterHeight=0
 ! Water flow pressure [N/m²]
 LOAD_waterFlow_k=0
+
 
 !! 1.7.2  Load Train                                                                              !!
 ! Load train name
