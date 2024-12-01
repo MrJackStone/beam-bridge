@@ -94,9 +94,12 @@ CMSEL,S,COMPN_RockSupport
     d,all,rotz
     /solu
 *endif
-!
-!
-!
+
+! Move DOF constraints from slave to master nodes
+cpsbcmerge
+
+
+
 !!                                                                                                !!
 !! 5.3 LOAD STEPS                                                                                 !!
 !!                                                                                                !!
