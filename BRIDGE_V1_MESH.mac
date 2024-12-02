@@ -90,7 +90,7 @@ cm,COMPE_crossBeam,elem
 CMSEL,S,COMPK_GirderSupport
 *get,KCount,KP,,COUNT
 KPNum=0
-NSEL,U,NODE,,ALL
+nsel,none
 CM,COMPN_GirderSupport,NODE
 *do,nthKP,1,KCount,1
    KPNum=KPNEXT(KPNum)
@@ -119,8 +119,8 @@ CM,COMPN_Slab,NODE
 
 ! Girders by span
 *do,nthSpan,1,GEO_SupportCount-1,1
-    nsel,u,node,,all
-    esel,u,elem,,all
+    nsel,none
+    esel,none
     *do,nthGirder,1,GEO_girderCount,1
         ecmName_nthGirder=strcat('COMPE_S',strcat(chrval(nthSpan),strcat('_G',chrval(nthGirder))))
         ncmName_nthGirder=strcat('COMPN_S',strcat(chrval(nthSpan),strcat('_G',chrval(nthGirder))))
@@ -143,8 +143,8 @@ cm,COMPN_LoadTrain,node
 !!                                                                                                !!
 !! 4.2 MESOSTRUCTURE MESH                                                                         !!
 !!                                                                                                !!
-nsel,u,node,,all
-esel,u,elem,,all
+nsel,none
+esel,none
 cm,COMPE_FrameGirder,elem
 cm,COMPN_FrameGirder,node
 cm,COMPE_Column,elem
@@ -171,7 +171,7 @@ cm,COMPE_Submerged,elem
         ESLN,r,1
         CM,COMPE_Submerged,ELEM
     *else
-        ESEL,U,ELEM,,ALL
+        esel,none
         CM,COMPE_Submerged,ELEM
     *endif
     cmsel,s,COMPE_temp
@@ -335,8 +335,8 @@ aatt,MAT_Abutment,,TYPE_SHELL181,,SEC_ABT_appSlab
 cmsel,s,COMPA_Abutment
 aesize,all,FEM_ABT_esize
 
-esel,u,elem,,all
-nsel,u,node,,all
+esel,none
+nsel,none
 cmsel,s,COMPA_ABT_1
 *get,ac,area,,count
 *if,ac,gt,0,then
@@ -348,8 +348,8 @@ csys,CS_ABT1
 local,csyiqr(0,14)+1,cart,0,0,0,-90-GEO_supportChi_0,0,0
 csys,0
 
-esel,u,elem,,all
-nsel,u,node,,all
+esel,none
+nsel,none
 cmsel,s,COMPA_ABT_2
 *get,ac,area,,count
 *if,ac,gt,0,then
@@ -416,12 +416,12 @@ lsla,s
 nsla,r,1
 cm,COMPN_tranWall,node
 
-nsel,u,node,,all
+nsel,none
 *do,nthGirder,1,GEO_girderCount,1
-    nthCS=CS_girders(nthGirder)
-    csys,nthCS
-    nsel,a,loc,y,0
-    csys,0
+  nthCS=CS_girders(nthGirder)
+  csys,nthCS
+  nsel,a,loc,y,0
+  csys,0
 *enddo
 cm,COMPN_temp,node
 cmsel,s,COMPN_ABT_1
@@ -429,21 +429,25 @@ cmsel,a,COMPN_ABT_2
 cmsel,r,COMPN_temp
 cmsel,r,COMPN_tranWall
 cm,COMPN_ABT_girder,node
-!
-!
+
+
 !! 4.3.4 SOIL SPRING SUPPORTS                                                                     !!
 !!                                                                                                !!
-csys,CS_ABT1
-cmsel,s,COMPN_ABT_1
-BRIDGE_V1_ABTSPRSUP, GEO_deckWidth_beg, GEO_ABT1_type, CS_ABT1, CS_ABT1_trv, CS_ABT1_lw, CS_ABT1_rw, GEO_ABT1_beamOpt
+*if,GEO_ABT1_status,eq,1,then
+  csys,CS_ABT1
+  cmsel,s,COMPN_ABT_1
+  BRIDGE_V1_ABTSPRSUP, GEO_deckWidth_beg, GEO_ABT1_type, CS_ABT1, CS_ABT1_trv, CS_ABT1_lw, CS_ABT1_rw, GEO_ABT1_beamOpt
+*endif
 
-csys,CS_ABT2
-cmsel,s,COMPN_ABT_2
-BRIDGE_V1_ABTSPRSUP, GEO_deckWidth_end, GEO_ABT2_type, CS_ABT2, CS_ABT2_trv, CS_ABT2_lw, CS_ABT2_rw, GEO_ABT2_beamOpt
+*if,GEO_ABT2_status,eq,1,then
+  csys,CS_ABT2
+  cmsel,s,COMPN_ABT_2
+  BRIDGE_V1_ABTSPRSUP, GEO_deckWidth_end, GEO_ABT2_type, CS_ABT2, CS_ABT2_trv, CS_ABT2_lw, CS_ABT2_rw, GEO_ABT2_beamOpt
+*endif
 
 csys,0
-!
-!
+
+
 !! 4.3.5 COMPONENTS                                                                               !!
 !!                                                                                                !!
 ! Approach slabs
@@ -476,7 +480,7 @@ esla,s
 cm,COMPE_ABT_Lanes,elem
 
 ! Barrier nodes (abutments)
-nsel,u,node,,all
+nsel,none
 cm,COMPN_ABT_Barrier,node
 *if,GEO_ABT1_status,eq,1,or,GEO_ABT2_status,eq,1,then
     *if,GEO_ABT1_appSlab,eq,1,or,GEO_ABT2_appSlab,eq,1,then
@@ -537,7 +541,7 @@ CM,COMPE_Lanes,ELEM
    NSLE,R,ACTIVE
    CM,COMPN_Barrier,NODE
 *else
-   NSEL,U,NODE,,ALL
+   nsel,none
    CM,COMPN_Barrier,NODE
 *endif
 !
@@ -551,8 +555,8 @@ CM,COMPE_Lanes,ELEM
 !!                                                                                                !!
 *if,GEO_capOpt,eq,0,then
     ! Grade beam mesh
-    ESEL,U,ELEM,,ALL
-    NSEL,U,NODE,,ALL
+    esel,none
+    nsel,none
     CMSEL,S,COMPL_GradeBeam
     *get,lc,line,,count
     *if,lc,gt,0,then
@@ -582,8 +586,8 @@ CM,COMPE_Lanes,ELEM
     CM,COMPE_PileCap,ELEM
     CM,COMPN_PileCap,NODE
 *else
-    esel,u,elem,,all
-    nsel,u,node,,all
+    esel,none
+    nsel,none
     CM,COMPE_PileCap,ELEM
     CM,COMPN_PileCap,NODE
 *endif
