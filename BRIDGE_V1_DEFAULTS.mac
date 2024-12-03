@@ -12,6 +12,9 @@ SEC_offset = 0
 !!                                                                                                !!
 GEO_deckRadius = 0
 
+GEO_deckOff_beg = 0
+GEO_deckOff_end = 0
+
 SLAB_hF            = 0
 GEO_slabConnection = 0
 
@@ -52,6 +55,8 @@ GEO_ABT1_topOffset = 0
 
 GEO_ABT1_beamOpt = 0
 GEO_ABT2_beamOpt = 0
+
+SEC_ABT_PILE_d = 1
 
 
 !!                                                                                                !!
