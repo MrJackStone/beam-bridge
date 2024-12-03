@@ -95,7 +95,9 @@ CMSEL,S,COMPN_RockSupport
     /solu
 *endif
 
-! Move DOF constraints from slave to master nodes
+! Clear up nodal coupling conflicts
+allsel
+cpsmerge
 cpsbcmerge
 
 

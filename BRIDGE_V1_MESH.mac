@@ -924,7 +924,6 @@ d,all,uz,0
 allsel
 
 numcmp,node
-cpsmerge
 
 ! Capture image of the mesh
 ALLSEL
