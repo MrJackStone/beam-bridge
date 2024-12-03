@@ -8,3 +8,6 @@
 ⭕ 8. Abutment pile cap should be able to extend beyond transversal wall into span
 ⭕ 9. Introduce load cases for design
 ⭕10. Move load train sideways on deck
+⭕11. User fewer load train positions (influence line)
+⭕12. Set pile unrestrained length per support
+⭕13. Add vehicle collision load

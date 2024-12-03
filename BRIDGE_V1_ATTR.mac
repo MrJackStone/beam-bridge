@@ -37,7 +37,7 @@ MAT_Soil_E=1e10                                                       !! MAT_Soi
 
 ! Springs
 SEC_VSOIL_area=(MAT_Soil_kv*FEM_springL*FEM_PileELength)/MAT_Soil_E   !! SEC_VSOIL_area=(MAT_Soil_kv*FEM_springL)/MAT_Soil_E
-SEC_HSOIL_area=(MAT_Soil_kh*FEM_springL*FEM_PileELength)/MAT_Soil_E   !! SEC_HSOIL_area=(MAT_Soil_kh*FEM_springL)/MAT_Soil_E
+SEC_HSOIL_area=(MAT_Soil_kh*FEM_springL*FEM_PileELength)/MAT_Soil_E  ! TODO  multiply by pile diameter (results in AREA per pile)
 SEC_PSOIL_area=(MAT_Soil_kp*FEM_springL)/MAT_Soil_E
 SEC_SPRING_k=1E10
 
@@ -568,9 +568,9 @@ secoffset,top
 !! 2.1.4 COORDINATE SYSTEMS                                                                       !!
 !!                                                                                                !!
 ! Reference CS
-LOCAL,CS_base,CART
+LOCAL,CS_base,CART  ! TODO  csys
 csys,0
-local,CS_deck,cylin,GEO_deckLength/2,-GEO_chordOff,0
+local,CS_deck,cylin,GEO_deckLength/2,-GEO_chordOff,0  ! TODO  csys
 csys,0
 !
 !

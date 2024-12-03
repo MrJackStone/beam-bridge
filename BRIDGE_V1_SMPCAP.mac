@@ -45,9 +45,9 @@ rCS_name = strcat('CS_INFRA_R',chrval(arg1))
 %lCS_name% = CS_left
 %rCS_name% = CS_right
 
-local , CS_center , cart , xCenter , yCenter , nthFrameZBot , zAngle
-local , CS_left   , cart , xLeft   , yLeft   , nthFrameZBot , zAngle
-local , CS_right  , cart , xRight  , yRight  , nthFrameZBot , zAngle
+local , CS_center , cart , xCenter , yCenter , nthFrameZBot , zAngle  ! TODO  csys
+local , CS_left   , cart , xLeft   , yLeft   , nthFrameZBot , zAngle  ! TODO  csys
+local , CS_right  , cart , xRight  , yRight  , nthFrameZBot , zAngle  ! TODO  csys
 csys  , 0
 
 *if,GEO_capOpt,eq,0,then

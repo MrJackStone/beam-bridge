@@ -39,7 +39,7 @@ exists=0
   CS_num=40+(10*arg1)
   %CS_name%=CS_num
   csys,0
-  local,CS_num,cart,xCenter,yCenter,0,zAngle
+  local,CS_num,cart,xCenter,yCenter,0,zAngle  ! TODO  csys
   csys,CS_num
 
 *endif

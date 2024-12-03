@@ -905,9 +905,9 @@ cmsel,u,COMPK_prev
 !!                                                                                                !!
 csys,arg1
 csnext,'CS_leftWall'
-clocal,CS_leftWall,cart,0,0,0,,90
+clocal,CS_leftWall,cart,0,0,0,,90  ! TODO  csys
 csnext,'CS_rightWall'
-clocal,CS_leftWall,cart,0,0,0,180,90
+clocal,CS_leftWall,cart,0,0,0,180,90  ! TODO  csys
 
 ! COMPA_Abutment
 !
