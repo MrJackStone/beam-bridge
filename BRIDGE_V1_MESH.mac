@@ -598,12 +598,21 @@ CM,COMPE_Lanes,ELEM
 ! Pile mesh
 esel,none
 nsel,none
+
 cmsel,s,COMPL_Pile
-orient,TYPE_BEAM188,MAT_Pile,SEC_PILE_num,1,,,FEM_PileELength
-lmesh,all
+*get,lc,line,,count
+*if,lc,gt,0,then
+  orient,TYPE_BEAM188,MAT_Pile,SEC_PILE_num,1,,,FEM_PileELength
+  lmesh,all
+*endif
+
 cmsel,s,COMPL_ABT_piles
-orient,TYPE_BEAM188,MAT_Pile,SEC_ABT_pile,1,,,FEM_PileELength
-lmesh,all
+*get,lc,line,,count
+*if,lc,gt,0,then
+  orient,TYPE_BEAM188,MAT_Pile,SEC_ABT_pile,1,,,FEM_PileELength
+  lmesh,all
+*endif
+
 nsle,S,ACTIVE
 CM,COMPE_Pile,ELEM
 CM,COMPN_Pile,NODE
