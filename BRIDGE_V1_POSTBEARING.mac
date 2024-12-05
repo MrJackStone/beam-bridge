@@ -1,0 +1,266 @@
+! BRIDGE_V1_POSTBEARING
+
+
+vnBegDeltaUX   = 11
+vnBegDeltaUY   = 12
+vnBegFX        = 13
+vnBegFY        = 14
+vnBegFZ        = 15
+vnBegGirderUX  = 16
+vnBegGirderUY  = 17
+vnBegMesoUX    = 18
+vnBegMesoUY    = 19
+vnBegROTY      = 20
+vnEndDeltaUX   = 21
+vnEndDeltaUY   = 22
+vnEndFX        = 23
+vnEndFY        = 24
+vnEndFZ        = 25
+vnEndGirderUX  = 26
+vnEndGirderUY  = 27
+vnEndMesoUX    = 28
+vnEndMesoUY    = 29
+vnEndROTY      = 30
+vnBegSlabFZ    = 31
+vnBegSlabFX    = 32
+vnBegSlabFY    = 33
+vnEndSlabFZ    = 34
+vnEndSlabFX    = 35
+vnEndSlabFY    = 36
+vnNthBegSlabFZ = 37
+vnNthBegSlabFX = 38
+vnNthBegSlabFY = 39
+vnNthEndSlabFZ = 40
+vnNthEndSlabFX = 41
+vnNthEndSlabFY = 42
+
+allsel
+pst26
+
+*cfopen,'~bearing_results','txt'
+  *vwrite,
+  ('GIRDER BEARING RESULTS')
+  *vwrite,
+  (' ')
+  *vwrite,
+  ('Units:')
+  *vwrite,
+  ('  FZ, FX, FY: kN')
+  *vwrite,
+  ('  DUX, DUY:   mm')
+  *vwrite,
+  ('  ROTY:       degrees')
+  *vwrite,
+  (' ')
+  *vwrite,
+  ('Directions:')
+  *vwrite,
+  ('  Z: vertical')
+  *vwrite,
+  ('  X: longitudinal')
+  *vwrite,
+  ('  Y: transversal')
+  *vwrite,
+  (' ')
+  *vwrite,
+  ('Legend:')
+  *vwrite,
+  ('  F:   force')
+  *vwrite,
+  ('  DU:  relative displacement (Delta U)')
+  *vwrite,
+  ('  ROT: cross-section rotation')
+  *vwrite,
+  ('  _B:  value at the first end of the span (Beginning)')
+  *vwrite,
+  ('  _E:  value at the second end of the span (End)')
+  *vwrite,
+  (' ')
+  *vwrite,
+  ('NOTE: all values considering ELU load scenario, with the following coefficients already applied:')
+  *vwrite,LOAD_gammaG
+  gamma_g: %7.3F
+  *vwrite,LOAD_gammaQ
+  gamma_q: %7.3F
+  *vwrite,LOAD_dynImpact
+  impact:  %7.3F
+  *vwrite,
+  (' ')
+*cfclos
+
+*do,nthSpan,1,GEO_spanCount,1
+  *do,nthGirder,1,GEO_girderCount,1
+
+    ndGirderBeg = bearing_pairs(1,nthGirder,nthSpan)
+    ndMesoBeg   = bearing_pairs(2,nthGirder,nthSpan)
+    ndGirderEnd = bearing_pairs(3,nthGirder,nthSpan)
+    ndMesoEnd   = bearing_pairs(4,nthGirder,nthSpan)
+
+    nsel,s,node,,ndGirderBeg
+    esln
+    cmsel,r,COMPE_girder
+    elGirderBeg = elnext(0)
+    esln ! TODO  fix this (slab doesn't use same node as girder)
+    cmsel,r,COMPE_slab
+    cm,COMPE_slabBeg,elem
+
+    nsel,s,node,,ndGirderEnd
+    esln
+    cmsel,r,COMPE_girder
+    elGirderEnd = elnext(0)
+    esln
+    cmsel,r,COMPE_slab
+    cm,COMPE_slabEnd,elem
+
+    nsel,all
+    esel,all
+
+    *del,dummy,nopr
+    vget,dummy,1
+    *get,arrayDim,parm,dummy,dim,x
+    *vfill,dummy,ramp,0,0
+    vput,dummy,vnBegSlabFZ
+    vput,dummy,vnBegSlabFX
+    vput,dummy,vnBegSlabFY
+    vput,dummy,vnEndSlabFZ
+    vput,dummy,vnEndSlabFX
+    vput,dummy,vnEndSlabFY
+
+    cmsel,s,COMPE_slabBeg
+    *get,ec,elem,,count
+    enum=0
+    *do,nthElem,1,ec,1
+      enum=elnext(enum)
+      esol   , vnNthBegSlabFZ , enum        , ndGirderBeg    , f , z
+      esol   , vnNthBegSlabFX , enum        , ndGirderBeg    , f , x
+      esol   , vnNthBegSlabFY , enum        , ndGirderBeg    , f , y
+      add    , vnBegSlabFZ    , vnBegSlabFZ , vnNthBegSlabFZ
+      add    , vnBegSlabFX    , vnBegSlabFX , vnNthBegSlabFX
+      add    , vnBegSlabFY    , vnBegSlabFY , vnNthBegSlabFY
+      vardel , vnNthBegSlabFZ
+      vardel , vnNthBegSlabFX
+      vardel , vnNthBegSlabFY
+    *enddo
+
+    cmsel,s,COMPE_slabEnd
+    *get,ec,elem,,count
+    enum=0
+    *do,nthElem,1,ec,1
+      enum=elnext(enum)
+      esol   , vnNthEndSlabFZ , enum        , ndGirderEnd    , f , z
+      esol   , vnNthEndSlabFX , enum        , ndGirderEnd    , f , x
+      esol   , vnNthEndSlabFY , enum        , ndGirderEnd    , f , y
+      add    , vnEndSlabFZ    , vnEndSlabFZ , vnNthEndSlabFZ
+      add    , vnEndSlabFX    , vnEndSlabFX , vnNthEndSlabFX
+      add    , vnEndSlabFY    , vnEndSlabFY , vnNthEndSlabFY
+      vardel , vnNthEndSlabFZ
+      vardel , vnNthEndSlabFX
+      vardel , vnNthEndSlabFY
+    *enddo
+
+    esol , vnBegFZ , elGirderBeg , ndGirderBeg , f , z
+    add , vnBegFZ , vnBegFZ , vnBegSlabFZ
+    abs , vnBegFZ , vnBegFZ ,,,'FZ_S%nthSpan%G%nthSpan%B',,,1e-3
+
+    esol , vnEndFZ , elGirderEnd , ndGirderEnd , f , z
+    add , vnEndFZ , vnEndFZ , vnEndSlabFZ
+    abs , vnEndFZ , vnEndFZ ,,,'FZ_S%nthSpan%G%nthSpan%E',,,1e-3
+
+    esol , vnBegFX , elGirderBeg , ndGirderBeg , f , x
+    add , vnBegFX , vnBegFX , vnBegSlabFX
+    abs , vnBegFX , vnBegFX ,,,'FX_S%nthSpan%G%nthSpan%B',,,1e-3
+
+    esol , vnEndFX , elGirderEnd , ndGirderEnd , f , x
+    add , vnEndFX , vnEndFX , vnEndSlabFX
+    abs , vnEndFX , vnEndFX ,,,'FX_S%nthSpan%G%nthSpan%E',,,1e-3
+
+    esol , vnBegFY , elGirderBeg , ndGirderBeg , f , y
+    add , vnBegFY , vnBegFY , vnBegSlabFY
+    abs , vnBegFY , vnBegFY ,,,'FY_S%nthSpan%G%nthSpan%B',,,1e-3
+
+    esol , vnEndFY , elGirderEnd , ndGirderEnd , f , y
+    add , vnEndFY , vnEndFY , vnEndSlabFY
+    abs , vnEndFY , vnEndFY ,,,'FY_S%nthSpan%G%nthSpan%E',,,1e-3
+
+    nsol , vnBegGirderUX , ndGirderBeg , u , x
+    nsol , vnBegMesoUX   , ndMesoBeg   , u , x
+    add , vnBegDeltaUX , vnBegGirderUX , vnBegMesoUX ,,,,,1,-1
+    abs , vnBegDeltaUX , vnBegDeltaUX ,,,'UX_S%nthSpan%G%nthGirder%B',,,1e3
+
+    nsol , vnBegGirderUY , ndGirderBeg , u , y
+    nsol , vnBegMesoUY   , ndMesoBeg   , u , y
+    add , vnBegDeltaUY , vnBegGirderUY , vnBegMesoUY ,,,,,1,-1
+    abs , vnBegDeltaUY , vnBegDeltaUY ,,,'UY_S%nthSpan%G%nthGirder%B',,,1e3
+
+    nsol , vnEndGirderUX , ndGirderEnd , u , x
+    nsol , vnEndMesoUX   , ndMesoEnd   , u , x
+    add , vnEndDeltaUX , vnEndGirderUX , vnEndMesoUX ,,,,,1,-1
+    abs , vnEndDeltaUX , vnEndDeltaUX ,,,'UX_S%nthSpan%G%nthGirder%E',,,1e3
+
+    nsol , vnEndGirderUY , ndGirderEnd , u , y
+    nsol , vnEndMesoUY   , ndMesoEnd   , u , y
+    add , vnEndDeltaUY , vnEndGirderUY , vnEndMesoUY ,,,,,1,-1
+    abs , vnEndDeltaUY , vnEndDeltaUY ,,,'UY_S%nthSpan%G%nthGirder%E',,,1e3
+
+    nsol , vnBegROTY , ndGirderBeg , rot , y
+    abs , vnBegROTY , vnBegROTY ,,,'RY_S%nthSpan%G%nthGirder%B',,,180/pi
+
+    nsol , vnEndROTY , ndGirderEnd , rot , y
+    abs , vnEndROTY , vnEndROTY ,,,'RY_S%nthSpan%G%nthGirder%E',,,180/pi
+
+    *del,bearing_results,,nopr
+    *dim,bearing_results,,arrayDim,12
+
+    vget , bearing_results(1,1)  , vnBegFZ
+    vget , bearing_results(1,2)  , vnBegFX
+    vget , bearing_results(1,3)  , vnBegFY
+    vget , bearing_results(1,4)  , vnBegDeltaUX
+    vget , bearing_results(1,5)  , vnBegDeltaUY
+    vget , bearing_results(1,6)  , vnBegROTY
+    vget , bearing_results(1,7)  , vnEndFZ
+    vget , bearing_results(1,8)  , vnEndFX
+    vget , bearing_results(1,9)  , vnEndFY
+    vget , bearing_results(1,10) , vnEndDeltaUX
+    vget , bearing_results(1,11) , vnEndDeltaUY
+    vget , bearing_results(1,12) , vnEndROTY
+
+    *cfopen,'~bearing_results','txt',,append
+      *vwrite,nthSpan,nthGirder
+SPAN: %I / GIRDER: %I
+      *vwrite,
+      ('    FZ_B      FX_B      FY_B     DUX_B     DUY_B    ROTY_B      FZ_E      FX_E      FY_E     DUX_E     DUY_E    ROTY_E')
+      *vwrite,bearing_results(1,1),bearing_results(1,2),bearing_results(1,3),bearing_results(1,4),bearing_results(1,5),bearing_results(1,6),bearing_results(1,7),bearing_results(1,8),bearing_results(1,9),bearing_results(1,10),bearing_results(1,11),bearing_results(1,12)
+%8.2F  %8.2F  %8.2F  %8.4F  %8.4F  %8.4F  %8.2F  %8.2F  %8.2F  %8.4F  %8.4F  %8.4F
+      *vwrite,
+      (' ')
+    *cfclos
+
+    vardel , vnBegDeltaUX
+    vardel , vnBegDeltaUY
+    vardel , vnBegFX
+    vardel , vnBegFY
+    vardel , vnBegFZ
+    vardel , vnBegGirderUX
+    vardel , vnBegGirderUY
+    vardel , vnBegMesoUX
+    vardel , vnBegMesoUY
+    vardel , vnBegROTY
+    vardel , vnEndDeltaUX
+    vardel , vnEndDeltaUY
+    vardel , vnEndFX
+    vardel , vnEndFY
+    vardel , vnEndFZ
+    vardel , vnEndGirderUX
+    vardel , vnEndGirderUY
+    vardel , vnEndMesoUX
+    vardel , vnEndMesoUY
+    vardel , vnEndROTY
+    vardel , vnBegSlabFZ
+    vardel , vnBegSlabFX
+    vardel , vnBegSlabFY
+    vardel , vnEndSlabFZ
+    vardel , vnEndSlabFX
+    vardel , vnEndSlabFY
+
+  *enddo
+*enddo
