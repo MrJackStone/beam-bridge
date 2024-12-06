@@ -100,20 +100,29 @@ pst26
     esln
     cmsel,r,COMPE_girder
     elGirderBeg = elnext(0)
-    esln ! TODO  fix this (slab doesn't use same node as girder)
-    cmsel,r,COMPE_slab
-    cm,COMPE_slabBeg,elem
 
     nsel,s,node,,ndGirderEnd
     esln
     cmsel,r,COMPE_girder
     elGirderEnd = elnext(0)
-    esln
-    cmsel,r,COMPE_slab
-    cm,COMPE_slabEnd,elem
 
-    nsel,all
-    esel,all
+    nsel,s,node,,ndGirderBeg
+    *get,cpNum,node,ndGirderBeg,cps,uz
+    nsel,s,cp,,cpNum
+    cmsel,r,COMPN_slab
+    cmsel,r,COMPN_SLAB_%nthSpan%
+    ndSlabBeg = ndnext(0)
+    esln,s
+    cm,COMPE_slabBeg,elem
+
+    nsel,s,node,,ndGirderEnd
+    *get,cpNum,node,ndGirderEnd,cps,uz
+    nsel,s,cp,,cpNum
+    cmsel,r,COMPN_slab
+    cmsel,r,COMPN_SLAB_%nthSpan%
+    ndSlabEnd = ndnext(0)
+    esln,s
+    cm,COMPE_slabEnd,elem
 
     *del,dummy,nopr
     vget,dummy,1
@@ -128,12 +137,12 @@ pst26
 
     cmsel,s,COMPE_slabBeg
     *get,ec,elem,,count
-    enum=0
+    enum = 0
     *do,nthElem,1,ec,1
-      enum=elnext(enum)
-      esol   , vnNthBegSlabFZ , enum        , ndGirderBeg    , f , z
-      esol   , vnNthBegSlabFX , enum        , ndGirderBeg    , f , x
-      esol   , vnNthBegSlabFY , enum        , ndGirderBeg    , f , y
+      enum = elnext(enum)
+      esol   , vnNthBegSlabFZ , enum        , ndSlabBeg      , f , z
+      esol   , vnNthBegSlabFX , enum        , ndSlabBeg      , f , x
+      esol   , vnNthBegSlabFY , enum        , ndSlabBeg      , f , y
       add    , vnBegSlabFZ    , vnBegSlabFZ , vnNthBegSlabFZ
       add    , vnBegSlabFX    , vnBegSlabFX , vnNthBegSlabFX
       add    , vnBegSlabFY    , vnBegSlabFY , vnNthBegSlabFY
@@ -144,12 +153,12 @@ pst26
 
     cmsel,s,COMPE_slabEnd
     *get,ec,elem,,count
-    enum=0
+    enum = 0
     *do,nthElem,1,ec,1
-      enum=elnext(enum)
-      esol   , vnNthEndSlabFZ , enum        , ndGirderEnd    , f , z
-      esol   , vnNthEndSlabFX , enum        , ndGirderEnd    , f , x
-      esol   , vnNthEndSlabFY , enum        , ndGirderEnd    , f , y
+      enum = elnext(enum)
+      esol   , vnNthEndSlabFZ , enum        , ndSlabEnd      , f , z
+      esol   , vnNthEndSlabFX , enum        , ndSlabEnd      , f , x
+      esol   , vnNthEndSlabFY , enum        , ndSlabEnd      , f , y
       add    , vnEndSlabFZ    , vnEndSlabFZ , vnNthEndSlabFZ
       add    , vnEndSlabFX    , vnEndSlabFX , vnNthEndSlabFX
       add    , vnEndSlabFY    , vnEndSlabFY , vnNthEndSlabFY
@@ -157,6 +166,9 @@ pst26
       vardel , vnNthEndSlabFX
       vardel , vnNthEndSlabFY
     *enddo
+
+    nsel,all
+    esel,all
 
     esol , vnBegFZ , elGirderBeg , ndGirderBeg , f , z
     add , vnBegFZ , vnBegFZ , vnBegSlabFZ
