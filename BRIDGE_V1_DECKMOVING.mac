@@ -9,8 +9,8 @@ cm,COMPN_candidates,node
 
 ! Adjust Y coordinate to account for load train skewness
 *afun,deg
-nthSkewedDeltaY=xCoord*tan(LOAD_ltSkewness)
-yCoord=yCoord+nthSkewedDeltaY
+nthSkewedDeltaY = xCoord*tan(LOAD_ltSkewness)
+yCoord          = yCoord+nthSkewedDeltaY
 *afun,rad
 
 ! Location filter
@@ -44,8 +44,8 @@ cmsel,s,COMPN_candidates
     ! Curved deck: centrifugal force and vector decomposition:
     BRIDGE_V1_XTOCHI,'chiAngle',xCoord
     *afun,deg
-    F_x=F_long*sin(chiAngle)-F_cen*cos(chiAngle)
-    F_y=F_long*cos(chiAngle)+F_cen*sin(chiAngle)
+    F_x = F_long*sin(chiAngle)-F_cen*cos(chiAngle)
+    F_y = F_long*cos(chiAngle)+F_cen*sin(chiAngle)
     *afun,rad
     F,NodeNum,FZ,-F_vert
     F,NodeNum,FX, F_x

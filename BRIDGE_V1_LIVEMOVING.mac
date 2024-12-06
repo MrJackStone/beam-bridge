@@ -9,15 +9,15 @@
   BRIDGE_V1_XTOCHI,'chiAngle',xCoord
 
   ! Load values
-  F_vert=LOAD_ltCount*LOAD_vert(nthLoad)/LOAD_wheelCount
-  F_long=LOAD_ltCount*(LOAD_long(nthLoad)/LOAD_wheelCount)*horDir_fct
-  F_cen=F_vert*(LOAD_centrifugalPct/100)
+  F_vert = LOAD_ltCount*LOAD_vert(nthLoad)/LOAD_wheelCount
+  F_long = LOAD_ltCount*(LOAD_long(nthLoad)/LOAD_wheelCount)*horDir_fct
+  F_cen  = F_vert*(LOAD_centrifugalPct/100)
 
   *do,nthWheel,1,LOAD_wheelCount,1
     ! Point load transversal position
     *afun,deg
-    yWheel=LOAD_ltWheelOff_beg(nthWheel,nthTransvPos)
-    yCoord=(GEO_deckRadius+yWheel)*sin(chiAngle)-GEO_chordOff
+    yWheel = LOAD_ltWheelOff_beg(nthWheel,nthTransvPos)
+    yCoord = (GEO_deckRadius+yWheel)*sin(chiAngle)-GEO_chordOff
     *afun,rad
 
     *if,xCoord,GE,0,AND,xCoord,LE,GEO_deckLength,THEN
