@@ -244,6 +244,7 @@ totalTime=SOLU_dlTime
     totalTime=totalTime+SOLU_LSdt
     time,totalTime
 
+    BRIDGE_V1_LSLOG, nthLoadStep
     lswrite,nthLoadStep
 
     ! Capture image of structural loading

@@ -1,0 +1,43 @@
+! BRIDGE_V1_LSLOG , lsNumber
+! BRIDGE_V1_LSLOG , ARG1
+
+! Local parameters:
+! ar21: vertForceSum
+! ar22: longForceSum
+! ar23: forceRatio
+
+*vscfun,ar21,sum,LOAD_vert(1)
+*vscfun,ar22,sum,LOAD_long(1)
+ar23 = ar22/ar21
+
+*cfopen,'~LS%ARG1%_loadtrain','txt'
+
+  *vwrite,
+Applied Load Train Forces
+  *vwrite,
+  (' ')
+
+  *vwrite,
+Force unit:  N (Newtons)
+  *vwrite,
+Length unit: m (meters)
+  *vwrite,ARG1
+Load Step:   %I
+  *vwrite,
+  (' ')
+
+  *vwrite,ar21
+Vertical force sum:     %G
+  *vwrite,ar22
+Longitudinal force sum: %G
+  *vwrite,ar23
+L/V force ratio:        %G
+  *vwrite,
+  (' ')
+
+  *vwrite,
+  ('    Position   FZ (vert)     FX (long)')
+  *vwrite,LOAD_pos(1),LOAD_vert(1),LOAD_long(1)
+  (F12.2,'  ',F12.2,'  ',F12.2)
+
+*cfclos
