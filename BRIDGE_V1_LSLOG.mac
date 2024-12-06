@@ -2,13 +2,19 @@
 ! BRIDGE_V1_LSLOG , ARG1
 
 ! Local parameters:
+! ar20: parType
 ! ar21: vertForceSum
 ! ar22: longForceSum
 ! ar23: forceRatio
 
-*vscfun,ar21,sum,LOAD_vert(1)
-*vscfun,ar22,sum,LOAD_long(1)
-ar23 = ar22/ar21
+*vscfun,ar21,sum,LOAD_vert
+*vscfun,ar22,sum,LOAD_long
+
+*if,ar21,ne,0,then
+  ar23 = ar22/ar21
+*else
+  ar23 = 0
+*endif
 
 *cfopen,'~LS%ARG1%_loadtrain','txt'
 
@@ -35,9 +41,18 @@ L/V force ratio:        %G
   *vwrite,
   (' ')
 
-  *vwrite,
-  ('    Position   FZ (vert)     FX (long)')
-  *vwrite,LOAD_pos(1),LOAD_vert(1),LOAD_long(1)
-  (F12.2,'  ',F12.2,'  ',F12.2)
+  *get,ar20,parm,LOAD_pos,type
+
+  *if,ar20,eq,1,then
+    *vwrite,
+    ('    Position     FZ (vert)     FX (long)')
+    *vwrite,LOAD_pos(1),LOAD_vert(1),LOAD_long(1)
+    (F12.2,'  ',F12.2,'  ',F12.2)
+
+  *else
+    *vwrite,
+    ('No forces on bridge.')
+
+  *endif
 
 *cfclos
