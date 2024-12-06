@@ -58,7 +58,6 @@ Writing load step #%I out of %I...
       *del , LOAD_long           ,  , nopr
       *del , loaded_longitudinal ,  , nopr
       *del , loaded_lengths      ,  , nopr
-      *del , LOAD_long           ,  , nopr
 
       ! Get X position of leading load
       xLead=LTleadingPos(nthPos)
@@ -169,14 +168,15 @@ Writing load step #%I out of %I...
             ! Continuous rail
             *voper,loaded_lengths,GEO_genSpanLengths,mult,loaded_spans
             *vscfun,loaded_length,sum,loaded_lengths
-            f_braking=200+17.5*loaded_length
-            f_accelerating=200*sqrt(loaded_length)
-            f_longitudinal=(f_braking>f_accelerating)
+            f_braking      = 1e3*(200+17.5*loaded_length)
+            f_accelerating = 1e3*(200*sqrt(loaded_length))
+            f_longitudinal = (f_braking>f_accelerating)
           *endif
-          f_longitudinal=f_longitudinal*1e3
-          *vscfun,Fvert_total,sum,LOAD_vert
-          vl_ratio=f_longitudinal/Fvert_total
-          long_fact=(vl_ratio<0.25)
+
+          *vscfun,totalVerticalForceOnDeck_d,sum,LOAD_vert
+          lv_ratio  = f_longitudinal/totalVerticalForceOnDeck_d
+          maxRatio  = 0.25/LOAD_dynImpact
+          long_fact = (lv_ratio<maxRatio)
           *voper,LOAD_long,LOAD_vert,mult,long_fact
 
         *endif

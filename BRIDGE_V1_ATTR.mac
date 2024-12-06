@@ -1391,9 +1391,9 @@ nthPier=0
 
 loadtrain, LOAD_ltName,LOAD_locRep,0,1, udlLength ! Output: LOADTRAIN_VAR_count; LOADTRAIN_ARR_positions; LOADTRAIN_ARR_loads
 LOAD_plCount=LOADTRAIN_VAR_count
-*del,LOAD_plDist,,nopr
-*del,LOAD_plValue,,nopr
-*del,LOAD_ltLength,,nopr
+*del , LOAD_plDist   ,  , nopr
+*del , LOAD_plValue  ,  , nopr
+*del , LOAD_ltLength ,  , nopr
 *vfun , LOAD_plDist  , copy , LOADTRAIN_ARR_positions
 *vfun , LOAD_plValue , copy , LOADTRAIN_ARR_loads
 LOAD_ltLength=LOADTRAIN_VAR_length
@@ -1408,19 +1408,25 @@ LOAD_ltLength=LOADTRAIN_VAR_length
     *if,LOAD_railOpt,eq,0,then
         ! Discontinuous rail:
 
+        ! According to AREMA (lengths input in meters, forces output in N):
+        !   f_braking      = 1e3*(200+17.5*loaded_length)
+        !   f_accelerating = 1e3*(200*sqrt(loaded_length))
+
         ! Braking forces
-        *del,arr_f_braking
-        *voper,arr_f_braking,GEO_genSpanLengths,mult,17.5
-        *voper,arr_f_braking,f_braking,add,200
+        *del   , arr_f_braking ,                    , nopr
+        *voper , arr_f_braking , GEO_genSpanLengths , mult , 17.5
+        *voper , arr_f_braking , f_braking          , add  , 200
+        *voper , arr_f_braking , arr_f_braking      , mult , 1e3
 
         ! Accelerating forces
-        *del,arr_f_accelerating
-        *vfun,arr_f_accelerating,sqrt,GEO_genSpanLengths
-        *voper,arr_f_accelerating,arr_f_accelerating,mult,200
+        *del   , arr_f_accelerating ,                    , nopr
+        *vfun  , arr_f_accelerating , sqrt               , GEO_genSpanLengths
+        *voper , arr_f_accelerating , arr_f_accelerating , mult               , 200
+        *voper , arr_f_accelerating , arr_f_accelerating , mult               , 1e3
 
         ! Total longitudinal forces
-        *del,arr_f_longitudinal
-        *voper,arr_f_longitudinal,arr_f_braking,max,arr_f_accelerating
+        *del   , arr_f_longitudinal ,               , nopr
+        *voper , arr_f_longitudinal , arr_f_braking , max  , arr_f_accelerating
 
     *endif
 
