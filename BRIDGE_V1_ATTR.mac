@@ -78,6 +78,7 @@ MAT_Gerber      = 14
 MAT_CrossBeam   = 15
 MAT_PileTip     = 16
 MAT_PileLat     = 17
+MAT_casing      = 18
 
 ! Element types
 TYPE_BEAM188  = 1
@@ -226,12 +227,15 @@ mp , prxy , MAT_PileLat , MAT_Soil_Poisson
 !! 2.1.1.15 SPRING                                                                                !!
 MAT_Spring_E=1e10
 MP,EX,MAT_Spring,MAT_Spring_E
-!
+
 !! 2.1.1.16 Bearing & FRICTION (MATRIX27 ELEMENTS)                                               !!
 MAT_Matrix_E=1e10
 MP,EX,MAT_Matrix,MAT_Matrix_E
-!
-!
+
+!! 2.1.1.17  Pile steel casing                                                                    !!
+steel , MAT_casing,MAT_CASING_E,,,,,,1
+
+
 !! 2.1.2 ELEMENT TYPES                                                                            !!
 !!                                                                                                !!
 ! Girders, columns: BEAM188
@@ -394,20 +398,28 @@ SECDATA,GRADEBEAM_b,GRADEBEAM_h
 *if,SEC_offset,EQ,1,THEN
    SECOFFSET,USER,,GRADEBEAM_h/2
 *endif
-!
+
 !! 2.1.3.9 PILES                                                                                  !!
-SECTYPE,SEC_PILE_num,BEAM,CSOLID,PILE_name,2
-SECDATA,PILE_d/2
-!
+*if,PILE_thk,eq,0,then
+  ! Standard concrete pile
+  SECTYPE,SEC_PILE_num,BEAM,CSOLID,PILE_name,2
+  SECDATA,PILE_d/2
+*elseif,PILE_thk,gt,0,then
+  ! Concrete pile with permanent steel casing
+  sec_ctube , PILE_d , PILE_thk , MAT_pile , MAT_casing ,, 'COMPOSITE_PILE'
+  sectype,SEC_PILE_num,beam,mesh,'PILE'
+  secread,'COMPOSITE_PILE',sect,,mesh
+*endif
+
 !! 2.1.3.10 SOIL: VERTICAL STIFFNESS                                                              !!
 R,SEC_VSOIL_num,SEC_VSOIL_area,,0
-!
+
 !! 2.1.3.11 SOIL: HORIZONTAL STIFFNESS                                                            !!
 R,SEC_HSOIL_num,SEC_HSOIL_area,,0
-!
+
 !! 2.1.3.12 SOIL: VERTICAL STIFFNESS AT PILE END                                                  !!
 R,SEC_PSOIL_num,SEC_PSOIL_area,,-1
-!
+
 !! 2.1.3.13 SPRINGS                                                                               !!
 R,SEC_SPRING_num,SEC_SPRING_k
 
@@ -540,8 +552,16 @@ secdata,SEC_ABT_appSlab_t,MAT_Approach
 secoffset,bot
 
 ! PILES
-sectype,SEC_ABT_pile,beam,csolid,'ABT_PILE',2
-secdata,SEC_ABT_pile_d/2
+*if,SEC_ABT_PILE_thk,eq,0,then
+  ! Standard concrete pile
+  sectype,SEC_ABT_pile,beam,csolid,'ABT_PILE',2
+  secdata,SEC_ABT_pile_d/2
+*elseif,SEC_ABT_PILE_thk,gt,0,then
+  ! Concrete pile with permanent steel casing
+  sec_ctube , SEC_ABT_PILE_d , SEC_ABT_PILE_thk , MAT_pile , MAT_casing ,, 'COMPOSITE_ABT_PILE'
+  sectype,SEC_ABT_pile,beam,mesh,'ABTPILE'
+  secread,'COMPOSITE_ABT_PILE',sect,,mesh
+*endif
 
 ! PILE CAP
 sectype,SEC_ABT_pileCap,shell,,'ABT_SLAB'

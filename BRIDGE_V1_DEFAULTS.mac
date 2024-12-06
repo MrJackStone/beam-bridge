@@ -68,6 +68,7 @@ GRADEBEAM_h = 1
 PILECAP_h   = 1
 PILE_thk    = 0
 
+MAT_CASING_E = 2e11
 
 
 !!                                                                                                !!
