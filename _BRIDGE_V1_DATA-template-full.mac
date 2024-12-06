@@ -304,7 +304,9 @@ SEC_ABT_wing_t=0.6
 SEC_ABT_appSlab_t=0.4
 
 ! Piles
-SEC_ABT_pile_d=0.4
+! (set THK > 0 for composite steel-concrete pile section)
+SEC_ABT_pile_d   = 0.4
+SEC_ABT_pile_thk = 0
 
 ! Pile cap height
 SEC_ABT_pileCap_h=1.5
@@ -547,7 +549,9 @@ GEO_pileOpt=0
 *endif
 
 ! Pile diameter
-PILE_d=0.4
+! (set THK > 0 for composite steel-concrete pile section)
+PILE_d   = 0.4
+PILE_thk = 0
 
 ! Grade beam cross-section
 GRADEBEAM_b=0.5
