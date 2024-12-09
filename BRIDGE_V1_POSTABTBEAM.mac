@@ -54,8 +54,12 @@ etable , 'SM_12' , smisc , 36
 *do,nthLS,1,LoadStepCount,1
   subset,nthLS,last
   etable,refl
-  pth2beam,beam1Top1,beam1Top2,beam1Bot1,beam1Bot2,'BEAM1',0,20,beamModulus,beamArea,0,'beam_1_envelope'
-  pth2beam,beam2Top1,beam2Top2,beam2Bot1,beam2Bot2,'BEAM2',0,20,beamModulus,beamArea,0,'beam_2_envelope'
+  *if,GEO_ABT1_status,eq,1,then
+    pth2beam,beam1Top1,beam1Top2,beam1Bot1,beam1Bot2,'BEAM1',0,20,beamModulus,beamArea,0,'beam_1_envelope'
+  *endif
+  *if,GEO_ABT2_status,eq,1,then
+    pth2beam,beam2Top1,beam2Top2,beam2Bot1,beam2Bot2,'BEAM2',0,20,beamModulus,beamArea,0,'beam_2_envelope'
+  *endif
 *enddo
 
 ! Scale results (kN, mm)

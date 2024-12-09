@@ -37,58 +37,62 @@ go2png,1200
   /window,2,on
   /window,3,off
 
-  cmsel,s,COMPA_ABT_1
-  cmsel,u,COMPA_ABT_thinTranWall
-  esla,s
-  nsle,s,active
-  /device,vector,on
-  /type,2,4
-  /eshape,1
-  /auto,2
-  eplot
-  /noerase
-  /device,vector,off
-  /user,2
+  *if,GEO_ABT1_status,eq,1,then
+    cmsel,s,COMPA_ABT_1
+    cmsel,u,COMPA_ABT_thinTranWall
+    esla,s
+    nsle,s,active
+    /device,vector,on
+    /type,2,4
+    /eshape,1
+    /auto,2
+    eplot
+    /noerase
+    /device,vector,off
+    /user,2
 
-  cmsel,s,COMPA_ABT_1
-  cmsel,r,COMPA_ABT_thinTranWall
-  esla,s
-  nsle,s,active
-  /eshape,0
-  /edge,2,1
-  eplot
+    cmsel,s,COMPA_ABT_1
+    cmsel,r,COMPA_ABT_thinTranWall
+    esla,s
+    nsle,s,active
+    /eshape,0
+    /edge,2,1
+    eplot
 
-  /plopts,info,3
-  mpathplot,10,,'thin1_paths',labelsToPlot
-  /plopts,info,0
+    /plopts,info,3
+    mpathplot,10,,'thin1_paths',labelsToPlot
+    /plopts,info,0
+  *endif
 
 
   /window,2,off
   /window,3,on
 
-  cmsel,s,COMPA_ABT_2
-  cmsel,u,COMPA_ABT_thinTranWall
-  esla,s
-  nsle,s,active
-  /device,vector,on
-  /type,3,4
-  /eshape,1
-  /auto,3
-  eplot
-  /device,vector,off
-  /user,3
+  *if,GEO_ABT2_status,eq,1,then
+    cmsel,s,COMPA_ABT_2
+    cmsel,u,COMPA_ABT_thinTranWall
+    esla,s
+    nsle,s,active
+    /device,vector,on
+    /type,3,4
+    /eshape,1
+    /auto,3
+    eplot
+    /device,vector,off
+    /user,3
 
-  cmsel,s,COMPA_ABT_2
-  cmsel,r,COMPA_ABT_thinTranWall
-  esla,s
-  nsle,s,active
-  /eshape,0
-  /edge,3,1
-  eplot
+    cmsel,s,COMPA_ABT_2
+    cmsel,r,COMPA_ABT_thinTranWall
+    esla,s
+    nsle,s,active
+    /eshape,0
+    /edge,3,1
+    eplot
 
-  /plopts,info,3
-  mpathplot,10,,'thin2_paths',labelsToPlot
-  /plopts,info,0
+    /plopts,info,3
+    mpathplot,10,,'thin2_paths',labelsToPlot
+    /plopts,info,0
+  *endif
 
 endpng,'%arg4%',,,,,POST_resultsFolder
 /erase

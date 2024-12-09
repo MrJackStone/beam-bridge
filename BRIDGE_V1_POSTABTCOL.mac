@@ -63,7 +63,7 @@ nsle,s,active
   scanpath,'etab','SHELL_QY',0,'P1',-1,'Q'
 
   path,'COL2'
-  scanpath,'etab','SHELL_NY',0,'P1',-1,'N'
+  scanpath,'etab','SHELL_NY',0,'P1',-1,'N'  ! TODO  typo here? Should be P2?
   scanpath,'etab','SHELL_MX',0,'P1',-1,'M'
   scanpath,'etab','SHELL_QY',0,'P1',-1,'Q'
 
