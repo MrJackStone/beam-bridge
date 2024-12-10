@@ -3,7 +3,7 @@
 
 ! TODO  consolidate
 
-! Indices
+!! A.  Indices                                                                                    !!
 CS_global         = 11
 CS_dummy          = 12
 CY_deck           = 13
@@ -80,7 +80,69 @@ index=0
   CS_barriers(nthBarrier) = CS_barrier%nthBarrier%
 *enddo
 
-! Create coordinate systems
+!! B.  Create coordinate systems                                                                  !!
+! Global
+local , CS_global , cart
+
+! Deck
+local , CY_deck   , cylin , GEO_deckLength/2 , -GEO_chordOff , 0
+
+BRIDGE_V1_SKEWEDCSYS , CS_DECK_center    , GEO_deckOff_beg+(GEO_deckWidth_beg/2)                   , GEO_deckOff_end+(GEO_deckWidth_end/2)
+BRIDGE_V1_SKEWEDCSYS , CS_DECK_leftEdge  , GEO_deckOff_beg+GEO_deckWidth_beg                       , GEO_deckOff_end+GEO_deckWidth_end
+BRIDGE_V1_SKEWEDCSYS , CS_DECK_rightEdge , GEO_deckOff_beg                                         , GEO_deckOff_end
+
+BRIDGE_V1_SKEWEDCSYS , CS_leftFootpath   , GEO_deckOff_beg+GEO_footpathLeft_beg                    , GEO_deckOff_end+GEO_footpathLeft_end
+BRIDGE_V1_SKEWEDCSYS , CS_rightFootpath  , GEO_deckOff_beg+GEO_deckWidth_beg-GEO_footpathRight_beg , GEO_deckOff_end+GEO_deckWidth_end-GEO_footpathRight_end
+
+! Girders
+*do,nthGirder,1,GEO_girderCount,1
+  yBeg = GEO_girderY_beg(nthGirder)
+  yEnd = GEO_girderY_end(nthGirder)
+  BRIDGE_V1_SKEWEDCSYS , CS_girder%nthGirder% , yBeg , yEnd
+*enddo
+
+! Barriers
+*do,nthBarrier,1,LOAD_barrierCount,1
+  yBeg = LOAD_barrierOffset_beg(nthBarrier)
+  yEnd = LOAD_barrierOffset_end(nthBarrier)
+  BRIDGE_V1_SKEWEDCSYS , CS_barrier%nthBarrier% , yBeg , yEnd
+*enddo
+
+! Loadtrains
+*do,nthLT,1,LOAD_ltTransScenarioCount,1
+  *do,nthWheel,1,LOAD_wheelCount,1
+    yBeg = LOAD_ltWheelOff_beg(nthWheel,nthLTtransScenario)
+    yEnd = LOAD_ltWheelOff_end(nthWheel,nthLTtransScenario)
+    BRIDGE_V1_SKEWEDCSYS , CS_LTRAIN%nthLT%_wheel%nthWheel% , yBeg , yEnd
+  *enddo
+*enddo
+
+! Piers
+*do,nthPier,1,GEO_pierCount,1
+*enddo
+
+! Abutments
+local , CS_abt1 , 0 , 0              , GEO_ABT1_yc , GEO_ABT1_zAB , 180+90-GEO_supportChi_0 , 0 , 0
+local , CS_abt2 , 0 , GEO_deckLength , GEO_ABT2_yc , GEO_ABT2_zAB , 90-GEO_SupportChi_L     , 0 , 0
+
+*do,nthAbt,1,2,1
+  csys   , CS_abt%nthAbt%
+  clocal , CS_ABT%nthAbt%_leftWall  , cart , 0 , GEO_ABT%nthAbt%_width/2  , 0                       , 0   , -90 , 0
+  csys   , CS_abt%nthAbt%
+  clocal , CS_ABT%nthAbt%_rightWall , cart , 0 , -GEO_ABT%nthAbt%_width/2 , 0                       , 0   , 90  , 0
+  csys   , CS_abt%nthAbt%
+  clocal , CS_ABT%nthAbt%_tranWall  , cart , 0 , 0                        , 0                       , -90 , 90  , 0
+  csys   , CS_abt%nthAbt%
+  clocal , CS_ABT%nthAbt%_pileCap   , cart , 0 , 0                        , -GEO_ABT%nthAbt%_height , 0   , 0   , 0
+  csys   , CS_abt%nthAbt%
+  clocal , CS_ABT%nthAbt%_appSlab   , cart , 0 , 0                        , 0                       , 0   , 0   , 0
+*enddo
+
+
+
+
+! Clean up
+csys,CS_global
 
 
 !!                                                                                                !!

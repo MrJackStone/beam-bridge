@@ -172,8 +172,7 @@ lsel,none
 ksel,none
 *if,GEO_ABT1_status,eq,1,then
     GEO_ABT1_zAB=GEO_frameTopOffset(1)
-    csys,0
-    local,CS_ABT1,0,0,GEO_ABT1_yc,GEO_ABT1_zAB,180+90-GEO_supportChi_0,0,0  ! TODO  csys
+    csys,CS_abt1
     *if,GEO_ABT1_type,eq,4,then
       BRIDGE_V1_ABT4,CS_ABT1,'GEO_ABT1_geometry'
       ABT1_angCoef=0
@@ -201,8 +200,7 @@ lsel,none
 ksel,none
 *if,GEO_ABT2_status,eq,1,then
     GEO_ABT2_zAB=GEO_frameTopOffset(GEO_supportCount)
-    csys,0
-    local,CS_ABT2,0,GEO_deckLength,GEO_ABT2_yc,GEO_ABT2_zAB,90-GEO_SupportChi_L,0,0  ! TODO  csys
+    csys,CS_abt2
     *if,GEO_ABT2_type,eq,4,then
       BRIDGE_V1_ABT4,CS_ABT2,'GEO_ABT2_geometry'
       ABT2_angCoef=0
