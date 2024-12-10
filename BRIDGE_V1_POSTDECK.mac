@@ -226,7 +226,7 @@ wincln,1
 cmsel,s,COMPE_Slab
 nsle,s,active
 
-csys,CS_rightDeckEdge
+csys,CS_DECK_rightEdge
 nsel,r,loc,y,0,1e9
 
 csys,CS_girders(1)
@@ -240,7 +240,7 @@ cm,COMPN_SlabSpan_SR,node
 cmsel,s,COMPE_Slab
 nsle,s,active
 
-csys,CS_leftDeckEdge
+csys,CS_DECK_leftEdge
 nsel,r,loc,y,0,-1e9
 
 csys,CS_girders(GEO_girderCount)
@@ -317,7 +317,7 @@ pathIdx=0
 cmsel,s,COMPE_SlabSpan_SR
 cmsel,s,COMPN_SlabSpan_SR
 
-csA=CS_rightDeckEdge
+csA=CS_DECK_rightEdge
 *get,csAy,cdsy,csA,loc,y
 *get,csAxy,cdsy,csA,ang,xy
 
@@ -366,7 +366,7 @@ csA=CS_girders(GEO_girderCount)
 *get,csAy,cdsy,csA,loc,y
 *get,csAxy,cdsy,csA,ang,xy
 
-csB=CS_leftDeckEdge
+csB=CS_DECK_leftEdge
 *get,csBy,cdsy,csB,loc,y
 *get,csBxy,cdsy,csB,ang,xy
 

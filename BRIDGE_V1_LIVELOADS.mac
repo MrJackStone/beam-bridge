@@ -79,11 +79,11 @@ cm,COMPE_temp_submerged,elem
 ! Wind lateral load on the slabs
 CMSEL,S,COMPN_Slab
 *if,GEO_deckRadius,eq,0,then
-    csys,CS_rightDeckEdge
+    csys,CS_DECK_rightEdge
     nsel,r,loc,y,0
     csys,0
 *else
-    csys,CS_deck
+    csys,CY_deck
     nsel,r,loc,x,GEO_deckRadius-(GEO_deckWidth_beg/2)
     csys,0
 *endif

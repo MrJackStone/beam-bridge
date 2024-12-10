@@ -127,10 +127,10 @@ SEC_ABT_thinTranWall = 31
 *vfill,SEC_GIRDER_nums,ramp,32,1
 
 ! Coordinate systems
-CS_base=11
+CS_global=11
 CS_ABT1=12
 CS_ABT2=13
-CS_deck=20
+CY_deck=20
 
 !! 2.1.1 MATERIALS                                                                                !!
 !!                                                                                                !!
@@ -588,9 +588,9 @@ secoffset,top
 !! 2.1.4 COORDINATE SYSTEMS                                                                       !!
 !!                                                                                                !!
 ! Reference CS
-LOCAL,CS_base,CART  ! TODO  csys
+local,CS_global,cart
 csys,0
-local,CS_deck,cylin,GEO_deckLength/2,-GEO_chordOff,0  ! TODO  csys
+local,CY_deck,cylin,GEO_deckLength/2,-GEO_chordOff,0  ! TODO  csys
 csys,0
 !
 !
@@ -742,10 +742,10 @@ BRIDGE_V1_XTOCHI, 'GEO_midspanChi', 'GEO_midspanX'
 *endif
 
 ! Generate coordinate systems aligned with each skewed longitudinal line
-BRIDGE_V1_SKEWEDCSYS , 'CS_leftDeckEdge'  , GEO_deckOff_beg+GEO_deckWidth_beg , GEO_deckOff_end+GEO_deckWidth_end
-BRIDGE_V1_SKEWEDCSYS , 'CS_rightDeckEdge' , GEO_deckOff_beg                   , GEO_deckOff_end
+BRIDGE_V1_SKEWEDCSYS , 'CS_DECK_leftEdge'  , GEO_deckOff_beg+GEO_deckWidth_beg , GEO_deckOff_end+GEO_deckWidth_end
+BRIDGE_V1_SKEWEDCSYS , 'CS_DECK_rightEdge' , GEO_deckOff_beg                   , GEO_deckOff_end
 
-*del,CS_girders
+*del,CS_girders,,nopr
 *dim,CS_girders,,GEO_girderCount
 *do,nthGirder,1,GEO_girderCount,1
     yBeg=GEO_girderY_beg(nthGirder)

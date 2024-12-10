@@ -91,7 +91,7 @@ csys,0
 !    *else
 !        ! Curved deck:
 !
-!        csys,CS_deck
+!        csys,CY_deck
 !        chiVal=GEO_supportChi(arg1)
 !
 !        ! Create frame girder
