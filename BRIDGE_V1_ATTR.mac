@@ -746,7 +746,6 @@ nthPath = 0
 *do,nthLTtransScenario,1,LOAD_ltTransScenarioCount,1
   *do,nthLT,1,LOAD_wheelCount,1
     yBeg    = LOAD_ltWheelOff_beg(nthLT,nthLTtransScenario)
-    yEnd    = LOAD_ltWheelOff_end(nthLT,nthLTtransScenario)
     nthPath = nthPath+1
     GEO_WHEELPATH_arcOffsets(nthPath) = yBeg
   *enddo
