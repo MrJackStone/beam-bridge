@@ -55,52 +55,61 @@ axanno,1
 axanno,2
 
 go2png,1200
-  /window,1,on
-  /window,2,off
-  /auto,1
-  cmsel,s,COMPA_ABT_1
-  esla,s
-  nsle,s,active
-  /eshape,1
-  eplot
-  /noerase
-  /user,1
-  cmsel,s,COMPL_ABT_1
-  esll,a
-  nsle,s,active
-  eplot
-  /eshape,0
+  *if,GEO_ABT1_status,eq,1,then
+    /window,1,on
+    /window,2,off
+    /auto,1
+    cmsel,s,COMPA_ABT_1
+    esla,s
+    nsle,s,active
+    /eshape,1
+    eplot
+    /noerase
+    /user,1
+    cmsel,s,COMPL_ABT_1
+    esll,a
+    nsle,s,active
+    eplot
+    /eshape,0
+  *endif
 
-  /window,1,off
-  /window,2,on
-  /auto,2
-  cmsel,s,COMPA_ABT_2
-  esla,s
-  nsle,s,active
-  /eshape,1
-  eplot
-  /user,2
-  cmsel,s,COMPL_ABT_2
-  esll,a
-  nsle,s,active
-  eplot
-  /eshape,0
+  *if,GEO_ABT2_status,eq,1,then
+    /window,1,off
+    /window,2,on
+    /auto,2
+    cmsel,s,COMPA_ABT_2
+    esla,s
+    nsle,s,active
+    /eshape,1
+    eplot
+    /noerase
+    /user,2
+    cmsel,s,COMPL_ABT_2
+    esll,a
+    nsle,s,active
+    eplot
+    /eshape,0
+  *endif
 
-  /window,1,on
-  /window,2,off
-  cmsel,s,COMPE_temp
-  cmsel,s,COMPA_ABT_1
-  esla,r
-  nsle,s
-  cleanplot,'pletab',_etabName,'1'
+  *if,GEO_ABT1_status,eq,1,then
+    /window,1,on
+    /window,2,off
+    cmsel,s,COMPE_temp
+    cmsel,s,COMPA_ABT_1
+    esla,r
+    nsle,s
+    cleanplot,'pletab',_etabName,'1'
+  *endif
 
-  /window,1,off
-  /window,2,on
-  cmsel,s,COMPE_temp
-  cmsel,s,COMPA_ABT_2
-  esla,r
-  nsle,s
-  cleanplot,'pletab',_etabName,'1'
+  *if,GEO_ABT2_status,eq,1,then
+    /window,1,off
+    /window,2,on
+    cmsel,s,COMPE_temp
+    cmsel,s,COMPA_ABT_2
+    esla,r
+    nsle,s
+    cleanplot,'pletab',_etabName,'1'
+  *endif
 
 endpng,_imgName,,,,,POST_resultsFolder
 /erase
