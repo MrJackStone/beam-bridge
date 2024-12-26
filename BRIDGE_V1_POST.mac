@@ -14,7 +14,7 @@ GIRDER_tw0   = GIRDER_tw  (1)
 GIRDER_hs0   = GIRDER_hs  (1)
 GIRDER_hi0   = GIRDER_hi  (1)
 GIRDER_hw0   = GIRDER_hw  (1)
-GIRDER_name0 = GIRDER_name(1)
+GIRDER_name0 = GIRDER_name(1,1)
 
 ! Display settings
 /device,font,3,Arial,1000,0,-64,0,0,,,
