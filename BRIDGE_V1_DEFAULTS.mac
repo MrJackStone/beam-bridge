@@ -95,6 +95,8 @@ CONSOLE_h = 0.75
 LOAD_transScenario = 0
 LOAD_longScenario  = 0
 
+LOAD_locRep = 1
+
 LOAD_TSCHEBOTARIOFF_status = 0
 *del,LOAD_TSCHEBOTARIOFF_data,,nopr
 

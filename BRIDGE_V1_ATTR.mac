@@ -1382,13 +1382,6 @@ nthPier=0
   udlLength=LOAD_railcarCount
 *endif
 
-*get,parType,parm,LOAD_locRep,type
-*if,parType,ne,0,then
-  LOAD_locRep=1
-*elseif,LOAD_locRep,le,0,then
-  LOAD_locRep=1
-*endif
-
 loadtrain, LOAD_ltName,LOAD_locRep,0,1, udlLength ! Output: LOADTRAIN_VAR_count; LOADTRAIN_ARR_positions; LOADTRAIN_ARR_loads
 LOAD_plCount=LOADTRAIN_VAR_count
 *del , LOAD_plDist   ,  , nopr
