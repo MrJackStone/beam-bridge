@@ -7,7 +7,7 @@ csys,0
 type,TYPE_BEAM188
 secnum,SEC_CROSSBEAM
 mat,MAT_FRAMEGIRDER
-esys,CS_base
+esys,CS_global
 
 *do,nthSpan,1,GEO_supportCount,1
   xSup=GEO_supportX(nthSpan)

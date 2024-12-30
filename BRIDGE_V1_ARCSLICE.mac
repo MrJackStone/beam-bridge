@@ -13,7 +13,7 @@ cm,COMPA_temp,area
 *endif
 *get,arcOffsetCount,parm,arc_offsets,dim,x
 
-wpcsys,-1,CS_deck
+wpcsys,-1,CY_deck
 *do,nthY,1,arcOffsetCount,1
   nthRadius = GEO_deckRadius+arc_offsets(nthY)
   radslice,'COMPA_temp',nthRadius
