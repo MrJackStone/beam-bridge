@@ -3,7 +3,7 @@
 
 *get,posCount,parm,%arg1%,dim,x
 
-wpcsys,,CS_deck
+wpcsys,,CY_deck
 wprota,,,-90
 wprota,,90
 *do,nthPos,1,posCount,1

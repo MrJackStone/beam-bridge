@@ -4,7 +4,7 @@
 csys,0
 type,TYPE_BEAM188
 mat,MAT_Girder
-esys,CS_base
+esys,CS_global
 
 ! Create girders
 *do,nthGirder,1,GEO_girderCount,1

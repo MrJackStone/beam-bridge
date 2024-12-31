@@ -94,7 +94,7 @@ totalTime=SOLU_dlTime
             *enddo
         *else
             ! Curved deck:
-            csys,CS_deck
+            csys,CY_deck
             BRIDGE_V1_XTOCHI,'chi_min',x_min
             BRIDGE_V1_XTOCHI,'chi_max',x_max
             *do,nthLT,1,LOAD_ltCount,1

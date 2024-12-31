@@ -16,7 +16,7 @@
   ! Select nodes at each extremity of the span's girders
   *if,GEO_deckRadius,ne,0,then
     ! Curved deck:
-    csys,CS_deck
+    csys,CY_deck
     *get,chi_min,node,,mnloc,y
     *get,chi_max,node,,mxloc,y
     nsel,s,loc,y,chi_min

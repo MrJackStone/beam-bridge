@@ -3,7 +3,7 @@
 GEO_centerKP=1
 k,GEO_centerKP,GEO_deckLength/2,-GEO_chordOff,0
 
-wpcsys,,CS_deck
+wpcsys,,CY_deck
 
 cyl4,0,0,GEO_deckRadius-(GEO_deckWidth_beg/2),,GEO_deckRadius+(GEO_deckWidth_beg/2)
 
@@ -20,7 +20,7 @@ BRIDGE_V1_RADSLICE,'GEO_midspanChi',0
 *endif
 
 ! Delete ring areas outside bridge length
-csys,CS_deck
+csys,CY_deck
 allsel
 asel,u,loc,y,180-GEO_supportChi_0,180-GEO_supportChi_L
 lsla,s
@@ -33,7 +33,7 @@ csys,0
 BRIDGE_V1_ARCSLICE , 0
 
 ! Perform linear slicing at girders
-wpcsys,,CS_deck
+wpcsys,,CY_deck
 *do,nthGirder,1,GEO_girderCount,1
 
   girderCompName=strcat('COMPL_GIRDER_',chrval(nthGirder))
@@ -45,7 +45,7 @@ wpcsys,,CS_deck
   cm,COMPL_slicer,line
 
   *do,nthSpan,1,GEO_spanCount,1
-    csys,CS_deck
+    csys,CY_deck
     chi_i=GEO_supportChi(nthSpan)
     chi_j=GEO_supportChi(nthSpan+1)
     asel,s,loc,y,180-chi_i,180-chi_j
@@ -80,7 +80,7 @@ wpcsys,,CS_deck
     cskp,100,cart,k_i,k_j,k_k
     csys,100
     ksel,s,loc,y,0
-    csys,CS_deck
+    csys,CY_deck
     lslk,s,1
     cmsel,r,COMPL_temp
     cmpadd,girderCompName
@@ -236,7 +236,7 @@ ksll,s
 cm,COMPK_Console,kp
 
 ! Create component with left pedestrian footpath areas
-csys,CS_deck
+csys,CY_deck
 *if,GEO_footpathLeft,GT,0,THEN
   asel,s,loc,x,GEO_deckRadius-(GEO_deckWidth_beg/2),GEO_deckRadius-(GEO_deckWidth_beg/2)+GEO_footpathLeft
   cm,COMPA_LeftFootpath,area
