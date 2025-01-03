@@ -1,0 +1,52 @@
+! BRIDGE_V1_POSTGIRDERSHEAR
+
+
+*do,nthSpan,1,GEO_spanCount,1
+  *do,nthGirder,1,GEO_girderCount,1
+
+    filePath = '%POST_resultsFolder%\GSHEAR_S%nthSpan%_G%nthGirder%'
+
+    cmsel,s,COMPE_S%nthSpan%_G%nthGirder%
+    nsle,,active
+    *get,ec,elem,,count
+    ndsort,'X','A','girder_nodes'
+
+    *cfopen,%filePath%,txt
+      *vwrite,
+      ('        ELEM        Xi [m]        Xj [m]   Vi,min [kN]   Vj,min [kN]   Vi,max [kN]   Vj,max [kN]   Vi,dlt [kN]   Vj,dlt [kN]  Ti,min [kNm]  Tj,min [kNm]  Ti,max [kNm]  Tj,max [kNm]')
+    *cfclos
+
+    *do,nthElem,1,ec,1
+
+      ni = girder_nodes(nthElem)
+      nj = girder_nodes(nthElem+1)
+      nsel,s,node,,ni
+      nsel,a,node,,nj
+      cmsel,s,COMPE_S%nthSpan%_G%nthGirder%
+      esln,r,1
+      enum = elnext(0)
+      nix  = nx(ni)
+      njx  = nx(nj)
+
+      *get,qiMin,elem,enum,etab,'EMN_QZi'
+      *get,qjMin,elem,enum,etab,'EMN_QZj'
+      *get,qiMax,elem,enum,etab,'EMX_QZi'
+      *get,qjMax,elem,enum,etab,'EMX_QZj'
+
+      *get,tiMin,elem,enum,etab,'EMN_TQi'
+      *get,tjMin,elem,enum,etab,'EMN_TQj'
+      *get,tiMax,elem,enum,etab,'EMX_TQi'
+      *get,tjMax,elem,enum,etab,'EMX_TQj'
+
+      qiDelta = qiMax-qiMin
+      qjDelta = qjMax-qjMin
+
+      *cfopen,%filePath%,txt,,append
+        *vwrite, enum , nix , njx , qiMin , qjMin , qiMax , qjMax , qiDelta , qjDelta , tiMin , tjMin , tiMax , tjMax
+        (F13.0,TL1,'  ',F12.4,'  ',F12.4,'  ',F12.4,'  ',F12.4,'  ',F12.4,'  ',F12.4,'  ',F12.4,'  ',F12.4,'  ',F12.4,'  ',F12.4,'  ',F12.4,'  ',F12.4)
+      *cfclos
+
+    *enddo
+
+  *enddo
+*enddo
