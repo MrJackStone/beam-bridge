@@ -87,10 +87,10 @@ cm,COMPA_centerPileCaps,area
 CM,COMPA_PileCap,AREA
 
 *do,nthSupport,1,GEO_supportCount,1
-    mesoType=GEO_mesoType(nthSupport)
-    *if,mesoType,ne,CTE_MESO_abutment,and,mesoType,ne,CTE_MESO_beamcap,then
-        BRIDGE_V1_SMPCAP,nthSupport
-    *endif
+  mesoType=GEO_mesoType(nthSupport)
+  *if,mesoType,ne,CTE_MESO_abutment,and,mesoType,ne,CTE_MESO_beamcap,then
+    BRIDGE_V1_SMPCAP,nthSupport
+  *endif
 *enddo
 
 CMSEL,S,COMPA_PileCap
@@ -133,9 +133,9 @@ cmsel,a,COMPK_Support
 lslk,s,1
 CM,COMPK_Pile,KP
 CM,COMPL_Pile,LINE
-!
-!
-!
+
+
+
 !!                                                                                                !!
 !! 3.4 ABUTMENTS                                                                                  !!
 !!                                                                                                !!
