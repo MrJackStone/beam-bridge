@@ -9,7 +9,7 @@ windefa,1
 /gformat,f,2,1
 /annot,dele
 
-! Create paths
+! Create paths !! TODO  fails if one of the abutments does not exist (CS undefined)
 cmsel,s,COMPA_ABT_1
 cmsel,r,COMPA_ABT_tranWall
 esla,s
