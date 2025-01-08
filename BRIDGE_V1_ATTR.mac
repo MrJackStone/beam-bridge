@@ -134,10 +134,6 @@ CY_deck=20
 
 !! 2.1.1 MATERIALS                                                                                !!
 !!                                                                                                !!
-*get,parType,parm,SLAB_longRedCoef,type
-*if,parType,ne,0,then
-  SLAB_longRedCoef=1
-*endif
 
 !! 2.1.1.1 GIRDER                                                                                 !!
 *if,MAT_Girder_type,EQ,0,THEN
