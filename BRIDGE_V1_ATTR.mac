@@ -1,15 +1,5 @@
 ! BRIDGE_V1_ATTR
 
-*if,GEO_deckRadius,ne,0,then
-    GEO_chordOff=(1/2)*sqrt(4*(GEO_deckRadius**2)-(GEO_deckLength**2))
-*else
-    GEO_chordOff=0
-*endif
-
-*get,parType,parm,SEC_ABT_thinTranWall_t,type
-*if,parType,ne,0,then
-  SEC_ABT_thinTranWall_t=SEC_ABT_tranWall_t
-*endif
 
 !!                                                                                                !!
 !!                                                                                                !!
