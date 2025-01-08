@@ -1,12 +1,12 @@
 ! BRIDGE_V1_PARSUPER
 
 
+! Special params for curved decks
 GEO_chordOff = 0
 *if,GEO_deckRadius,ne,0,then
   GEO_chordOff = (1/2)*sqrt(4*(GEO_deckRadius**2)-(GEO_deckLength**2))
 *endif
 
-! Eliminate deck beginning/end offsets for curved bridge
 *if,GEO_deckRadius,ne,0,then
   GEO_deckOff_beg = -GEO_deckWidth_beg/2
   GEO_deckOff_end = -GEO_deckWidth_end/2
@@ -41,7 +41,7 @@ GEO_deckOffsets(1) = GEO_deckOff_beg   , GEO_deckOff_end
 GEO_FOOTPATH_arcOffsets(1) = GEO_deckOff_beg+GEO_footpathLeft_beg
 GEO_FOOTPATH_arcOffsets(2) = GEO_deckOff_beg+GEO_deckWidth_beg-GEO_footpathRight_beg
 
-! Calculate X coordinates of gerber connections
+! Gerber cantilever positions
 *voper,activeGerber,GEO_gerberL,gt,0
 *vscfun,GEO_gerberCount,sum,activeGerber
 *if,GEO_gerberCount,eq,0,then
