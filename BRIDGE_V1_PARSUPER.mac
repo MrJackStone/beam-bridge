@@ -6,32 +6,32 @@ GEO_chordOff = 0
   GEO_chordOff = (1/2)*sqrt(4*(GEO_deckRadius**2)-(GEO_deckLength**2))
 *endif
 
-! Deck width at bridge's extremities
-*del,GEO_deckWidths,,nopr
-*dim,GEO_deckWidths,,2
-GEO_deckWidths(1)=GEO_deckWidth_beg,GEO_deckWidth_end
-
-! Deck offsets (along Y)
+! Eliminate deck beginning/end offsets for curved bridge
 *if,GEO_deckRadius,ne,0,then
   GEO_deckOff_beg = -GEO_deckWidth_beg/2
   GEO_deckOff_end = -GEO_deckWidth_end/2
 *endif
 
-*del,GEO_deckOffsets,,nopr
-*dim,GEO_deckOffsets,,2
-GEO_deckOffsets(1)=GEO_deckOff_beg,GEO_deckOff_end
-
 ! Determine position of the girders
+*del , GEO_deckWidths  ,  , nopr
+*del , GEO_deckOffsets ,  , nopr
+*dim , GEO_deckWidths  ,  , 2
+*dim , GEO_deckOffsets ,  , 2
+
+GEO_deckWidths(1)  = GEO_deckWidth_beg , GEO_deckWidth_end
+GEO_deckOffsets(1) = GEO_deckOff_beg   , GEO_deckOff_end
+
 *if,GEO_uniGirderSpacing,EQ,1,THEN
   *do,deckExtremity,1,2,1
-    deckWidth=GEO_deckWidths(deckExtremity)
-    deckOffset=GEO_deckOffsets(deckExtremity)
-    pos=GEO_longPosKey(deckExtremity)
+    deckWidth  = GEO_deckWidths(deckExtremity)
+    deckOffset = GEO_deckOffsets(deckExtremity)
+    pos        = GEO_longPosKey(deckExtremity)
+    totalDist  = deckWidth-(GEO_leftSlabHang+GEO_rightSlabHang)
+    girderDist = totalDist/(GEO_girderCount-1)
 
-    totalDist=deckWidth-(GEO_leftSlabHang+GEO_rightSlabHang)
-    girderDist=totalDist/(GEO_girderCount-1)
-    *del,GEO_girderY_%pos%
-    *dim,GEO_girderY_%pos%,ARRAY,GEO_girderCount
+    *del,GEO_girderY_%pos%,,nopr
+    *dim,GEO_girderY_%pos%,,GEO_girderCount
+
     *vfill,GEO_girderY_%pos%,ramp,deckOffset+GEO_leftSlabHang,girderDist
   *enddo
 *endif
