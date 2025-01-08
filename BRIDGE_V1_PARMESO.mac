@@ -42,18 +42,18 @@ GEO_supportChi_L = GEO_supportChi(GEO_supportCount)
 ! WARNING: Frame width incompatible with girder layout. GEO_FRAMEWIDTH increased to %G.
 ! *endif
 
-! Calculate column length
+! Calculate column size & key levels
 GEO_colLength = GEO_frameHeight
 *if,SEC_offset,EQ,1,THEN
    GEO_colLength = GEO_frameHeight-FRAMEGIRDER_h
 *endif
 
-! Calculate the vertical position of the frame girder keypoints
-*if,SEC_offset,EQ,0,THEN
-  zFrameTop = 0
-*elseif,SEC_offset,EQ,1,THEN
+zFrameTop = 0
+*if,SEC_offset,eq,1,then
   zFrameTop = 0-GIRDER_d(1)-FRAMEGIRDER_h !! TODO: contemplate multiple girder heights
 *endif
+
+zFrameBot = zFrameTop-GEO_colLength
 
 ! Calculate key Y coordinates for frame girders
 ! TODO: this does not contemplate tubular pier columns
@@ -64,25 +64,19 @@ deckWidthDelta = GEO_deckWidth_end-GEO_deckWidth_beg
 
 *do,nthFrame,1,GEO_supportCount,1
 
-  ! Get X-coordinate at this support
   xSupport            = GEO_supportX(nthFrame)
   skewnessScaleFactor = xSupport/GEO_deckLength
-
-  ! Calculate deck width
-  deckWidth=deckWidthDelta*skewnessScaleFactor+GEO_deckWidth_beg
-
-  ! Calculate Y center
-  yCenter=yCenterDelta*skewnessScaleFactor+yCenterBeg
+  deckWidth           = deckWidthDelta*skewnessScaleFactor+GEO_deckWidth_beg
+  yCenter             = yCenterDelta*skewnessScaleFactor+yCenterBeg
 
   ! Calculate frame girder ends Y coordinates
-  *del,GEO_frameGirderEndsY_%nthFrame%,,nopr
-  *dim,GEO_frameGirderEndsY_%nthFrame%,,2
-  GEO_frameGirderEndsY_%nthFrame%(1)=yCenter-(deckWidth/2), yCenter+(deckWidth/2)
+  *del , GEO_frameGirderEndsY_%nthFrame% ,  , nopr
+  *del , GEO_columnY_%nthFrame%          ,  , nopr
+  *dim , GEO_frameGirderEndsY_%nthFrame% ,  , 2
+  *dim , GEO_columnY_%nthFrame%          ,  , 2
 
-  ! Calculate column Y coordinates
-  *del,GEO_columnY_%nthFrame%,,nopr
-  *dim,GEO_columnY_%nthFrame%,,2
-  GEO_columnY_%nthFrame%(1)=yCenter-(GEO_columnSpacing/2), yCenter+(GEO_columnSpacing/2)
+  GEO_frameGirderEndsY_%nthFrame%(1) = yCenter-(deckWidth/2)         , yCenter+(deckWidth/2)
+  GEO_columnY_%nthFrame%(1)          = yCenter-(GEO_columnSpacing/2) , yCenter+(GEO_columnSpacing/2)
 
   ! Calculate girder Y
   *del,girder_y,,nopr
