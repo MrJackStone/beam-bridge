@@ -3,58 +3,6 @@
 
 ! TODO  consolidate
 
-!! A.  Indices                                                                                    !!
-CS_global         = 11
-CS_dummy          = 12
-CY_deck           = 13
-CS_DECK_center    = 14
-CS_DECK_leftEdge  = 15
-CS_DECK_rightEdge = 16
-CS_leftFootpath   = 17
-CS_rightFootpath  = 18
-
-CS_abt1           = 20
-CS_ABT1_leftWall  = 21
-CS_ABT1_rightWall = 22
-CS_ABT1_tranWall  = 23
-CS_ABT1_pileCap   = 24
-CS_ABT1_appSlab   = 25
-
-CS_abt2           = 30
-CS_ABT2_leftWall  = 31
-CS_ABT2_rightWall = 32
-CS_ABT2_tranWall  = 33
-CS_ABT2_pileCap   = 34
-CS_ABT2_appSlab   = 35
-
-CS_free = 40
-
-*do,nthPier,1,GEO_pierCount,1
-  CS_pier%i%           = CS_free+0
-  CS_PIER%i%_pileCap   = CS_free+1
-  CS_PIER%i%_columnCap = CS_free+2
-  CS_PIER%i%_front     = CS_free+3
-  CS_PIER%i%_left      = CS_free+4
-  CS_PIER%i%_right     = CS_free+5
-  CS_free              = CS_free+10
-*endif
-
-*do,nthGirder,1,GEO_girderCount,1
-  CS_girder%nthGirder% = CS_free
-  CS_free              = CS_free+1
-*enddo
-
-*do,nthLT,1,LOAD_ltTransScenarioCount,1
-  *do,nthWheel,1,LOAD_wheelCount,1
-    CS_LTRAIN%nthLT%_wheel%nthWheel% = CS_free
-    CS_free                          = CS_free+1
-  *enddo
-*enddo
-
-*do,nthBarrier,1,LOAD_barrierCount,1
-  CS_barrier%nthBarrier% = CS_free
-  CS_free                = CS_free+1
-*enddo
 
 ! Groups of CSYS
 *del , CS_girders    ,  , nopr
@@ -119,6 +67,14 @@ BRIDGE_V1_SKEWEDCSYS , CS_rightFootpath  , GEO_deckOff_beg+GEO_deckWidth_beg-GEO
 
 ! Piers
 *do,nthPier,1,GEO_pierCount,1
+
+  ! CS_pier%i%
+  ! CS_PIER%i%_pileCap
+  ! CS_PIER%i%_columnCap
+  ! CS_PIER%i%_front
+  ! CS_PIER%i%_back
+  ! CS_PIER%i%_left
+  ! CS_PIER%i%_right
 
 *enddo
 

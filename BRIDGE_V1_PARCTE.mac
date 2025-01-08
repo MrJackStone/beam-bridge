@@ -1,0 +1,35 @@
+! BRIDGE_V1_PARCTE
+
+
+pi = acos(-1)
+
+! Element size for pile soil springs
+FEM_springL = 1
+
+! Element size for abutment springs (soil)
+FEM_ABT_springL = 0.5*(FEM_ABT_esize**2)
+
+! Soil elastic modulus
+MAT_Soil_E = 1e10                                                       !! MAT_Soil_E = 1e10*FEM_PileELength
+
+! Springs
+SEC_VSOIL_area = (MAT_Soil_kv*FEM_springL*FEM_PileELength)/MAT_Soil_E   !! SEC_VSOIL_area                                           = (MAT_Soil_kv*FEM_springL)/MAT_Soil_E
+SEC_HSOIL_area = (MAT_Soil_kh*FEM_springL*FEM_PileELength)/MAT_Soil_E  ! TODO  multiply by pile diameter (results in AREA per pile)
+SEC_PSOIL_area = (MAT_Soil_kp*FEM_springL)/MAT_Soil_E
+SEC_SPRING_k   = 1E10
+
+! Length of approach slab under which there is no soil support (springs), measured from abutment face
+FEM_unsupportedAppSlabLength = 2
+
+POST_convolutionRadius = 0.50
+POST_resultsFolder     = 'memo_imgs'
+
+! Mesostructure types
+CTE_MESO_frame    = 1
+CTE_MESO_tube     = 2
+CTE_MESO_beamcap  = 3
+CTE_MESO_tcolumn  = 4
+CTE_MESO_abutment = 5
+
+! Time at the end of dead load introduction load step (dynamic analysis only)
+SOLU_dlTime = 1
