@@ -54,9 +54,9 @@ CTE_MESO_tube     = 2
 CTE_MESO_beamcap  = 3
 CTE_MESO_tcolumn  = 4
 CTE_MESO_abutment = 5
-!
-!
-!
+
+
+
 !!                                                                                                !!
 !! 2.1 ATTRIBUTES                                                                                 !!
 !!                                                                                                !!
@@ -136,53 +136,53 @@ CY_deck=20
 !!                                                                                                !!
 *get,parType,parm,SLAB_longRedCoef,type
 *if,parType,ne,0,then
-    SLAB_longRedCoef=1
+  SLAB_longRedCoef=1
 *endif
 
 !! 2.1.1.1 GIRDER                                                                                 !!
 *if,MAT_Girder_type,EQ,0,THEN
-    concrete, MAT_Girder, MAT_Girder_fck, MAT_Girder_dens, MAT_Girder_Poisson,,1
+  concrete, MAT_Girder, MAT_Girder_fck, MAT_Girder_dens, MAT_Girder_Poisson,,1
 *elseif,MAT_Girder_type,EQ,1,THEN
-    MAT_Girder_E=2e11
-    steel, MAT_Girder,MAT_Girder_E,,,,,,1 !!
+  MAT_Girder_E=2e11
+  steel, MAT_Girder,MAT_Girder_E,,,,,,1 !!
 *endif
-!
+
 !! 2.1.1.2 SLAB                                                                                   !!
 concrete, MAT_Slab, MAT_Slab_fck, MAT_Slab_dens, MAT_Slab_Poisson,,1
 *if,SLAB_longRedCoef,ne,1,and,SLAB_longRedCoef,ne,0,then
-    E0=4760*sqrt(MAT_Slab_fck*1e-6)*1e6
-    EX=E0*SLAB_longRedCoef
-    GXYZ=E0/2.6
+  E0   = 4760*sqrt(MAT_Slab_fck*1e-6)*1e6
+  EX   = E0*SLAB_longRedCoef
+  GXYZ = E0/2.6
 
-    mp,ex,MAT_Slab,EX
-    mp,ey,MAT_Slab,E0
+  mp , ex , MAT_Slab , EX
+  mp , ey , MAT_Slab , E0
 
-    mp,gxy,MAT_Slab,GXYZ
-    mp,gyz,MAT_Slab,GXYZ
-    mp,gxz,MAT_Slab,GXYZ
+  mp , gxy , MAT_Slab , GXYZ
+  mp , gyz , MAT_Slab , GXYZ
+  mp , gxz , MAT_Slab , GXYZ
 *endif
-!
+
 !! 2.1.1.3 COLUMN                                                                                 !!
 concrete, MAT_Column,      MAT_Column_fck,      MAT_Column_dens,      MAT_Column_Poisson     ,,1
-!
+
 !! 2.1.1.4 FRAME GIRDER                                                                           !!
 concrete, MAT_FrameGirder, MAT_FrameGirder_fck, MAT_FrameGirder_dens, MAT_FrameGirder_Poisson,,1
-!
+
 !! 2.1.1.5 GRADE BEAM                                                                             !!
 concrete, MAT_GradeBeam,   MAT_GradeBeam_fck,   MAT_GradeBeam_dens,   MAT_GradeBeam_Poisson  ,,1
-!
+
 !! 2.1.1.6 PILE CAPS                                                                              !!
 concrete, MAT_PileCap,     MAT_PileCap_fck,     MAT_PileCap_dens,     MAT_PileCap_Poisson    ,,1
-!
+
 !! 2.1.1.7 PILE                                                                                   !!
 concrete, MAT_Pile,        MAT_Pile_fck,        MAT_Pile_dens,        MAT_Pile_Poisson       ,,1
-!
+
 !! 2.1.1.8 ABUTMENT                                                                               !!
 concrete, MAT_Abutment,    MAT_Abutment_fck,    MAT_Abutment_dens,    MAT_Abutment_Poisson   ,,1
-!
+
 !! 2.1.1.9 APPROACH SLABS                                                                         !!
 concrete, MAT_Approach,    MAT_Approach_fck,    MAT_Approach_dens,    MAT_Approach_Poisson   ,,1
-!
+
 !! 2.1.1.10 GERBER CONNECTION (CANTILEVER + CONSOLE)                                              !!
 concrete, MAT_Gerber,      MAT_Gerber_fck,      MAT_Gerber_dens,      MAT_Gerber_Poisson   ,,1
 
@@ -619,67 +619,70 @@ GEO_deckOffsets(1)=GEO_deckOff_beg,GEO_deckOff_end
 
 ! Determine position of the girders
 *if,GEO_uniGirderSpacing,EQ,1,THEN
-    *do,deckExtremity,1,2,1
-        deckWidth=GEO_deckWidths(deckExtremity)
-        deckOffset=GEO_deckOffsets(deckExtremity)
-        pos=GEO_longPosKey(deckExtremity)
+  *do,deckExtremity,1,2,1
+    deckWidth=GEO_deckWidths(deckExtremity)
+    deckOffset=GEO_deckOffsets(deckExtremity)
+    pos=GEO_longPosKey(deckExtremity)
 
-        totalDist=deckWidth-(GEO_leftSlabHang+GEO_rightSlabHang)
-        girderDist=totalDist/(GEO_girderCount-1)
-        *del,GEO_girderY_%pos%
-        *dim,GEO_girderY_%pos%,ARRAY,GEO_girderCount
-        *vfill,GEO_girderY_%pos%,ramp,deckOffset+GEO_leftSlabHang,girderDist
-    *enddo
+    totalDist=deckWidth-(GEO_leftSlabHang+GEO_rightSlabHang)
+    girderDist=totalDist/(GEO_girderCount-1)
+    *del,GEO_girderY_%pos%
+    *dim,GEO_girderY_%pos%,ARRAY,GEO_girderCount
+    *vfill,GEO_girderY_%pos%,ramp,deckOffset+GEO_leftSlabHang,girderDist
+  *enddo
 *endif
 
 ! Determine position of the supports
 *if,GEO_supportOpt,eq,0,then
-    ! Evenly spaced supports
-    supportDist=GEO_deckLength/(GEO_supportCount-1)
-    *del,GEO_supportX
-    *dim,GEO_supportX,ARRAY,GEO_supportCount
-    xPos=0
-    *do,nthSupport,1,GEO_supportCount,1
-        GEO_supportX(nthSupport)=xPos
-        xPos=xPos+supportDist
-    *enddo
+  ! Evenly spaced supports
+  supportDist=GEO_deckLength/(GEO_supportCount-1)
+  *del,GEO_supportX,,nopr
+  *dim,GEO_supportX,,GEO_supportCount
+  xPos=0
+  *do,nthSupport,1,GEO_supportCount,1
+    GEO_supportX(nthSupport) = xPos
+    xPos                     = xPos+supportDist
+  *enddo
 *endif
 
 ! Location of first and last supports
-s1Offset=GEO_supportX(1)
-s2Offset=GEO_supportX(GEO_supportCount)
+s1Offset = GEO_supportX(1)
+s2Offset = GEO_supportX(GEO_supportCount)
 
 ! Calculate span lengths
-GEO_spanCount=GEO_supportCount-1
+GEO_spanCount = GEO_supportCount-1
 *del,GEO_spanLengths
 *dim,GEO_spanLengths,ARRAY,GEO_spanCount
 *do,nthSpan,1,GEO_spanCount,1
-   spanLength=GEO_supportX(nthSpan+1)-GEO_supportX(nthSpan)
-   GEO_spanLengths(nthSpan)=ABS(spanLength)
+  spanLength=GEO_supportX(nthSpan+1)-GEO_supportX(nthSpan)
+  GEO_spanLengths(nthSpan)=ABS(spanLength)
 *enddo
-*vscfun,minSpanLength,MIN,GEO_spanLengths
-*vscfun,maxSpanLength,MAX,GEO_spanLengths
+*vscfun,minSpanLength,min,GEO_spanLengths
+*vscfun,maxSpanLength,max,GEO_spanLengths
 
 ! Calculate positions of midspans
-GEO_midspanCount=GEO_supportCount-1
-*del,GEO_midspanX
-*dim,GEO_midspanX,ARRAY,GEO_midspanCount
+GEO_midspanCount = GEO_supportCount-1
+*del,GEO_midspanX,,nopr
+*dim,GEO_midspanX,,GEO_midspanCount
 *do,nthMid,1,GEO_midspanCount,1
-   x1=GEO_supportX(nthMid)
-   x2=GEO_supportX(nthMid+1)
-   xMid=(x1+x2)/2
-   GEO_midspanX(nthMid)=xMid
+  x1                   = GEO_supportX(nthMid)
+  x2                   = GEO_supportX(nthMid+1)
+  xMid                 = (x1+x2)/2
+  GEO_midspanX(nthMid) = xMid
 *enddo
 
 ! Calculate wheel transversal offsets
-LOAD_wheelCount=LOAD_ltCount*2
 *afun,deg
 skewedDeltaY=GEO_deckLength*tan(LOAD_ltSkewness)
 *afun,rad
+
+LOAD_wheelCount = LOAD_ltCount*2
+
 *del,LOAD_ltWheelOff_beg,,nopr
-*dim,LOAD_ltWheelOff_beg,,LOAD_wheelCount,LOAD_ltTransScenarioCount
 *del,LOAD_ltWheelOff_end,,nopr
+*dim,LOAD_ltWheelOff_beg,,LOAD_wheelCount,LOAD_ltTransScenarioCount
 *dim,LOAD_ltWheelOff_end,,LOAD_wheelCount,LOAD_ltTransScenarioCount
+
 *do,nthLTtransScenario,1,LOAD_ltTransScenarioCount,1
   *do,nthLine,1,LOAD_ltCount,1
     LOAD_ltWheelOff_beg(nthLine*2-1 , nthLTtransScenario) = LOAD_ltLineOff(nthLine, nthLTtransScenario)-(LOAD_ltWidth/2)
@@ -693,51 +696,54 @@ skewedDeltaY=GEO_deckLength*tan(LOAD_ltSkewness)
 *voper,activeGerber,GEO_gerberL,gt,0
 *vscfun,GEO_gerberCount,sum,activeGerber
 *if,GEO_gerberCount,eq,0,then
-    GEO_gerberStatus=0
+  GEO_gerberStatus=0
 *endif
 
 *if,GEO_gerberStatus,eq,1,then
-    *del,GEO_gerberX_sub
-    *del,GEO_gerberX_add
-    *dim,GEO_gerberX_sub,,GEO_supportCount
-    *dim,GEO_gerberX_add,,GEO_supportCount
-    *del,GEO_gerberX_i
-    *del,GEO_gerberX_j
-    *del,GEO_gerberX_m
-    *del,GEO_gerberX_n
 
-    ! X coordinate at tubular column faces
-    *voper,GEO_gerberX_sub,GEO_supportX,sub,GEO_columnDepth/2
-    *voper,GEO_gerberX_add,GEO_supportX,add,GEO_columnDepth/2
+  *del , GEO_gerberX_sub ,  , nopr
+  *del , GEO_gerberX_add ,  , nopr
+  *del , GEO_gerberX_i   ,  , nopr
+  *del , GEO_gerberX_j   ,  , nopr
+  *del , GEO_gerberX_m   ,  , nopr
+  *del , GEO_gerberX_n   ,  , nopr
+  *dim , GEO_gerberX_sub ,  , GEO_supportCount
+  *dim , GEO_gerberX_add ,  , GEO_supportCount
 
-    *vmask,activeGerber
-    *vfun,GEO_gerberX_m,comp,GEO_gerberX_sub
-    *vmask,activeGerber
-    *vfun,GEO_gerberX_n,comp,GEO_gerberX_add
+  ! X coordinate at tubular column faces
+  *voper,GEO_gerberX_sub,GEO_supportX,sub,GEO_columnDepth/2
+  *voper,GEO_gerberX_add,GEO_supportX,add,GEO_columnDepth/2
 
-    ! X coordinate at gerber tips
-    *voper,GEO_gerberX_sub,GEO_gerberX_sub,sub,GEO_gerberL
-    *voper,GEO_gerberX_add,GEO_gerberX_add,add,GEO_gerberL
+  *vmask,activeGerber
+  *vfun,GEO_gerberX_m,comp,GEO_gerberX_sub
+  *vmask,activeGerber
+  *vfun,GEO_gerberX_n,comp,GEO_gerberX_add
 
-    *vmask,activeGerber
-    *vfun,GEO_gerberX_i,comp,GEO_gerberX_sub
-    *vmask,activeGerber
-    *vfun,GEO_gerberX_j,comp,GEO_gerberX_add
+  ! X coordinate at gerber tips
+  *voper,GEO_gerberX_sub,GEO_gerberX_sub,sub,GEO_gerberL
+  *voper,GEO_gerberX_add,GEO_gerberX_add,add,GEO_gerberL
+
+  *vmask,activeGerber
+  *vfun,GEO_gerberX_i,comp,GEO_gerberX_sub
+  *vmask,activeGerber
+  *vfun,GEO_gerberX_j,comp,GEO_gerberX_add
+
 *endif
 
-! Calculate angular positions: supports, midspans, gerber connections
-BRIDGE_V1_XTOCHI, 'GEO_supportChi', 'GEO_supportX'
-GEO_supportChi_0=GEO_supportChi(1)
-GEO_supportChi_L=GEO_supportChi(GEO_supportCount)
-BRIDGE_V1_XTOCHI, 'GEO_midspanChi', 'GEO_midspanX'
+! Calculate positions: supports, midspans, gerber connections
+BRIDGE_V1_XTOCHI , 'GEO_supportChi' , 'GEO_supportX'
+BRIDGE_V1_XTOCHI , 'GEO_midspanChi' , 'GEO_midspanX'
+GEO_supportChi_0 = GEO_supportChi(1)
+GEO_supportChi_L = GEO_supportChi(GEO_supportCount)
+
 *if,GEO_gerberStatus,eq,1,then
-    BRIDGE_V1_XTOCHI, 'GEO_gerberChi_i', 'GEO_gerberX_i'
-    BRIDGE_V1_XTOCHI, 'GEO_gerberChi_j', 'GEO_gerberX_j'
-    BRIDGE_V1_XTOCHI, 'GEO_gerberChi_m', 'GEO_gerberX_m'
-    BRIDGE_V1_XTOCHI, 'GEO_gerberChi_n', 'GEO_gerberX_n'
+  BRIDGE_V1_XTOCHI, 'GEO_gerberChi_i', 'GEO_gerberX_i'
+  BRIDGE_V1_XTOCHI, 'GEO_gerberChi_j', 'GEO_gerberX_j'
+  BRIDGE_V1_XTOCHI, 'GEO_gerberChi_m', 'GEO_gerberX_m'
+  BRIDGE_V1_XTOCHI, 'GEO_gerberChi_n', 'GEO_gerberX_n'
 *endif
 
-LOAD_ltWheelPathCount=LOAD_wheelCount*LOAD_ltTransScenarioCount
+LOAD_ltWheelPathCount = LOAD_wheelCount*LOAD_ltTransScenarioCount
 
 *del , GEO_WHEELPATH_arcOffsets ,  , nopr
 *dim , GEO_WHEELPATH_arcOffsets ,  , LOAD_ltWheelPathCount
@@ -790,9 +796,9 @@ GEO_frameGirderRight=GEO_frameGirderLeft
 
 ! Calculate the vertical position of the frame girder keypoints
 *if,SEC_offset,EQ,0,THEN
-   zFrameTop=0
+  zFrameTop = 0
 *elseif,SEC_offset,EQ,1,THEN
-   zFrameTop=0-GIRDER_d(1)-FRAMEGIRDER_h !! TODO: contemplate multiple girder heights
+  zFrameTop = 0-GIRDER_d(1)-FRAMEGIRDER_h !! TODO: contemplate multiple girder heights
 *endif
 
 ! Calculate the vertical position of the base of the columns
@@ -1193,61 +1199,63 @@ GEO_ABT2_xMin=GEO_deckLength
 GEO_ABT2_xMax=GEO_deckLength+(GEO_ABT2_length>GEO_ABT2_appSlabL*GEO_ABT2_appSlab)
 
 ! General span lengths
-GEO_genSpanCount=GEO_supportCount-1
+GEO_genSpanCount = GEO_supportCount-1
+
 *if,GEO_ABT1_status,eq,1,or,GEO_ABT2_status,eq,1,then
 
-    *if,GEO_ABT1_status,eq,1,and,GEO_ABT1_appSlab,eq,1,then
-        ! Approach slab in first abutment
-        GEO_genSpanCount=GEO_genSpanCount+1
-        i_init=1
-    *else
-        i_init=0
-    *endif
+  i_init = 0
+  *if,GEO_ABT1_status,eq,1,and,GEO_ABT1_appSlab,eq,1,then
+    ! Approach slab in first abutment
+    GEO_genSpanCount = GEO_genSpanCount+1
+    i_init           = 1
+  *endif
 
-    *if,GEO_ABT1_status,eq,1,and,GEO_ABT2_appSlab,eq,1,then
-        ! Approach slab in second abutment
-        GEO_genSpanCount=GEO_genSpanCount+1
-        i_end=1
-    *else
-        i_end=0
-    *endif
+  i_end = 0
+  *if,GEO_ABT1_status,eq,1,and,GEO_ABT2_appSlab,eq,1,then
+    ! Approach slab in second abutment
+    GEO_genSpanCount = GEO_genSpanCount+1
+    i_end            = 1
+  *endif
 
-    *del,GEO_genSpanLengths
-    *dim,GEO_genSpanLengths,,GEO_genSpanCount
-    *vfun,GEO_genSpanLengths(i_init+1),copy,GEO_spanLengths(1)
+  *del , GEO_genSpanLengths ,  , nopr
+  *del , GEO_genSpanLimits  ,  , nopr
 
-    *del,GEO_genSpanLimits
-    *dim,GEO_genSpanLimits,,GEO_genSpanCount+1
-    *vfun,GEO_genSpanLimits(i_init+1),copy,GEO_supportX(1)
+  *dim , GEO_genSpanLengths ,  , GEO_genSpanCount
+  *dim , GEO_genSpanLimits  ,  , GEO_genSpanCount+1
 
-    *if,i_init,eq,1,then
-        GEO_genSpanLengths(1)=GEO_ABT1_appSlabL
-        GEO_genSpanLimits(1)=-GEO_ABT1_appSlabL
-    *endif
+  *vfun , GEO_genSpanLengths(i_init+1) , copy , GEO_spanLengths(1)
+  *vfun , GEO_genSpanLimits(i_init+1)  , copy , GEO_supportX(1)
 
-    *if,i_end,eq,1,then
-        GEO_genSpanLengths(GEO_genSpanCount)=GEO_ABT2_appSlabL
-        GEO_genSpanLimits(GEO_genSpanCount+1)=GEO_deckLength+GEO_ABT2_appSlabL
-    *endif
+  *if,i_init,eq,1,then
+    GEO_genSpanLengths(1) = GEO_ABT1_appSlabL
+    GEO_genSpanLimits(1)  = -GEO_ABT1_appSlabL
+  *endif
+
+  *if,i_end,eq,1,then
+    GEO_genSpanLengths(GEO_genSpanCount)  = GEO_ABT2_appSlabL
+    GEO_genSpanLimits(GEO_genSpanCount+1) = GEO_deckLength+GEO_ABT2_appSlabL
+  *endif
 
 *else
-    ! No abutments
-    *del,GEO_genSpanLengths
-    *dim,GEO_genSpanLengths,,GEO_supportCount-1
-    *vfun,GEO_genSpanLengths(1),copy,GEO_spanLengths
+  ! No abutments
+  *del , GEO_genSpanLengths ,  , nopr
+  *del , GEO_genSpanLimits  ,  , nopr
+  *dim , GEO_genSpanLengths ,  , GEO_supportCount-1
 
-    *del,GEO_genSpanLimits
-    *vfun,GEO_genSpanLimits,copy,GEO_supportX
+  *vfun , GEO_genSpanLengths(1) , copy , GEO_spanLengths
+  *vfun , GEO_genSpanLimits     , copy , GEO_supportX
 
 *endif
 
 ! Number of piers (excluding abutments)
-GEO_pierCount=GEO_supportCount
+GEO_pierCount = GEO_supportCount
+
 *if,GEO_ABT1_status,eq,1,then
-    GEO_pierCount=GEO_pierCount-1
+  GEO_pierCount = GEO_pierCount-1
 *endif
+
 *if,GEO_ABT2_status,eq,1,then
-    GEO_pierCount=GEO_pierCount-1
+  GEO_pierCount = GEO_pierCount-1
 *endif
 
 ! XZ coordinates of each pier
@@ -1281,47 +1289,50 @@ nthPier=0
 ! Determine type of mesostructure at each support
 *del,GEO_mesoType,,nopr
 *dim,GEO_mesoType,,GEO_supportCount
+
 *if,GEO_frameOpt,eq,0,then
-    ! Column-girder frame
-    *vfill,GEO_mesoType,ramp,CTE_MESO_frame,0
+  ! Column-girder frame
+  *vfill,GEO_mesoType,ramp,CTE_MESO_frame,0
 *elseif,GEO_frameOpt,eq,1,then
-    ! Tubular pier column
-    *vfill,GEO_mesoType,ramp,CTE_MESO_tube,0
+  ! Tubular pier column
+  *vfill,GEO_mesoType,ramp,CTE_MESO_tube,0
 *elseif,GEO_frameOpt,eq,2,then
-    ! Tubular pier column
-    *vfill,GEO_mesoType,ramp,CTE_MESO_beamcap,0
+  ! Tubular pier column
+  *vfill,GEO_mesoType,ramp,CTE_MESO_beamcap,0
 *endif
+
 *if,GEO_gerberStatus,eq,1,then
-    *do,nthSupport,1,GEO_supportCount,1
-        gerberL=GEO_gerberL(nthSupport)
-        *if,gerberL,gt,0,then
-            GEO_mesoType(nthSupport)=CTE_MESO_tcolumn
-        *endif
-    *enddo
+  *do,nthSupport,1,GEO_supportCount,1
+    gerberL = GEO_gerberL(nthSupport)
+    *if,gerberL,gt,0,then
+      GEO_mesoType(nthSupport) = CTE_MESO_tcolumn
+    *endif
+  *enddo
 *endif
+
 *if,GEO_ABT1_status,eq,1,then
-    GEO_mesoType(1)=CTE_MESO_abutment
+  GEO_mesoType(1) = CTE_MESO_abutment
 *endif
 *if,GEO_ABT2_status,eq,1,then
-    GEO_mesoType(GEO_supportCount)=CTE_MESO_abutment
+  GEO_mesoType(GEO_supportCount) = CTE_MESO_abutment
 *endif
 
 ! Calculate X coordinates of tubular column faces
-*del,GEO_pierX_i
-*del,GEO_pierX_j
-*dim,GEO_pierX_i,,GEO_pierCount
-*dim,GEO_pierX_j,,GEO_pierCount
+*del , GEO_pierX_i ,  , nopr
+*del , GEO_pierX_j ,  , nopr
+*dim , GEO_pierX_i ,  , GEO_pierCount
+*dim , GEO_pierX_j ,  , GEO_pierCount
 *voper,GEO_pierX_i,GEO_pierX,sub,GEO_columnDepth/2
 *voper,GEO_pierX_j,GEO_pierX,add,GEO_columnDepth/2
 
 ! Calculate chi angles of tubular column faces
 *if,GEO_deckRadius,gt,0,then
-    BRIDGE_V1_XTOCHI,'GEO_pierChi_i','GEO_pierX_i'
-    BRIDGE_V1_XTOCHI,'GEO_pierChi_j','GEO_pierX_j'
+  BRIDGE_V1_XTOCHI,'GEO_pierChi_i','GEO_pierX_i'
+  BRIDGE_V1_XTOCHI,'GEO_pierChi_j','GEO_pierX_j'
 *endif
-!
-!
-!
+
+
+
 !!                                                                                                !!
 !! 2.3 LOADS                                                                                      !!
 !!                                                                                                !!
