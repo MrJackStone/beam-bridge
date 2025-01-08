@@ -56,22 +56,22 @@ cm   , COMPL_Column      , line
 
 *do,nthSupport,1,GEO_supportCount,1
 
-    mesoType=GEO_mesoType(nthSupport)
-    *if,mesoType,eq,CTE_MESO_frame,then
-        ! Column-girder frame:
-        BRIDGE_V1_SMFRAME,nthSupport
-    *elseif,mesoType,eq,CTE_MESO_tube,or,mesoType,eq,CTE_MESO_tcolumn,then
-        ! Tubular pier column:
-        BRIDGE_V1_SMCTUBE, nthSupport
-    *elseif,mesoType,eq,CTE_MESO_beamcap,then
-        ! Cap-beam frame:
-        BRIDGE_V1_SMCAPBEAM, nthSupport
-    *endif
+  mesoType=GEO_mesoType(nthSupport)
+  *if,mesoType,eq,CTE_MESO_frame,then
+    ! Column-girder frame:
+    BRIDGE_V1_SMFRAME,nthSupport
+  *elseif,mesoType,eq,CTE_MESO_tube,or,mesoType,eq,CTE_MESO_tcolumn,then
+    ! Tubular pier column:
+    BRIDGE_V1_SMCTUBE, nthSupport
+  *elseif,mesoType,eq,CTE_MESO_beamcap,then
+    ! Cap-beam frame:
+    BRIDGE_V1_SMCAPBEAM, nthSupport
+  *endif
 
 *enddo
-!
-!
-!
+
+
+
 !!                                                                                                !!
 !! 3.3 INFRASTRUCTURE                                                                             !!
 !!                                                                                                !!
