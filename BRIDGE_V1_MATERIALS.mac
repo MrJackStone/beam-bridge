@@ -1,1 +1,102 @@
 ! BRIDGE_V1_MATERIALS
+
+
+!! 2.1.1 MATERIALS                                                                                !!
+!!                                                                                                !!
+
+!! 2.1.1.1 GIRDER                                                                                 !!
+*if,MAT_Girder_type,EQ,0,THEN
+  concrete, MAT_Girder, MAT_Girder_fck, MAT_Girder_dens, MAT_Girder_Poisson,,1
+*elseif,MAT_Girder_type,EQ,1,THEN
+  MAT_Girder_E=2e11
+  steel, MAT_Girder,MAT_Girder_E,,,,,,1 !!
+*endif
+
+!! 2.1.1.2 SLAB                                                                                   !!
+concrete, MAT_Slab, MAT_Slab_fck, MAT_Slab_dens, MAT_Slab_Poisson,,1
+*if,SLAB_longRedCoef,ne,1,and,SLAB_longRedCoef,ne,0,then
+  E0   = 4760*sqrt(MAT_Slab_fck*1e-6)*1e6
+  EX   = E0*SLAB_longRedCoef
+  GXYZ = E0/2.6
+
+  mp , ex , MAT_Slab , EX
+  mp , ey , MAT_Slab , E0
+
+  mp , gxy , MAT_Slab , GXYZ
+  mp , gyz , MAT_Slab , GXYZ
+  mp , gxz , MAT_Slab , GXYZ
+*endif
+
+!! 2.1.1.3 COLUMN                                                                                 !!
+concrete, MAT_Column,      MAT_Column_fck,      MAT_Column_dens,      MAT_Column_Poisson     ,,1
+
+!! 2.1.1.4 FRAME GIRDER                                                                           !!
+concrete, MAT_FrameGirder, MAT_FrameGirder_fck, MAT_FrameGirder_dens, MAT_FrameGirder_Poisson,,1
+
+!! 2.1.1.5 GRADE BEAM                                                                             !!
+concrete, MAT_GradeBeam,   MAT_GradeBeam_fck,   MAT_GradeBeam_dens,   MAT_GradeBeam_Poisson  ,,1
+
+!! 2.1.1.6 PILE CAPS                                                                              !!
+concrete, MAT_PileCap,     MAT_PileCap_fck,     MAT_PileCap_dens,     MAT_PileCap_Poisson    ,,1
+
+!! 2.1.1.7 PILE                                                                                   !!
+concrete, MAT_Pile,        MAT_Pile_fck,        MAT_Pile_dens,        MAT_Pile_Poisson       ,,1
+
+!! 2.1.1.8 ABUTMENT                                                                               !!
+concrete, MAT_Abutment,    MAT_Abutment_fck,    MAT_Abutment_dens,    MAT_Abutment_Poisson   ,,1
+
+!! 2.1.1.9 APPROACH SLABS                                                                         !!
+concrete, MAT_Approach,    MAT_Approach_fck,    MAT_Approach_dens,    MAT_Approach_Poisson   ,,1
+
+!! 2.1.1.10 GERBER CONNECTION (CANTILEVER + CONSOLE)                                              !!
+concrete, MAT_Gerber,      MAT_Gerber_fck,      MAT_Gerber_dens,      MAT_Gerber_Poisson   ,,1
+
+!! 2.1.1.11 SOIL (LATERAL REACTION)                                                               !!
+MP,EX,MAT_Soil,MAT_Soil_E
+MP,PRXY,MAT_Soil,MAT_Soil_Poisson
+*if,MAT_Soil_shadm,ne,0,then
+  MAT_Soil_sigScale=pi*(PILE_d/2)*FEM_PileELength/SEC_HSOIL_area
+  tb,biso,MAT_Soil
+  tbdata,,MAT_Soil_shadm*MAT_Soil_sigScale
+*endif
+
+!! 2.1.1.12 SOIL (INSIDE ABUTMENTS)                                                               !!
+MAT_ABT_Soil_E=1e9
+MP,EX,MAT_ABT_Soil,MAT_ABT_Soil_E
+MP,PRXY,MAT_ABT_Soil,MAT_ABT_Soil_Poisson
+
+! Active earth pressure coefficient (Ka) -- FIX: changed to rest coefficient (k0)
+*afun,deg
+! MAT_ABT_Soil_ka=tan(45-(MAT_ABT_Soil_fi/2))
+MAT_ABT_Soil_ka=1-sin(MAT_ABT_Soil_fi)
+*afun,rad
+
+!! 2.1.1.13 SOIL (PILE TIP)                                                                       !!
+mp , ex   , MAT_PileTip , MAT_Soil_E
+mp , prxy , MAT_PileTip , MAT_Soil_Poisson
+*if,MAT_SOIL_tipNlim,ne,0,then
+  MAT_PileTip_sadm=MAT_SOIL_tipNlim/SEC_PSOIL_area
+  tb,biso,MAT_PileTip
+  tbdata,,MAT_PileTip_sadm
+*endif
+
+!! 2.1.1.14 SOIL (PILE LATERAL FRICTION)                                                          !!
+mp , ex   , MAT_PileLat , MAT_Soil_E
+mp , prxy , MAT_PileLat , MAT_Soil_Poisson
+*if,MAT_SOIL_svadm,ne,0,then
+  MAT_PileLat_sigScale=pi*(PILE_d/2)*FEM_PileELength/SEC_VSOIL_area
+  tb,biso,MAT_PileLat
+  tbdata,,MAT_SOIL_svadm*MAT_PileLat_sigScale
+*endif
+
+!! 2.1.1.15 SPRING                                                                                !!
+MAT_Spring_E=1e10
+MP,EX,MAT_Spring,MAT_Spring_E
+
+!! 2.1.1.16 Bearing & FRICTION (MATRIX27 ELEMENTS)                                               !!
+MAT_Matrix_E=1e10
+MP,EX,MAT_Matrix,MAT_Matrix_E
+
+!! 2.1.1.17  Pile steel casing                                                                    !!
+steel , MAT_casing,MAT_CASING_E,,,,,,1
+
