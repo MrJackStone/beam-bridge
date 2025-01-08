@@ -17,7 +17,6 @@ GEO_chordOff = 0
 *del , GEO_deckOffsets ,  , nopr
 *dim , GEO_deckWidths  ,  , 2
 *dim , GEO_deckOffsets ,  , 2
-
 GEO_deckWidths(1)  = GEO_deckWidth_beg , GEO_deckWidth_end
 GEO_deckOffsets(1) = GEO_deckOff_beg   , GEO_deckOff_end
 
@@ -25,9 +24,9 @@ GEO_deckOffsets(1) = GEO_deckOff_beg   , GEO_deckOff_end
   *do,deckExtremity,1,2,1
     deckWidth  = GEO_deckWidths(deckExtremity)
     deckOffset = GEO_deckOffsets(deckExtremity)
-    pos        = GEO_longPosKey(deckExtremity)
     totalDist  = deckWidth-(GEO_leftSlabHang+GEO_rightSlabHang)
     girderDist = totalDist/(GEO_girderCount-1)
+    pos        = GEO_longPosKey(deckExtremity)
 
     *del,GEO_girderY_%pos%,,nopr
     *dim,GEO_girderY_%pos%,,GEO_girderCount
@@ -36,75 +35,20 @@ GEO_deckOffsets(1) = GEO_deckOff_beg   , GEO_deckOff_end
   *enddo
 *endif
 
-! Determine position of the supports
-*if,GEO_supportOpt,eq,0,then
-  ! Evenly spaced supports
-  supportDist=GEO_deckLength/(GEO_supportCount-1)
-  *del,GEO_supportX,,nopr
-  *dim,GEO_supportX,,GEO_supportCount
-  xPos=0
-  *do,nthSupport,1,GEO_supportCount,1
-    GEO_supportX(nthSupport) = xPos
-    xPos                     = xPos+supportDist
-  *enddo
-*endif
-
-! Location of first and last supports
-s1Offset = GEO_supportX(1)
-s2Offset = GEO_supportX(GEO_supportCount)
-
-! Calculate span lengths
-GEO_spanCount = GEO_supportCount-1
-*del,GEO_spanLengths
-*dim,GEO_spanLengths,ARRAY,GEO_spanCount
-*do,nthSpan,1,GEO_spanCount,1
-  spanLength=GEO_supportX(nthSpan+1)-GEO_supportX(nthSpan)
-  GEO_spanLengths(nthSpan)=ABS(spanLength)
-*enddo
-*vscfun,minSpanLength,min,GEO_spanLengths
-*vscfun,maxSpanLength,max,GEO_spanLengths
-
-! Calculate positions of midspans
-GEO_midspanCount = GEO_supportCount-1
-*del,GEO_midspanX,,nopr
-*dim,GEO_midspanX,,GEO_midspanCount
-*do,nthMid,1,GEO_midspanCount,1
-  x1                   = GEO_supportX(nthMid)
-  x2                   = GEO_supportX(nthMid+1)
-  xMid                 = (x1+x2)/2
-  GEO_midspanX(nthMid) = xMid
-*enddo
-
-! Calculate wheel transversal offsets
-*afun,deg
-skewedDeltaY=GEO_deckLength*tan(LOAD_ltSkewness)
-*afun,rad
-
-LOAD_wheelCount = LOAD_ltCount*2
-
-*del,LOAD_ltWheelOff_beg,,nopr
-*del,LOAD_ltWheelOff_end,,nopr
-*dim,LOAD_ltWheelOff_beg,,LOAD_wheelCount,LOAD_ltTransScenarioCount
-*dim,LOAD_ltWheelOff_end,,LOAD_wheelCount,LOAD_ltTransScenarioCount
-
-*do,nthLTtransScenario,1,LOAD_ltTransScenarioCount,1
-  *do,nthLine,1,LOAD_ltCount,1
-    LOAD_ltWheelOff_beg(nthLine*2-1 , nthLTtransScenario) = LOAD_ltLineOff(nthLine, nthLTtransScenario)-(LOAD_ltWidth/2)
-    LOAD_ltWheelOff_beg(nthLine*2   , nthLTtransScenario) = LOAD_ltLineOff(nthLine, nthLTtransScenario)+(LOAD_ltWidth/2)
-    LOAD_ltWheelOff_end(nthLine*2-1 , nthLTtransScenario) = LOAD_ltLineOff(nthLine, nthLTtransScenario)-(LOAD_ltWidth/2)+skewedDeltaY
-    LOAD_ltWheelOff_end(nthLine*2   , nthLTtransScenario) = LOAD_ltLineOff(nthLine, nthLTtransScenario)+(LOAD_ltWidth/2)+skewedDeltaY
-  *enddo
-*enddo
+! Footpath positions
+*del,GEO_FOOTPATH_arcOffsets,,nopr
+*dim,GEO_FOOTPATH_arcOffsets,,2
+GEO_FOOTPATH_arcOffsets(1) = GEO_deckOff_beg+GEO_footpathLeft_beg
+GEO_FOOTPATH_arcOffsets(2) = GEO_deckOff_beg+GEO_deckWidth_beg-GEO_footpathRight_beg
 
 ! Calculate X coordinates of gerber connections
 *voper,activeGerber,GEO_gerberL,gt,0
 *vscfun,GEO_gerberCount,sum,activeGerber
 *if,GEO_gerberCount,eq,0,then
-  GEO_gerberStatus=0
+  GEO_gerberStatus = 0
 *endif
 
 *if,GEO_gerberStatus,eq,1,then
-
   *del , GEO_gerberX_sub ,  , nopr
   *del , GEO_gerberX_add ,  , nopr
   *del , GEO_gerberX_i   ,  , nopr
@@ -115,63 +59,27 @@ LOAD_wheelCount = LOAD_ltCount*2
   *dim , GEO_gerberX_add ,  , GEO_supportCount
 
   ! X coordinate at tubular column faces
-  *voper,GEO_gerberX_sub,GEO_supportX,sub,GEO_columnDepth/2
-  *voper,GEO_gerberX_add,GEO_supportX,add,GEO_columnDepth/2
+  *voper , GEO_gerberX_sub , GEO_supportX , sub , GEO_columnDepth/2
+  *voper , GEO_gerberX_add , GEO_supportX , add , GEO_columnDepth/2
 
-  *vmask,activeGerber
-  *vfun,GEO_gerberX_m,comp,GEO_gerberX_sub
-  *vmask,activeGerber
-  *vfun,GEO_gerberX_n,comp,GEO_gerberX_add
+  *vmask , activeGerber
+  *vfun  , GEO_gerberX_m , comp , GEO_gerberX_sub
+  *vmask , activeGerber
+  *vfun  , GEO_gerberX_n , comp , GEO_gerberX_add
 
   ! X coordinate at gerber tips
-  *voper,GEO_gerberX_sub,GEO_gerberX_sub,sub,GEO_gerberL
-  *voper,GEO_gerberX_add,GEO_gerberX_add,add,GEO_gerberL
+  *voper , GEO_gerberX_sub , GEO_gerberX_sub , sub , GEO_gerberL
+  *voper , GEO_gerberX_add , GEO_gerberX_add , add , GEO_gerberL
 
-  *vmask,activeGerber
-  *vfun,GEO_gerberX_i,comp,GEO_gerberX_sub
-  *vmask,activeGerber
-  *vfun,GEO_gerberX_j,comp,GEO_gerberX_add
-
+  *vmask , activeGerber
+  *vfun  , GEO_gerberX_i , comp , GEO_gerberX_sub
+  *vmask , activeGerber
+  *vfun  , GEO_gerberX_j , comp , GEO_gerberX_add
 *endif
-
-! Calculate positions: supports, midspans, gerber connections
-BRIDGE_V1_XTOCHI , 'GEO_supportChi' , 'GEO_supportX'
-BRIDGE_V1_XTOCHI , 'GEO_midspanChi' , 'GEO_midspanX'
-GEO_supportChi_0 = GEO_supportChi(1)
-GEO_supportChi_L = GEO_supportChi(GEO_supportCount)
-
-*do,nthPier,1,GEO_pierCount,1 ! TODO  used before it is defined
-
-*enddo
 
 *if,GEO_gerberStatus,eq,1,then
-  BRIDGE_V1_XTOCHI, 'GEO_gerberChi_i', 'GEO_gerberX_i'
-  BRIDGE_V1_XTOCHI, 'GEO_gerberChi_j', 'GEO_gerberX_j'
-  BRIDGE_V1_XTOCHI, 'GEO_gerberChi_m', 'GEO_gerberX_m'
-  BRIDGE_V1_XTOCHI, 'GEO_gerberChi_n', 'GEO_gerberX_n'
+  BRIDGE_V1_XTOCHI , 'GEO_gerberChi_i' , 'GEO_gerberX_i'
+  BRIDGE_V1_XTOCHI , 'GEO_gerberChi_j' , 'GEO_gerberX_j'
+  BRIDGE_V1_XTOCHI , 'GEO_gerberChi_m' , 'GEO_gerberX_m'
+  BRIDGE_V1_XTOCHI , 'GEO_gerberChi_n' , 'GEO_gerberX_n'
 *endif
-
-LOAD_ltWheelPathCount = LOAD_wheelCount*LOAD_ltTransScenarioCount
-
-*del , GEO_WHEELPATH_arcOffsets ,  , nopr
-*dim , GEO_WHEELPATH_arcOffsets ,  , LOAD_ltWheelPathCount
-
-nthPath = 0
-*do,nthLTtransScenario,1,LOAD_ltTransScenarioCount,1
-  *do,nthLT,1,LOAD_wheelCount,1
-    yBeg    = LOAD_ltWheelOff_beg(nthLT,nthLTtransScenario)
-    nthPath = nthPath+1
-    GEO_WHEELPATH_arcOffsets(nthPath) = yBeg
-  *enddo
-*enddo
-
-*del,GEO_FOOTPATH_arcOffsets,,nopr
-*dim,GEO_FOOTPATH_arcOffsets,,2
-GEO_FOOTPATH_arcOffsets(1) = GEO_deckOff_beg+GEO_footpathLeft_beg
-GEO_FOOTPATH_arcOffsets(2) = GEO_deckOff_beg+GEO_deckWidth_beg-GEO_footpathRight_beg
-
-! Positions used to slice longitudinally
-arrjoin,'CS_slice','CS_girders','CS_loadTrains','CS_barriers','CS_leftFootpath','CS_rightFootpath'
-
-arrjoin , 'GEO_arc_offsets' , 'GEO_WHEELPATH_arcOffsets' , 'GEO_FOOTPATH_arcOffsets' , 'LOAD_barrierOffset_beg'
-
