@@ -77,6 +77,8 @@ PILE_thk = 0
 
 MAT_CASING_E = 2e11
 
+FEM_PileTopConnection = 0
+
 
 !!                                                                                                !!
 !! 1.5  Gerber cantilever on girder support                                                       !!
