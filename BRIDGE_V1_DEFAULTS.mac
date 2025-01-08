@@ -23,6 +23,8 @@ GEO_girderConnection = 0
 CROSSBEAM_b = 1
 CROSSBEAM_h = 1
 
+SLAB_longRedCoef = 1
+
 FEM_sgCouple_UX = 1
 FEM_sgCouple_UY = 1
 FEM_sgCouple_UZ = 1
