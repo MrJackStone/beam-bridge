@@ -1,6 +1,36 @@
 ! BRIDGE_V1_PARMESO
 
 
+! Calculate key span & support positions
+GEO_spanCount = GEO_supportCount-1  ! TODO  possibly rename param ("midSpanCount"?) to avoid confusing with span count that includes abutment approach slabs
+
+*del , GEO_spanLengths ,  , nopr
+*del , GEO_midspanX    ,  , nopr
+*dim , GEO_spanLengths ,  , GEO_spanCount
+*dim , GEO_midspanX    ,  , GEO_spanCount
+
+*if,GEO_supportOpt,eq,0,then
+  *del,GEO_supportX,,nopr
+  *dim,GEO_supportX,,GEO_supportCount
+  supportDist = GEO_deckLength/GEO_spanCount
+  *vfill,GEO_supportX,ramp,0,supportDist
+*endif
+
+*do,nthSpan,1,GEO_spanCount,1
+  ithX                     = GEO_supportX(nthMid)
+  jthX                     = GEO_supportX(nthMid+1)
+  GEO_spanLengths(nthSpan) = abs(jthX-ithX)
+  GEO_midspanX(nthMid)     = (ithX+jthX)/2
+*enddo
+
+BRIDGE_V1_XTOCHI , 'GEO_supportChi' , 'GEO_supportX'
+BRIDGE_V1_XTOCHI , 'GEO_midspanChi' , 'GEO_midspanX'
+GEO_supportChi_0 = GEO_supportChi(1)
+GEO_supportChi_L = GEO_supportChi(GEO_supportCount)
+
+*do,nthPier,1,GEO_pierCount,1 ! TODO  used before it is defined
+*enddo
+
 ! TODO: check temporarily removed (has to be redesigned for skewed multi-span bridges)
 ! ! Check width of the frame
 ! leftGirderY=GEO_girderY_beg(GEO_girderCount)
