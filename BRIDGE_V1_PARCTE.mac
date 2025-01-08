@@ -12,6 +12,11 @@ FEM_ABT_springL = 0.5*(FEM_ABT_esize**2)
 ! Soil elastic modulus
 MAT_Soil_E = 1e10
 
+! Position identifier at each extremity of the bridge
+*del , GEO_longPosKey ,      , nopr
+*dim , GEO_longPosKey , char , 2
+GEO_longPosKey(1) = 'BEG','END'
+
 ! Springs
 SEC_VSOIL_area = (MAT_Soil_kv*FEM_springL*FEM_PileELength)/MAT_Soil_E
 SEC_HSOIL_area = (MAT_Soil_kh*FEM_springL*FEM_PileELength)/MAT_Soil_E  ! TODO  multiply by pile diameter (results in AREA per pile)

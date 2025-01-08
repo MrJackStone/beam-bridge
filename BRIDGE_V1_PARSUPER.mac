@@ -6,11 +6,6 @@ GEO_chordOff = 0
   GEO_chordOff = (1/2)*sqrt(4*(GEO_deckRadius**2)-(GEO_deckLength**2))
 *endif
 
-! Position identifier at each extremity of the bridge
-*del,GEO_longPosKey
-*dim,GEO_longPosKey,char,2
-GEO_longPosKey(1)='BEG','END'
-
 ! Deck width at bridge's extremities
 *del,GEO_deckWidths,,nopr
 *dim,GEO_deckWidths,,2
