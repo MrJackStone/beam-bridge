@@ -129,6 +129,8 @@ PILE_thk = 0
 
 FEM_PileTopConnection = 0
 
+FEM_PileTopConnection = 0
+
 
 !!                                                                                                !!
 !! 1.5  Gerber cantilever on girder support                                                       !!
