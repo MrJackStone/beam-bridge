@@ -1,9 +1,46 @@
 ! BRIDGE_V1_PARLOADS
 
 
+! Calculate wheel transversal offsets
+*afun,deg
+skewedDeltaY=GEO_deckLength*tan(LOAD_ltSkewness)
+*afun,rad
+
+LOAD_wheelCount = LOAD_ltCount*2
+
+*del,LOAD_ltWheelOff_beg,,nopr
+*del,LOAD_ltWheelOff_end,,nopr
+*dim,LOAD_ltWheelOff_beg,,LOAD_wheelCount,LOAD_ltTransScenarioCount
+*dim,LOAD_ltWheelOff_end,,LOAD_wheelCount,LOAD_ltTransScenarioCount
+
+*do,nthLTtransScenario,1,LOAD_ltTransScenarioCount,1
+  *do,nthLine,1,LOAD_ltCount,1
+    LOAD_ltWheelOff_beg(nthLine*2-1 , nthLTtransScenario) = LOAD_ltLineOff(nthLine, nthLTtransScenario)-(LOAD_ltWidth/2)
+    LOAD_ltWheelOff_beg(nthLine*2   , nthLTtransScenario) = LOAD_ltLineOff(nthLine, nthLTtransScenario)+(LOAD_ltWidth/2)
+    LOAD_ltWheelOff_end(nthLine*2-1 , nthLTtransScenario) = LOAD_ltLineOff(nthLine, nthLTtransScenario)-(LOAD_ltWidth/2)+skewedDeltaY
+    LOAD_ltWheelOff_end(nthLine*2   , nthLTtransScenario) = LOAD_ltLineOff(nthLine, nthLTtransScenario)+(LOAD_ltWidth/2)+skewedDeltaY
+  *enddo
+*enddo
+
+LOAD_ltWheelPathCount = LOAD_wheelCount*LOAD_ltTransScenarioCount
+
+*del , GEO_WHEELPATH_arcOffsets ,  , nopr
+*dim , GEO_WHEELPATH_arcOffsets ,  , LOAD_ltWheelPathCount
+
+nthPath = 0
+*do,nthLTtransScenario,1,LOAD_ltTransScenarioCount,1
+  *do,nthLT,1,LOAD_wheelCount,1
+    yBeg    = LOAD_ltWheelOff_beg(nthLT,nthLTtransScenario)
+    nthPath = nthPath+1
+    GEO_WHEELPATH_arcOffsets(nthPath) = yBeg
+  *enddo
+*enddo
+
 ! Calculate dynamic impact coefficient
 *if,BRIDGE_type,eq,0,then
   ! Highway bridge
+
+  *vscfun,minSpanLength,min,GEO_spanLengths
 
   ! Basic impact coefficient (NBR 7188)
   LOAD_baseImpactCoefficient       = (1.35<1+1.06*(20/(minSpanLength+50)))
