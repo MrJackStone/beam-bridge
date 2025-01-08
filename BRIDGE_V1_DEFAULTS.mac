@@ -174,10 +174,10 @@ MAT_Gerber_Poisson = 0.2
 MAT_Gerber_dens    = 2500
 
 ! Soil
-MAT_Soil_Poisson=0.2
+MAT_Soil_Poisson = 0.2
 
 ! Abutment soil
-MAT_ABT_Soil_Poisson=0.2
+MAT_ABT_Soil_Poisson = 0.2
 
 MAT_SOIL_tipNlim = 0
 MAT_SOIL_shadm   = 0
