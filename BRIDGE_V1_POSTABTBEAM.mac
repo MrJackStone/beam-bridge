@@ -152,61 +152,66 @@ esla,s
 nsle,s,active
 
 go2png,1200
-  /window,1,on
-  /window,2,off
 
-  cmsel,s,COMPA_ABT_1
-  cmsel,u,COMPA_ABT_beam
-  esla,s
-  nsle,s,active
-  /device,vector,on
-  /type,1,4
-  /eshape,1
-  /auto,1
-  eplot
-  /noerase
-  /device,vector,off
-  /user,1
+  *if,GEO_ABT1_status,eq,1,then
+    /window,1,on
+    /window,2,off
 
-  cmsel,s,COMPA_ABT_1
-  cmsel,r,COMPA_ABT_beam
-  esla,s
-  nsle,s,active
-  /eshape,0
-  /edge,1,1
-  eplot
+    cmsel,s,COMPA_ABT_1
+    cmsel,u,COMPA_ABT_beam
+    esla,s
+    nsle,s,active
+    /device,vector,on
+    /type,1,4
+    /eshape,1
+    /auto,1
+    eplot
+    /noerase
+    /device,vector,off
+    /user,1
 
-  /plopts,info,3
-  mpathplot,3,,'beam1_paths','mp_labels'
-  /plopts,info,0
+    cmsel,s,COMPA_ABT_1
+    cmsel,r,COMPA_ABT_beam
+    esla,s
+    nsle,s,active
+    /eshape,0
+    /edge,1,1
+    eplot
 
+    /plopts,info,3
+    mpathplot,3,,'beam1_paths','mp_labels'
+    /plopts,info,0
+  *endif
 
-  /window,1,off
-  /window,2,on
+  *if,GEO_ABT2_status,eq,1,then
+    /window,1,off
+    /window,2,on
 
-  cmsel,s,COMPA_ABT_2
-  cmsel,u,COMPA_ABT_beam
-  esla,s
-  nsle,s,active
-  /device,vector,on
-  /type,2,4
-  /eshape,1
-  /auto,2
-  eplot
-  /device,vector,off
-  /user,2
+    cmsel,s,COMPA_ABT_2
+    cmsel,u,COMPA_ABT_beam
+    esla,s
+    nsle,s,active
+    /device,vector,on
+    /type,2,4
+    /eshape,1
+    /auto,2
+    eplot
+    /noerase
+    /device,vector,off
+    /user,2
 
-  cmsel,s,COMPA_ABT_2
-  cmsel,r,COMPA_ABT_beam
-  esla,s
-  nsle,s,active
-  /eshape,0
-  /edge,2,1
-  eplot
+    cmsel,s,COMPA_ABT_2
+    cmsel,r,COMPA_ABT_beam
+    esla,s
+    nsle,s,active
+    /eshape,0
+    /edge,2,1
+    eplot
 
-  /plopts,info,3
-  mpathplot,3,,'beam2_paths','mp_labels'
-  /plopts,info,0
+    /plopts,info,3
+    mpathplot,3,,'beam2_paths','mp_labels'
+    /plopts,info,0
+  *endif
 
 endpng,'IMG25a_ABT_BEAM_MP',,,,,POST_resultsFolder
 /erase
@@ -248,61 +253,67 @@ esla,s
 nsle,s,active
 
 go2png,1200
-  /window,1,on
-  /window,2,off
 
-  cmsel,s,COMPA_ABT_1
-  cmsel,u,COMPA_ABT_beam
-  esla,s
-  nsle,s,active
-  /device,vector,on
-  /type,1,4
-  /eshape,1
-  /auto,1
-  eplot
-  /noerase
-  /device,vector,off
-  /user,1
+  *if,GEO_ABT1_status,eq,1,then
+    /window,1,on
+    /window,2,off
 
-  cmsel,s,COMPA_ABT_1
-  cmsel,r,COMPA_ABT_beam
-  esla,s
-  nsle,s,active
-  /eshape,0
-  /edge,1,1
-  eplot
+    cmsel,s,COMPA_ABT_1
+    cmsel,u,COMPA_ABT_beam
+    esla,s
+    nsle,s,active
+    /device,vector,on
+    /type,1,4
+    /eshape,1
+    /auto,1
+    eplot
+    /noerase
+    /device,vector,off
+    /user,1
 
-  /plopts,info,3
-  mpathplot,3,,'beam1_paths','mb_labels'
-  /plopts,info,0
+    cmsel,s,COMPA_ABT_1
+    cmsel,r,COMPA_ABT_beam
+    esla,s
+    nsle,s,active
+    /eshape,0
+    /edge,1,1
+    eplot
+
+    /plopts,info,3
+    mpathplot,3,,'beam1_paths','mb_labels'
+    /plopts,info,0
+  *endif
 
 
-  /window,1,off
-  /window,2,on
+  *if,GEO_ABT2_status,eq,1,then
+    /window,1,off
+    /window,2,on
 
-  cmsel,s,COMPA_ABT_2
-  cmsel,u,COMPA_ABT_beam
-  esla,s
-  nsle,s,active
-  /device,vector,on
-  /type,2,4
-  /eshape,1
-  /auto,2
-  eplot
-  /device,vector,off
-  /user,2
+    cmsel,s,COMPA_ABT_2
+    cmsel,u,COMPA_ABT_beam
+    esla,s
+    nsle,s,active
+    /device,vector,on
+    /type,2,4
+    /eshape,1
+    /auto,2
+    eplot
+    /noerase
+    /device,vector,off
+    /user,2
 
-  cmsel,s,COMPA_ABT_2
-  cmsel,r,COMPA_ABT_beam
-  esla,s
-  nsle,s,active
-  /eshape,0
-  /edge,2,1
-  eplot
+    cmsel,s,COMPA_ABT_2
+    cmsel,r,COMPA_ABT_beam
+    esla,s
+    nsle,s,active
+    /eshape,0
+    /edge,2,1
+    eplot
 
-  /plopts,info,3
-  mpathplot,3,,'beam2_paths','mb_labels'
-  /plopts,info,0
+    /plopts,info,3
+    mpathplot,3,,'beam2_paths','mb_labels'
+    /plopts,info,0
+  *endif
 
 endpng,'IMG25b_ABT_BEAM_MB',,,,,POST_resultsFolder
 /erase
@@ -344,61 +355,67 @@ esla,s
 nsle,s,active
 
 go2png,1200
-  /window,1,on
-  /window,2,off
 
-  cmsel,s,COMPA_ABT_1
-  cmsel,u,COMPA_ABT_beam
-  esla,s
-  nsle,s,active
-  /device,vector,on
-  /type,1,4
-  /eshape,1
-  /auto,1
-  eplot
-  /noerase
-  /device,vector,off
-  /user,1
+  *if,GEO_ABT1_status,eq,1,then
+    /window,1,on
+    /window,2,off
 
-  cmsel,s,COMPA_ABT_1
-  cmsel,r,COMPA_ABT_beam
-  esla,s
-  nsle,s,active
-  /eshape,0
-  /edge,1,1
-  eplot
+    cmsel,s,COMPA_ABT_1
+    cmsel,u,COMPA_ABT_beam
+    esla,s
+    nsle,s,active
+    /device,vector,on
+    /type,1,4
+    /eshape,1
+    /auto,1
+    eplot
+    /noerase
+    /device,vector,off
+    /user,1
 
-  /plopts,info,3
-  mpathplot,3,,'beam1_paths','n_labels'
-  /plopts,info,0
+    cmsel,s,COMPA_ABT_1
+    cmsel,r,COMPA_ABT_beam
+    esla,s
+    nsle,s,active
+    /eshape,0
+    /edge,1,1
+    eplot
+
+    /plopts,info,3
+    mpathplot,3,,'beam1_paths','n_labels'
+    /plopts,info,0
+  *endif
 
 
-  /window,1,off
-  /window,2,on
+  *if,GEO_ABT2_status,eq,1,then
+    /window,1,off
+    /window,2,on
 
-  cmsel,s,COMPA_ABT_2
-  cmsel,u,COMPA_ABT_beam
-  esla,s
-  nsle,s,active
-  /device,vector,on
-  /type,2,4
-  /eshape,1
-  /auto,2
-  eplot
-  /device,vector,off
-  /user,2
+    cmsel,s,COMPA_ABT_2
+    cmsel,u,COMPA_ABT_beam
+    esla,s
+    nsle,s,active
+    /device,vector,on
+    /type,2,4
+    /eshape,1
+    /auto,2
+    eplot
+    /noerase
+    /device,vector,off
+    /user,2
 
-  cmsel,s,COMPA_ABT_2
-  cmsel,r,COMPA_ABT_beam
-  esla,s
-  nsle,s,active
-  /eshape,0
-  /edge,2,1
-  eplot
+    cmsel,s,COMPA_ABT_2
+    cmsel,r,COMPA_ABT_beam
+    esla,s
+    nsle,s,active
+    /eshape,0
+    /edge,2,1
+    eplot
 
-  /plopts,info,3
-  mpathplot,3,,'beam2_paths','n_labels'
-  /plopts,info,0
+    /plopts,info,3
+    mpathplot,3,,'beam2_paths','n_labels'
+    /plopts,info,0
+  *endif
 
 endpng,'IMG25c_ABT_BEAM_N',,,,,POST_resultsFolder
 /erase
@@ -440,61 +457,67 @@ esla,s
 nsle,s,active
 
 go2png,1200
-  /window,1,on
-  /window,2,off
 
-  cmsel,s,COMPA_ABT_1
-  cmsel,u,COMPA_ABT_beam
-  esla,s
-  nsle,s,active
-  /device,vector,on
-  /type,1,4
-  /eshape,1
-  /auto,1
-  eplot
-  /noerase
-  /device,vector,off
-  /user,1
+  *if,GEO_ABT1_status,eq,1,then
+    /window,1,on
+    /window,2,off
 
-  cmsel,s,COMPA_ABT_1
-  cmsel,r,COMPA_ABT_beam
-  esla,s
-  nsle,s,active
-  /eshape,0
-  /edge,1,1
-  eplot
+    cmsel,s,COMPA_ABT_1
+    cmsel,u,COMPA_ABT_beam
+    esla,s
+    nsle,s,active
+    /device,vector,on
+    /type,1,4
+    /eshape,1
+    /auto,1
+    eplot
+    /noerase
+    /device,vector,off
+    /user,1
 
-  /plopts,info,3
-  mpathplot,3,,'beam1_paths','v_labels'
-  /plopts,info,0
+    cmsel,s,COMPA_ABT_1
+    cmsel,r,COMPA_ABT_beam
+    esla,s
+    nsle,s,active
+    /eshape,0
+    /edge,1,1
+    eplot
+
+    /plopts,info,3
+    mpathplot,3,,'beam1_paths','v_labels'
+    /plopts,info,0
+  *endif
 
 
-  /window,1,off
-  /window,2,on
+  *if,GEO_ABT2_status,eq,1,then
+    /window,1,off
+    /window,2,on
 
-  cmsel,s,COMPA_ABT_2
-  cmsel,u,COMPA_ABT_beam
-  esla,s
-  nsle,s,active
-  /device,vector,on
-  /type,2,4
-  /eshape,1
-  /auto,2
-  eplot
-  /device,vector,off
-  /user,2
+    cmsel,s,COMPA_ABT_2
+    cmsel,u,COMPA_ABT_beam
+    esla,s
+    nsle,s,active
+    /device,vector,on
+    /type,2,4
+    /eshape,1
+    /auto,2
+    eplot
+    /noerase
+    /device,vector,off
+    /user,2
 
-  cmsel,s,COMPA_ABT_2
-  cmsel,r,COMPA_ABT_beam
-  esla,s
-  nsle,s,active
-  /eshape,0
-  /edge,2,1
-  eplot
+    cmsel,s,COMPA_ABT_2
+    cmsel,r,COMPA_ABT_beam
+    esla,s
+    nsle,s,active
+    /eshape,0
+    /edge,2,1
+    eplot
 
-  /plopts,info,3
-  mpathplot,3,,'beam2_paths','v_labels'
-  /plopts,info,0
+    /plopts,info,3
+    mpathplot,3,,'beam2_paths','v_labels'
+    /plopts,info,0
+  *endif
 
 endpng,'IMG25d_ABT_BEAM_V',,,,,POST_resultsFolder
 /erase
@@ -537,61 +560,67 @@ esla,s
 nsle,s,active
 
 go2png,1200
-  /window,1,on
-  /window,2,off
 
-  cmsel,s,COMPA_ABT_1
-  cmsel,u,COMPA_ABT_beam
-  esla,s
-  nsle,s,active
-  /device,vector,on
-  /type,1,4
-  /eshape,1
-  /auto,1
-  eplot
-  /noerase
-  /device,vector,off
-  /user,1
+  *if,GEO_ABT1_status,eq,1,then
+    /window,1,on
+    /window,2,off
 
-  cmsel,s,COMPA_ABT_1
-  cmsel,r,COMPA_ABT_beam
-  esla,s
-  nsle,s,active
-  /eshape,0
-  /edge,1,1
-  eplot
+    cmsel,s,COMPA_ABT_1
+    cmsel,u,COMPA_ABT_beam
+    esla,s
+    nsle,s,active
+    /device,vector,on
+    /type,1,4
+    /eshape,1
+    /auto,1
+    eplot
+    /noerase
+    /device,vector,off
+    /user,1
 
-  /plopts,info,3
-  mpathplot,3,,'beam1_paths','ux_labels'
-  /plopts,info,0
+    cmsel,s,COMPA_ABT_1
+    cmsel,r,COMPA_ABT_beam
+    esla,s
+    nsle,s,active
+    /eshape,0
+    /edge,1,1
+    eplot
+
+    /plopts,info,3
+    mpathplot,3,,'beam1_paths','ux_labels'
+    /plopts,info,0
+  *endif
 
 
-  /window,1,off
-  /window,2,on
+  *if,GEO_ABT2_status,eq,1,then
+    /window,1,off
+    /window,2,on
 
-  cmsel,s,COMPA_ABT_2
-  cmsel,u,COMPA_ABT_beam
-  esla,s
-  nsle,s,active
-  /device,vector,on
-  /type,2,4
-  /eshape,1
-  /auto,2
-  eplot
-  /device,vector,off
-  /user,2
+    cmsel,s,COMPA_ABT_2
+    cmsel,u,COMPA_ABT_beam
+    esla,s
+    nsle,s,active
+    /device,vector,on
+    /type,2,4
+    /eshape,1
+    /auto,2
+    eplot
+    /noerase
+    /device,vector,off
+    /user,2
 
-  cmsel,s,COMPA_ABT_2
-  cmsel,r,COMPA_ABT_beam
-  esla,s
-  nsle,s,active
-  /eshape,0
-  /edge,2,1
-  eplot
+    cmsel,s,COMPA_ABT_2
+    cmsel,r,COMPA_ABT_beam
+    esla,s
+    nsle,s,active
+    /eshape,0
+    /edge,2,1
+    eplot
 
-  /plopts,info,3
-  mpathplot,3,,'beam2_paths','ux_labels'
-  /plopts,info,0
+    /plopts,info,3
+    mpathplot,3,,'beam2_paths','ux_labels'
+    /plopts,info,0
+  *endif
 
 endpng,'IMG25e_ABT_BEAM_UX',,,,,POST_resultsFolder
 /erase
@@ -634,61 +663,67 @@ esla,s
 nsle,s,active
 
 go2png,1200
-  /window,1,on
-  /window,2,off
 
-  cmsel,s,COMPA_ABT_1
-  cmsel,u,COMPA_ABT_beam
-  esla,s
-  nsle,s,active
-  /device,vector,on
-  /type,1,4
-  /eshape,1
-  /auto,1
-  eplot
-  /noerase
-  /device,vector,off
-  /user,1
+  *if,GEO_ABT1_status,eq,1,then
+    /window,1,on
+    /window,2,off
 
-  cmsel,s,COMPA_ABT_1
-  cmsel,r,COMPA_ABT_beam
-  esla,s
-  nsle,s,active
-  /eshape,0
-  /edge,1,1
-  eplot
+    cmsel,s,COMPA_ABT_1
+    cmsel,u,COMPA_ABT_beam
+    esla,s
+    nsle,s,active
+    /device,vector,on
+    /type,1,4
+    /eshape,1
+    /auto,1
+    eplot
+    /noerase
+    /device,vector,off
+    /user,1
 
-  /plopts,info,3
-  mpathplot,3,,'beam1_paths','uz_labels'
-  /plopts,info,0
+    cmsel,s,COMPA_ABT_1
+    cmsel,r,COMPA_ABT_beam
+    esla,s
+    nsle,s,active
+    /eshape,0
+    /edge,1,1
+    eplot
+
+    /plopts,info,3
+    mpathplot,3,,'beam1_paths','uz_labels'
+    /plopts,info,0
+  *endif
 
 
-  /window,1,off
-  /window,2,on
+  *if,GEO_ABT2_status,eq,1,then
+    /window,1,off
+    /window,2,on
 
-  cmsel,s,COMPA_ABT_2
-  cmsel,u,COMPA_ABT_beam
-  esla,s
-  nsle,s,active
-  /device,vector,on
-  /type,2,4
-  /eshape,1
-  /auto,2
-  eplot
-  /device,vector,off
-  /user,2
+    cmsel,s,COMPA_ABT_2
+    cmsel,u,COMPA_ABT_beam
+    esla,s
+    nsle,s,active
+    /device,vector,on
+    /type,2,4
+    /eshape,1
+    /auto,2
+    eplot
+    /noerase
+    /device,vector,off
+    /user,2
 
-  cmsel,s,COMPA_ABT_2
-  cmsel,r,COMPA_ABT_beam
-  esla,s
-  nsle,s,active
-  /eshape,0
-  /edge,2,1
-  eplot
+    cmsel,s,COMPA_ABT_2
+    cmsel,r,COMPA_ABT_beam
+    esla,s
+    nsle,s,active
+    /eshape,0
+    /edge,2,1
+    eplot
 
-  /plopts,info,3
-  mpathplot,3,,'beam2_paths','uz_labels'
-  /plopts,info,0
+    /plopts,info,3
+    mpathplot,3,,'beam2_paths','uz_labels'
+    /plopts,info,0
+  *endif
 
 endpng,'IMG25f_ABT_BEAM_UY',,,,,POST_resultsFolder
 /erase
