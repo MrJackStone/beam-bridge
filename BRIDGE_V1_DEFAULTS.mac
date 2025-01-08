@@ -64,6 +64,8 @@ GEO_ABT2_beamOpt = 0
 SEC_ABT_PILE_d   = 1
 SEC_ABT_PILE_thk = 0
 
+SEC_ABT_thinTranWall_t = SEC_ABT_tranWall_t
+
 
 !!                                                                                                !!
 !! 1.4  Infrastructure                                                                            !!
