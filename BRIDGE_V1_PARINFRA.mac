@@ -1,8 +1,10 @@
 ! BRIDGE_V1_PARINFRA
 
 
-! Force single pile cap option for tubular piers
+! Force single pile cap option for tubular & hammerhead piers
 *if,GEO_frameOpt,eq,1,then
+  GEO_capOpt = 1
+*elseif,GEO_frameOpt,eq,3,then
   GEO_capOpt = 1
 *endif
 
@@ -20,59 +22,55 @@ zPileTop = zFrameBot
   zPileTop = zFrameBot-PILECAP_h+0.1
 *endif
 
-BRIDGE_V1_PARPILES
+BRIDGE_V1_CALCPILECOORDS , 'GEO_pileXL' , 'GEO_pileYL' , GEO_pileCount , GEO_pileConfig , PILE_d , GEO_pileDistLong , GEO_pileDistTran , COLUMN_cx , COLUMN_cy , GEO_capLength , GEO_capWidth
 
-! Correct minimum dimensions of pile cap
-GEO_pileCapMinLength = (GEO_pileCapMinLength>COLUMN_cy)
-GEO_pileCapMinWidth  = (GEO_pileCapMinWidth>COLUMN_cx)
+! Compile pier piles data
+*do,nthPier,1,GEO_pierCount,1
 
-*if,GEO_capLength,lt,GEO_pileCapMinLength,then
-  GEO_capLength = GEO_pileCapMinLength
-  *msg,warn,GEO_capLength
-WARNING: Pile cap length too small. Size increased to %Gm.
-*endif
+  supportIdx = GEO_PIER_supportIdx(nthPier)
 
-*if,GEO_capWidth,lt,GEO_pileCapMinWidth,then
-  GEO_capWidth = GEO_pileCapMinWidth
-  *msg,warn,GEO_capWidth
-WARNING: Pile cap width too small. Size increased to %Gm.
-*endif
+  *del,GEO_PIER%nthPier%_pile_data,,nopr
+  *dim,GEO_PIER%nthPier%_pile_data,,GEO_pileCount
 
-! Calculate frame/pier slicing positions
-zero = 0
-arrjoin,'xCoords','GEO_pileXL','zero'
-arruniq,'xCoords','GEO_xTubeSlice',1
-*get,XTubeSliceCount,parm,GEO_xTubSlice,dim,x
+  *do,nthPile,1,GEO_pileCount,1
+    GEO_PIER%nthPier%_pile_data(1,nthPile) = GEO_pileXL(nthPile)
+    GEO_PIER%nthPier%_pile_data(2,nthPile) = GEO_pileYL(nthPile)
+    GEO_PIER%nthPier%_pile_data(3,nthPile) = GEO_pileLengths(supportIdx)
+    GEO_PIER%nthPier%_pile_data(4,nthPile) = GEO_pileYAngle(nthPile)  ! TODO  these X & Y angles don't exactly match the alpha & beta
+    GEO_PIER%nthPier%_pile_data(5,nthPile) = GEO_pileXAngle(nthPile)  !       approach adopted for pile data -- revise DATA and elsewhere
+    GEO_PIER%nthPier%_pile_data(6,nthPile) = 0
+  *enddo
+*enddo
+
+! Calculate pier pile cap slicing positions
+zero  = 0
+front = 0
+back  = 0
+left  = 0
+right = 0
 
 *if,GEO_frameOpt,eq,0,then
   ! Column-girder frame
-  *del,ycols,,nopr
-  *dim,ycols,,2
-  ycols(1) = -GEO_columnSpacing/2,GEO_columnSpacing/2
-*else
+  left  = -GEO_columnSpacing/2
+  right =  GEO_columnSpacing/2
+*elseif,GEO_frameOpt,eq,1,then
   ! Tubular pier column
-  *del,ycols,,nopr
-  *dim,ycols,,1
-  ycols(1) = 0
-*endif
-
-arrjoin,'yCoords','GEO_pileYL','zero','ycols'
-arruniq,'yCoords','GEO_yTubeSlice',1
-*get,YTubeSliceCount,parm,GEO_yCapSlice,dim,x
-
-! Calculate pile cap slicing positions
-*if,GEO_frameOpt,eq,1,then
-  ! Tubular pier column
-  front = GEO_columnDepth/2
+  left  = -GEO_columnWidth/2
+  right =  GEO_columnWidth/2
+  front =  GEO_columnDepth/2
   back  = -GEO_columnDepth/2
-*else
-  ! Column-girder frame
-  front = 0
-  back  = 0
 *endif
-arrjoin,'xCoords','GEO_xTubeSlice','front','back'
-arruniq,'xCoords','GEO_xCapSlice',1
-*get,XSliceCount,parm,GEO_xCapSlice,dim,x
 
-arruniq,'GEO_yTubeSlice','GEO_yCapSlice',1
-*get,YSliceCount,parm,GEO_yCapSlice,dim,x
+arrjoin , 'GEO_PIERCAP_x_slices' , 'GEO_pileXL' , 'zero' , 'front' , 'back'
+arrjoin , 'GEO_PIERCAP_y_slices' , 'GEO_pileYL' , 'zero' , 'left' , 'right'
+
+! Check if unrestrained pile segments were properly defined
+*if,MAT_SOIL_absentOpt,eq,1,then
+  *get,parTypeTop,parm,MAT_SOIL_absent_top,type
+  *get,parTypeBot,parm,MAT_SOIL_absent_bot,type
+  *if,parTypeTop,ne,1,or,parTypeBot,ne,1,then
+    *msg,fatal
+BRIDGE_V1 error: 'MAT_SOIL_absentOpt' was set to 1 but 'MAT_SOIL_absent_top' and/or 'MAT_SOIL_absent_bot' were not defined.%/&
+Run aborted.
+  *endif
+*endif

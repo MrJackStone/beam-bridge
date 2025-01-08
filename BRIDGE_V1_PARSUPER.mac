@@ -40,7 +40,7 @@ GEO_chordOff = 0
 GEO_deckWidths(1)  = GEO_deckWidth_beg , GEO_deckWidth_end
 GEO_deckOffsets(1) = GEO_deckOff_beg   , GEO_deckOff_end
 
-*if,GEO_uniGirderSpacing,EQ,1,THEN
+*if,GEO_uniGirderSpacing,eq,1,then
   *do,deckExtremity,1,2,1
     deckWidth  = GEO_deckWidths(deckExtremity)
     deckOffset = GEO_deckOffsets(deckExtremity)
@@ -112,9 +112,7 @@ GEO_FOOTPATH_arcOffsets(2) = GEO_deckOff_beg+GEO_deckWidth_beg-GEO_footpathRight
   *vfun  , GEO_gerberX_i , comp , GEO_gerberX_sub
   *vmask , activeGerber
   *vfun  , GEO_gerberX_j , comp , GEO_gerberX_add
-*endif
 
-*if,GEO_gerberStatus,eq,1,then
   BRIDGE_V1_XTOCHI , 'GEO_gerberChi_i' , 'GEO_gerberX_i'
   BRIDGE_V1_XTOCHI , 'GEO_gerberChi_j' , 'GEO_gerberX_j'
   BRIDGE_V1_XTOCHI , 'GEO_gerberChi_m' , 'GEO_gerberX_m'

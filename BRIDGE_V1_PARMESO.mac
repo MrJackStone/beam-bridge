@@ -29,6 +29,9 @@
 *elseif,GEO_frameOpt,eq,2,then
   ! Tubular pier column
   *vfill,GEO_mesoType,ramp,CTE_MESO_beamcap,0
+*elseif,GEO_frameOpt,eq,3,then
+  ! Hammerhead
+  *vfill,GEO_mesoType,ramp,CTE_MESO_hammerhead,0
 *endif
 
 *if,GEO_gerberStatus,eq,1,then
@@ -67,6 +70,11 @@ afunbackup
 *enddo
 afunrestore
 
+*if,GEO_frameBotOffStatus,eq,0,then
+  *del,GEO_frameBotOffset,,nopr
+  *dim,GEO_frameBotOffset,ARRAY,GEO_SupportCount
+*endif
+
 
 !!                                                                                                !!
 ! TODO: check temporarily removed (has to be redesigned for skewed multi-span bridges)
@@ -83,11 +91,17 @@ afunrestore
 
 
 !! C.  Pier frame key positions                                                                   !!
+GEO_pierCount = GEO_supportCount-GEO_abutmentCount
+
 ! Vertical positions
-*del , GEO_pierZBot ,  , nopr
-*del , GEO_pierZTop ,  , nopr
-*dim , GEO_pierZBot ,  , GEO_pierCount
-*dim , GEO_pierZTop ,  , GEO_pierCount
+*del , GEO_pierZBot        ,  , nopr
+*del , GEO_pierZTop        ,  , nopr
+*del , GEO_PIER_supportIdx ,  , nopr
+*del , GEO_SUPPORT_pierIdx ,  , nopr
+*dim , GEO_pierZBot        ,  , GEO_pierCount
+*dim , GEO_pierZTop        ,  , GEO_pierCount
+*dim , GEO_PIER_supportIdx ,  , GEO_pierCount
+*dim , GEO_SUPPORT_pierIdx ,  , GEO_supportCount
 
 GEO_colLength = GEO_frameHeight
 *if,SEC_offset,EQ,1,THEN
@@ -101,21 +115,17 @@ zFrameTop = 0
 
 zFrameBot = zFrameTop-GEO_colLength
 
-nthPier = 0
+pierIdx = 0
 *do,nthSupport,1,GEO_supportCount,1
   mesoType = GEO_mesoType(nthSupport)
-  *if,mesoType,eq,CTE_MESO_abutment,then
-    nthPier               = nthPier+1
-    GEO_pierZBot(nthPier) = zFrameBot+GEO_frameBotOffset(nthSupport)
-    GEO_pierZTop(nthPier) = zFrameTop+GEO_frameTopOffset(nthSupport)
-  *endif
-*enddo
+  *if,mesoType,eq,CTE_MESO_abutment,cycle
 
-*if,GEO_waterHeight,ge,GEO_colLength,then
-  GEO_waterHeight = GEO_colLength-0.1
-  *msg,warn,GEO_waterHeight
-WARNING: Water level incompatible with frame height. GEO_WATERHEIGHT reduced to %G.
-*endif
+  pierIdx                         = pierIdx+1
+  GEO_pierZBot(pierIdx)           = zFrameBot+GEO_frameBotOffset(nthSupport)
+  GEO_pierZTop(pierIdx)           = zFrameTop+GEO_frameTopOffset(nthSupport)
+  GEO_PIER_supportIdx(pierIdx)    = nthSupport
+  GEO_SUPPORT_pierIdx(nthSupport) = pierIdx
+*enddo
 
 ! Transversal positions
 yCenterBeg     = GEO_deckOff_beg+(GEO_deckWidth_beg/2)
@@ -130,7 +140,7 @@ deckWidthDelta = GEO_deckWidth_end-GEO_deckWidth_beg
   deckWidth           = deckWidthDelta*skewnessScaleFactor+GEO_deckWidth_beg
   yCenter             = yCenterDelta*skewnessScaleFactor+yCenterBeg
 
-  ! Frame girder
+  ! Frame girder at internal supports & type-6 abutments
   *del , GEO_frameGirderEndsY_%nthFrame% ,  , nopr
   *del , GEO_columnY_%nthFrame%          ,  , nopr
   *dim , GEO_frameGirderEndsY_%nthFrame% ,  , 2
@@ -138,6 +148,17 @@ deckWidthDelta = GEO_deckWidth_end-GEO_deckWidth_beg
 
   GEO_frameGirderEndsY_%nthFrame%(1) = yCenter-(deckWidth/2)         , yCenter+(deckWidth/2)
   GEO_columnY_%nthFrame%(1)          = yCenter-(GEO_columnSpacing/2) , yCenter+(GEO_columnSpacing/2)
+
+  *if,nthFrame,eq,1,and,GEO_ABT1_status,eq,1,then
+    *if,GEO_ABT1_type,eq,6,then
+      GEO_columnY_%nthFrame%(1) = GEO_ABT1_yc-(GEO_ABT1_columnSpacing/2), GEO_ABT1_yc+(GEO_ABT1_columnSpacing/2)
+    *endif
+  *endif
+  *if,nthFrame,eq,GEO_supportCount,and,GEO_ABT2_status,eq,1,then
+    *if,GEO_ABT2_type,eq,6,then
+      GEO_columnY_%nthFrame%(1) = GEO_ABT2_yc-(GEO_ABT2_columnSpacing/2), GEO_ABT2_yc+(GEO_ABT2_columnSpacing/2)
+    *endif
+  *endif
 
   ! Longitudinal girders
   *del,girder_y,,nopr
@@ -155,3 +176,17 @@ deckWidthDelta = GEO_deckWidth_end-GEO_deckWidth_beg
   !       For a permanent solution, frame width has to be given at each support.
 
 *enddo
+
+!! D.  Params related to loads                                                                    !!
+*if,GEO_waterHeight,ge,GEO_colLength,then
+  GEO_waterHeight = GEO_colLength-0.1
+  *msg,warn,GEO_waterHeight
+WARNING: Water level incompatible with frame height. GEO_WATERHEIGHT reduced to %G.
+*endif
+
+! Calculate effective hammerhead pier column width facing water/wind flow
+*if,upcase(GEO_pierColumnShape),eq,'C',then
+  GEO_pierColumnFlowWidth = GEO_pierColumnDiameter
+*elseif,upcase(GEO_pierColumnShape),eq,'R',then
+  GEO_pierColumnFlowWidth = GEO_pierColumnCy
+*endif

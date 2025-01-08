@@ -28,8 +28,7 @@
 
 
 ! Calculate load introduction positions
-afunbackup
-*afun,deg
+afunbackup,'DEG'
 skewedDeltaY = GEO_deckLength*tan(LOAD_ltSkewness)
 afunrestore
 
@@ -86,7 +85,13 @@ nthPath = 0
 *endif
 
 ! Build load train
-loadtrain , LOAD_ltName , LOAD_locRep , 0 , 1 , LOAD_railcarCount ! Output: LOADTRAIN_VAR_count; LOADTRAIN_ARR_positions; LOADTRAIN_ARR_loads
+udlLength = (0>LOAD_railcarCount)
+*if,SOLU_type,eq,1,then
+  ! Remove follower railcars in case of dynamic analysis
+  udlLength = 0
+*endif
+
+loadtrain , LOAD_ltName , LOAD_locRep , 0 , 1 , udlLength ! Output: LOADTRAIN_VAR_count; LOADTRAIN_ARR_positions; LOADTRAIN_ARR_loads
 *del  , LOAD_plDist   ,      , nopr
 *del  , LOAD_plValue  ,      , nopr
 *del  , LOAD_ltLength ,      , nopr
@@ -129,14 +134,29 @@ LOAD_ltLength = LOADTRAIN_VAR_length
 *endif
 
 ! Calculate centrifugal force percentage (AREMA)
+LOAD_centrifugalPct = 0
 *if,GEO_deckRadius,ne,0,then
-  afunbackup
-  *afun,deg
-  LOAD_degreeOfCurve = 2*asin(15.24/GEO_deckRadius)
-  afunrestore
+  afunbackup,'DEG'
+  LOAD_degreeOfCurve  = 2*asin(15.24/GEO_deckRadius)
   LOAD_centrifugalPct = 4.52e-4*(LOAD_speed**2)*LOAD_degreeOfCurve
+  afunrestore
+*endif
+
+! Point-load generated soil pressure calculation method
+*get,parType,parm,LOAD_ltPresMethod,type
+*if,parType,eq,3,then
+  *if,upcase(LOAD_ltPresMethod),eq,'HYDROSTA',then
+    LOAD_ltPresMethod = 'HYDROSTA'
+  *else
+    LOAD_ltPresMethod = 'BOUSSNSQ'
+  *endif
 *else
-  LOAD_centrifugalPct = 0
+  LOAD_ltPresMethod = 'BOUSSNSQ'
+*endif
+
+! Check load train step
+*if,LOAD_ltStep,eq,0,or,LOAD_ltStep,gt,GEO_deckLength/2,then
+   LOAD_ltStep = GEO_deckLength/2
 *endif
 
 ! Define load combination coefficients
