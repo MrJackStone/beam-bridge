@@ -87,7 +87,7 @@ secdata,CONSOLE_b,CONSOLE_h
    secoffset,user,,CONSOLE_h/2
 *endif
 
-!! 2.1.3.5 COLUMNS                                                                                !!
+! Columns
 *if,GEO_frameOpt,eq,3,then
   *if,upcase(GEO_pierColumnShape),eq,'C',then
     sectype,SEC_COLUMN_num,beam,csolid
