@@ -6,9 +6,6 @@ r , REAL_vsoil , SEC_VSOIL_area ,  , 0
 r , REAL_hsoil , SEC_HSOIL_area ,  , 0
 r , REAL_psoil , SEC_PSOIL_area ,  , -1
 
-! Springs
-r,REAL_spring,SEC_SPRING_k  ! TODO  this looks unused, check if it can be eliminated
-
 ! Girder bearing: X
 !   C1  =  KX
 !   C7  = -KX

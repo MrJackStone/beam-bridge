@@ -68,14 +68,13 @@ SEC_ABT2_gradeBeam   = 28
 REAL_vsoil    = 1
 REAL_hsoil    = 2
 REAL_psoil    = 3
-REAL_spring   = 4
-REAL_bearingx = 5
-REAL_bearingy = 6
-REAL_bearingz = 7
-REAL_friction = 8
+REAL_bearingx = 4
+REAL_bearingy = 5
+REAL_bearingz = 6
+REAL_friction = 7
 
-REAL_ABT_kv   = 9
-REAL_ABT_kh   = 10
+REAL_ABT_kv   = 8
+REAL_ABT_kh   = 9
 
 
 !! D.  Coordinate systems                                                                         !!

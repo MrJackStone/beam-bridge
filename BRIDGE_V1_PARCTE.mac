@@ -43,9 +43,7 @@ GEO_longPosKey(1) = 'BEG','END'
 ! Springs
 SEC_VSOIL_area = (MAT_Soil_kv*FEM_springL*FEM_PileELength)/MAT_Soil_E
 SEC_HSOIL_area = (MAT_Soil_kh*FEM_springL*FEM_PileELength)/MAT_Soil_E  ! TODO  multiply by pile diameter (results in AREA per pile)
-SEC_PSOIL_area = (MAT_Soil_kp*FEM_springL)/MAT_SOIL_E
-
-SEC_SPRING_k = 1E10
+SEC_PSOIL_area = (MAT_Soil_kp*FEM_springL)/MAT_Soil_E
 
 ! Length of approach slab under which there is no soil support (springs), measured from abutment face
 FEM_unsupportedAppSlabLength = 2
