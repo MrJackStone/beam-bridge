@@ -42,15 +42,10 @@ GEO_supportChi_L = GEO_supportChi(GEO_supportCount)
 ! WARNING: Frame width incompatible with girder layout. GEO_FRAMEWIDTH increased to %G.
 ! *endif
 
-! Calculate length of the left & right frame girder cantilevers
-GEO_frameGirderLeft=(GEO_frameWidth-GEO_columnSpacing)/2
-GEO_frameGirderRight=GEO_frameGirderLeft
-
 ! Calculate column length
+GEO_colLength = GEO_frameHeight
 *if,SEC_offset,EQ,1,THEN
-   GEO_colLength=GEO_frameHeight-FRAMEGIRDER_h
-*else
-   GEO_colLength=GEO_frameHeight
+   GEO_colLength = GEO_frameHeight-FRAMEGIRDER_h
 *endif
 
 ! Calculate the vertical position of the frame girder keypoints
