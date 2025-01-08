@@ -1,0 +1,90 @@
+! BRIDGE_V1_PARMESO
+
+
+! TODO: check temporarily removed (has to be redesigned for skewed multi-span bridges)
+! ! Check width of the frame
+! leftGirderY=GEO_girderY_beg(GEO_girderCount)
+! rightGirderY=GEO_girderY_beg(1)
+! minFrameWidth=rightGirderY-leftGirderY
+! *if,GEO_frameWidth,LT,minFrameWidth,THEN
+!    GEO_frameWidth=minFrameWidth
+!    *msg,GEO_frameWidth
+! WARNING: Frame width incompatible with girder layout. GEO_FRAMEWIDTH increased to %G.
+! *endif
+
+! Calculate length of the left & right frame girder cantilevers
+GEO_frameGirderLeft=(GEO_frameWidth-GEO_columnSpacing)/2
+GEO_frameGirderRight=GEO_frameGirderLeft
+
+! Calculate column length
+*if,SEC_offset,EQ,1,THEN
+   GEO_colLength=GEO_frameHeight-FRAMEGIRDER_h
+*else
+   GEO_colLength=GEO_frameHeight
+*endif
+
+! Calculate the vertical position of the frame girder keypoints
+*if,SEC_offset,EQ,0,THEN
+  zFrameTop = 0
+*elseif,SEC_offset,EQ,1,THEN
+  zFrameTop = 0-GIRDER_d(1)-FRAMEGIRDER_h !! TODO: contemplate multiple girder heights
+*endif
+
+! Calculate the vertical position of the base of the columns
+zFrameBot=zFrameTop-GEO_colLength
+
+! TODO: array parameter GEO_columnY has been replaced with GEO_columnY_<supportNum>.
+!       Account for this change in the rest of the code.
+
+! Calculate key Y coordinates for frame girders
+! TODO: this does not contemplate tubular pier columns
+yCenterBeg     = GEO_deckOff_beg+(GEO_deckWidth_beg/2)
+yCenterEnd     = GEO_deckOff_end+(GEO_deckWidth_end/2)
+yCenterDelta   = yCenterEnd-yCenterBeg
+deckWidthDelta = GEO_deckWidth_end-GEO_deckWidth_beg
+
+*do,nthFrame,1,GEO_supportCount,1
+
+  ! Get X-coordinate at this support
+  xSupport            = GEO_supportX(nthFrame)
+  skewnessScaleFactor = xSupport/GEO_deckLength
+
+  ! Calculate deck width
+  deckWidth=deckWidthDelta*skewnessScaleFactor+GEO_deckWidth_beg
+
+  ! Calculate Y center
+  yCenter=yCenterDelta*skewnessScaleFactor+yCenterBeg
+
+  ! Calculate frame girder ends Y coordinates
+  *del,GEO_frameGirderEndsY_%nthFrame%,,nopr
+  *dim,GEO_frameGirderEndsY_%nthFrame%,,2
+  GEO_frameGirderEndsY_%nthFrame%(1)=yCenter-(deckWidth/2), yCenter+(deckWidth/2)
+
+  ! Calculate column Y coordinates
+  *del,GEO_columnY_%nthFrame%,,nopr
+  *dim,GEO_columnY_%nthFrame%,,2
+  GEO_columnY_%nthFrame%(1)=yCenter-(GEO_columnSpacing/2), yCenter+(GEO_columnSpacing/2)
+
+  ! Calculate girder Y
+  *del,girder_y,,nopr
+  *vfact,1,1-skewnessScaleFactor,skewnessScaleFactor
+  *voper,girder_y,GEO_girderY_beg,add,GEO_girderY_end
+
+  ! Compose key-Y location array with the following positions:
+  !    left & right columns
+  !    left & right extremities
+  !    girder intersections
+  arrjoin,'y_coords','girder_y','GEO_frameGirderEndsY_%nthFrame%','GEO_columnY_%nthFrame%'
+  arruniq,'y_coords','GEO_frameGirderY_%nthFrame%',1
+
+  ! TODO: Currently using deck width at support as frame width.
+  !       For a permanent solution, frame width has to be given at each support.
+
+*enddo
+
+! Check compatibility between water level and column height
+*if,GEO_waterHeight,GE,GEO_colLength,THEN
+   GEO_waterHeight=GEO_colLength-0.1
+   *msg,WARN,GEO_waterHeight
+WARNING: Water level incompatible with frame height. GEO_WATERHEIGHT reduced to %G.
+*endif
