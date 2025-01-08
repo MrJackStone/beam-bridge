@@ -10,9 +10,6 @@ R,SEC_HSOIL_num,SEC_HSOIL_area,,0
 !! 2.1.3.12 SOIL: VERTICAL STIFFNESS AT PILE END                                                  !!
 R,SEC_PSOIL_num,SEC_PSOIL_area,,-1
 
-!! 2.1.3.13 SPRINGS                                                                               !!
-R,SEC_SPRING_num,SEC_SPRING_k
-
 !! 2.1.3.14 BEARING (X)                                                                           !!
 ! Set stiffness matrix values:
 !    C1  =  KX
