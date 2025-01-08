@@ -55,12 +55,6 @@ GEO_colLength = GEO_frameHeight
   zFrameTop = 0-GIRDER_d(1)-FRAMEGIRDER_h !! TODO: contemplate multiple girder heights
 *endif
 
-! Calculate the vertical position of the base of the columns
-zFrameBot=zFrameTop-GEO_colLength
-
-! TODO: array parameter GEO_columnY has been replaced with GEO_columnY_<supportNum>.
-!       Account for this change in the rest of the code.
-
 ! Calculate key Y coordinates for frame girders
 ! TODO: this does not contemplate tubular pier columns
 yCenterBeg     = GEO_deckOff_beg+(GEO_deckWidth_beg/2)
