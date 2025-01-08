@@ -1,34 +1,10 @@
-! BRIDGE_V1_ATTR
+! BRIDGE_V1_PARCALC
 
 
-!!                                                                                                !!
-!!                                                                                                !!
-!! 2. PREPARATION                                                                                 !!
-!!                                                                                                !!
-!!                                                                                                !!
-/prep7
-
-! Create results and images directories
-mkdirs,1
-
-!!                                                                                                !!
-!! 2.0  Set params                                                                                !!
-!!                                                                                                !!
-BRIDGE_V1_PARDEF
-
-
-!!                                                                                                !!
-!! 2.1  Mesh attributes                                                                           !!
-!!                                                                                                !!
-BRIDGE_V1_MATERIALS
-
-BRIDGE_V1_ETYPES
-
-BRIDGE_V1_SECTIONS
-
-BRIDGE_V1_REALCONSTS
-
-BRIDGE_V1_CSYS
+GEO_chordOff = 0
+*if,GEO_deckRadius,ne,0,then
+  GEO_chordOff = (1/2)*sqrt(4*(GEO_deckRadius**2)-(GEO_deckLength**2))
+*endif
 
 
 !!                                                                                                !!
@@ -176,6 +152,10 @@ BRIDGE_V1_XTOCHI , 'GEO_midspanChi' , 'GEO_midspanX'
 GEO_supportChi_0 = GEO_supportChi(1)
 GEO_supportChi_L = GEO_supportChi(GEO_supportCount)
 
+*do,nthPier,1,GEO_pierCount,1 ! TODO  used before it is defined
+
+*enddo
+
 *if,GEO_gerberStatus,eq,1,then
   BRIDGE_V1_XTOCHI, 'GEO_gerberChi_i', 'GEO_gerberX_i'
   BRIDGE_V1_XTOCHI, 'GEO_gerberChi_j', 'GEO_gerberX_j'
@@ -223,6 +203,10 @@ arrjoin , 'GEO_arc_offsets' , 'GEO_WHEELPATH_arcOffsets' , 'GEO_FOOTPATH_arcOffs
 ! WARNING: Frame width incompatible with girder layout. GEO_FRAMEWIDTH increased to %G.
 ! *endif
 
+! Calculate length of the left & right frame girder cantilevers
+GEO_frameGirderLeft=(GEO_frameWidth-GEO_columnSpacing)/2
+GEO_frameGirderRight=GEO_frameGirderLeft
+
 ! Calculate column length
 *if,SEC_offset,EQ,1,THEN
    GEO_colLength=GEO_frameHeight-FRAMEGIRDER_h
@@ -239,47 +223,6 @@ arrjoin , 'GEO_arc_offsets' , 'GEO_WHEELPATH_arcOffsets' , 'GEO_FOOTPATH_arcOffs
 
 ! Calculate the vertical position of the base of the columns
 zFrameBot=zFrameTop-GEO_colLength
-
-! Number of piers
-GEO_pierCount = GEO_supportCount-(GEO_ABT1_status+GEO_ABT2_status)
-
-! Calculate pier coordinates & support index correspondence
-*if,GEO_frameBotOffStatus,eq,0,then
-  *del,GEO_frameBotOffset,,nopr
-  *dim,GEO_frameBotOffset,ARRAY,GEO_SupportCount
-*endif
-
-*del , GEO_pierX           ,  , nopr
-*del , GEO_pierZBot        ,  , nopr
-*del , GEO_pierZTop        ,  , nopr
-*del , GEO_PIER_supportIdx ,  , nopr
-*del , GEO_SUPPORT_pierIdx ,  , nopr
-*dim , GEO_pierX           ,  , GEO_pierCount
-*dim , GEO_pierZBot        ,  , GEO_pierCount
-*dim , GEO_pierZTop        ,  , GEO_pierCount
-*dim , GEO_PIER_supportIdx ,  , GEO_pierCount
-*dim , GEO_SUPPORT_pierIdx ,  , GEO_supportCount
-pierIdx = 0
-*do,nthSupport,1,GEO_supportCount,1
-  skip = 0
-  *if,nthSupport,eq,1,and,GEO_ABT1_status,eq,1,then
-    skip = 1
-  *elseif,nthSupport,eq,GEO_supportCount,and,GEO_ABT2_status,eq,1,then
-    skip = 1
-  *endif
-  *if,skip,eq,0,then
-    pierIdx                         = pierIdx+1
-    GEO_pierX(pierIdx)              = GEO_supportX(nthSupport)
-    GEO_pierZBot(pierIdx)           = zFrameBot+GEO_frameBotOffset(nthSupport)
-    GEO_pierZTop(pierIdx)           = zFrameTop+GEO_frameTopOffset(nthSupport)
-    GEO_PIER_supportIdx(pierIdx)    = nthSupport
-    GEO_SUPPORT_pierIdx(nthSupport) = pierIdx
-  *endif
-*enddo
-
-! Calculate length of the left & right frame girder cantilevers
-GEO_frameGirderLeft=(GEO_frameWidth-GEO_columnSpacing)/2
-GEO_frameGirderRight=GEO_frameGirderLeft
 
 ! TODO: array parameter GEO_columnY has been replaced with GEO_columnY_<supportNum>.
 !       Account for this change in the rest of the code.
@@ -330,13 +273,6 @@ deckWidthDelta = GEO_deckWidth_end-GEO_deckWidth_beg
 
 *enddo
 
-! Calculate effective hammerhead pier column width facing water/wind flow
-*if,upcase(GEO_pierColumnShape),eq,'C',then
-  GEO_pierColumnFlowWidth = GEO_pierColumnDiameter
-*elseif,upcase(GEO_pierColumnShape),eq,'R',then
-  GEO_pierColumnFlowWidth = GEO_pierColumnCy
-*endif
-
 ! Check compatibility between water level and column height
 *if,GEO_waterHeight,GE,GEO_colLength,THEN
    GEO_waterHeight=GEO_colLength-0.1
@@ -347,10 +283,8 @@ WARNING: Water level incompatible with frame height. GEO_WATERHEIGHT reduced to 
 !
 !! 2.2.3 INFRASTRUCTURE   *** this needs revising ***                                             !!
 !!                                                                                                !!
-! Force single pile cap option for tubular i& hammerhead piers
+! Force single pile cap option for tubular piers
 *if,GEO_frameOpt,eq,1,then
-  GEO_capOpt = 1
-*elseif,GEO_frameOpt,eq,3,then
   GEO_capOpt = 1
 *endif
 
@@ -362,65 +296,198 @@ WARNING: Water level incompatible with frame height. GEO_WATERHEIGHT reduced to 
   *vfill,GEO_pileLengths,ramp,GEO_pileL,0
 *endif
 
-! Determine pile segments without lateral soil restraint
-*if,MAT_SOIL_absentOpt,eq,1,then
-  *get,parType,parm,MAT_SOIL_absent_top,type
-  *if,parType,ne,1,then
-    *del,MAT_SOIL_absent_top,,nopr
-    *dim,MAT_SOIL_absent_top,,GEO_supportCount
-    *vfill,MAT_SOIL_absent_top,ramp,MAT_SOIL_absentTop,0
-  *endif
+! Initialize pile position arrays
+*del , GEO_pileXL ,  , nopr
+*del , GEO_pileYL ,  , nopr
+*dim , GEO_pileXL ,  , GEO_pileCount
+*dim , GEO_pileYL ,  , GEO_pileCount
 
-  *get,parType,parm,MAT_SOIL_absent_bot,type
-  *if,parType,ne,1,then
-    *del,MAT_SOIL_absent_bot,,nopr
-    *dim,MAT_SOIL_absent_bot,,GEO_supportCount
-    *vfill,MAT_SOIL_absent_bot,ramp,MAT_SOIL_absentBot,0
-  *endif
+! Calculate relative coordinates of the piles in the pile cap
+*if,GEO_pileCount,EQ,2,THEN
+   ! Two piles
+   *if,GEO_pileConfig,EQ,'A',THEN
+      GEO_pileXL(1)        = 0,0
+      GEO_pileYL(1)        = -GEO_pileDistTran/2,GEO_pileDistTran/2
+      GEO_pileCapMinLength = (GEO_pileDistTran)+(2*PILE_d)
+      GEO_pileCapMinWidth  = (2*PILE_d)
+   *elseif,GEO_pileConfig,EQ,'B',THEN
+      GEO_pileXL(1)        = GEO_pileDistLong/2,-GEO_pileDistLong/2
+      GEO_pileYL(1)        = 0,0
+      GEO_pileCapMinLength = (2*PILE_d)
+      GEO_pileCapMinWidth  = (GEO_pileDistLong)+(2*PILE_d)
+   *endif
+
+*elseif,GEO_pileCount,EQ,3,THEN
+   ! Three piles
+   *if,GEO_pileConfig,EQ,'A',THEN
+      GEO_pileXL(1)        = 0                 , 0 , 0
+      GEO_pileYL(1)        = -GEO_pileDistTran , 0 , GEO_pileDistTran
+      GEO_pileCapMinLength = (2*GEO_pileDistTran)+(2*PILE_d)
+      GEO_pileCapMinWidth  = (2*PILE_d)
+   *elseif,GEO_pileConfig,EQ,'B',THEN
+      GEO_pileXL(1)        = GEO_pileDistLong , 0 , -GEO_pileDistLong
+      GEO_pileYL(1)        = 0                , 0 , 0
+      GEO_pileCapMinLength = (2*PILE_d)
+      GEO_pileCapMinWidth  = (2*GEO_pileDistLong)+(2*PILE_d)
+   *elseif,GEO_pileConfig,EQ,'C',THEN
+      GEO_pileXL(1)        = GEO_pileDistLong*(SQRT(3)/6) , GEO_pileDistLong*(SQRT(3)/6) , -GEO_pileDistLong*(SQRT(3)/3)
+      GEO_pileYL(1)        = -GEO_pileDistTran/2          , GEO_pileDistTran/2           , 0
+      GEO_pileCapMinLength = (GEO_pileDistTran)+(2*PILE_d)
+      GEO_pileCapMinWidth  = ((2/3)*(SQRT(3))*GEO_pileDistLong)+(2*PILE_d)
+   *endif
+
+*elseif,GEO_pileCount,EQ,4,THEN
+   ! Four piles
+   *if,GEO_pileConfig,EQ,'A',THEN
+      GEO_pileXL(1)        = GEO_pileDistLong/2  , GEO_pileDistLong/2 , -GEO_pileDistLong/2 , -GEO_pileDistLong/2
+      GEO_pileYL(1)        = -GEO_pileDistTran/2 , GEO_pileDistTran/2 , -GEO_pileDistTran/2 , GEO_pileDistTran/2
+      GEO_pileCapMinLength = (GEO_pileDistTran)+(2*PILE_d)
+      GEO_pileCapMinWidth  = (GEO_pileDistLong)+(2*PILE_d)
+   *elseif,GEO_pileConfig,EQ,'B',THEN
+      GEO_pileXL(1)        = 0                     , 0                   , 0                  , 0
+      GEO_pileYL(1)        = -1.5*GEO_pileDistTran , -GEO_pileDistTran/2 , GEO_pileDistTran/2 , 1.5*GEO_pileDistTran
+      GEO_pileCapMinLength = (3*GEO_pileDistTran)+(2*PILE_d)
+      GEO_pileCapMinWidth  = (2*PILE_d)
+   *elseif,GEO_pileConfig,EQ,'C',THEN
+      GEO_pileXL(1)        = 1.5*GEO_pileDistLong , GEO_pileDistLong/2 , -GEO_pileDistLong/2 , -1.5*GEO_pileDistLong
+      GEO_pileYL(1)        = 0                    , 0                  , 0                   , 0
+      GEO_pileCapMinLength = (2*PILE_d)
+      GEO_pileCapMinWidth  = (3*GEO_pileDistLong)+(2*PILE_d)
+   *endif
+
+*elseif,GEO_pileCount,EQ,5,THEN
+   ! Five piles
+   *if,GEO_pileConfig,EQ,'A',THEN
+      GEO_pileXL(1)        = GEO_pileDistLong*(SQRT(2)/2)  , GEO_pileDistLong*(SQRT(2)/2) , 0 , -GEO_pileDistLong*(SQRT(2)/2) , -GEO_pileDistLong*(SQRT(2)/2)
+      GEO_pileYL(1)        = -GEO_pileDistTran*(SQRT(2)/2) , GEO_pileDistTran*(SQRT(2)/2) , 0 , -GEO_pileDistTran*(SQRT(2)/2) , GEO_pileDistTran*(SQRT(2)/2)
+      GEO_pileCapMinLength = ((SQRT(2)*GEO_pileDistTran)+(2*PILE_d)
+      GEO_pileCapMinWidth  = ((SQRT(2)*GEO_pileDistLong)+(2*PILE_d)
+   *elseif,GEO_pileConfig,EQ,'B',THEN
+      GEO_pileXL(1)        = (0.85065)*GEO_pileDistLong , (0.26287)*GEO_pileDistLong  , (0.26287)*GEO_pileDistLong , -(0.68819)*GEO_pileDistLong , -(0.68819)*GEO_pileDistLong
+      GEO_pileYL(1)        = 0                          , -(0.80902)*GEO_pileDistTran , (0.80902)*GEO_pileDistTran , -(0.5)*GEO_pileDistTran     , (0.5)*GEO_pileDistTran
+      GEO_pileCapMinLength = ((1.61804)*GEO_pileDistTran)+(2*PILE_d)
+      GEO_pileCapMinWidth  = ((1.70130)*GEO_pileDistLong)+(2*PILE_d)
+   *endif
+
+*elseif,GEO_pileCount,EQ,6,THEN
+   ! Six piles
+   *if,GEO_pileConfig,EQ,'A',THEN
+      GEO_pileXL(1)        = GEO_pileDistLong/2 , GEO_pileDistLong/2 , GEO_pileDistLong/2 , -GEO_pileDistLong/2 , -GEO_pileDistLong/2 , -GEO_pileDistLong/2
+      GEO_pileYL(1)        = -GEO_pileDistTran  , 0                  , GEO_pileDistTran   , -GEO_pileDistTran   , 0                   , GEO_pileDistTran
+      GEO_pileCapMinLength = (2*GEO_pileDistTran)+(2*PILE_d)
+      GEO_pileCapMinWidth  = (GEO_pileDistLong)+(2*PILE_d)
+   *elseif,GEO_pileConfig,EQ,'B',THEN
+      GEO_pileXL(1)        = GEO_pileDistLong    , GEO_pileDistLong   , 0                   , 0                  , -GEO_pileDistLong   , -GEO_pileDistLong
+      GEO_pileYL(1)        = -GEO_pileDistTran/2 , GEO_pileDistTran/2 , -GEO_pileDistTran/2 , GEO_pileDistTran/2 , -GEO_pileDistTran/2 , GEO_pileDistTran/2
+      GEO_pileCapMinLength = (GEO_pileDistTran)+(2*PILE_d)
+      GEO_pileCapMinWidth  = (2*GEO_pileDistLong)+(2*PILE_d)
+   *endif
+
+*elseif,GEO_pileCount,EQ,8,THEN
+   ! Eight piles:
+   d_1 = GEO_pileDistTran
+   d_2 = GEO_pileDistLong/2
+   *if,GEO_pileConfig,EQ,'A',THEN
+      GEO_pileXL(1)        = d_2      , d_2      , d_2     , d_2     , -d_2     , -d_2     , -d_2    , -d_2
+      GEO_pileYL(1)        = -1.5*d_1 , -0.5*d_1 , 0.5*d_1 , 1.5*d_1 , -1.5*d_1 , -0.5*d_1 , 0.5*d_1 , 1.5*d_1
+      GEO_pileCapMinLength = (3*GEO_pileDistTran)+(2*PILE_d)
+      GEO_pileCapMinWidth  = (GEO_pileDistLong)+(2*PILE_d)
+   *elseif,GEO_pileConfig,EQ,'B',THEN
+      !GEO_pileXL(1)=GEO_pileDistLong,GEO_pileDistLong,0,0,-GEO_pileDistLong,-GEO_pileDistLong
+      !GEO_pileYL(1)=-GEO_pileDistTran/2,GEO_pileDistTran/2,-GEO_pileDistTran/2,GEO_pileDistTran/2,-GEO_pileDistTran/2,GEO_pileDistTran/2
+      !GEO_pileCapMinLength=(GEO_pileDistTran)+(2*PILE_d)
+      !GEO_pileCapMinWidth=(2*GEO_pileDistLong)+(2*PILE_d)
+   *endif
+
+*elseif,GEO_pileCount,EQ,9,THEN
+   ! Nine piles
+   GEO_pileXL(1)        = GEO_pileDistLong  , GEO_pileDistLong , GEO_pileDistLong , 0                 , 0 , 0                , -GEO_pileDistLong , -GEO_pileDistLong , -GEO_pileDistLong
+   GEO_pileYL(1)        = -GEO_pileDistTran , 0                , GEO_pileDistTran , -GEO_pileDistTran , 0 , GEO_pileDistTran , -GEO_pileDistTran , 0                 , GEO_pileDistTran
+   GEO_pileCapMinLength = (2*GEO_pileDistTran)+(2*PILE_d)
+   GEO_pileCapMinWidth  = (2*GEO_pileDistLong)+(2*PILE_d)
+
+*elseif,GEO_pileCount,EQ,10,THEN
+   ! Ten piles:
+   d_1 = GEO_pileDistTran
+   d_2 = GEO_pileDistLong/2
+   *if,GEO_pileConfig,EQ,'A',THEN
+      GEO_pileXL(1)        = d_2     , d_2  , d_2 , d_2 , d_2   , -d_2   , -d_2 , -d_2 , -d_2 , -d_2
+      GEO_pileYL(1)        = - 2*d_1 , -d_1 , 0   , d_1 , 2*d_1 , -2*d_1 , -d_1 , 0    , d_1  , 2*d_1
+      GEO_pileCapMinLength = (4*GEO_pileDistTran)+(2*PILE_d)
+      GEO_pileCapMinWidth  = (GEO_pileDistLong)+(2*PILE_d)
+   *elseif,GEO_pileConfig,EQ,'B',THEN
+      !GEO_pileXL(1)=GEO_pileDistLong,GEO_pileDistLong,0,0,-GEO_pileDistLong,-GEO_pileDistLong
+      !GEO_pileYL(1)=-GEO_pileDistTran/2,GEO_pileDistTran/2,-GEO_pileDistTran/2,GEO_pileDistTran/2,-GEO_pileDistTran/2,GEO_pileDistTran/2
+      !GEO_pileCapMinLength=(GEO_pileDistTran)+(2*PILE_d)
+      !GEO_pileCapMinWidth=(2*GEO_pileDistLong)+(2*PILE_d)
+   *endif
+
 *endif
 
-! Calculate pier piles data
-! Note: prepared to implementation of non-uniform piers (TODO)
-BRIDGE_V1_CALCPILECOORDS , 'GEO_pileXL' , 'GEO_pileYL' , GEO_pileCount , GEO_pileConfig , PILE_d , GEO_pileDistLong , GEO_pileDistTran , COLUMN_cx , COLUMN_cy , GEO_capLength , GEO_capWidth
+! Correct minimum dimensions of pile cap
+*if,GEO_pileCapMinLength,LT,COLUMN_cy,THEN
+   GEO_pileCapMinLength=COLUMN_cy
+*endif
+*if,GEO_pileCapMinWidth,LT,COLUMN_cx,THEN
+   GEO_pileCapMinWidth=COLUMN_cx
+*endif
+*if,GEO_capLength,LT,GEO_pileCapMinLength,THEN
+   GEO_capLength=GEO_pileCapMinLength
+   *msg,WARN,GEO_capLength
+WARNING: Pile cap length too small. Size increased to %Gm.
+*endif
+*if,GEO_capWidth,LT,GEO_pileCapMinWidth,THEN
+   GEO_capWidth=GEO_pileCapMinWidth
+   *msg,WARN,GEO_capWidth
+WARNING: Pile cap width too small. Size increased to %Gm.
+*endif
 
-*do,nthPier,1,GEO_pierCount,1
+! Calculate X positions in which to slice tubular column piers
+zero=0
+arrjoin,'xCoords','GEO_pileXL','zero'
+arruniq,'xCoords','GEO_xTubeSlice',1
+*get,XTubeSliceCount,PARM,GEO_xTubSlice,DIM,X
 
-  supportIdx = GEO_PIER_supportIdx(nthPier)
-
-  *del,GEO_PIER%nthPier%_pile_data,,nopr
-  *dim,GEO_PIER%nthPier%_pile_data,,GEO_pileCount
-
-  *do,nthPile,1,GEO_pileCount,1
-    GEO_PIER%nthPier%_pile_data(1,nthPile) = GEO_pileXL(nthPile)
-    GEO_PIER%nthPier%_pile_data(2,nthPile) = GEO_pileYL(nthPile)
-    GEO_PIER%nthPier%_pile_data(3,nthPile) = GEO_pileLengths(supportIdx)
-    GEO_PIER%nthPier%_pile_data(4,nthPile) = GEO_pileYAngle(nthPile)  ! TODO  these X & Y angles don't exactly match the alpha & beta
-    GEO_PIER%nthPier%_pile_data(5,nthPile) = GEO_pileXAngle(nthPile)  !       approach adopted for pile data -- revise DATA and elsewhere
-    GEO_PIER%nthPier%_pile_data(6,nthPile) = 0
-  *enddo
-*enddo
-
-! Calculate pier pile cap slicing positions
-zero  = 0
-front = 0
-back  = 0
-left  = 0
-right = 0
-
+! Calculate Y positions in which to slice tubular column piers
 *if,GEO_frameOpt,eq,0,then
-  ! Column-girder frame
-  left  = -GEO_columnSpacing/2
-  right =  GEO_columnSpacing/2
-*elseif,GEO_frameOpt,eq,1,then
-  ! Tubular pier column
-  left  = -GEO_columnWidth/2
-  right =  GEO_columnWidth/2
-  front =  GEO_columnDepth/2
-  back  = -GEO_columnDepth/2
+    ! Column-girder frame
+    *del,ycols
+    *dim,ycols,,2
+    ycols(1)=-GEO_columnSpacing/2,GEO_columnSpacing/2
+*else
+    ! Tubular pier column
+    *del,ycols
+    *dim,ycols,,1
+    ycols(1)=0
 *endif
 
-arrjoin , 'GEO_PIERCAP_x_slices' , 'GEO_pileXL' , 'zero' , 'front' , 'back'
-arrjoin , 'GEO_PIERCAP_y_slices' , 'GEO_pileYL' , 'zero' , 'left' , 'right'
+arrjoin,'yCoords','GEO_pileYL','zero','ycols'
+arruniq,'yCoords','GEO_yTubeSlice',1
+*get,YTubeSliceCount,PARM,GEO_yCapSlice,DIM,X
+
+! Calculate positions in which to slice the pile cap along the YZ plane
+*if,GEO_frameOpt,eq,1,then
+  ! Tubular pier column
+  front = GEO_columnDepth/2
+  back  = -GEO_columnDepth/2
+*else
+  ! Column-girder frame
+  front = 0
+  back  = 0
+*endif
+arrjoin,'xCoords','GEO_xTubeSlice','front','back'
+arruniq,'xCoords','GEO_xCapSlice',1
+*get,XSliceCount,PARM,GEO_xCapSlice,DIM,X
+
+! Calculate positions in which to slice the pile cap along the XZ plane
+! TODO: this is gonna be a bitch to fix...
+*if,GEO_pileOpt,eq,0,then
+  arrjoin,'yCoords','GEO_yTubeSlice','zero'
+*elseif,GEO_pileOpt,eq,1,then
+  arrjoin,'yCoords','GEO_yTubeSlice','GEO_columnY'
+*endif
+arruniq,'yCoords','GEO_yCapSlice',1
+*get,YSliceCount,PARM,GEO_yCapSlice,DIM,X
 
 ! Determine the Z coordinate (vertical position) of the top & bottom of each pile
 *if,SEC_offset,EQ,1,THEN
@@ -433,7 +500,19 @@ arrjoin , 'GEO_PIERCAP_y_slices' , 'GEO_pileYL' , 'zero' , 'left' , 'right'
 !! 2.2.4 ABUTMENTS                                                                                !!
 !!                                                                                                !!
 ! Abutments status
-GEO_ABT_status = (GEO_ABT1_status>GEO_ABT2_status)
+*if,GEO_ABT_status,eq,0,then
+    GEO_ABT1_status=0
+    GEO_ABT2_status=0
+*elseif,GEO_ABT_status,eq,1,then
+    GEO_ABT1_status=1
+    GEO_ABT2_status=1
+*elseif,GEO_ABT_status,eq,2,then
+    GEO_ABT1_status=1
+    GEO_ABT2_status=0
+*elseif,GEO_ABT_status,eq,3,then
+    GEO_ABT1_status=0
+    GEO_ABT2_status=1
+*endif
 
 ! Approach slab status
 GEO_ABT1_appSlab=nint(((GEO_ABT1_appSlab>0)<1))
@@ -454,14 +533,6 @@ GEO_ABT2_appSlab=nint(((GEO_ABT2_appSlab>0)<1))
 GEO_ABT1_yc=GEO_deckOff_beg+(GEO_deckWidth_beg/2)
 GEO_ABT2_yc=GEO_deckOff_end+(GEO_deckWidth_end/2)
 
-! Fix global CS position of columns when first and/or last supports are abutment type 6
-*if,GEO_ABT1_status,eq,1,and,GEO_ABT1_type,eq,6,then
-  GEO_columnY_1(1) = GEO_ABT1_yc-(GEO_ABT1_columnSpacing/2), GEO_ABT1_yc+(GEO_ABT1_columnSpacing/2)
-*endif
-*if,GEO_ABT2_status,eq,1,and,GEO_ABT2_type,eq,2,then
-  GEO_columnY_%GEO_supportCount%(1) = GEO_ABT2_yc-(GEO_ABT2_columnSpacing/2), GEO_ABT2_yc+(GEO_ABT2_columnSpacing/2)
-*endif
-
 ! Surface area at the top of each abutment
 *if,GEO_ABT1_appSlab,eq,1,then
   GEO_ABT1_topSurfArea = GEO_ABT1_width*GEO_ABT1_appSlabL
@@ -474,6 +545,7 @@ GEO_ABT2_yc=GEO_deckOff_end+(GEO_deckWidth_end/2)
 *else
   GEO_ABT2_topSurfArea = GEO_ABT2_width*GEO_ABT2_length
 *endif
+
 
 ! Calculate number of piles (for curtain option)
 pileWidth=SEC_ABT_pile_d-2*GEO_ABT_pileOvlap
@@ -494,43 +566,6 @@ pileWidth=SEC_ABT_pile_d-2*GEO_ABT_pileOvlap
     GEO_ABT2_pileCapL=GEO_ABT2_length+(GEO_ABT2_pileCapW/2)
 *endif
 
-! Pile & pile cap data for frame-type abutment
-zero = 0
-*if,GEO_ABT1_type,eq,6,then
-  BRIDGE_V1_CALCPILECOORDS , 'GEO_ABT1_x_piles' , 'GEO_ABT1_y_piles' , GEO_ABT1_pileCount , GEO_ABT1_pileConfig , SEC_ABT_pile_d , GEO_ABT1_pilePitchX , GEO_ABT1_pilePitchY , GEO_ABT1_columnCx , GEO_ABT1_columnCy , GEO_ABT1_pileCapL , GEO_ABT1_pileCapW
-  *del,GEO_ABT1_pile_data,,nopr
-  *dim,GEO_ABT1_pile_data,,6,GEO_ABT1_pileCount
-  *do,nthPile,1,GEO_ABT1_pileCount,1
-    GEO_ABT1_pile_data(1,nthPile) = GEO_ABT1_x_piles(nthPile)
-    GEO_ABT1_pile_data(2,nthPile) = GEO_ABT1_y_piles(nthPile)
-    GEO_ABT1_pile_data(3,nthPile) = GEO_ABT1_pileL
-    GEO_ABT1_pile_data(4,nthPile) = GEO_ABT1_pileAlpha(nthPile)
-    GEO_ABT1_pile_data(5,nthPile) = GEO_ABT1_pileBeta(nthPile)
-    GEO_ABT1_pile_data(6,nthPile) = 0
-  *enddo
-  left  = -GEO_ABT1_columnSpacing/2
-  right =  GEO_ABT1_columnSpacing/2
-  arrjoin , 'GEO_ABT1_CAP_x_slices' , 'GEO_ABT1_x_piles'  , 'zero'
-  arrjoin , 'GEO_ABT1_CAP_y_slices' , 'GEO_ABT1_y_piles'  , 'zero' , 'left' , 'right'
-*endif
-*if,GEO_ABT2_type,eq,6,then
-  BRIDGE_V1_CALCPILECOORDS , 'GEO_ABT2_x_piles' , 'GEO_ABT2_y_piles' , GEO_ABT2_pileCount , GEO_ABT2_pileConfig , SEC_ABT_pile_d , GEO_ABT2_pilePitchX , GEO_ABT2_pilePitchY , GEO_ABT2_columnCx , GEO_ABT2_columnCy , GEO_ABT2_pileCapL , GEO_ABT2_pileCapW
-  *del,GEO_ABT2_pile_data,,nopr
-  *dim,GEO_ABT2_pile_data,,6,GEO_ABT2_pileCount
-  *do,nthPile,1,GEO_ABT2_pileCount,1
-    GEO_ABT2_pile_data(1,nthPile) = GEO_ABT2_x_piles(nthPile)
-    GEO_ABT2_pile_data(2,nthPile) = GEO_ABT2_y_piles(nthPile)
-    GEO_ABT2_pile_data(3,nthPile) = GEO_ABT2_pileL
-    GEO_ABT2_pile_data(4,nthPile) = GEO_ABT2_pileAlpha(nthPile)
-    GEO_ABT2_pile_data(5,nthPile) = GEO_ABT2_pileBeta(nthPile)
-    GEO_ABT2_pile_data(6,nthPile) = 0
-  *enddo
-  left  = -GEO_ABT2_columnSpacing/2
-  right =  GEO_ABT2_columnSpacing/2
-  arrjoin , 'GEO_ABT2_CAP_x_slices' , 'GEO_ABT2_x_piles'  , 'zero'
-  arrjoin , 'GEO_ABT2_CAP_y_slices' , 'GEO_ABT2_y_piles'  , 'zero' , 'left' , 'right'
-*endif
-
 ! Thin transversal wall depth
 *get,parType,parm,GEO_ABT1_thinTranWallDepth,type
 *if,parType,ne,0,then
@@ -543,28 +578,22 @@ zero = 0
 
 ! Create abutment geometry arrays
 *del,GEO_ABT1_geometry
-*dim,GEO_ABT1_geometry,,42
-GEO_ABT1_geometry(1)  = GEO_ABT1_type          , GEO_deckWidth_beg   , GEO_deckOff_beg      , GEO_ABT1_yc                , GEO_ABT1_appSlab
-GEO_ABT1_geometry(6)  = GEO_ABT1_appSlabL      , GEO_ABT1_height     , GEO_ABT1_length      , GEO_ABT1_longPiles         , GEO_ABT1_pileCapL
-GEO_ABT1_geometry(11) = GEO_ABT1_pileCapW      , GEO_ABT1_pileL      , GEO_ABT1_topOffset   , GEO_ABT1_tranPiles         , GEO_ABT1_wings
-GEO_ABT1_geometry(16) = GEO_ABT1_wingHa        , GEO_ABT1_wingL      , GEO_ABT1_pileAngle   , GEO_ABT1_suppressLW        , GEO_ABT1_curtainL
-GEO_ABT1_geometry(21) = GEO_ABT1_pileFree      , GEO_ABT1_pileShort  , GEO_ABT1_trvPileCols , GEO_ABT1_wingPileCols      , GEO_ABT1_wingCapLength
-GEO_ABT1_geometry(26) = GEO_ABT1_wingCapWidth  , GEO_ABT1_wingAngle  , GEO_ABT1_width       , GEO_ABT1_thinTranWallDepth , GEO_ABT1_beamOpt
-GEO_ABT1_geometry(31) = GEO_ABT1_pileCapOffset , GEO_ABT1_postHeight , GEO_ABT_postCx       , GEO_ABT_postCy             , GEO_ABT1_postOffset
-GEO_ABT1_geometry(36) = GEO_ABT1_appSlabW      , GEO_ABT1_columnCx   , GEO_ABT1_columnCy    , GEO_ABT1_columnSpacing     , GEO_ABT1_capOpt
-GEO_ABT1_geometry(41) = GEO_ABT1_girderB       , GEO_ABT1_girderH
+*dim,GEO_ABT1_geometry,,30
+GEO_ABT1_geometry(1)  = GEO_ABT1_type         , GEO_deckWidth_beg  , GEO_deckOff_beg      , GEO_ABT1_yc                , GEO_ABT1_appSlab
+GEO_ABT1_geometry(6)  = GEO_ABT1_appSlabL     , GEO_ABT1_height    , GEO_ABT1_length      , GEO_ABT1_longPiles         , GEO_ABT1_pileCapL
+GEO_ABT1_geometry(11) = GEO_ABT1_pileCapW     , GEO_ABT1_pileL     , GEO_ABT1_topOffset   , GEO_ABT1_tranPiles         , GEO_ABT1_wings
+GEO_ABT1_geometry(16) = GEO_ABT1_wingHa       , GEO_ABT1_wingL     , GEO_ABT1_pileAngle   , GEO_ABT1_suppressLW        , GEO_ABT1_curtainL
+GEO_ABT1_geometry(21) = GEO_ABT1_pileFree     , GEO_ABT1_pileShort , GEO_ABT1_trvPileCols , GEO_ABT1_wingPileCols      , GEO_ABT1_wingCapLength
+GEO_ABT1_geometry(26) = GEO_ABT1_wingCapWidth , GEO_ABT1_wingAngle , GEO_ABT1_width       , GEO_ABT1_thinTranWallDepth , GEO_ABT1_beamOpt
 
 *del,GEO_ABT2_geometry
-*dim,GEO_ABT2_geometry,,42
-GEO_ABT2_geometry(1)  = GEO_ABT2_type          , GEO_deckWidth_end   , GEO_deckOff_end      , GEO_ABT2_yc                , GEO_ABT2_appSlab
-GEO_ABT2_geometry(6)  = GEO_ABT2_appSlabL      , GEO_ABT2_height     , GEO_ABT2_length      , GEO_ABT2_longPiles         , GEO_ABT2_pileCapL
-GEO_ABT2_geometry(11) = GEO_ABT2_pileCapW      , GEO_ABT2_pileL      , GEO_ABT2_topOffset   , GEO_ABT2_tranPiles         , GEO_ABT2_wings
-GEO_ABT2_geometry(16) = GEO_ABT2_wingHa        , GEO_ABT2_wingL      , GEO_ABT2_pileAngle   , GEO_ABT2_suppressLW        , GEO_ABT2_curtainL
-GEO_ABT2_geometry(21) = GEO_ABT2_pileFree      , GEO_ABT2_pileShort  , GEO_ABT2_trvPileCols , GEO_ABT2_wingPileCols      , GEO_ABT2_wingCapLength
-GEO_ABT2_geometry(26) = GEO_ABT2_wingCapWidth  , GEO_ABT2_wingAngle  , GEO_ABT2_width       , GEO_ABT2_thinTranWallDepth , GEO_ABT2_beamOpt
-GEO_ABT2_geometry(31) = GEO_ABT2_pileCapOffset , GEO_ABT2_postHeight , GEO_ABT_postCx       , GEO_ABT_postCy             , GEO_ABT2_postOffset
-GEO_ABT2_geometry(36) = GEO_ABT2_appSlabW      , GEO_ABT2_columnCx   , GEO_ABT2_columnCy    , GEO_ABT2_columnSpacing     , GEO_ABT2_capOpt
-GEO_ABT2_geometry(41) = GEO_ABT2_girderB       , GEO_ABT2_girderH
+*dim,GEO_ABT2_geometry,,30
+GEO_ABT2_geometry(1)  = GEO_ABT2_type         , GEO_deckWidth_end  , GEO_deckOff_end      , GEO_ABT2_yc                , GEO_ABT2_appSlab
+GEO_ABT2_geometry(6)  = GEO_ABT2_appSlabL     , GEO_ABT2_height    , GEO_ABT2_length      , GEO_ABT2_longPiles         , GEO_ABT2_pileCapL
+GEO_ABT2_geometry(11) = GEO_ABT2_pileCapW     , GEO_ABT2_pileL     , GEO_ABT2_topOffset   , GEO_ABT2_tranPiles         , GEO_ABT2_wings
+GEO_ABT2_geometry(16) = GEO_ABT2_wingHa       , GEO_ABT2_wingL     , GEO_ABT2_pileAngle   , GEO_ABT2_suppressLW        , GEO_ABT2_curtainL
+GEO_ABT2_geometry(21) = GEO_ABT2_pileFree     , GEO_ABT2_pileShort , GEO_ABT2_trvPileCols , GEO_ABT2_wingPileCols      , GEO_ABT2_wingCapLength
+GEO_ABT2_geometry(26) = GEO_ABT2_wingCapWidth , GEO_ABT2_wingAngle , GEO_ABT2_width       , GEO_ABT2_thinTranWallDepth , GEO_ABT2_beamOpt
 
 ! Abutment extents
 GEO_ABT1_xMin=-(GEO_ABT1_length>GEO_ABT1_appSlabL*GEO_ABT1_appSlab)
@@ -621,9 +650,6 @@ GEO_genSpanCount = GEO_supportCount-1
 
 *endif
 
-! Overall abutment status
-GEO_ABT_status = (GEO_ABT1_status>GEO_ABT2_status)
-
 ! Number of piers (excluding abutments)
 GEO_pierCount = GEO_supportCount
 
@@ -676,9 +702,6 @@ nthPier=0
 *elseif,GEO_frameOpt,eq,2,then
   ! Tubular pier column
   *vfill,GEO_mesoType,ramp,CTE_MESO_beamcap,0
-*elseif,GEO_frameOpt,eq,3,then
-  ! Hammerhead
-  *vfill,GEO_mesoType,ramp,CTE_MESO_hammerhead,0
 *endif
 
 *if,GEO_gerberStatus,eq,1,then
@@ -710,8 +733,6 @@ nthPier=0
   BRIDGE_V1_XTOCHI,'GEO_pierChi_i','GEO_pierX_i'
   BRIDGE_V1_XTOCHI,'GEO_pierChi_j','GEO_pierX_j'
 *endif
-
-
 
 !!                                                                                                !!
 !! 2.3 LOADS                                                                                      !!
@@ -954,29 +975,3 @@ LOAD_ltLength=LOADTRAIN_VAR_length
 *else
     LOAD_centrifugalPct=0
 *endif
-!
-!
-!
-!!                                                                                                !!
-!! 2.4 MESH                                                                                       !!
-!!                                                                                                !!
-
-!!                                                                                                !!
-!! 2.5 SOLUTION                                                                                   !!
-!!                                                                                                !!
-! Set default connection between pile and pile cap to pinned
-*get,parType,parm,FEM_PileTopConnection,type
-*if,parType,ne,0,then
-    FEM_PileTopConnection=0
-*endif
-
-! Time at the end of dead load introduction load step (dynamic analysis only)
-SOLU_dlTime=1
-
-
-
-!!                                                                                                !!
-!! 2.6  Coordinate systems                                                                        !!
-!!                                                                                                !!
-! TODO  consolidate
-BRIDGE_V1_CSYS
