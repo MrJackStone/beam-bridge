@@ -1,7 +1,7 @@
 ! BRIDGE_V1_PARMESO
 
 
-! Calculate key span & support positions
+!! A.  Calculate key span & support positions                                                     !!
 GEO_spanCount = GEO_supportCount-1  ! TODO  possibly rename param ("midSpanCount"?) to avoid confusing with span count that includes abutment approach slabs
 
 *del , GEO_spanLengths ,  , nopr
