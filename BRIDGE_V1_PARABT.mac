@@ -41,8 +41,6 @@ GEO_ABT2_appSlab = nint(((GEO_ABT2_appSlab*GEO_ABT2_status>0)<1))
 *if,GEO_frameTopOffStatus,eq,0,then
   *del,GEO_frameTopOffset,,nopr
   *dim,GEO_frameTopOffset,,GEO_SupportCount
-  GEO_ABT1_topOffset = 0 ! GEO_frameTopOffset(1) !! TODO: if this value is not zero, abutment face is inclined
-  GEO_ABT2_topOffset = 0 ! GEO_frameTopOffset(GEO_supportCount)
 *endif
 
 ! Y coordinate of the center of each abutment
