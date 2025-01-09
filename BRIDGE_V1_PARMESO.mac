@@ -102,7 +102,9 @@ GEO_pierCount = GEO_supportCount-GEO_abutmentCount
 *dim , GEO_PIER_supportIdx ,  , GEO_pierCount
 *dim , GEO_SUPPORT_pierIdx ,  , GEO_supportCount
 
-! Calculate column size & key levels
+
+!! C.  Pier frame key positions                                                                   !!
+! Vertical positions
 GEO_colLength = GEO_frameHeight
 *if,SEC_offset,EQ,1,THEN
    GEO_colLength = GEO_frameHeight-FRAMEGIRDER_h
