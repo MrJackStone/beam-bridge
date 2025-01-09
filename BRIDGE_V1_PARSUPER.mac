@@ -55,6 +55,21 @@ GEO_deckOffsets(1) = GEO_deckOff_beg   , GEO_deckOff_end
   *enddo
 *endif
 
+*if,GEO_uniGirderSection,eq,1,then
+  *do,nthSection,2,GEO_girderSectionCount,1
+    GIRDER_d(nthSection)      = GIRDER_d(1)
+    GIRDER_bfs(nthSection)    = GIRDER_bfs(1)
+    GIRDER_bfi(nthSection)    = GIRDER_bfi(1)
+    GIRDER_tfs(nthSection)    = GIRDER_tfs(1)
+    GIRDER_tfi(nthSection)    = GIRDER_tfi(1)
+    GIRDER_tw(nthSection)     = GIRDER_tw(1)
+    GIRDER_hs(nthSection)     = GIRDER_hs(1)
+    GIRDER_hi(nthSection)     = GIRDER_hi(1)
+    GIRDER_hw(nthSection)     = GIRDER_hw(1)
+    GIRDER_name(1,nthSection) = GIRDER_name(1,1)
+  *enddo
+*endif
+
 
 !! C.  Footpath positions                                                                         !!
 *del,GEO_FOOTPATH_arcOffsets,,nopr
