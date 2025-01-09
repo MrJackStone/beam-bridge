@@ -1,5 +1,24 @@
 ! BRIDGE_V1_PARSUPER
 
+! Exported params:
+! GEO_chordOff
+! GEO_deckOff_beg
+! GEO_deckOff_end
+! GEO_deckOffsets
+! GEO_deckWidths
+! GEO_FOOTPATH_arcOffsets
+! GEO_gerberChi_i
+! GEO_gerberChi_j
+! GEO_gerberChi_m
+! GEO_gerberChi_n
+! GEO_gerberStatus
+! GEO_gerberX_i
+! GEO_gerberX_j
+! GEO_gerberX_m
+! GEO_gerberX_n
+! GEO_girderY_beg
+! GEO_girderY_end
+
 
 !! A.  Special params for curved decks                                                            !!
 GEO_chordOff = 0
