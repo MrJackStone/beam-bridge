@@ -16,6 +16,14 @@
   GEO_ABT2_status = 1
 *endif
 
+GEO_pierCount = GEO_supportCount
+*if,GEO_ABT1_status,eq,1,then
+  GEO_pierCount = GEO_pierCount-1
+*endif
+*if,GEO_ABT2_status,eq,1,then
+  GEO_pierCount = GEO_pierCount-1
+*endif
+
 ! Approach slab status
 GEO_ABT1_appSlab = nint(((GEO_ABT1_appSlab>0)<1))
 GEO_ABT2_appSlab = nint(((GEO_ABT2_appSlab>0)<1))
