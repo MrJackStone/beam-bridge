@@ -1,5 +1,25 @@
 ! BRIDGE_V1_PARMESO
 
+! Exported params:
+! GEO_colLength
+! GEO_columnY_[f]
+! GEO_frameGirderEndsY_[f]
+! GEO_frameGirderY_[f]
+! GEO_MESO[s]_alpha
+! GEO_MESO[s]_x
+! GEO_MESO[s]_y
+! GEO_midspanChi
+! GEO_midspanX
+! GEO_spanCount
+! GEO_spanLengths
+! GEO_supportChi
+! GEO_supportChi_0
+! GEO_supportChi_L
+! GEO_supportX
+! GEO_waterHeight
+! zFrameBot
+! zFrameTop
+
 
 !! A.  Calculate key span & support positions                                                     !!
 GEO_spanCount = GEO_supportCount-1  ! TODO  possibly rename param ("midSpanCount"?) to avoid confusing with span count that includes abutment approach slabs
@@ -25,8 +45,8 @@ GEO_spanCount = GEO_supportCount-1  ! TODO  possibly rename param ("midSpanCount
 
 BRIDGE_V1_XTOCHI , 'GEO_supportChi' , 'GEO_supportX'
 BRIDGE_V1_XTOCHI , 'GEO_midspanChi' , 'GEO_midspanX'
-GEO_supportChi_0 = GEO_supportChi(1)
-GEO_supportChi_L = GEO_supportChi(GEO_supportCount)
+GEO_supportChi_0 = GEO_supportChi(1)                 ! TODO  move elsewhere, used only twice
+GEO_supportChi_L = GEO_supportChi(GEO_supportCount)  ! TODO  move elsewhere, used only twice
 
 
 !! B.  Mesostructure anchor positions                                                             !!

@@ -32,7 +32,7 @@ GEO_chordOff = 0
 *endif
 
 
-!! B.  Determine position of the girders                                                          !!
+!! B.  Longitudinal girders                                                                       !!
 *del , GEO_deckWidths  ,  , nopr
 *del , GEO_deckOffsets ,  , nopr
 *dim , GEO_deckWidths  ,  , 2
