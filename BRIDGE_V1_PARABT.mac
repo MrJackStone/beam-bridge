@@ -27,8 +27,8 @@ GEO_ABT2_appSlab = nint(((GEO_ABT2_appSlab>0)<1))
 *endif
 
 ! Y coordinate of the center of each abutment
-GEO_ABT1_yc=GEO_deckOff_beg+(GEO_deckWidth_beg/2)
-GEO_ABT2_yc=GEO_deckOff_end+(GEO_deckWidth_end/2)
+GEO_ABT1_yc = GEO_deckOff_beg+(GEO_deckWidth_beg/2)
+GEO_ABT2_yc = GEO_deckOff_end+(GEO_deckWidth_end/2)
 
 ! Surface area at the top of each abutment
 *if,GEO_ABT1_appSlab,eq,1,then
