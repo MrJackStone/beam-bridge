@@ -67,6 +67,7 @@ GEO_ABT1_appSlabGap = 2
 GEO_ABT2_appSlabGap = 2
 
 GEO_ABT1_topOffset = 0
+GEO_ABT2_topOffset = 0
 
 GEO_ABT1_beamOpt = 0
 GEO_ABT2_beamOpt = 0
