@@ -52,8 +52,7 @@
 
 
 !! B.  Mesostructure anchor positions                                                             !!
-afunbackup
-*afun,deg
+afunbackup,'DEG'
 *do,nthSupport,1,GEO_supportCount,1
   xCenter = GEO_supportX(nthSupport)
   *if,GEO_deckRadius,eq,0,then
