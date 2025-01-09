@@ -28,8 +28,25 @@ BRIDGE_V1_XTOCHI , 'GEO_midspanChi' , 'GEO_midspanX'
 GEO_supportChi_0 = GEO_supportChi(1)
 GEO_supportChi_L = GEO_supportChi(GEO_supportCount)
 
-*do,nthPier,1,GEO_pierCount,1 ! TODO  used before it is defined
+
+!! B.  Mesostructure anchor positions                                                             !!
+afunbackup
+*afun,deg
+*do,nthSupport,1,GEO_supportCount,1
+  xCenter = GEO_supportX(nthSupport)
+  *if,GEO_deckRadius,eq,0,then
+    yOffset                    = GEO_deckOff_beg+(GEO_deckOff_end-GEO_deckOff_beg)*(xCenter/GEO_deckLength)
+    GEO_MESO%nthSupport%_x     = xCenter
+    GEO_MESO%nthSupport%_y     = yOffset+(GEO_deckWidth_beg/2)
+    GEO_MESO%nthSupport%_alpha = 0
+  *else
+    chi_i                      = GEO_supportChi(nthSupport)
+    GEO_MESO%nthSupport%_x     = xCenter
+    GEO_MESO%nthSupport%_y     = GEO_deckRadius*sin(chi_i)-GEO_chordOff
+    GEO_MESO%nthSupport%_alpha = 90-chi_i
+  *endif
 *enddo
+afunrestore
 
 ! TODO: check temporarily removed (has to be redesigned for skewed multi-span bridges)
 ! ! Check width of the frame
