@@ -4,10 +4,17 @@
 !!                                                                                                !!
 !! 2.2 GEOMETRY                                                                                   !!
 !!                                                                                                !!
+BRIDGE_V1_PARSPANS
+
 
 !! 2.2.1 SUPERSTRUCTURE                                                                           !!
 !!                                                                                                !!
 BRIDGE_V1_PARSUPER
+
+
+!! 2.2.4 ABUTMENTS                                                                                !!
+!!                                                                                                !!
+BRIDGE_V1_PARABT
 
 
 !! 2.2.2 MESOSTRUCTURE  *** this needs revising ***                                               !!
@@ -18,11 +25,6 @@ BRIDGE_V1_PARMESO
 !! 2.2.3 INFRASTRUCTURE   *** this needs revising ***                                             !!
 !!                                                                                                !!
 BRIDGE_V1_PARINFRA
-
-
-!! 2.2.4 ABUTMENTS                                                                                !!
-!!                                                                                                !!
-BRIDGE_V1_PARABT
 
 
 !!                                                                                                !!
