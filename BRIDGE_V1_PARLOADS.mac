@@ -1,5 +1,31 @@
 ! BRIDGE_V1_PARLOADS
 
+! Exported params:
+! arr_f_longitudinal
+! GEO_WHEELPATH_arcOffsets
+! LOAD_additionalImpactCoefficient
+! LOAD_barrierValue
+! LOAD_baseImpactCoefficient
+! LOAD_centrifugalPct
+! LOAD_columnWind
+! LOAD_deckWind
+! LOAD_degreeOfCurve
+! LOAD_dynImpact
+! LOAD_g
+! LOAD_laneCoefficient
+! LOAD_ltLength
+! LOAD_ltWheelOff_beg
+! LOAD_ltWheelOff_end
+! LOAD_ltWheelPathCount
+! LOAD_pav
+! LOAD_pedestrianTraffic
+! LOAD_plCount
+! LOAD_plDist
+! LOAD_plValue
+! LOAD_vehicleTraffic
+! LOAD_waterFlow
+! LOAD_wheelCount
+
 
 ! Calculate load introduction positions
 afunbackup
