@@ -1,5 +1,24 @@
 ! BRIDGE_V1_PARCTE
 
+! Exported params:
+! CTE_MESO_abutment
+! CTE_MESO_beamcap
+! CTE_MESO_frame
+! CTE_MESO_tcolumn
+! CTE_MESO_tube
+! FEM_ABT_springL
+! FEM_springL
+! FEM_unsupportedAppSlabLength
+! GEO_longPosKey(1)
+! MAT_Soil_E
+! pi
+! POST_convolutionRadius
+! POST_resultsFolder
+! SEC_HSOIL_area
+! SEC_PSOIL_area
+! SEC_VSOIL_area
+! SOLU_dlTime
+
 
 pi = acos(-1)
 
