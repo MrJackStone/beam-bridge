@@ -1,10 +1,7 @@
 ! BRIDGE_V1_SECTIONS
 
 
-!! 2.1.3 CROSS-SECTIONS                                                                           !!
-!!                                                                                                !!
-
-!! 2.1.3.1 GIRDER                                                                                 !!
+! Girders
 *do,nthGirderSection,1,GEO_girderSectionCount
   ! Collect section description
   num  = SEC_GIRDER_nums(nthGirderSection)
@@ -19,9 +16,9 @@
   hw   = GIRDER_hw(nthGirderSection)
   name = GIRDER_name(1,nthGirderSection)
 
-  *if,MAT_Girder_type,EQ,0,THEN
+  *if,MAT_Girder_type,eq,0,then
     ! Write custom cross-section file
-    SEC_GIRDER,bfs,bfi,d,tfs,tfi,tw,hs,hi,hw,name
+    sec_girder,bfs,bfi,d,tfs,tfi,tw,hs,hi,hw,name
 
     ! Update input geometry
     GIRDER_bfs(nthGirderSection) = SEC_GIRDER_VAR_bfs
@@ -35,13 +32,13 @@
     GIRDER_hw (nthGirderSection) = SEC_GIRDER_VAR_hw
 
     ! Create cross-section
-    sectype,num,beam,mesh,name
-    secread,name,sect,,mesh
-    secoffset,user,bfi/2,d
+    sectype   , num  , beam  , mesh , name
+    secread   , name , sect  ,      , mesh
+    secoffset , user , bfi/2 , d
 
-  *elseif,MAT_Girder_type,EQ,1,THEN
-    ! Create section from database
-    CEDISAVS,num,name,2
+  *elseif,MAT_Girder_type,eq,1,then
+    ! create section from database
+    cedisavs,num,name,2
 
     ! Update input geometry
     GIRDER_bfs(nthGirderSection) = CEDISAVS_VAR_bf
@@ -54,7 +51,7 @@
     GIRDER_hi (nthGirderSection) = 0
     GIRDER_hw (nthGirderSection) = CEDISAVS_VAR_d-2*CEDISAVS_VAR_tf
 
-    secoffset,user,,GIRDER_d(nthGirderSection)
+    secoffset , user ,  , GIRDER_d(nthGirderSection)
 
   *endif
 
@@ -71,96 +68,95 @@
   *del , name ,, nopr
 *enddo
 
-!! 2.1.3.2 SLAB                                                                                   !!
-sectype,SEC_SLAB_num,SHELL,,SLAB_name
-secdata,SLAB_t,MAT_Slab
-secoffset,user,-(SLAB_t/2)-SLAB_hF
+! Deck slab
+sectype   , SEC_SLAB_num , shell               ,  , SLAB_name
+secdata   , SLAB_t       , MAT_slab
+secoffset , user         , -(SLAB_t/2)-SLAB_hF
 
-!! 2.1.3.3 CANTILEVER (GERBER CONNECTION)                                                         !!
+! Gerber cantilever
 sectype,SEC_GERBER,beam,rect,'GERBER',2
 secdata,GERBER_b,GERBER_h
 *if,SEC_offset,eq,1,then
    secoffset,user,,GERBER_h/2
 *endif
 
-!! 2.1.3.4 CONSOLE (GERBER CONNECTION)                                                            !!
+! Gerber console
 sectype,SEC_CONSOLE,beam,rect,'CONSOLE',2
 secdata,CONSOLE_b,CONSOLE_h
 *if,SEC_offset,eq,1,then
    secoffset,user,,CONSOLE_h/2
 *endif
 
-!! 2.1.3.5 COLUMNS                                                                                !!
-SECTYPE,SEC_COLUMN_num,BEAM,RECT,COLUMN_name,2
-SECDATA,COLUMN_cx,COLUMN_cy
+! Frame columns
+sectype,SEC_COLUMN_num,beam,rect,COLUMN_name,2
+secdata,COLUMN_cx,COLUMN_cy
 
-!! 2.1.3.6 FRAME GIRDER                                                                           !!
-sectype,SEC_FRAMEGIRDER_num,BEAM,RECT,FRAMEGIRDER_name,2
+! Frame girder
+sectype,SEC_FRAMEGIRDER_num,beam,rect,FRAMEGIRDER_name,2
 secdata,FRAMEGIRDER_b,FRAMEGIRDER_h
-secoffset,USER,,FRAMEGIRDER_h/2
+secoffset,user,,FRAMEGIRDER_h/2
 
-!! 2.1.3.7 Cross beam                                                                             !!
+! Cross-beam
 sectype,SEC_CROSSBEAM,beam,rect,'CRSBEAM',2
 secdata,CROSSBEAM_b,CROSSBEAM_h
 secoffset,user,,CROSSBEAM_h/2
 
-!! 2.1.3.7 PILE CAPS                                                                              !!
-SECTYPE,SEC_PILECAP_num,SHELL,,PILECAP_name
-SECDATA,PILECAP_h,MAT_PileCap
-*if,SEC_offset,EQ,1,THEN
-  SECOFFSET,TOP
+! Pile caps
+sectype,SEC_PILECAP_num,shell,,PILECAP_name
+secdata,PILECAP_h,MAT_PileCap
+*if,SEC_offset,eq,1,then
+  secoffset,top
 *endif
 
-!! 2.1.3.8 GRADE BEAM                                                                             !!
-SECTYPE,SEC_GRADEBEAM_num,BEAM,RECT,GRADEBEAM_name,2
-SECDATA,GRADEBEAM_b,GRADEBEAM_h
-*if,SEC_offset,EQ,1,THEN
-   SECOFFSET,USER,,GRADEBEAM_h/2
+! Grade beam
+sectype,SEC_GRADEBEAM_num,beam,rect,GRADEBEAM_name,2
+secdata,GRADEBEAM_b,GRADEBEAM_h
+*if,SEC_offset,eq,1,then
+   secoffset,user,,GRADEBEAM_h/2
 *endif
 
-!! 2.1.3.9 PILES                                                                                  !!
+! Piles
 *if,PILE_thk,eq,0,then
   ! Standard concrete pile
-  SECTYPE,SEC_PILE_num,BEAM,CSOLID,PILE_name,2
-  SECDATA,PILE_d/2
+  sectype,SEC_PILE_num,beam,csolid,PILE_name,2
+  secdata,PILE_d/2
 *elseif,PILE_thk,gt,0,then
   ! Concrete pile with permanent steel casing
   sec_ctube , PILE_d , PILE_thk , MAT_pile , MAT_casing ,, 'COMPOSITE_PILE'
   sectype,SEC_PILE_num,beam,mesh,'PILE'
   secread,'COMPOSITE_PILE',sect,,mesh
 *endif
-!! 2.1.3.18 ABUTMENTS                                                                             !!
 
-! LONGITUDINAL WALLS
+! Abutment longitudinal walls
 sectype,SEC_ABT_longWall,shell,,'ABT_LW'
 secdata,SEC_ABT_longWall_t,MAT_Abutment
 
-! TRANSVERSAL WALL (thick)
+! Abutment transversal wall-column
 sectype,SEC_ABT_tranWall,shell,,'ABT_TW'
 secdata,SEC_ABT_tranWall_t,MAT_Abutment
 
-! TRANSVERSAL WALL (thin)
+! Abutment transversal wall
 sectype,SEC_ABT_thinTranWall,shell,,'ABT_TTW'
 secdata,SEC_ABT_thinTranWall_t,MAT_Abutment
 
-! BEAM
+! Abutment beam/half-wall
 sectype,SEC_ABT_beam,shell,,'ABT_BEAM'
 secdata,SEC_ABT_beam_W,MAT_Abutment
 
-! COLUMNS
+! Abutment longitudinal wall columns
 sectype,SEC_ABT_column,shell,,'ABT_COL'
 secdata,SEC_ABT_col_W,MAT_Abutment
 
-! WINGS
+! Abutment wings
 sectype,SEC_ABT_wing,shell,,'ABT_WING'
 secdata,SEC_ABT_wing_t,MAT_Abutment
 
-! APPROACH SLAB
+! Abutment approach slabs
 sectype,SEC_ABT_appSlab,shell,,'ABT_SLAB'
 secdata,SEC_ABT_appSlab_t,MAT_Approach
 secoffset,bot
 
-! PILES
+! Abutment piles
 *if,SEC_ABT_PILE_thk,eq,0,then
   ! Standard concrete pile
   sectype,SEC_ABT_pile,beam,csolid,'ABT_PILE',2
@@ -172,16 +168,16 @@ secoffset,bot
   secread,'COMPOSITE_ABT_PILE',sect,,mesh
 *endif
 
-! PILE CAP
+! Abutment pile caps
 sectype,SEC_ABT_pileCap,shell,,'ABT_SLAB'
-secdata,SEC_ABT_pileCap_h,MAT_Abutment
+secdata,SEC_ABT_pileCap_h,MAT_abutment
 secoffset,top
 
-!! 2.1.3.19 TUBULAR COLUMN WALLS                                                                  !!
-SECTYPE,SEC_COLWALL,SHELL,,'COLWALL'
-SECDATA,COLUMN_tWall,MAT_Column
-!
-!! 2.1.3.20 TUBULAR COLUMN CAP                                                                    !!
-SECTYPE,SEC_COLCAP,SHELL,,'COLCAP'
-SECDATA,COLUMN_tCap,MAT_Column
+! Tubular pier column walls
+sectype,SEC_colWall,shell,,'COLWALL'
+secdata,COLUMN_tWall,MAT_column
+
+! Tubular pier column top cap
+sectype,SEC_colCap,shell,,'COLCAP'
+secdata,COLUMN_tCap,MAT_column
 secoffset,top
