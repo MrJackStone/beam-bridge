@@ -33,13 +33,8 @@
 GEO_ABT_status    = (GEO_ABT1_status>GEO_ABT2_status)
 GEO_abutmentCount = GEO_ABT1_status+GEO_ABT2_status
 
-GEO_pierCount = GEO_supportCount
-*if,GEO_ABT1_status,eq,1,then
-  GEO_pierCount = GEO_pierCount-1
-*endif
-*if,GEO_ABT2_status,eq,1,then
-  GEO_pierCount = GEO_pierCount-1
-*endif
+GEO_abutmentCount = GEO_ABT1_status+GEO_ABT2_status
+GEO_pierCount     = GEO_supportCount-GEO_abutmentCount
 
 ! Approach slab status
 GEO_ABT1_appSlab = nint(((GEO_ABT1_appSlab*GEO_ABT1_status>0)<1))

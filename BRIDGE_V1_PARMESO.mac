@@ -105,6 +105,11 @@ GEO_pierCount = GEO_supportCount-GEO_abutmentCount
 
 !! C.  Pier frame key positions                                                                   !!
 ! Vertical positions
+*del , GEO_pierZBot ,  , nopr
+*del , GEO_pierZTop ,  , nopr
+*dim , GEO_pierZBot ,  , GEO_pierCount
+*dim , GEO_pierZTop ,  , GEO_pierCount
+
 GEO_colLength = GEO_frameHeight
 *if,SEC_offset,EQ,1,THEN
    GEO_colLength = GEO_frameHeight-FRAMEGIRDER_h
