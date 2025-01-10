@@ -1,38 +1,35 @@
 ! BRIDGE_V1_PARLOADS
 
 
-! Calculate wheel transversal offsets
+! Calculate load introduction positions
 afunbackup
 *afun,deg
 skewedDeltaY = GEO_deckLength*tan(LOAD_ltSkewness)
 afunrestore
 
-LOAD_wheelCount = LOAD_ltCount*2
-
-*del , LOAD_ltWheelOff_beg ,  , nopr
-*del , LOAD_ltWheelOff_end ,  , nopr
-*dim , LOAD_ltWheelOff_beg ,  , LOAD_wheelCount , LOAD_ltTransScenarioCount
-*dim , LOAD_ltWheelOff_end ,  , LOAD_wheelCount , LOAD_ltTransScenarioCount
-
-*do,nthLTtransScenario,1,LOAD_ltTransScenarioCount,1
-  *do,nthLine,1,LOAD_ltCount,1
-    LOAD_ltWheelOff_beg(nthLine*2-1, nthLTtransScenario) = LOAD_ltLineOff(nthLine, nthLTtransScenario)-(LOAD_ltWidth/2)
-    LOAD_ltWheelOff_beg(nthLine*2, nthLTtransScenario)   = LOAD_ltLineOff(nthLine, nthLTtransScenario)+(LOAD_ltWidth/2)
-    LOAD_ltWheelOff_end(nthLine*2-1, nthLTtransScenario) = LOAD_ltLineOff(nthLine, nthLTtransScenario)-(LOAD_ltWidth/2)+skewedDeltaY
-    LOAD_ltWheelOff_end(nthLine*2, nthLTtransScenario)   = LOAD_ltLineOff(nthLine, nthLTtransScenario)+(LOAD_ltWidth/2)+skewedDeltaY
-  *enddo
-*enddo
-
+LOAD_wheelCount       = LOAD_ltCount*2
 LOAD_ltWheelPathCount = LOAD_wheelCount*LOAD_ltTransScenarioCount
 
+*del , LOAD_ltWheelOff_beg      ,  , nopr
+*del , LOAD_ltWheelOff_end      ,  , nopr
 *del , GEO_WHEELPATH_arcOffsets ,  , nopr
+*dim , LOAD_ltWheelOff_beg      ,  , LOAD_wheelCount       , LOAD_ltTransScenarioCount
+*dim , LOAD_ltWheelOff_end      ,  , LOAD_wheelCount       , LOAD_ltTransScenarioCount
 *dim , GEO_WHEELPATH_arcOffsets ,  , LOAD_ltWheelPathCount
 
 nthPath = 0
+
 *do,nthLTtransScenario,1,LOAD_ltTransScenarioCount,1
+  *do,nthLine,1,LOAD_ltCount,1
+    LOAD_ltWheelOff_beg(nthLine*2-1,nthLTtransScenario) = LOAD_ltLineOff(nthLine,nthLTtransScenario)-(LOAD_ltWidth/2)
+    LOAD_ltWheelOff_beg(nthLine*2,nthLTtransScenario)   = LOAD_ltLineOff(nthLine,nthLTtransScenario)+(LOAD_ltWidth/2)
+    LOAD_ltWheelOff_end(nthLine*2-1,nthLTtransScenario) = LOAD_ltLineOff(nthLine,nthLTtransScenario)-(LOAD_ltWidth/2)+skewedDeltaY
+    LOAD_ltWheelOff_end(nthLine*2,nthLTtransScenario)   = LOAD_ltLineOff(nthLine,nthLTtransScenario)+(LOAD_ltWidth/2)+skewedDeltaY
+  *enddo
+
   *do,nthLT,1,LOAD_wheelCount,1
-    yBeg    = LOAD_ltWheelOff_beg(nthLT,nthLTtransScenario)
-    nthPath = nthPath+1
+    yBeg                              = LOAD_ltWheelOff_beg(nthLT,nthLTtransScenario)
+    nthPath                           = nthPath+1
     GEO_WHEELPATH_arcOffsets(nthPath) = yBeg
   *enddo
 *enddo
@@ -62,17 +59,17 @@ nthPath = 0
 
 *endif
 
-! Apply impact coefficient to dynamic loads
-loadtrain, LOAD_ltName,LOAD_locRep,0,1, LOAD_railcarCount ! Output: LOADTRAIN_VAR_count; LOADTRAIN_ARR_positions; LOADTRAIN_ARR_loads
-LOAD_plCount = LOADTRAIN_VAR_count
+! Build load train
+loadtrain , LOAD_ltName , LOAD_locRep , 0 , 1 , LOAD_railcarCount ! Output: LOADTRAIN_VAR_count; LOADTRAIN_ARR_positions; LOADTRAIN_ARR_loads
 *del  , LOAD_plDist   ,      , nopr
 *del  , LOAD_plValue  ,      , nopr
 *del  , LOAD_ltLength ,      , nopr
 *vfun , LOAD_plDist   , copy , LOADTRAIN_ARR_positions
 *vfun , LOAD_plValue  , copy , LOADTRAIN_ARR_loads
+LOAD_plCount  = LOADTRAIN_VAR_count
 LOAD_ltLength = LOADTRAIN_VAR_length
 
-! Calculate horizontal forces
+! Calculate longitudinal horizontal forces
 *if,BRIDGE_type,eq,0,then
   ! Highway bridge
 
@@ -105,7 +102,18 @@ LOAD_ltLength = LOADTRAIN_VAR_length
   *endif
 *endif
 
-! Combination type: ELU or ELS
+! Calculate centrifugal force percentage (AREMA)
+*if,GEO_deckRadius,ne,0,then
+  afunbackup
+  *afun,deg
+  LOAD_degreeOfCurve = 2*asin(15.24/GEO_deckRadius)
+  afunrestore
+  LOAD_centrifugalPct = 4.52e-4*(LOAD_speed**2)*LOAD_degreeOfCurve
+*else
+  LOAD_centrifugalPct = 0
+*endif
+
+! Define load combination coefficients
 *if,LOAD_combination,eq,1,then
   ! Ultimate load: load train as main
   ! Live loads
@@ -232,15 +240,4 @@ LOAD_ltLength = LOADTRAIN_VAR_length
   LOAD_pav          = LOAD_pav_k
   LOAD_barrierValue = LOAD_barrierValue_k
 
-*endif
-
-! Calculate centrifugal force percentage (AREMA)
-*if,GEO_deckRadius,ne,0,then
-  afunbackup
-  *afun,deg
-  LOAD_degreeOfCurve = 2*asin(15.24/GEO_deckRadius)
-  afunrestore
-  LOAD_centrifugalPct = 4.52e-4*(LOAD_speed**2)*LOAD_degreeOfCurve
-*else
-  LOAD_centrifugalPct = 0
 *endif
