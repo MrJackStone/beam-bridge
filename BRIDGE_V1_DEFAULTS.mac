@@ -124,6 +124,8 @@ LOAD_ltPresMethod = 'BOUSSNSQ'
 LOAD_barrierCount   = 0
 LOAD_barrierValue_k = 0
 
+LOAD_railcarCount = 0
+
 
 !!                                                                                                !!
 !! 1.8  Solution                                                                                  !!
