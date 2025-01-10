@@ -16,13 +16,8 @@
   GEO_ABT2_status = 1
 *endif
 
-GEO_pierCount = GEO_supportCount
-*if,GEO_ABT1_status,eq,1,then
-  GEO_pierCount = GEO_pierCount-1
-*endif
-*if,GEO_ABT2_status,eq,1,then
-  GEO_pierCount = GEO_pierCount-1
-*endif
+GEO_abutmentCount = GEO_ABT1_status+GEO_ABT2_status
+GEO_pierCount     = GEO_supportCount-GEO_abutmentCount
 
 ! Approach slab status
 GEO_ABT1_appSlab = nint(((GEO_ABT1_appSlab>0)<1))
@@ -51,9 +46,8 @@ GEO_ABT2_yc = GEO_deckOff_end+(GEO_deckWidth_end/2)
   GEO_ABT2_topSurfArea = GEO_ABT2_width*GEO_ABT2_length
 *endif
 
-
 ! Calculate number of piles (for curtain option)
-pileWidth=SEC_ABT_pile_d-2*GEO_ABT_pileOvlap
+pileWidth = SEC_ABT_pile_d-2*GEO_ABT_pileOvlap
 *if,GEO_ABT1_type,eq,3,then
   GEO_ABT1_tranPiles = nint((GEO_deckWidth_beg-pileWidth)/pileWidth)
   GEO_ABT1_longPiles = nint(GEO_ABT1_length/pileWidth)
@@ -69,16 +63,6 @@ pileWidth=SEC_ABT_pile_d-2*GEO_ABT_pileOvlap
 *endif
 *if,GEO_ABT2_type,eq,3,then
   GEO_ABT2_pileCapL = GEO_ABT2_length+(GEO_ABT2_pileCapW/2)
-*endif
-
-! Thin transversal wall depth
-*get,parType,parm,GEO_ABT1_thinTranWallDepth,type
-*if,parType,ne,0,then
-  GEO_ABT1_thinTranWallDepth=0
-*endif
-*get,parType,parm,GEO_ABT2_thinTranWallDepth,type
-*if,parType,ne,0,then
-  GEO_ABT2_thinTranWallDepth=0
 *endif
 
 ! Create abutment geometry arrays
@@ -101,10 +85,10 @@ GEO_ABT2_geometry(21) = GEO_ABT2_pileFree     , GEO_ABT2_pileShort , GEO_ABT2_tr
 GEO_ABT2_geometry(26) = GEO_ABT2_wingCapWidth , GEO_ABT2_wingAngle , GEO_ABT2_width       , GEO_ABT2_thinTranWallDepth , GEO_ABT2_beamOpt
 
 ! Abutment extents
-GEO_ABT1_xMin=-(GEO_ABT1_length>GEO_ABT1_appSlabL*GEO_ABT1_appSlab)
-GEO_ABT1_xMax=0
-GEO_ABT2_xMin=GEO_deckLength
-GEO_ABT2_xMax=GEO_deckLength+(GEO_ABT2_length>GEO_ABT2_appSlabL*GEO_ABT2_appSlab)
+GEO_ABT1_xMin = -(GEO_ABT1_length>GEO_ABT1_appSlabL*GEO_ABT1_appSlab)
+GEO_ABT1_xMax = 0
+GEO_ABT2_xMin = GEO_deckLength
+GEO_ABT2_xMax = GEO_deckLength+(GEO_ABT2_length>GEO_ABT2_appSlabL*GEO_ABT2_appSlab)
 
 ! General span lengths
 GEO_genSpanCount = GEO_supportCount-1
@@ -153,77 +137,4 @@ GEO_genSpanCount = GEO_supportCount-1
   *vfun , GEO_genSpanLengths(1) , copy , GEO_spanLengths
   *vfun , GEO_genSpanLimits     , copy , GEO_supportX
 
-*endif
-
-! XZ coordinates of each pier
-*if,GEO_frameBotOffStatus,eq,0,then
-  *del,GEO_frameBotOffset,,nopr
-  *dim,GEO_frameBotOffset,ARRAY,GEO_SupportCount
-*endif
-
-*del , GEO_pierX    ,  , nopr
-*del , GEO_pierZBot ,  , nopr
-*del , GEO_pierZTop ,  , nopr
-*dim , GEO_pierX    ,  , GEO_pierCount
-*dim , GEO_pierZBot ,  , GEO_pierCount
-*dim , GEO_pierZTop ,  , GEO_pierCount
-nthPier=0
-*do,nthSupport,1,GEO_supportCount,1
-  skip = 0
-  *if,nthSupport,eq,1,and,GEO_ABT1_status,eq,1,then
-    skip = 1
-  *elseif,nthSupport,eq,GEO_supportCount,and,GEO_ABT2_status,eq,1,then
-    skip = 1
-  *endif
-  *if,skip,eq,0,then
-    nthPier               = nthPier+1
-    GEO_pierX(nthPier)    = GEO_supportX(nthSupport)
-    GEO_pierZBot(nthPier) = zFrameBot+GEO_frameBotOffset(nthSupport)
-    GEO_pierZTop(nthPier) = zFrameTop+GEO_frameTopOffset(nthSupport)
-  *endif
-*enddo
-
-! Determine type of mesostructure at each support
-*del,GEO_mesoType,,nopr
-*dim,GEO_mesoType,,GEO_supportCount
-
-*if,GEO_frameOpt,eq,0,then
-  ! Column-girder frame
-  *vfill,GEO_mesoType,ramp,CTE_MESO_frame,0
-*elseif,GEO_frameOpt,eq,1,then
-  ! Tubular pier column
-  *vfill,GEO_mesoType,ramp,CTE_MESO_tube,0
-*elseif,GEO_frameOpt,eq,2,then
-  ! Tubular pier column
-  *vfill,GEO_mesoType,ramp,CTE_MESO_beamcap,0
-*endif
-
-*if,GEO_gerberStatus,eq,1,then
-  *do,nthSupport,1,GEO_supportCount,1
-    gerberL = GEO_gerberL(nthSupport)
-    *if,gerberL,gt,0,then
-      GEO_mesoType(nthSupport) = CTE_MESO_tcolumn
-    *endif
-  *enddo
-*endif
-
-*if,GEO_ABT1_status,eq,1,then
-  GEO_mesoType(1) = CTE_MESO_abutment
-*endif
-*if,GEO_ABT2_status,eq,1,then
-  GEO_mesoType(GEO_supportCount) = CTE_MESO_abutment
-*endif
-
-! Calculate X coordinates of tubular column faces
-*del , GEO_pierX_i ,  , nopr
-*del , GEO_pierX_j ,  , nopr
-*dim , GEO_pierX_i ,  , GEO_pierCount
-*dim , GEO_pierX_j ,  , GEO_pierCount
-*voper,GEO_pierX_i,GEO_pierX,sub,GEO_columnDepth/2
-*voper,GEO_pierX_j,GEO_pierX,add,GEO_columnDepth/2
-
-! Calculate chi angles of tubular column faces
-*if,GEO_deckRadius,gt,0,then
-  BRIDGE_V1_XTOCHI,'GEO_pierChi_i','GEO_pierX_i'
-  BRIDGE_V1_XTOCHI,'GEO_pierChi_j','GEO_pierX_j'
 *endif
