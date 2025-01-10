@@ -1,0 +1,32 @@
+! General span lengths
+GEO_genSpanCount = GEO_spanCount+GEO_abutmentCount
+
+*del , GEO_genSpanLengths ,  , nopr
+*del , GEO_genSpanLimits  ,  , nopr
+*dim , GEO_genSpanLengths ,  , GEO_genSpanCount
+*dim , GEO_genSpanLimits  ,  , GEO_genSpanCount+1
+
+*if,GEO_abutmentCount,ge,1,then
+
+
+
+  *vfun , GEO_genSpanLengths(GEO_ABT1_appSlab+1) , copy , GEO_spanLengths(1)
+  *vfun , GEO_genSpanLimits(GEO_ABT1_appSlab+1)  , copy , GEO_supportX(1)
+
+  *if,GEO_ABT1_appSlab,eq,1,then
+    GEO_genSpanLengths(1) = GEO_ABT1_appSlabL
+    GEO_genSpanLimits(1)  = -GEO_ABT1_appSlabL
+  *endif
+
+  *if,GEO_ABT2_appSlab,eq,1,then
+    GEO_genSpanLengths(GEO_genSpanCount)  = GEO_ABT2_appSlabL
+    GEO_genSpanLimits(GEO_genSpanCount+1) = GEO_deckLength+GEO_ABT2_appSlabL
+  *endif
+
+*else
+  ! No abutments
+
+  *vfun , GEO_genSpanLengths(1) , copy , GEO_spanLengths
+  *vfun , GEO_genSpanLimits     , copy , GEO_supportX
+
+*endif
