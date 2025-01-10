@@ -12,7 +12,7 @@
 mkdirs,1
 
 !!                                                                                                !!
-!! 2.0  Set params                                                                                !!
+!! 2.1  Set params                                                                                !!
 !!                                                                                                !!
 ! Constants
 BRIDGE_V1_PARCTE
@@ -25,7 +25,7 @@ BRIDGE_V1_INDICES
 
 
 !!                                                                                                !!
-!! 2.1  Mesh attributes                                                                           !!
+!! 2.2  Mesh attributes                                                                           !!
 !!                                                                                                !!
 BRIDGE_V1_MATERIALS
 
