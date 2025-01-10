@@ -14,7 +14,14 @@ mkdirs,1
 !!                                                                                                !!
 !! 2.0  Set params                                                                                !!
 !!                                                                                                !!
-BRIDGE_V1_PARDEF
+! Constants
+BRIDGE_V1_PARCTE
+
+! Calculated params
+BRIDGE_V1_PARCALC
+
+! Attribute indices
+BRIDGE_V1_INDICES
 
 
 !!                                                                                                !!
