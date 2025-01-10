@@ -39,7 +39,7 @@ GEO_longPosKey(1) = 'BEG','END'
 ! Springs
 SEC_VSOIL_area = (MAT_Soil_kv*FEM_springL*FEM_PileELength)/MAT_Soil_E
 SEC_HSOIL_area = (MAT_Soil_kh*FEM_springL*FEM_PileELength)/MAT_Soil_E  ! TODO  multiply by pile diameter (results in AREA per pile)
-SEC_PSOIL_area = (MAT_Soil_kp*FEM_springL)/MAT_Soil_E
+SEC_PSOIL_area = (MAT_Soil_kp*FEM_springL)/MAT_SOIL_E
 
 ! Length of approach slab under which there is no soil support (springs), measured from abutment face
 FEM_unsupportedAppSlabLength = 2
@@ -57,3 +57,10 @@ CTE_MESO_abutment = 5
 
 ! Time at the end of dead load introduction load step (dynamic analysis only)
 SOLU_dlTime = 1
+
+!! mesh attributes                                                                                !!
+MAT_GIRDER_steelE = 2e11
+MAT_CASING_E      = 2e11
+
+MAT_Matrix_E      = 1e10
+MAT_ABT_Soil_E    = 1e9
