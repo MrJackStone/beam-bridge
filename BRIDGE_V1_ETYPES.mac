@@ -1,32 +1,23 @@
 ! BRIDGE_V1_ETYPES
 
 
-!! 2.1.2 ELEMENT TYPES                                                                            !!
-!!                                                                                                !!
-! Girders, columns: BEAM188
-ET,TYPE_BEAM188,BEAM188
-KEYOPT,TYPE_BEAM188,3,2
+et     , TYPE_BEAM188  , 188
+keyopt , TYPE_BEAM188  , 3   , 2
 
-! Slab, pile caps: SHELL181
-ET,TYPE_SHELL181,SHELL181
+et     , TYPE_SHELL181 , 181
 
-! Soil, springs: LINK180
-ET,TYPE_LINK180,LINK180
+et     , TYPE_LINK180  , 180
 
-! Springs: COMBIN14
-ET,TYPE_COMBIN14,COMBIN14
-KEYOPT,TYPE_COMBIN14,1,0
-KEYOPT,TYPE_COMBIN14,2,0
-KEYOPT,TYPE_COMBIN14,3,0
+et     , TYPE_COMBIN14 , 14
+keyopt , TYPE_COMBIN14 , 1   , 0
+keyopt , TYPE_COMBIN14 , 2   , 0
+keyopt , TYPE_COMBIN14 , 3   , 0
 
-! Bearing/friction: MATRIX27
-ET,TYPE_MATRIX27,MATRIX27
-KEYOPT,TYPE_MATRIX27,2,0
-KEYOPT,TYPE_MATRIX27,3,4
+et     , TYPE_MATRIX27 , 27
+keyopt , TYPE_MATRIX27 , 2   , 0
+keyopt , TYPE_MATRIX27 , 3   , 4
 
-! Rigid link
-et,TYPE_MPC184,184
-keyopt,TYPE_MPC184,1,0
+et     , TYPE_MPC184   , 184
+keyopt , TYPE_MPC184   , 1   , 0
 
-! Point mass
-et,TYPE_MASS21,21
+et     , TYPE_MASS21   , 21
