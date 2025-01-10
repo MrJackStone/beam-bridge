@@ -8,8 +8,13 @@
 ! GEO_MESO[s]_alpha
 ! GEO_MESO[s]_x
 ! GEO_MESO[s]_y
+! GEO_mesoType
 ! GEO_midspanChi
 ! GEO_midspanX
+! GEO_pierZBot
+! GEO_pierZBot
+! GEO_pierZTop
+! GEO_pierZTop
 ! GEO_spanCount
 ! GEO_spanLengths
 ! GEO_supportChi
@@ -21,7 +26,38 @@
 ! zFrameTop
 
 
-!! A.  Calculate key span & support positions                                                     !!
+!! A.  Mesostructure types                                                                        !!
+*del,GEO_mesoType,,nopr
+*dim,GEO_mesoType,,GEO_supportCount
+
+*if,GEO_frameOpt,eq,0,then
+  ! Column-girder frame
+  *vfill,GEO_mesoType,ramp,CTE_MESO_frame,0
+*elseif,GEO_frameOpt,eq,1,then
+  ! Tubular pier column
+  *vfill,GEO_mesoType,ramp,CTE_MESO_tube,0
+*elseif,GEO_frameOpt,eq,2,then
+  ! Tubular pier column
+  *vfill,GEO_mesoType,ramp,CTE_MESO_beamcap,0
+*endif
+
+*if,GEO_gerberStatus,eq,1,then
+  *do,nthSupport,1,GEO_supportCount,1
+    gerberL = GEO_gerberL(nthSupport)
+    *if,gerberL,gt,0,then
+      GEO_mesoType(nthSupport) = CTE_MESO_tcolumn
+    *endif
+  *enddo
+*endif
+
+*if,GEO_ABT1_status,eq,1,then
+  GEO_mesoType(1) = CTE_MESO_abutment
+*endif
+*if,GEO_ABT2_status,eq,1,then
+  GEO_mesoType(GEO_supportCount) = CTE_MESO_abutment
+*endif
+
+!! B.  Calculate key span & support positions                                                     !!
 GEO_spanCount = GEO_supportCount-1  ! TODO  possibly rename param ("midSpanCount"?) to avoid confusing with span count that includes abutment approach slabs
 
 *del , GEO_spanLengths ,  , nopr
@@ -85,6 +121,11 @@ afunrestore
 
 !! C.  Pier frame key positions                                                                   !!
 ! Vertical positions
+*del , GEO_pierZBot ,  , nopr
+*del , GEO_pierZTop ,  , nopr
+*dim , GEO_pierZBot ,  , GEO_pierCount
+*dim , GEO_pierZTop ,  , GEO_pierCount
+
 GEO_colLength = GEO_frameHeight
 *if,SEC_offset,EQ,1,THEN
    GEO_colLength = GEO_frameHeight-FRAMEGIRDER_h
@@ -96,6 +137,16 @@ zFrameTop = 0
 *endif
 
 zFrameBot = zFrameTop-GEO_colLength
+
+nthPier = 0
+*do,nthSupport,1,GEO_supportCount,1
+  mesoType = GEO_mesoType(nthSupport)
+  *if,mesoType,eq,CTE_MESO_abutment,then
+    nthPier               = nthPier+1
+    GEO_pierZBot(nthPier) = zFrameBot+GEO_frameBotOffset(nthSupport)
+    GEO_pierZTop(nthPier) = zFrameTop+GEO_frameTopOffset(nthSupport)
+  *endif
+*enddo
 
 *if,GEO_waterHeight,ge,GEO_colLength,then
   GEO_waterHeight = GEO_colLength-0.1
