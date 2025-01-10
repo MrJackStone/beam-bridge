@@ -27,3 +27,6 @@ MAT_ABT_Soil_ka  = tan(45-(MAT_ABT_Soil_fi/2))
 MAT_ABT_Soil_k0  = 1-sin(MAT_ABT_Soil_fi)
 MAT_ABT_SOIL_kEP = MAT_ABT_Soil_k0
 afunrestore
+
+REAL_ABT_kv_area = (MAT_ABT_Soil_kv*FEM_ABT_springL)/MAT_ABT_Soil_E
+REAL_ABT_kh_area = (MAT_ABT_Soil_kh*FEM_ABT_springL)/MAT_ABT_Soil_E
