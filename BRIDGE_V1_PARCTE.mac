@@ -10,6 +10,10 @@
 ! FEM_springL
 ! FEM_unsupportedAppSlabLength
 ! GEO_longPosKey(1)
+! MAT_ABT_Soil_E
+! MAT_CASING_E
+! MAT_GIRDER_steelE
+! MAT_Matrix_E
 ! MAT_Soil_E
 ! pi
 ! POST_convolutionRadius
@@ -58,7 +62,7 @@ CTE_MESO_abutment = 5
 ! Time at the end of dead load introduction load step (dynamic analysis only)
 SOLU_dlTime = 1
 
-!! mesh attributes                                                                                !!
+! Mesh attributes
 MAT_GIRDER_steelE = 2e11
 MAT_CASING_E      = 2e11
 
