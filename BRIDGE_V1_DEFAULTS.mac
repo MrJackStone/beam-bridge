@@ -65,7 +65,9 @@ GEO_ABT2_beamOpt = 0
 SEC_ABT_PILE_d   = 1
 SEC_ABT_PILE_thk = 0
 
-SEC_ABT_thinTranWall_t = SEC_ABT_tranWall_t
+SEC_ABT_thinTranWall_t     = SEC_ABT_tranWall_t
+GEO_ABT1_thinTranWallDepth = 0
+GEO_ABT2_thinTranWallDepth = 0
 
 
 !!                                                                                                !!
