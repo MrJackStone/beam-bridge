@@ -13,13 +13,12 @@ MAT_Abutment    = 8
 MAT_Approach    = 9
 MAT_Soil        = 10
 MAT_ABT_Soil    = 11
-MAT_Spring      = 12
-MAT_Matrix      = 13
-MAT_Gerber      = 14
-MAT_CrossBeam   = 15
-MAT_PileTip     = 16
-MAT_PileLat     = 17
-MAT_casing      = 18
+MAT_Matrix      = 12
+MAT_Gerber      = 13
+MAT_CrossBeam   = 14
+MAT_PileTip     = 15
+MAT_PileLat     = 16
+MAT_casing      = 17
 
 
 !! B.  Element types                                                                              !!
