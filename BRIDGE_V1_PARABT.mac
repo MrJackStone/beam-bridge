@@ -1,5 +1,33 @@
 ! BRIDGE_V1_PARABT
 
+! Exported params:
+! GEO_ABT1_appSlab
+! GEO_ABT1_geometry
+! GEO_ABT1_longPiles
+! GEO_ABT1_pileCapL
+! GEO_ABT1_status
+! GEO_ABT1_topSurfArea
+! GEO_ABT1_tranPiles
+! GEO_ABT1_xMax
+! GEO_ABT1_xMin
+! GEO_ABT1_yc
+! GEO_ABT2_appSlab
+! GEO_ABT2_geometry
+! GEO_ABT2_longPiles
+! GEO_ABT2_pileCapL
+! GEO_ABT2_status
+! GEO_ABT2_topSurfArea
+! GEO_ABT2_tranPiles
+! GEO_ABT2_xMax
+! GEO_ABT2_xMin
+! GEO_ABT2_yc
+! GEO_abutmentCount
+! GEO_frameTopOffset
+! GEO_genSpanCount
+! GEO_genSpanLengths
+! GEO_genSpanLimits
+! GEO_pierCount
+
 
 ! Abutments status
 *if,GEO_ABT_status,eq,0,then
@@ -20,8 +48,8 @@ GEO_abutmentCount = GEO_ABT1_status+GEO_ABT2_status
 GEO_pierCount     = GEO_supportCount-GEO_abutmentCount
 
 ! Approach slab status
-GEO_ABT1_appSlab = nint(((GEO_ABT1_appSlab>0)<1))
-GEO_ABT2_appSlab = nint(((GEO_ABT2_appSlab>0)<1))
+GEO_ABT1_appSlab = nint(((GEO_ABT1_appSlab*GEO_ABT1_status>0)<1))
+GEO_ABT2_appSlab = nint(((GEO_ABT2_appSlab*GEO_ABT2_status>0)<1))
 
 ! Correct height increment at the beginning of the abutments
 *if,GEO_frameTopOffStatus,eq,0,then
@@ -96,14 +124,14 @@ GEO_genSpanCount = GEO_supportCount-1
 *if,GEO_ABT1_status,eq,1,or,GEO_ABT2_status,eq,1,then
 
   i_init = 0
-  *if,GEO_ABT1_status,eq,1,and,GEO_ABT1_appSlab,eq,1,then
+  *if,GEO_ABT1_appSlab,eq,1,then
     ! Approach slab in first abutment
     GEO_genSpanCount = GEO_genSpanCount+1
     i_init           = 1
   *endif
 
   i_end = 0
-  *if,GEO_ABT1_status,eq,1,and,GEO_ABT2_appSlab,eq,1,then
+  *if,GEO_ABT2_appSlab,eq,1,then
     ! Approach slab in second abutment
     GEO_genSpanCount = GEO_genSpanCount+1
     i_end            = 1
