@@ -112,7 +112,9 @@ GEO_ABT2_pileCapOffset = 0
 GEO_ABT2_postHeight    = 0
 GEO_ABT2_postOffset    = 0
 
-SEC_ABT_thinTranWall_t = SEC_ABT_tranWall_t
+SEC_ABT_thinTranWall_t     = SEC_ABT_tranWall_t
+GEO_ABT1_thinTranWallDepth = 0
+GEO_ABT2_thinTranWallDepth = 0
 
 
 !!                                                                                                !!
