@@ -114,6 +114,8 @@ LOAD_locRep = 1
 LOAD_TSCHEBOTARIOFF_status = 0
 *del,LOAD_TSCHEBOTARIOFF_data,,nopr
 
+LOAD_ltStep = 1
+
 *get,LOAD_ltTransScenarioCount,parm,LOAD_ltLineOff,dim,y
 
 LOAD_ltGapWidth  = 0

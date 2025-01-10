@@ -234,11 +234,6 @@ LOAD_ltLength = LOADTRAIN_VAR_length
 
 *endif
 
-! Check load train step
-*if,LOAD_ltStep,eq,0,or,LOAD_ltStep,gt,GEO_deckLength/2,then
-  LOAD_ltStep = GEO_deckLength/2
-*endif
-
 ! Calculate centrifugal force percentage (AREMA)
 *if,GEO_deckRadius,ne,0,then
   afunbackup
