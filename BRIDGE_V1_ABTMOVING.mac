@@ -29,7 +29,7 @@ nbackup
 
     ! Apply stress increases on first abutment:
     topPressure  = _Fz/GEO_ABT1_topSurfArea
-    soilPressure = topPressure*MAT_ABT_SOIL_ka
+    soilPressure = topPressure*MAT_ABT_SOIL_kEP
 
     ! Longitudinal walls
     *if,GEO_ABT1_type,eq,5,then
@@ -111,7 +111,7 @@ nbackup
 
     ! Apply stress increases on second abutment:
     topPressure  = _Fz/GEO_ABT2_topSurfArea
-    soilPressure = topPressure*MAT_ABT_SOIL_ka
+    soilPressure = topPressure*MAT_ABT_SOIL_kEP
 
     *if,GEO_ABT2_type,eq,5,then
       ! No loads on longitudinal walls

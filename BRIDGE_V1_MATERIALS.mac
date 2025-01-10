@@ -65,10 +65,11 @@ MAT_ABT_Soil_E=1e9
 MP,EX,MAT_ABT_Soil,MAT_ABT_Soil_E
 MP,PRXY,MAT_ABT_Soil,MAT_ABT_Soil_Poisson
 
-! Active earth pressure coefficient (Ka) -- FIX: changed to rest coefficient (k0)
+! Earth Pressure coefficient: always using k0 (rest coefficient); ka (active) calculated but not used
 *afun,deg
-! MAT_ABT_Soil_ka=tan(45-(MAT_ABT_Soil_fi/2))
-MAT_ABT_Soil_ka=1-sin(MAT_ABT_Soil_fi)
+MAT_ABT_Soil_ka  = tan(45-(MAT_ABT_Soil_fi/2))
+MAT_ABT_Soil_k0  = 1-sin(MAT_ABT_Soil_fi)
+MAT_ABT_SOIL_kEP = MAT_ABT_Soil_k0
 *afun,rad
 
 !! 2.1.1.13 SOIL (PILE TIP)                                                                       !!
