@@ -119,49 +119,29 @@ GEO_ABT2_xMin = GEO_deckLength
 GEO_ABT2_xMax = GEO_deckLength+(GEO_ABT2_length>GEO_ABT2_appSlabL*GEO_ABT2_appSlab)
 
 ! General span lengths
-GEO_genSpanCount = GEO_supportCount-1
+GEO_genSpanCount = GEO_spanCount+GEO_abutmentCount
 
-*if,GEO_ABT1_status,eq,1,or,GEO_ABT2_status,eq,1,then
+*del , GEO_genSpanLengths ,  , nopr
+*del , GEO_genSpanLimits  ,  , nopr
+*dim , GEO_genSpanLengths ,  , GEO_genSpanCount
+*dim , GEO_genSpanLimits  ,  , GEO_genSpanCount+1
 
-  i_init = 0
+*if,GEO_abutmentCount,ge,1,then
+  *vfun , GEO_genSpanLengths(GEO_ABT1_appSlab+1) , copy , GEO_spanLengths(1)
+  *vfun , GEO_genSpanLimits(GEO_ABT1_appSlab+1)  , copy , GEO_supportX(1)
+
   *if,GEO_ABT1_appSlab,eq,1,then
-    ! Approach slab in first abutment
-    GEO_genSpanCount = GEO_genSpanCount+1
-    i_init           = 1
-  *endif
-
-  i_end = 0
-  *if,GEO_ABT2_appSlab,eq,1,then
-    ! Approach slab in second abutment
-    GEO_genSpanCount = GEO_genSpanCount+1
-    i_end            = 1
-  *endif
-
-  *del , GEO_genSpanLengths ,  , nopr
-  *del , GEO_genSpanLimits  ,  , nopr
-
-  *dim , GEO_genSpanLengths ,  , GEO_genSpanCount
-  *dim , GEO_genSpanLimits  ,  , GEO_genSpanCount+1
-
-  *vfun , GEO_genSpanLengths(i_init+1) , copy , GEO_spanLengths(1)
-  *vfun , GEO_genSpanLimits(i_init+1)  , copy , GEO_supportX(1)
-
-  *if,i_init,eq,1,then
     GEO_genSpanLengths(1) = GEO_ABT1_appSlabL
     GEO_genSpanLimits(1)  = -GEO_ABT1_appSlabL
   *endif
 
-  *if,i_end,eq,1,then
+  *if,GEO_ABT2_appSlab,eq,1,then
     GEO_genSpanLengths(GEO_genSpanCount)  = GEO_ABT2_appSlabL
     GEO_genSpanLimits(GEO_genSpanCount+1) = GEO_deckLength+GEO_ABT2_appSlabL
   *endif
 
 *else
   ! No abutments
-  *del , GEO_genSpanLengths ,  , nopr
-  *del , GEO_genSpanLimits  ,  , nopr
-  *dim , GEO_genSpanLengths ,  , GEO_supportCount-1
-
   *vfun , GEO_genSpanLengths(1) , copy , GEO_spanLengths
   *vfun , GEO_genSpanLimits     , copy , GEO_supportX
 
