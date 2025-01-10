@@ -1,5 +1,16 @@
 ! BRIDGE_V1_PARATTR
 
+! Exported params:
+! MAT_ABT_SOIL_kEP
+! MAT_ABT_Soil_k0
+! MAT_ABT_Soil_ka
+! MAT_PILELAT_sigScale
+! MAT_PILETIP_sadm
+! MAT_SLAB_E0
+! MAT_SLAB_EX
+! MAT_SLAB_Gxyz
+! MAT_SOIL_sigScale
+
 
 MAT_SLAB_E0   = 4760*sqrt(MAT_SLAB_fck*1e-6)*1e6
 MAT_SLAB_EX   = MAT_SLAB_E0*SLAB_longRedCoef
