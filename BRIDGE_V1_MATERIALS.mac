@@ -23,7 +23,7 @@ concrete , MAT_gerber , MAT_GERBER_fck , MAT_GERBER_dens , MAT_GERBER_poisson , 
 concrete , MAT_column      , MAT_COLUMN_fck      , MAT_COLUMN_dens      , MAT_COLUMN_poisson      ,  , 1
 concrete , MAT_frameGirder , MAT_FRAMEGIRDER_fck , MAT_FRAMEGIRDER_dens , MAT_FRAMEGIRDER_poisson ,  , 1
 
-MP , ex   , MAT_Matrix , MAT_Matrix_E
+mp , ex   , MAT_matrix , MAT_MATRIX_E
 mp , prxy , MAT_matrix , 0.2
 
 ! Infrastructure
