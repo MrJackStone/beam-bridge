@@ -75,6 +75,7 @@ go2png,1200
     nsle,s,active
     /eshape,1
     eplot
+    /noerase
     /user,2
     cmsel,s,COMPL_ABT_2
     esll,a
