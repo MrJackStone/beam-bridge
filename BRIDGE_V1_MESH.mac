@@ -733,24 +733,28 @@ cm , COMPN_ABT2_pileRestrained , node
 cm , COMPN_PILE_absentSoil     , node
 
 ! Create selection component with pile nodes that will not have soil envelopment
-*if,MAT_Soil_absentOpt,eq,1,then
-    cmsel,s,COMPL_Pile
-    cmsel,a,COMPL_ABT_piles
-    cm,COMPL_temp,line
-    *get,lc,line,,count
-    lnum=0
-    *do,nthLine,1,lc,1
-        cmsel,s,COMPL_temp
-        lnum=lsnext(lnum)
+*if,MAT_SOIL_absentOpt,eq,1,then
+  *do,nthSupport,1,GEO_supportCount,1
+    topLevel = MAT_SOIL_absent_top(nthSupport)
+    botLevel = MAT_SOIL_absent_bot(nthSupport)
+    *if,botLevel,gt,topLevel,then
+      cmsel,s,COMPL_SUP%nthSupport%_piles
+      *get,lc,line,,count
+      lnum = 0
+      *do,nthLine,1,lc,1
+        cmsel,s,COMPL_SUP%nthSupport%_piles
+        lnum = lsnext(lnum)
         lsel,s,line,,lnum
         ksll,s
         *get,zRef,kp,,mxloc,z
-        topZ=zRef-MAT_Soil_absentTop
-        botZ=zRef-MAT_Soil_absentBot
+        topZ = zRef-topLevel
+        botZ = zRef-botLevel
         nsll,s,1
         nsel,r,loc,z,botZ,topZ
         cmpadd,'COMPN_PILE_absentSoil'
-    *enddo
+      *enddo
+    *endif
+  *enddo
 *endif
 
 ! Pier piles

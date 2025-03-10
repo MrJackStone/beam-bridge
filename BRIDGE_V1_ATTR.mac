@@ -904,6 +904,23 @@ WARNING: Water level incompatible with frame height. GEO_WATERHEIGHT reduced to 
   *vfill,GEO_pileLengths,ramp,GEO_pileL,0
 *endif
 
+! Determine pile segments without lateral soil restraint
+*if,MAT_SOIL_absentOpt,eq,1,then
+  *get,parType,parm,MAT_SOIL_absent_top
+  *if,parType,ne,1,then
+    *del,MAT_SOIL_absent_top,,nopr
+    *dim,MAT_SOIL_absent_top,,GEO_supportCount
+    *vfill,MAT_SOIL_absent_top,ramp,MAT_SOIL_absentTop,0
+  *endif
+
+  *get,parType,parm,MAT_SOIL_absent_bot
+  *if,parType,ne,1,then
+    *del,MAT_SOIL_absent_bot,,nopr
+    *dim,MAT_SOIL_absent_bot,,GEO_supportCount
+    *vfill,MAT_SOIL_absent_bot,ramp,MAT_SOIL_absentBot,0
+  *endif
+*endif
+
 ! Initialize pile position arrays
 *del , GEO_pileXL ,  , nopr
 *del , GEO_pileYL ,  , nopr

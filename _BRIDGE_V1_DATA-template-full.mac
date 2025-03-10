@@ -626,11 +626,16 @@ MAT_SOIL_tipNlim=150e3
 !    [0] Disabled
 !    [1] Enabled
 MAT_Soil_absentOpt=0
-! Depth at the top of weak soil layer
-MAT_Soil_absentTop=10
-! Depth at the bottom of weak soil layer
-MAT_Soil_absentBot=23
 
+*if,MAT_Soil_absentOpt,eq,1,then
+  ! Depths at top and bottom of weak soil layer for each support
+  *del,MAT_SOIL_absent_top,,nopr
+  *del,MAT_SOIL_absent_bot,,nopr
+  *dim,MAT_SOIL_absent_top,,GEO_supportCount
+  *dim,MAT_SOIL_absent_bot,,GEO_supportCount
+  MAT_SOIL_absent_top(1) = 0
+  MAT_SOIL_absent_bot(1) = 1
+*endif
 
 
 !! 1.6.2  Soil inside abutments                                                                   !!
