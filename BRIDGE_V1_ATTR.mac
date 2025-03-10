@@ -906,14 +906,14 @@ WARNING: Water level incompatible with frame height. GEO_WATERHEIGHT reduced to 
 
 ! Determine pile segments without lateral soil restraint
 *if,MAT_SOIL_absentOpt,eq,1,then
-  *get,parType,parm,MAT_SOIL_absent_top
+  *get,parType,parm,MAT_SOIL_absent_top,type
   *if,parType,ne,1,then
     *del,MAT_SOIL_absent_top,,nopr
     *dim,MAT_SOIL_absent_top,,GEO_supportCount
     *vfill,MAT_SOIL_absent_top,ramp,MAT_SOIL_absentTop,0
   *endif
 
-  *get,parType,parm,MAT_SOIL_absent_bot
+  *get,parType,parm,MAT_SOIL_absent_bot,type
   *if,parType,ne,1,then
     *del,MAT_SOIL_absent_bot,,nopr
     *dim,MAT_SOIL_absent_bot,,GEO_supportCount
