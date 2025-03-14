@@ -1,0 +1,72 @@
+! _jeene
+! /input,'D:\Tools\Code\beam-bridge\_jeene',mac
+
+! n1 = ?
+! n2 = ?
+
+
+view1w
+/view,1,0,0,1
+/auto,1
+wincln,1
+allsel
+lplot
+
+nsol , 2 , n1 , u   , x , 'UX1'
+nsol , 3 , n2 , u   , x , 'UX2'
+nsol , 4 , n1 , rot , y , 'ROTY1'
+nsol , 5 , n2 , rot , y , 'ROTY2'
+
+add , 12 , 2 ,  ,  , 'LEFT_U'  ,  ,  , 1e3/(LOAD_gammaG*LOAD_dynImpact)
+add , 13 , 3 ,  ,  , 'RIGHT_U' ,  ,  , 1e3/(LOAD_gammaG*LOAD_dynImpact)
+add , 14 , 4 ,  ,  , 'LEFT_R'  ,  ,  , 1e3/(LOAD_gammaG*LOAD_dynImpact)
+add , 15 , 5 ,  ,  , 'RIGHT_R' ,  ,  , 1e3/(LOAD_gammaG*LOAD_dynImpact)
+
+add , 21 , 12 , 13 ,  , 'DELTA_U' ,  ,  , 1 , -1
+add , 22 , 14 , 15 ,  , 'DELTA_R' ,  ,  , 1 , -1
+
+/xrange , 1     , LoadStepCount
+/gropt  , divx  , LoadStepCount-1
+/gropt  , curl  , 0
+/color  , curve , blue            , 1
+/color  , curve , red             , 2
+
+/axlab , x , LOAD SCENARIO
+/axlab , y , LONG. DISP. [mm]
+xvar  , 1
+plvar , 12 , 13
+takepic,'JEENE_U',1200
+
+/axlab , x , LOAD SCENARIO
+/axlab , y , TRANS. ROT. [mrad]
+xvar  , 1
+plvar , 14 , 15
+takepic,'JEENE_ROT',1200
+
+*get,maxDeltaU,vari,21,extrem,vmax
+*get,minDeltaU,vari,21,extrem,vmin
+*get,maxDeltaR,vari,22,extrem,vmax
+*get,minDeltaR,vari,22,extrem,vmin
+
+absDeltaU = (abs(maxDeltaU)>abs(minDeltaU))
+absDeltaR = (abs(maxDeltaR)>abs(minDeltaR))
+
+*msg,ui,absDeltaU,absDeltaR
+JEENE check:%/&
+Max. relative horizontal movement: %.2g mm%/&
+Max. relative transversal rotation: %.2g mrad
+
+*cfopen,'JEENE_DELTAS',txt
+  *vwrite,absDeltaU
+Max. relative horizontal movement: %.2g mm
+  *vwrite,absDeltaR
+Max. relative transversal rotation: %.2g mrad
+  *vwrite,
+  (' ')
+  *vwrite,
+  (' ')
+  *vwrite,
+  ('             DELTA U              DELTA R')
+*cfclos
+
+wrvar,21,22,'JEENE_DELTAS',1
