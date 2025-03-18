@@ -930,16 +930,20 @@ allsel
 numcmp,node
 
 ! Capture image of the mesh
-ALLSEL
-VIEW4W
-LPLOT
-/vup,ALL,Z
-/pnum,MAT,1
+allsel
+view4w
+wincln,1
+wincln,2
+wincln,3
+wincln,4
+lplot
+/color,defa
+/vup,all,z
+/pnum,sec,1
 /number,1
 /eshape,1
-/show
-EPLOT
-BRIDGE_V1_TAKEPIC,'02_MESH'
+eplot
+takepic,'IMG01d_meshExtruded',,,,,POST_resultsFolder
 
 ! Turn off automatic screen updating
 /nopr
