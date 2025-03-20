@@ -238,7 +238,7 @@ CM,COMPN_occupied,NODE
     spanEnd                   = GEO_supportX(nthSpan+1)
     LTleadingPos(nthSpan*3-2) = (spanStart+spanEnd)/2
     LTleadingPos(nthSpan*3-1) = spanStart+(LOAD_ltLength/2)
-    LTleadingPos(nthSpan*3-0) = spanEnd-(LOAD_ltLength/2)
+    LTleadingPos(nthSpan*3-0) = spanEnd-(LOAD_ltLength/2)  !! TODO  results in no loads on bridge?
     LOAD_lt_span(nthSpan*3-2) = nthSpan
     LOAD_lt_span(nthSpan*3-1) = nthSpan
     LOAD_lt_span(nthSpan*3-0) = nthSpan
@@ -255,7 +255,7 @@ CM,COMPN_occupied,NODE
   ! Over first abutment
   *if,GEO_ABT1_status,eq,1,then
     posIndex               = posIndex+1
-    LTleadingPos(posIndex) = 0-(LOAD_ltLength/2)
+    LTleadingPos(posIndex) = 0-(LOAD_ltLength/2) !! TODO  results in no loads on bridge/abutment?
     LOAD_lt_span(posIndex) = -1
   *endif
 
