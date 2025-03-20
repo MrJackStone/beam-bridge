@@ -70,10 +70,23 @@ nsle,s,active
   subset,nthLS,last
 
   *do,nthPath,1,pathCount,1
-    pathName='APS_P%nthPath%'
+    pathName = 'APS_P%nthPath%'
     path,pathName
-    pdef      , 'UZ_frq' , etab , 'UZ_frq'  , 1
+
+    pdef  , 'UZ_nth' , u        , z
+    pcalc , add      , 'UZ_nth' , 'UZ_nth' ,  , 1e3
+
+    *if,nthLS,eq,1,then
+      pcalc , add , 'UZ_g'  , 'UZ_nth' ,  , 1
+      pcalc , add , 'UZ_gk' , 'UZ_g'   ,  , 1/LOAD_gammaG
+    *endif
+
+    pcalc , add , 'UZ_q'   , 'UZ_nth' , 'UZ_g'  , 1                              , -1
+    pcalc , add , 'UZ_qk'  , 'UZ_q'   ,         , 1/(LOAD_gammaQ*LOAD_dynImpact)
+    pcalc , add , 'UZ_frq' , 'UZ_gk'  , 'UZ_qk' , 1                              , 1
+
     pthrebase , 'UZ_frq' , 0    , 'DFL_frq' , 1
+
   *enddo
 
   pthenv,'UPDATE','slab_envelope'
