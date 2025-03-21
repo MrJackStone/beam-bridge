@@ -76,10 +76,12 @@ eplot
 /user,1
 /vscale,1,vscale
 /vscale,2,vscale
+/type,1,3
 /hbc,1,1
 /color,f,red
 
 go2png,1200
+
   *if,geo_abt1_status,eq,1,and,geo_abt1_type,eq,3,then
     /eshape,1
     /pbc,f,,0
@@ -96,10 +98,12 @@ go2png,1200
     eplot
     /eshape,0
   *endif
+
   cmsel,s,compe_tmp
   cmsel,s,compn_tmp
   eplot
   /noerase
+
   /window,1,off
   /window,2,on
   /hbc,2,1
@@ -113,6 +117,7 @@ go2png,1200
   /udoc,2,surf,off
   /udoc,2,body,off
   /udoc,2,bcdc,off
+
   *if,geo_abt2_status,eq,1,then
     /pbc,f,,0
     cmsel,s,compa_abt_2
@@ -124,7 +129,9 @@ go2png,1200
     eplot
     /pbc,f,,1
   *endif
+
   /user,2
+
   *if,geo_abt2_status,eq,1,and,geo_abt2_type,eq,3,then
     /eshape,1
     /pbc,f,,0
@@ -140,6 +147,7 @@ go2png,1200
     eplot
     /eshape,0
   *endif
+
   *if,geo_abt2_status,eq,1,then
     esel,u,elem,,all
     *if,geo_abt2_type,eq,3,then
@@ -151,7 +159,9 @@ go2png,1200
   *else
     allsel
   *endif
+
   eplot
+
 endpng,'IMG01b_abtLoads',,,,,POST_resultsFolder
 /erase
 
