@@ -1,8 +1,9 @@
 ! BRIDGE_V1_POSTCOMPOSITE
 
-secCount=101
 
-xPitch=GEO_deckLength/(secCount-1)
+secCount = 101
+
+xPitch = GEO_deckLength/(secCount-1)
 
 cmsel,s,COMPE_Slab
 nsle,s,active
@@ -17,29 +18,29 @@ clims
 ! Create paths
 *do,nthSec,1,secCount,1
   ! Calculate cross-section position
-  xCoord=xPitch*(nthSec-1)
+  xCoord = xPitch*(nthSec-1)
 
   ! Determine on which span the section lies
-  activeSpan=0
+  activeSpan = 0
   *do,nthSpan,1,GEO_spanCount,1
-    xi=GEO_supportX(nthSpan)
-    xj=GEO_supportX(nthSpan+1)
+    xi = GEO_supportX(nthSpan)
+    xj = GEO_supportX(nthSpan+1)
     *if,xCoord,ge,xi,and,xCoord,le,xj,then
-      activeSpan=nthSpan
+      activeSpan = nthSpan
       *exit
     *endif
   *enddo
 
-  path_span(nthSec)=activeSpan
+  path_span(nthSec) = activeSpan
 
   ! Calculate Z coordinate
-  zi=zFrameTop+GEO_frameTopOffset(activeSpan)
-  zj=zFrameTop+GEO_frameTopOffset(activeSpan+1)
-  spanLength=GEO_spanlengths(activeSpan)
-  zCoord=(zj-zi)*((xCoord-xi)/spanLength)+zi
+  zi         = zFrameTop+GEO_frameTopOffset(activeSpan)
+  zj         = zFrameTop+GEO_frameTopOffset(activeSpan+1)
+  spanLength = GEO_spanlengths(activeSpan)
+  zCoord     = (zj-zi)*((xCoord-xi)/spanLength)+zi
 
   ! Create cross-sectional path
-  pthName=strcat('SS_',chrval(nthSec))
+  pthName = strcat('SS_',chrval(nthSec))
   path,%pthName%,2,,100
   ppath,1,,xCoord,yMin,zCoord
   ppath,2,,xCoord,yMax,zCoord
@@ -52,63 +53,63 @@ clims
 
 *do,nthLS,1,LoadStepCount,1
 
-    *msg,ui,nthLS,LoadStepCount
+  *msg,ui,nthLS,LoadStepCount
 BRIDGE_V1_POSTCOMPOSITE: reading load step %I/%I.
 
-    subset,nthLS
-    cshell_my,1
-    cshell_qx,1
+  subset,nthLS
+  cshell_my,1
+  cshell_qx,1
 
-    *do,nthSec,1,secCount,1
-      pthName=strcat('SS_',chrval(nthSec))
-      pthSpan=path_span(nthSec)
+  *do,nthSec,1,secCount,1
+    pthName = strcat('SS_',chrval(nthSec))
+    pthSpan = path_span(nthSec)
 
-      path,%pthName%
+    path,%pthName%
 
-      ! Map bending moment (about transversal direction)
-      mySpanPeak=mymax_ls(pthSpan,2)
-      pdef,'MY',etab,'SHELL_MY'
-      pcalc,intg,'MY_CUM','MY','S',1
-      *get,myCumMax,path,,max,'MY_CUM'
-      *get,myCumMin,path,,min,'MY_CUM'
-      myCumPeak=(abs(myCumMin)>abs(myCumMax))
-      *if,myCumPeak,gt,mySpanPeak,then
-        mymax_ls(pthSpan,1)=nthLS
-        mymax_ls(pthSpan,2)=myCumPeak
-      *endif
+    ! Map bending moment (about transversal direction)
+    mySpanPeak = mymax_ls(pthSpan,2)
+    pdef,'MY',etab,'SHELL_MY'
+    pcalc,intg,'MY_CUM','MY','S',1
+    *get,myCumMax,path,,max,'MY_CUM'
+    *get,myCumMin,path,,min,'MY_CUM'
+    myCumPeak = (abs(myCumMin)>abs(myCumMax))
+    *if,myCumPeak,gt,mySpanPeak,then
+      mymax_ls(pthSpan,1) = nthLS
+      mymax_ls(pthSpan,2) = myCumPeak
+    *endif
 
-      ! Map shear force (along transversal direction)
-      qxSpanPeak=qxmax_ls(pthSpan,2)
-      pdef,'QX',etab,'SHELL_QX'
-      pcalc,intg,'QX_CUM','QX','S',1
-      *get,qxCumMax,path,,max,'QX_CUM'
-      *get,qxCumMin,path,,min,'QX_CUM'
-      qxCumPeak=(abs(qxCumMin)>abs(qxCumMax))
-      *if,qxCumPeak,gt,qxSpanPeak,then
-        qxmax_ls(pthSpan,1)=nthLS
-        qxmax_ls(pthSpan,2)=qxCumPeak
-      *endif
+    ! Map shear force (along transversal direction)
+    qxSpanPeak = qxmax_ls(pthSpan,2)
+    pdef,'QX',etab,'SHELL_QX'
+    pcalc,intg,'QX_CUM','QX','S',1
+    *get,qxCumMax,path,,max,'QX_CUM'
+    *get,qxCumMin,path,,min,'QX_CUM'
+    qxCumPeak = (abs(qxCumMin)>abs(qxCumMax))
+    *if,qxCumPeak,gt,qxSpanPeak,then
+      qxmax_ls(pthSpan,1) = nthLS
+      qxmax_ls(pthSpan,2) = qxCumPeak
+    *endif
 
-    *enddo
+  *enddo
 
 *enddo
 
 ! Map peak results onto paths
 *do,nthSec,1,secCount,1
   ! Activate cross-sectional path
-  pthName=strcat('SS_',chrval(nthSec))
+  pthName = strcat('SS_',chrval(nthSec))
   path,%pthName%
 
   *do,nthSpan,1,GEO_spanCount,1
     ! Map bending moment (about transversal direction)
-    myLS=mymax_ls(nthSpan,1)
+    myLS = mymax_ls(nthSpan,1)
     subset,myLS
     cshell_my,1
     pdef  , 'MY' , etab     , 'SHELL_MY'
     pcalc , intg , 'MY%nthSpan%_CUM' , 'MY'       , 'S' , 1
 
     ! Map shear force
-    qxLS=qxmax_ls(nthSpan,1)
+    qxLS = qxmax_ls(nthSpan,1)
     subset,qxLS
     cshell_qx,1
     pdef  , 'QX' , etab     , 'SHELL_QX'
@@ -120,38 +121,38 @@ BRIDGE_V1_POSTCOMPOSITE: reading load step %I/%I.
 *do,nthSpan,1,GEO_spanCount,1
 
   ! Determine which paths lie on span
-  xi=GEO_supportX(nthSpan)
-  xj=GEO_supportX(nthSpan+1)
+  xi = GEO_supportX(nthSpan)
+  xj = GEO_supportX(nthSpan+1)
 
   *del,MPATHPLOT_ARR_pathNames,,nopr
-  zeroEntries=1
+  zeroEntries = 1
 
   *do,nthSec,1,secCount,1
-    pthName=strcat('SS_',chrval(nthSec))
-    xCoord=xPitch*(nthSec-1)
+    pthName = strcat('SS_',chrval(nthSec))
+    xCoord  = xPitch*(nthSec-1)
 
     *if,xCoord,ge,xi,and,xCoord,le,xj,then
 
       *if,zeroEntries,eq,1,then
         *dim,MPATHPLOT_ARR_pathNames,char,1
-        MPATHPLOT_ARR_pathNames(1)=pthName
-        zeroEntries=0
+        MPATHPLOT_ARR_pathNames(1) = pthName
+        zeroEntries                = 0
 
       *else
         *get,parLen,parm,MPATHPLOT_ARR_pathNames,dim,x
         *del,temp_char,,nopr
         *dim,temp_char,char,parLen
         *do,nthPath,1,parLen,1
-          temp_char(nthPath)=MPATHPLOT_ARR_pathNames(nthPath)
+          temp_char(nthPath) = MPATHPLOT_ARR_pathNames(nthPath)
         *enddo
         *del,MPATHPLOT_ARR_pathNames,,nopr
         *dim,MPATHPLOT_ARR_pathNames,char,parLen+1
         *do,nthPath,1,parLen,1
-          MPATHPLOT_ARR_pathNames(nthPath)=temp_char(nthPath)
+          MPATHPLOT_ARR_pathNames(nthPath) = temp_char(nthPath)
         *enddo
-        MPATHPLOT_ARR_pathNames(parLen+1)=pthName
+        MPATHPLOT_ARR_pathNames(parLen+1) = pthName
 
-        validPathCount=parLen+1
+        validPathCount = parLen+1
 
       *endif
     *endif
@@ -161,7 +162,7 @@ BRIDGE_V1_POSTCOMPOSITE: reading load step %I/%I.
   *del,MPATHPLOT_ARR_labels,,nopr
   *dim,MPATHPLOT_ARR_labels,char,validPathCount
   *do,nthPath,1,validPathCount,1
-    MPATHPLOT_ARR_labels(nthPath)='MY%nthSpan%_CUM'
+    MPATHPLOT_ARR_labels(nthPath) = 'MY%nthSpan%_CUM'
   *enddo
 
   view1w
@@ -195,7 +196,7 @@ BRIDGE_V1_POSTCOMPOSITE: reading load step %I/%I.
   *del,MPATHPLOT_ARR_labels,,nopr
   *dim,MPATHPLOT_ARR_labels,char,validPathCount
   *do,nthPath,1,validPathCount,1
-    MPATHPLOT_ARR_labels(nthPath)='QX%nthSpan%_CUM'
+    MPATHPLOT_ARR_labels(nthPath) = 'QX%nthSpan%_CUM'
   *enddo
 
   view1w
