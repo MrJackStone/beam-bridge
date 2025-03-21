@@ -453,7 +453,7 @@ go2png
   /eshape,100
   clims,0,1e-9
   plnsol,eppl,eqv
-endpng,'IMG26a_soilPL'
+endpng,'IMG26a_soilPL',,,,,POST_resultsFolder
 /erase
 /gline,,0
 

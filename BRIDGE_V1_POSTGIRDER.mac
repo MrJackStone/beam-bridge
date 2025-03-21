@@ -179,7 +179,6 @@ boldfont, 1
   /user,1
   cmsel,a,COMPE_pile !!
 
-  ! /plopts,info,3
   /plopts,leg3,on
   /udoc,1,cntr,right
   /gformat,F,1,1
@@ -231,7 +230,6 @@ boldfont, 1
   /user,1
   cmsel,a,COMPE_pile !!
 
-  ! /plopts,info,3
   /plopts,leg3,on
   /udoc,1,cntr,right
   /gformat,F,1,1
@@ -284,7 +282,6 @@ boldfont, 1
   /user,1
   cmsel,a,COMPE_pile !!
 
-  ! /plopts,info,3
   /plopts,leg3,on
   /udoc,1,cntr,right
   /gformat,F,1,1
@@ -469,7 +466,9 @@ cm,COMPE_bg,elem
     cmsel,s,COMPN_plot
     /number,1
     /udoc,1,cntr,off
+    /gline,,-1
     plnsol,u,z
+    /gline,,0
     /plopts,leg3,on
     /gformat,f,2,1
     /udoc,1,cntr,right
@@ -514,7 +513,9 @@ cm,COMPE_bg,elem
     cmsel,s,COMPN_plot
     /udoc,1,cntr,off
     /number,1
+    /gline,,-1
     plnsol,u,z
+    /gline,,0
     /plopts,leg3,on
     /gformat,f,2,1
     /udoc,1,cntr,right
