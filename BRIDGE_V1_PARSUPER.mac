@@ -1,0 +1,122 @@
+! BRIDGE_V1_PARSUPER
+
+! Exported params:
+! GEO_chordOff
+! GEO_deckOff_beg
+! GEO_deckOff_end
+! GEO_deckOffsets
+! GEO_deckWidths
+! GEO_FOOTPATH_arcOffsets
+! GEO_gerberChi_i
+! GEO_gerberChi_j
+! GEO_gerberChi_m
+! GEO_gerberChi_n
+! GEO_gerberStatus
+! GEO_gerberX_i
+! GEO_gerberX_j
+! GEO_gerberX_m
+! GEO_gerberX_n
+! GEO_girderY_beg
+! GEO_girderY_end
+
+
+!! A.  Special params for curved decks                                                            !!
+GEO_chordOff = 0
+*if,GEO_deckRadius,ne,0,then
+  GEO_chordOff = (1/2)*sqrt(4*(GEO_deckRadius**2)-(GEO_deckLength**2))
+*endif
+
+*if,GEO_deckRadius,ne,0,then
+  GEO_deckOff_beg = -GEO_deckWidth_beg/2
+  GEO_deckOff_end = -GEO_deckWidth_end/2
+*endif
+
+
+!! B.  Longitudinal girders                                                                       !!
+*del , GEO_deckWidths  ,  , nopr
+*del , GEO_deckOffsets ,  , nopr
+*dim , GEO_deckWidths  ,  , 2
+*dim , GEO_deckOffsets ,  , 2
+GEO_deckWidths(1)  = GEO_deckWidth_beg , GEO_deckWidth_end
+GEO_deckOffsets(1) = GEO_deckOff_beg   , GEO_deckOff_end
+
+*if,GEO_uniGirderSpacing,EQ,1,THEN
+  *do,deckExtremity,1,2,1
+    deckWidth  = GEO_deckWidths(deckExtremity)
+    deckOffset = GEO_deckOffsets(deckExtremity)
+    totalDist  = deckWidth-(GEO_leftSlabHang+GEO_rightSlabHang)
+    girderDist = totalDist/(GEO_girderCount-1)
+    pos        = GEO_longPosKey(deckExtremity)
+
+    *del,GEO_girderY_%pos%,,nopr
+    *dim,GEO_girderY_%pos%,,GEO_girderCount
+
+    *vfill,GEO_girderY_%pos%,ramp,deckOffset+GEO_leftSlabHang,girderDist
+  *enddo
+*endif
+
+*if,GEO_uniGirderSection,eq,1,then
+  *do,nthSection,2,GEO_girderSectionCount,1
+    GIRDER_d(nthSection)      = GIRDER_d(1)
+    GIRDER_bfs(nthSection)    = GIRDER_bfs(1)
+    GIRDER_bfi(nthSection)    = GIRDER_bfi(1)
+    GIRDER_tfs(nthSection)    = GIRDER_tfs(1)
+    GIRDER_tfi(nthSection)    = GIRDER_tfi(1)
+    GIRDER_tw(nthSection)     = GIRDER_tw(1)
+    GIRDER_hs(nthSection)     = GIRDER_hs(1)
+    GIRDER_hi(nthSection)     = GIRDER_hi(1)
+    GIRDER_hw(nthSection)     = GIRDER_hw(1)
+    GIRDER_name(1,nthSection) = GIRDER_name(1,1)
+  *enddo
+*endif
+
+
+!! C.  Footpath positions                                                                         !!
+*del,GEO_FOOTPATH_arcOffsets,,nopr
+*dim,GEO_FOOTPATH_arcOffsets,,2
+GEO_FOOTPATH_arcOffsets(1) = GEO_deckOff_beg+GEO_footpathLeft_beg
+GEO_FOOTPATH_arcOffsets(2) = GEO_deckOff_beg+GEO_deckWidth_beg-GEO_footpathRight_beg
+
+
+!! D.  Gerber cantilever positions                                                                !!
+*voper,activeGerber,GEO_gerberL,gt,0
+*vscfun,GEO_gerberCount,sum,activeGerber
+*if,GEO_gerberCount,eq,0,then
+  GEO_gerberStatus = 0
+*endif
+
+*if,GEO_gerberStatus,eq,1,then
+  *del , GEO_gerberX_sub ,  , nopr
+  *del , GEO_gerberX_add ,  , nopr
+  *del , GEO_gerberX_i   ,  , nopr
+  *del , GEO_gerberX_j   ,  , nopr
+  *del , GEO_gerberX_m   ,  , nopr
+  *del , GEO_gerberX_n   ,  , nopr
+  *dim , GEO_gerberX_sub ,  , GEO_supportCount
+  *dim , GEO_gerberX_add ,  , GEO_supportCount
+
+  ! X coordinate at tubular column faces
+  *voper , GEO_gerberX_sub , GEO_supportX , sub , GEO_columnDepth/2
+  *voper , GEO_gerberX_add , GEO_supportX , add , GEO_columnDepth/2
+
+  *vmask , activeGerber
+  *vfun  , GEO_gerberX_m , comp , GEO_gerberX_sub
+  *vmask , activeGerber
+  *vfun  , GEO_gerberX_n , comp , GEO_gerberX_add
+
+  ! X coordinate at gerber tips
+  *voper , GEO_gerberX_sub , GEO_gerberX_sub , sub , GEO_gerberL
+  *voper , GEO_gerberX_add , GEO_gerberX_add , add , GEO_gerberL
+
+  *vmask , activeGerber
+  *vfun  , GEO_gerberX_i , comp , GEO_gerberX_sub
+  *vmask , activeGerber
+  *vfun  , GEO_gerberX_j , comp , GEO_gerberX_add
+*endif
+
+*if,GEO_gerberStatus,eq,1,then
+  BRIDGE_V1_XTOCHI , 'GEO_gerberChi_i' , 'GEO_gerberX_i'
+  BRIDGE_V1_XTOCHI , 'GEO_gerberChi_j' , 'GEO_gerberX_j'
+  BRIDGE_V1_XTOCHI , 'GEO_gerberChi_m' , 'GEO_gerberX_m'
+  BRIDGE_V1_XTOCHI , 'GEO_gerberChi_n' , 'GEO_gerberX_n'
+*endif

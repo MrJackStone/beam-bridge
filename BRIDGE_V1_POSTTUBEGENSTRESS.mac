@@ -24,7 +24,7 @@
   *do,nthPier,1,GEO_pierCount,1
     csNum = 41+(10*(nthPier+1))
 
-    x_c   = 0 ! GEO_pierX(nthPier)
+    x_c   = 0
     x_min = x_c-(GEO_columnDepth/2)
     x_max = x_c+(GEO_columnDepth/2)
     y_c   = 0

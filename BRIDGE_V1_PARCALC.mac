@@ -1,0 +1,31 @@
+! BRIDGE_V1_PARCALC
+
+! Exported params:
+! CS_slice
+! GEO_arc_offsets
+
+
+! Bridge spans
+BRIDGE_V1_PARSPANS
+
+! Superstructure
+BRIDGE_V1_PARSUPER
+
+! Abutments
+BRIDGE_V1_PARABT
+
+! Mesostructure
+BRIDGE_V1_PARMESO
+
+! Infrastructure
+BRIDGE_V1_PARINFRA
+
+! Loads
+BRIDGE_V1_PARLOADS
+
+! Mesh attributes
+BRIDGE_V1_PARATTR
+
+! Positions used to slice longitudinally
+arrjoin , 'CS_slice'        , 'CS_girders'               , 'CS_loadTrains'           , 'CS_barriers'            , 'CS_leftFootpath' , 'CS_rightFootpath'
+arrjoin , 'GEO_arc_offsets' , 'GEO_WHEELPATH_arcOffsets' , 'GEO_FOOTPATH_arcOffsets' , 'LOAD_barrierOffset_beg'

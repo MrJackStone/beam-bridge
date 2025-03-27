@@ -1,0 +1,23 @@
+! BRIDGE_V1_ETYPES
+
+
+et     , TYPE_BEAM188  , 188
+keyopt , TYPE_BEAM188  , 3   , 2
+
+et     , TYPE_SHELL181 , 181
+
+et     , TYPE_LINK180  , 180
+
+et     , TYPE_COMBIN14 , 14
+keyopt , TYPE_COMBIN14 , 1   , 0
+keyopt , TYPE_COMBIN14 , 2   , 0
+keyopt , TYPE_COMBIN14 , 3   , 0
+
+et     , TYPE_MATRIX27 , 27
+keyopt , TYPE_MATRIX27 , 2   , 0
+keyopt , TYPE_MATRIX27 , 3   , 4
+
+et     , TYPE_MPC184   , 184
+keyopt , TYPE_MPC184   , 1   , 0
+
+et     , TYPE_MASS21   , 21

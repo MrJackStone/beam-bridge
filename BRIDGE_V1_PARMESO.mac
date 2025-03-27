@@ -1,0 +1,157 @@
+! BRIDGE_V1_PARMESO
+
+! Exported params:
+! GEO_colLength
+! GEO_columnY_[f]
+! GEO_frameGirderEndsY_[f]
+! GEO_frameGirderY_[f]
+! GEO_MESO[s]_alpha
+! GEO_MESO[s]_x
+! GEO_MESO[s]_y
+! GEO_mesoType
+! GEO_pierZBot
+! GEO_pierZTop
+! GEO_waterHeight
+! zFrameBot
+! zFrameTop
+
+
+!! A.  Mesostructure types                                                                        !!
+*del,GEO_mesoType,,nopr
+*dim,GEO_mesoType,,GEO_supportCount
+
+*if,GEO_frameOpt,eq,0,then
+  ! Column-girder frame
+  *vfill,GEO_mesoType,ramp,CTE_MESO_frame,0
+*elseif,GEO_frameOpt,eq,1,then
+  ! Tubular pier column
+  *vfill,GEO_mesoType,ramp,CTE_MESO_tube,0
+*elseif,GEO_frameOpt,eq,2,then
+  ! Tubular pier column
+  *vfill,GEO_mesoType,ramp,CTE_MESO_beamcap,0
+*endif
+
+*if,GEO_gerberStatus,eq,1,then
+  *do,nthSupport,1,GEO_supportCount,1
+    gerberL = GEO_gerberL(nthSupport)
+    *if,gerberL,gt,0,then
+      GEO_mesoType(nthSupport) = CTE_MESO_tcolumn
+    *endif
+  *enddo
+*endif
+
+*if,GEO_ABT1_status,eq,1,then
+  GEO_mesoType(1) = CTE_MESO_abutment
+*endif
+*if,GEO_ABT2_status,eq,1,then
+  GEO_mesoType(GEO_supportCount) = CTE_MESO_abutment
+*endif
+
+
+!! B.  Mesostructure anchor positions                                                             !!
+afunbackup
+*afun,deg
+*do,nthSupport,1,GEO_supportCount,1
+  xCenter = GEO_supportX(nthSupport)
+  *if,GEO_deckRadius,eq,0,then
+    yOffset                    = GEO_deckOff_beg+(GEO_deckOff_end-GEO_deckOff_beg)*(xCenter/GEO_deckLength)
+    GEO_MESO%nthSupport%_x     = xCenter
+    GEO_MESO%nthSupport%_y     = yOffset+(GEO_deckWidth_beg/2)
+    GEO_MESO%nthSupport%_alpha = 0
+  *else
+    chi_i                      = GEO_supportChi(nthSupport)
+    GEO_MESO%nthSupport%_x     = xCenter
+    GEO_MESO%nthSupport%_y     = GEO_deckRadius*sin(chi_i)-GEO_chordOff
+    GEO_MESO%nthSupport%_alpha = 90-chi_i
+  *endif
+*enddo
+afunrestore
+
+
+!!                                                                                                !!
+! TODO: check temporarily removed (has to be redesigned for skewed multi-span bridges)
+! ! Check width of the frame
+! leftGirderY=GEO_girderY_beg(GEO_girderCount)
+! rightGirderY=GEO_girderY_beg(1)
+! minFrameWidth=rightGirderY-leftGirderY
+! *if,GEO_frameWidth,LT,minFrameWidth,THEN
+!    GEO_frameWidth=minFrameWidth
+!    *msg,GEO_frameWidth
+! WARNING: Frame width incompatible with girder layout. GEO_FRAMEWIDTH increased to %G.
+! *endif
+!!                                                                                                !!
+
+
+!! C.  Pier frame key positions                                                                   !!
+! Vertical positions
+*del , GEO_pierZBot ,  , nopr
+*del , GEO_pierZTop ,  , nopr
+*dim , GEO_pierZBot ,  , GEO_pierCount
+*dim , GEO_pierZTop ,  , GEO_pierCount
+
+GEO_colLength = GEO_frameHeight
+*if,SEC_offset,EQ,1,THEN
+   GEO_colLength = GEO_frameHeight-FRAMEGIRDER_h
+*endif
+
+zFrameTop = 0
+*if,SEC_offset,eq,1,then
+  zFrameTop = 0-GIRDER_d(1)-FRAMEGIRDER_h !! TODO: contemplate multiple girder heights
+*endif
+
+zFrameBot = zFrameTop-GEO_colLength
+
+nthPier = 0
+*do,nthSupport,1,GEO_supportCount,1
+  mesoType = GEO_mesoType(nthSupport)
+  *if,mesoType,eq,CTE_MESO_abutment,then
+    nthPier               = nthPier+1
+    GEO_pierZBot(nthPier) = zFrameBot+GEO_frameBotOffset(nthSupport)
+    GEO_pierZTop(nthPier) = zFrameTop+GEO_frameTopOffset(nthSupport)
+  *endif
+*enddo
+
+*if,GEO_waterHeight,ge,GEO_colLength,then
+  GEO_waterHeight = GEO_colLength-0.1
+  *msg,warn,GEO_waterHeight
+WARNING: Water level incompatible with frame height. GEO_WATERHEIGHT reduced to %G.
+*endif
+
+! Transversal positions
+yCenterBeg     = GEO_deckOff_beg+(GEO_deckWidth_beg/2)
+yCenterEnd     = GEO_deckOff_end+(GEO_deckWidth_end/2)
+yCenterDelta   = yCenterEnd-yCenterBeg
+deckWidthDelta = GEO_deckWidth_end-GEO_deckWidth_beg
+
+*do,nthFrame,1,GEO_supportCount,1
+
+  xSupport            = GEO_supportX(nthFrame)
+  skewnessScaleFactor = xSupport/GEO_deckLength
+  deckWidth           = deckWidthDelta*skewnessScaleFactor+GEO_deckWidth_beg
+  yCenter             = yCenterDelta*skewnessScaleFactor+yCenterBeg
+
+  ! Frame girder
+  *del , GEO_frameGirderEndsY_%nthFrame% ,  , nopr
+  *del , GEO_columnY_%nthFrame%          ,  , nopr
+  *dim , GEO_frameGirderEndsY_%nthFrame% ,  , 2
+  *dim , GEO_columnY_%nthFrame%          ,  , 2
+
+  GEO_frameGirderEndsY_%nthFrame%(1) = yCenter-(deckWidth/2)         , yCenter+(deckWidth/2)
+  GEO_columnY_%nthFrame%(1)          = yCenter-(GEO_columnSpacing/2) , yCenter+(GEO_columnSpacing/2)
+
+  ! Longitudinal girders
+  *del,girder_y,,nopr
+  *vfact,1,1-skewnessScaleFactor,skewnessScaleFactor
+  *voper,girder_y,GEO_girderY_beg,add,GEO_girderY_end
+
+  ! Compose key Y-location array with the following positions:
+  !    left & right columns
+  !    left & right extremities
+  !    girder intersections
+  arrjoin,'y_coords','girder_y','GEO_frameGirderEndsY_%nthFrame%','GEO_columnY_%nthFrame%'
+  arruniq,'y_coords','GEO_frameGirderY_%nthFrame%',1
+
+  ! TODO: Currently using deck width at support as frame width.
+  !       For a permanent solution, frame width has to be given at each support.
+
+*enddo

@@ -32,15 +32,15 @@ batch_sliceyz,'GEO_midspanX'
 
 ! Cut at gerber connections
 *if,GEO_gerberStatus,eq,1,then
-    batch_sliceyz,'GEO_gerberX_i',,1
-    batch_sliceyz,'GEO_gerberX_j',,1
+  batch_sliceyz,'GEO_gerberX_i',,1
+  batch_sliceyz,'GEO_gerberX_j',,1
 *endif
 
-! Cut at tubular column faces
-*if,GEO_pierCount,gt,0,and,GEO_frameOpt,eq,1,then
-    batch_sliceyz,'GEO_pierX_i'
-    batch_sliceyz,'GEO_pierX_j'
-*endif
+! ! Cut at tubular column faces
+! *if,GEO_pierCount,gt,0,and,GEO_frameOpt,eq,1,then  ! TODO  I don't think these slices are necessary, for
+!     batch_sliceyz,'GEO_pierX_i'                    !       connectivity or any other reason. If removed,
+!     batch_sliceyz,'GEO_pierX_j'                    !       params GEO_pierX_i and GEO_pierX_j can then
+! *endif                                             !       also be deleted.
 
 ! Perform longitudinal cuts on the deck (footpaths, girders, load trains)
 BRIDGE_V1_LONGSLICE

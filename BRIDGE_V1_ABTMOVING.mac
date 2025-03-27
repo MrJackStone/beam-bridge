@@ -29,7 +29,7 @@ nbackup
 
     ! Apply stress increases on first abutment:
     topPressure  = _Fz/GEO_ABT1_topSurfArea
-    soilPressure = topPressure*MAT_ABT_SOIL_ka
+    soilPressure = topPressure*MAT_ABT_SOIL_kEP
 
     ! Longitudinal wall and wing (Y<0)
     cmsel,s,COMPA_ABT_longWalls
@@ -102,7 +102,7 @@ nbackup
 
     ! Apply stress increases on second abutment:
     topPressure  = _Fz/GEO_ABT2_topSurfArea
-    soilPressure = topPressure*MAT_ABT_SOIL_ka
+    soilPressure = topPressure*MAT_ABT_SOIL_kEP
 
     ! Longitudinal wall and wing (Y<0)
     cmsel,s,COMPA_ABT_longWalls

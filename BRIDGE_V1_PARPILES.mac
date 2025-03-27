@@ -1,0 +1,346 @@
+! BRIDGE_V1_PARPILES
+
+! Exported params:
+! GEO_pileXL
+! GEO_pileYL
+! GEO_pileXL
+! GEO_pileYL
+! GEO_pileCapMinLength
+! GEO_pileCapMinWidth
+
+! Schematic sketch:
+!
+!    Y (global)
+!  
+!  X      length
+!     ├─────────────┤
+!     ┌─────────────┐ ┬
+!     │           │ │
+!     │      x      │ │
+!     │      └y     │ │ width
+!     │   (local)   │ │
+!     │           │ │
+!     └─────────────┘ ┴
+!
+!
+! Pile layout options:
+! ┌─────────────────────────┬───────────────────────────────────┐
+! │ ► 2 PILES:              │ ► 6 PILES:                        │
+! │                         │                                   │
+! │     ┌───────────┐       │     ┌──────────────┐              │
+! │ (A) │  1   2  │       │ (A) │ 1  2    3 │              │
+! │     └───────────┘       │     │              │              │
+! │                         │     │ 4  5    5 │              │
+! │     ┌──────┐            │     └──────────────┘              │
+! │ (B) │   1 │            │                                   │
+! │     │      │            │                                   │
+! │     │      │            │     ┌────────┐                    │
+! │     │   2 │            │ (B) │ 1  2 │                    │
+! │     └──────┘            │     │        │                    │
+! ├─────────────────────────┤     │ 3  4 │                    │
+! │ ► 3 PILES:              │     │        │                    │
+! │                         │     │ 5  6 │                    │
+! │     ┌──────────────┐    │     └────────┘                    │
+! │ (A) │ 1  2    2 │    │                                   │
+! │     └──────────────┘    │───────────────────────────────────┤
+! │                         │ ► 8 PILES:                        │
+! │ (B) ┌──────┐            │                                   │
+! │     │   1 │            │     ┌────────────────────┐        │
+! │     │      │            │ (A) │ 1  2    3    4 │        │
+! │     │   2 │            │     │                    │        │
+! │     │      │            │     │ 5  6    7    8 │        │
+! │     │   3 │            │     └────────────────────┘        │
+! │     └──────┘            │                                   │
+! │                         │                                   │
+! │     ┌──────────┐        │     ┌────────┐                    │
+! │ (C) │  1    2│        │ (B) │ 1  2 │                    │
+! │     │          │        │     │        │                    │
+! │     │     3   │        │     │ 3  4 │                    │
+! │     └──────────┘        │     │        │                    │
+! ├─────────────────────────┤     │ 5  6 │                    │
+! │ ► 4 PILES:              │     │        │                    │
+! │                         │     │ 7  8 │                    │
+! │     ┌───────────┐       │     └────────┘                    │
+! │ (A) │  1   2  │       │                                   │
+! │     │           │       │───────────────────────────────────┤
+! │     │           │       │ ► 9 PILES:                        │
+! │     │  3   4  │       │                                   │
+! │     └───────────┘       │     ┌──────────────┐              │
+! │                         │ (A) │ 1  2    3 │              │
+! │     ┌─────────────────┐ │     │              │              │
+! │ (B) │ 1   2 3   4 │ │     │ 4  5    6 │              │
+! │     └─────────────────┘ │     │              │              │
+! │                         │     │ 7  8    9 │              │
+! │     ┌──────┐            │     └──────────────┘              │
+! │ (C) │   1 │            │                                   │
+! │     │      │            │───────────────────────────────────┤
+! │     │   2 │            │ ► 10 PILES:                       │
+! │     │      │            │                                   │
+! │     │   3 │            │     ┌──────────────────────────┐  │
+! │     │      │            │ (A) │ 1  2    3    4    5 │  │
+! │     │   4 │            │     │                          │  │
+! │     └──────┘            │     │ 6  7    8    9   10 │  │
+! ├─────────────────────────┤     └──────────────────────────┘  │
+! │ ► 5 PILES:              │                                   │
+! │                         │                                   │
+! │     ┌────────────┐      │     ┌────────┐                    │
+! │ (A) │  1    2  │      │ (B) │ 1  2 │                    │
+! │     │            │      │     │        │                    │
+! │     │      3    │      │     │ 3  4 │                    │
+! │     │            │      │     │        │                    │
+! │     │  4    5  │      │     │ 5  6 │                    │
+! │     └────────────┘      │     │        │                    │
+! │                         │     │ 7  8 │                    │
+! │     ┌────────────┐      │     │        │                    │
+! │ (B) │    1      │      │     │ 9 10 │                    │
+! │     │  2    3  │      │     └────────┘                    │
+! │     │            │      │                                   │
+! │     │  4    5  │      │                                   │
+! │     └────────────┘      │                                   │
+! └─────────────────────────┴───────────────────────────────────┘
+
+
+! Calculate relative in-plane coordinates of the piles in the pile cap
+*del , GEO_pileXL ,  , nopr
+*del , GEO_pileYL ,  , nopr
+*dim , GEO_pileXL ,  , GEO_pileCount
+*dim , GEO_pileYL ,  , GEO_pileCount
+
+*if,GEO_pileCount,eq,2,then
+  ! Two piles
+  *if,GEO_pileConfig,eq,'A',then
+    !   ┌───────────┐ x
+    !   │  1   2  │ └─y
+    !   └───────────┘
+    GEO_pileXL(1) = 0                   , 0
+    GEO_pileYL(1) = -GEO_pileDistTran/2 , GEO_pileDistTran/2
+    rowCount      = 1
+    colCount      = 2
+
+  *elseif,GEO_pileConfig,eq,'B',then
+    !   ┌──────┐
+    !   │   1 │ x
+    !   │      │ └─y
+    !   │      │
+    !   │   2 │
+    !   └──────┘
+    GEO_pileXL(1) = GEO_pileDistLong/2 , -GEO_pileDistLong/2
+    GEO_pileYL(1) = 0                  , 0
+    rowCount      = 2
+    colCount      = 1
+  *endif
+
+*elseif,GEO_pileCount,eq,3,then
+  ! Three piles
+  *if,GEO_pileConfig,eq,'A',then
+    !   ┌──────────────┐ x
+    !   │ 1  2    2 │ └─y
+    !   └──────────────┘
+    GEO_pileXL(1) = 0                 , 0 , 0
+    GEO_pileYL(1) = -GEO_pileDistTran , 0 , GEO_pileDistTran
+    rowCount      = 1
+    colCount      = 3
+
+  *elseif,GEO_pileConfig,eq,'B',then
+    !   ┌──────┐
+    !   │   1 │
+    !   │      │ x
+    !   │   2 │ └─y
+    !   │      │
+    !   │   3 │
+    !   └──────┘
+    GEO_pileXL(1) = GEO_pileDistLong , 0 , -GEO_pileDistLong
+    GEO_pileYL(1) = 0                , 0 , 0
+    rowCount      = 3
+    colCount      = 1
+
+  *elseif,GEO_pileConfig,eq,'C',then
+    !   ┌──────────┐
+    !   │  1    2│ x
+    !   │          │ └─y
+    !   │     3   │
+    !   └──────────┘
+    GEO_pileXL(1) = GEO_pileDistLong*(sqrt(3)/6) , GEO_pileDistLong*(sqrt(3)/6) , -GEO_pileDistLong*(sqrt(3)/3)
+    GEO_pileYL(1) = -GEO_pileDistTran/2          , GEO_pileDistTran/2           , 0
+    rowCount      = 2
+    colCount      = 1+(2/3)*sqrt(3)
+  *endif
+
+*elseif,GEO_pileCount,eq,4,then
+  ! Four piles
+  *if,GEO_pileConfig,eq,'A',then
+    !   ┌───────────┐
+    !   │  1   2  │
+    !   │           │ x
+    !   │           │ └─y
+    !   │  3   4  │
+    !   └───────────┘
+    GEO_pileXL(1) = GEO_pileDistLong/2  , GEO_pileDistLong/2 , -GEO_pileDistLong/2 , -GEO_pileDistLong/2
+    GEO_pileYL(1) = -GEO_pileDistTran/2 , GEO_pileDistTran/2 , -GEO_pileDistTran/2 , GEO_pileDistTran/2
+    rowCount      = 2
+    colCount      = 2
+
+  *elseif,GEO_pileConfig,eq,'B',then
+    !   ┌─────────────────┐ x
+    !   │ 1   2 3   4 │ └─y
+    !   └─────────────────┘
+    GEO_pileXL(1) = 0                     , 0                   , 0                  , 0
+    GEO_pileYL(1) = -1.5*GEO_pileDistTran , -GEO_pileDistTran/2 , GEO_pileDistTran/2 , 1.5*GEO_pileDistTran
+    rowCount      = 1
+    colCount      = 4
+
+  *elseif,GEO_pileConfig,eq,'C',then
+    !   ┌──────┐
+    !   │   1 │
+    !   │      │
+    !   │   2 │ x
+    !   │      │ └─y
+    !   │   3 │
+    !   │      │
+    !   │   4 │
+    !   └──────┘
+    GEO_pileXL(1) = 1.5*GEO_pileDistLong , GEO_pileDistLong/2 , -GEO_pileDistLong/2 , -1.5*GEO_pileDistLong
+    GEO_pileYL(1) = 0                    , 0                  , 0                   , 0
+    rowCount      = 4
+    colCount      = 1
+  *endif
+
+*elseif,GEO_pileCount,eq,5,then
+  ! Five piles
+  *if,GEO_pileConfig,eq,'A',then
+    !   ┌────────────┐
+    !   │  1    2  │
+    !   │            │ x
+    !   │      3    │ └─y
+    !   │            │
+    !   │  4    5  │
+    !   └────────────┘
+    GEO_pileXL(1) = GEO_pileDistLong*(sqrt(2)/2)  , GEO_pileDistLong*(sqrt(2)/2) , 0 , -GEO_pileDistLong*(sqrt(2)/2) , -GEO_pileDistLong*(sqrt(2)/2)
+    GEO_pileYL(1) = -GEO_pileDistTran*(sqrt(2)/2) , GEO_pileDistTran*(sqrt(2)/2) , 0 , -GEO_pileDistTran*(sqrt(2)/2) , GEO_pileDistTran*(sqrt(2)/2)
+    rowCount      = 1+sqrt(2)
+    colCount      = 1+sqrt(2)
+
+  *elseif,GEO_pileConfig,eq,'B',then
+    !   ┌────────────┐
+    !   │    1      │
+    !   │  2    3  │ x
+    !   │            │ └─y
+    !   │  4    5  │
+    !   └────────────┘
+    GEO_pileXL(1) = (0.85065)*GEO_pileDistLong , (0.26287)*GEO_pileDistLong  , (0.26287)*GEO_pileDistLong , -(0.68819)*GEO_pileDistLong , -(0.68819)*GEO_pileDistLong
+    GEO_pileYL(1) = 0                          , -(0.80902)*GEO_pileDistTran , (0.80902)*GEO_pileDistTran , -(0.5)*GEO_pileDistTran     , (0.5)*GEO_pileDistTran
+    rowCount      = 2.61804
+    colCount      = 2.70130
+  *endif
+
+*elseif,GEO_pileCount,eq,6,then
+  ! Six piles
+  *if,GEO_pileConfig,eq,'A',then
+    !   ┌──────────────┐
+    !   │ 1  2    3 │ x
+    !   │              │ └─y
+    !   │ 4  5    5 │
+    !   └──────────────┘
+    GEO_pileXL(1) = GEO_pileDistLong/2 , GEO_pileDistLong/2 , GEO_pileDistLong/2 , -GEO_pileDistLong/2 , -GEO_pileDistLong/2 , -GEO_pileDistLong/2
+    GEO_pileYL(1) = -GEO_pileDistTran  , 0                  , GEO_pileDistTran   , -GEO_pileDistTran   , 0                   , GEO_pileDistTran
+    rowCount      = 2
+    colCount      = 3
+
+  *elseif,GEO_pileConfig,eq,'B',then
+    !   ┌────────┐
+    !   │ 1  2 │
+    !   │        │ x
+    !   │ 3  4 │ └─y
+    !   │        │
+    !   │ 5  6 │
+    !   └────────┘
+    GEO_pileXL(1) = GEO_pileDistLong    , GEO_pileDistLong   , 0                   , 0                  , -GEO_pileDistLong   , -GEO_pileDistLong
+    GEO_pileYL(1) = -GEO_pileDistTran/2 , GEO_pileDistTran/2 , -GEO_pileDistTran/2 , GEO_pileDistTran/2 , -GEO_pileDistTran/2 , GEO_pileDistTran/2
+    rowCount      = 3
+    colCount      = 2
+  *endif
+
+*elseif,GEO_pileCount,eq,8,then
+  ! Eight piles:
+  d_1 = GEO_pileDistTran
+  d_2 = GEO_pileDistLong/2
+
+  *if,GEO_pileConfig,eq,'A',then
+    !   ┌────────────────────┐
+    !   │ 1  2    3    4 │ x
+    !   │                    │ └─y
+    !   │ 5  6    7    8 │
+    !   └────────────────────┘
+    GEO_pileXL(1) = d_2      , d_2      , d_2     , d_2     , -d_2     , -d_2     , -d_2    , -d_2
+    GEO_pileYL(1) = -1.5*d_1 , -0.5*d_1 , 0.5*d_1 , 1.5*d_1 , -1.5*d_1 , -0.5*d_1 , 0.5*d_1 , 1.5*d_1
+    rowCount      = 2
+    colCount      = 4
+
+  *elseif,GEO_pileConfig,eq,'B',then
+    !   ┌────────┐
+    !   │ 1  2 │
+    !   │        │
+    !   │ 3  4 │ x
+    !   │        │ └─y
+    !   │ 5  6 │
+    !   │        │
+    !   │ 7  8 │
+    !   └────────┘
+    GEO_pileXL(1) = 1.5*d_1 , 0.5*d_1 , -0.5*d_1 , -1.5*d_1 , 1.5*d_1 , 0.5*d_1 , -0.5*d_1 , -1.5*d_1
+    GEO_pileYL(1) = -d_2    , -d_2    , -d_2     , -d_2     , d_2     , d_2     , d_2      , d_2
+    rowCount      = 4
+    colCount      = 2
+  *endif
+
+*elseif,GEO_pileCount,eq,9,then
+  !   ┌──────────────┐
+  !   │ 1  2    3 │
+  !   │              │ x
+  !   │ 4  5    6 │ └─y
+  !   │              │
+  !   │ 7  8    9 │
+  !   └──────────────┘
+  GEO_pileXL(1) = GEO_pileDistLong  , GEO_pileDistLong , GEO_pileDistLong , 0                 , 0 , 0                , -GEO_pileDistLong , -GEO_pileDistLong , -GEO_pileDistLong
+  GEO_pileYL(1) = -GEO_pileDistTran , 0                , GEO_pileDistTran , -GEO_pileDistTran , 0 , GEO_pileDistTran , -GEO_pileDistTran , 0                 , GEO_pileDistTran
+  rowCount      = 3
+  colCount      = 3
+
+*elseif,GEO_pileCount,eq,10,then
+  ! Ten piles:
+  d_1 = GEO_pileDistTran
+  d_2 = GEO_pileDistLong/2
+
+  *if,GEO_pileConfig,eq,'A',then
+    !   ┌──────────────────────────┐
+    !   │ 1  2    3    4    5 │ x
+    !   │                          │ └─y
+    !   │ 6  7    8    9   10 │
+    !   └──────────────────────────┘
+    GEO_pileXL(1) = d_2    , d_2  , d_2 , d_2 , d_2   , -d_2   , -d_2 , -d_2 , -d_2 , -d_2
+    GEO_pileYL(1) = -2*d_1 , -d_1 , 0   , d_1 , 2*d_1 , -2*d_1 , -d_1 , 0    , d_1  , 2*d_1
+    rowCount      = 2
+    colCount      = 5
+
+  *elseif,GEO_pileConfig,eq,'B',then
+    !   ┌────────┐
+    !   │ 1  2 │
+    !   │        │
+    !   │ 3  4 │
+    !   │        │ x
+    !   │ 5  6 │ └─y
+    !   │        │
+    !   │ 7  8 │
+    !   │        │
+    !   │ 9 10 │
+    !   └────────┘
+    GEO_pileXL(1) = 2*d_1 , d_1  , 0    , -d_1 , -2*d_1 , 2*d_1 , d_1 , 0   , -d_1 , -2*d_1
+    GEO_pileYL(1) = -d_2  , -d_2 , -d_2 , -d_2 , -d_2   , d_2   , d_2 , d_2 , d_2  , d_2
+    rowCount      = 5
+    colCount      = 2
+  *endif
+
+*endif
+
+minPileEdgeDistance  = PILE_d
+GEO_pileCapMinLength = ((colCount-1)*GEO_pileDistTran)+(2*minPileEdgeDistance)
+GEO_pileCapMinWidth  = ((rowCount-1)*GEO_pileDistLong)+(2*minPileEdgeDistance)

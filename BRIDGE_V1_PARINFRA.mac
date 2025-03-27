@@ -1,0 +1,78 @@
+! BRIDGE_V1_PARINFRA
+
+
+! Force single pile cap option for tubular piers
+*if,GEO_frameOpt,eq,1,then
+  GEO_capOpt = 1
+*endif
+
+! Calculate pile lengths
+*if,GEO_pileOpt,eq,0,then
+  ! Uniform lengths
+  *del,GEO_pileLengths,,nopr
+  *dim,GEO_pileLengths,,GEO_SupportCount
+  *vfill,GEO_pileLengths,ramp,GEO_pileL,0
+*endif
+
+! Determine pile positions
+zPileTop = zFrameBot
+*if,SEC_offset,eq,1,then
+  zPileTop = zFrameBot-PILECAP_h+0.1
+*endif
+
+BRIDGE_V1_PARPILES
+
+! Correct minimum dimensions of pile cap
+GEO_pileCapMinLength = (GEO_pileCapMinLength>COLUMN_cy)
+GEO_pileCapMinWidth  = (GEO_pileCapMinWidth>COLUMN_cx)
+
+*if,GEO_capLength,lt,GEO_pileCapMinLength,then
+  GEO_capLength = GEO_pileCapMinLength
+  *msg,warn,GEO_capLength
+WARNING: Pile cap length too small. Size increased to %Gm.
+*endif
+
+*if,GEO_capWidth,lt,GEO_pileCapMinWidth,then
+  GEO_capWidth = GEO_pileCapMinWidth
+  *msg,warn,GEO_capWidth
+WARNING: Pile cap width too small. Size increased to %Gm.
+*endif
+
+! Calculate frame/pier slicing positions
+zero = 0
+arrjoin,'xCoords','GEO_pileXL','zero'
+arruniq,'xCoords','GEO_xTubeSlice',1
+*get,XTubeSliceCount,parm,GEO_xTubSlice,dim,x
+
+*if,GEO_frameOpt,eq,0,then
+  ! Column-girder frame
+  *del,ycols,,nopr
+  *dim,ycols,,2
+  ycols(1) = -GEO_columnSpacing/2,GEO_columnSpacing/2
+*else
+  ! Tubular pier column
+  *del,ycols,,nopr
+  *dim,ycols,,1
+  ycols(1) = 0
+*endif
+
+arrjoin,'yCoords','GEO_pileYL','zero','ycols'
+arruniq,'yCoords','GEO_yTubeSlice',1
+*get,YTubeSliceCount,parm,GEO_yCapSlice,dim,x
+
+! Calculate pile cap slicing positions
+*if,GEO_frameOpt,eq,1,then
+  ! Tubular pier column
+  front = GEO_columnDepth/2
+  back  = -GEO_columnDepth/2
+*else
+  ! Column-girder frame
+  front = 0
+  back  = 0
+*endif
+arrjoin,'xCoords','GEO_xTubeSlice','front','back'
+arruniq,'xCoords','GEO_xCapSlice',1
+*get,XSliceCount,parm,GEO_xCapSlice,dim,x
+
+arruniq,'GEO_yTubeSlice','GEO_yCapSlice',1
+*get,YSliceCount,parm,GEO_yCapSlice,dim,x

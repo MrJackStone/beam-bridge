@@ -1,0 +1,183 @@
+! BRIDGE_V1_SECTIONS
+
+
+! Girders
+*do,nthGirderSection,1,GEO_girderSectionCount
+  ! Collect section description
+  num  = SEC_GIRDER_nums(nthGirderSection)
+  bfs  = GIRDER_bfs(nthGirderSection)
+  bfi  = GIRDER_bfi(nthGirderSection)
+  d    = GIRDER_d(nthGirderSection)
+  tfs  = GIRDER_tfs(nthGirderSection)
+  tfi  = GIRDER_tfi(nthGirderSection)
+  tw   = GIRDER_tw(nthGirderSection)
+  hs   = GIRDER_hs(nthGirderSection)
+  hi   = GIRDER_hi(nthGirderSection)
+  hw   = GIRDER_hw(nthGirderSection)
+  name = GIRDER_name(1,nthGirderSection)
+
+  *if,MAT_Girder_type,eq,0,then
+    ! Write custom cross-section file
+    sec_girder,bfs,bfi,d,tfs,tfi,tw,hs,hi,hw,name
+
+    ! Update input geometry
+    GIRDER_bfs(nthGirderSection) = SEC_GIRDER_VAR_bfs
+    GIRDER_bfi(nthGirderSection) = SEC_GIRDER_VAR_bfi
+    GIRDER_d  (nthGirderSection) = SEC_GIRDER_VAR_d
+    GIRDER_tfs(nthGirderSection) = SEC_GIRDER_VAR_tfs
+    GIRDER_tfi(nthGirderSection) = SEC_GIRDER_VAR_tfi
+    GIRDER_tw (nthGirderSection) = SEC_GIRDER_VAR_tw
+    GIRDER_hs (nthGirderSection) = SEC_GIRDER_VAR_hs
+    GIRDER_hi (nthGirderSection) = SEC_GIRDER_VAR_hi
+    GIRDER_hw (nthGirderSection) = SEC_GIRDER_VAR_hw
+
+    ! Create cross-section
+    sectype   , num  , beam  , mesh , name
+    secread   , name , sect  ,      , mesh
+    secoffset , user , bfi/2 , d
+
+  *elseif,MAT_Girder_type,eq,1,then
+    ! create section from database
+    cedisavs,num,name,2
+
+    ! Update input geometry
+    GIRDER_bfs(nthGirderSection) = CEDISAVS_VAR_bf
+    GIRDER_bfi(nthGirderSection) = CEDISAVS_VAR_bf
+    GIRDER_d  (nthGirderSection) = CEDISAVS_VAR_d
+    GIRDER_tfs(nthGirderSection) = CEDISAVS_VAR_tf
+    GIRDER_tfi(nthGirderSection) = CEDISAVS_VAR_tf
+    GIRDER_tw (nthGirderSection) = CEDISAVS_VAR_tw
+    GIRDER_hs (nthGirderSection) = 0
+    GIRDER_hi (nthGirderSection) = 0
+    GIRDER_hw (nthGirderSection) = CEDISAVS_VAR_d-2*CEDISAVS_VAR_tf
+
+    secoffset , user ,  , GIRDER_d(nthGirderSection)
+
+  *endif
+
+  *del , num  ,, nopr
+  *del , bfs  ,, nopr
+  *del , bfi  ,, nopr
+  *del , d    ,, nopr
+  *del , tfs  ,, nopr
+  *del , tfi  ,, nopr
+  *del , tw   ,, nopr
+  *del , hs   ,, nopr
+  *del , hi   ,, nopr
+  *del , hw   ,, nopr
+  *del , name ,, nopr
+*enddo
+
+! Deck slab
+sectype   , SEC_SLAB_num , shell               ,  , SLAB_name
+secdata   , SLAB_t       , MAT_slab
+secoffset , user         , -(SLAB_t/2)-SLAB_hF
+
+! Gerber cantilever
+sectype,SEC_GERBER,beam,rect,'GERBER',2
+secdata,GERBER_b,GERBER_h
+*if,SEC_offset,eq,1,then
+   secoffset,user,,GERBER_h/2
+*endif
+
+! Gerber console
+sectype,SEC_CONSOLE,beam,rect,'CONSOLE',2
+secdata,CONSOLE_b,CONSOLE_h
+*if,SEC_offset,eq,1,then
+   secoffset,user,,CONSOLE_h/2
+*endif
+
+! Frame columns
+sectype,SEC_COLUMN_num,beam,rect,COLUMN_name,2
+secdata,COLUMN_cx,COLUMN_cy
+
+! Frame girder
+sectype,SEC_FRAMEGIRDER_num,beam,rect,FRAMEGIRDER_name,2
+secdata,FRAMEGIRDER_b,FRAMEGIRDER_h
+secoffset,user,,FRAMEGIRDER_h/2
+
+! Cross-beam
+sectype,SEC_CROSSBEAM,beam,rect,'CRSBEAM',2
+secdata,CROSSBEAM_b,CROSSBEAM_h
+secoffset,user,,CROSSBEAM_h/2
+
+! Pile caps
+sectype,SEC_PILECAP_num,shell,,PILECAP_name
+secdata,PILECAP_h,MAT_PileCap
+*if,SEC_offset,eq,1,then
+  secoffset,top
+*endif
+
+! Grade beam
+sectype,SEC_GRADEBEAM_num,beam,rect,GRADEBEAM_name,2
+secdata,GRADEBEAM_b,GRADEBEAM_h
+*if,SEC_offset,eq,1,then
+   secoffset,user,,GRADEBEAM_h/2
+*endif
+
+! Piles
+*if,PILE_thk,eq,0,then
+  ! Standard concrete pile
+  sectype,SEC_PILE_num,beam,csolid,PILE_name,2
+  secdata,PILE_d/2
+*elseif,PILE_thk,gt,0,then
+  ! Concrete pile with permanent steel casing
+  sec_ctube , PILE_d , PILE_thk , MAT_pile , MAT_casing ,, 'COMPOSITE_PILE'
+  sectype,SEC_PILE_num,beam,mesh,'PILE'
+  secread,'COMPOSITE_PILE',sect,,mesh
+*endif
+
+! Abutment longitudinal walls
+sectype,SEC_ABT_longWall,shell,,'ABT_LW'
+secdata,SEC_ABT_longWall_t,MAT_Abutment
+
+! Abutment transversal wall-column
+sectype,SEC_ABT_tranWall,shell,,'ABT_TW'
+secdata,SEC_ABT_tranWall_t,MAT_Abutment
+
+! Abutment transversal wall
+sectype,SEC_ABT_thinTranWall,shell,,'ABT_TTW'
+secdata,SEC_ABT_thinTranWall_t,MAT_Abutment
+
+! Abutment beam/half-wall
+sectype,SEC_ABT_beam,shell,,'ABT_BEAM'
+secdata,SEC_ABT_beam_W,MAT_Abutment
+
+! Abutment longitudinal wall columns
+sectype,SEC_ABT_column,shell,,'ABT_COL'
+secdata,SEC_ABT_col_W,MAT_Abutment
+
+! Abutment wings
+sectype,SEC_ABT_wing,shell,,'ABT_WING'
+secdata,SEC_ABT_wing_t,MAT_Abutment
+
+! Abutment approach slabs
+sectype,SEC_ABT_appSlab,shell,,'ABT_SLAB'
+secdata,SEC_ABT_appSlab_t,MAT_Approach
+secoffset,bot
+
+! Abutment piles
+*if,SEC_ABT_PILE_thk,eq,0,then
+  ! Standard concrete pile
+  sectype,SEC_ABT_pile,beam,csolid,'ABT_PILE',2
+  secdata,SEC_ABT_pile_d/2
+*elseif,SEC_ABT_PILE_thk,gt,0,then
+  ! Concrete pile with permanent steel casing
+  sec_ctube , SEC_ABT_PILE_d , SEC_ABT_PILE_thk , MAT_pile , MAT_casing ,, 'COMPOSITE_ABT_PILE'
+  sectype,SEC_ABT_pile,beam,mesh,'ABTPILE'
+  secread,'COMPOSITE_ABT_PILE',sect,,mesh
+*endif
+
+! Abutment pile caps
+sectype,SEC_ABT_pileCap,shell,,'ABT_SLAB'
+secdata,SEC_ABT_pileCap_h,MAT_abutment
+secoffset,top
+
+! Tubular pier column walls
+sectype,SEC_colWall,shell,,'COLWALL'
+secdata,COLUMN_tWall,MAT_column
+
+! Tubular pier column top cap
+sectype,SEC_colCap,shell,,'COLCAP'
+secdata,COLUMN_tCap,MAT_column
+secoffset,top
