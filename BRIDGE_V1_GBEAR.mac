@@ -1,5 +1,9 @@
 ! BRIDGE_V1_GBEAR
 
+
+*del,FEM_bearing_pairs,,nopr
+*dim,FEM_bearing_pairs,,4,GEO_girderCount,GEO_spanCount
+
 ! Connect girders to frame girders
 *do,nthSpan,1,GEO_spanCount,1
 
@@ -107,6 +111,11 @@
 
     BRIDGE_V1_FEMBEARING , connectionBeg , GBNode , SBNode
     BRIDGE_V1_FEMBEARING , connectionEnd , GENode , SENode
+
+    FEM_bearing_pairs(1,nthGirder,nthSpan) = GBNode
+    FEM_bearing_pairs(2,nthGirder,nthSpan) = SBNode
+    FEM_bearing_pairs(3,nthGirder,nthSpan) = GENode
+    FEM_bearing_pairs(4,nthGirder,nthSpan) = SENode
 
   *enddo
 
