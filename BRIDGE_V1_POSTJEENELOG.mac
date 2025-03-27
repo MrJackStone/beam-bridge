@@ -1,0 +1,25 @@
+! BRIDGE_V1_POSTJEENELOG , leftNode , rightNode , supIndex , girderIndex
+! BRIDGE_V1_POSTJEENELOG , ARG1     , ARG2      , ARG3     , ARG4
+
+
+_leftNode    = ARG1
+_rightNode   = ARG2
+_supIndex    = ARG3
+_girderIndex = ARG4
+
+*vscfun , leftMax , max , left_f
+*vscfun , leftMin , min , left_f
+
+*vscfun , rightMax , max , right_f
+*vscfun , rightMin , min , right_f
+
+*vscfun , maxGap , max  , f_k
+*vscfun , minGap , min  , f_k
+*vscfun , maxLS  , lmax , f_k
+*vscfun , minLS  , lmin , f_k
+deltaGap = maxGap-minGap
+
+*cfopen,'JEENE_LOG','txt',,append
+  *vwrite,_supIndex,_girderIndex,_leftNode,_rightNode,leftMin,leftMax,rightMin,rightMax,minGap,minLS,maxGap,maxLS,deltaGap
+  (F4.0,TL1,'     ',F4.0,TL1,'  ' ,F9.0,TL1,'  ', F9.0,TL1,'  ', F10.4,'  ', F10.4,'  ', F10.4,'  ', F10.4,'  ', F10.4,'     ', F4.0,TL1,' ', F10.4,'     ', F4.0,TL1,' ' , F10.4)
+*cfclos

@@ -1,0 +1,74 @@
+! BRIDGE_V1_POSTJEENE
+
+! Input/Output array formatting:
+!
+! FEM_bearing_pairs(i,j,k)
+!   i: spanBeginning(girderNode; mesoNode); spanEnd(girderNode; mesoNode)
+!   j: girderIndex
+!   k: supportIndex
+!
+! FEM_jeene_pairs(i,j,k)
+!   i: leftNode; rightNode
+!   j: girderIndex
+!   k: supportIndex
+
+
+!! A.  Create matrix with pairs of nodes for Jeene joint calculation                              !!
+*del,FEM_jeene_pairs,,nopr
+*dim,FEM_jeene_pairs,,2,GEO_girderCount,GEO_supportCount
+
+! Span nodes
+*do,nthSpan,1,GEO_spanCount,1
+
+  begSupport = nthSpan
+  endSupport = nthSpan+1
+
+  *do,nthGirder,1,GEO_girderCount,1
+    FEM_jeene_pairs(2,nthGirder,begSupport) = FEM_bearing_pairs(1,nthGirder,nthSpan)
+    FEM_jeene_pairs(1,nthGirder,endSupport) = FEM_bearing_pairs(3,nthGirder,nthSpan)
+  *enddo
+
+*enddo
+
+! First abutment nodes
+*if,GEO_ABT1_status,eq,1,and,GEO_ABT1_appSlab,eq,1,then
+  cmsel,s,COMPE_ABT_appSlab
+  cmsel,r,COMPE_ABT_1
+  nsle,s,active
+  *do,nthGirder,1,GEO_girderCount,1
+    girderNode                     = FEM_jeene_pairs(2,nthGirder,1)
+    slabNode                       = nnear(girderNode)
+    FEM_jeene_pairs(1,nthGirder,1) = slabNode
+  *enddo
+*endif
+
+! Second abutment nodes
+*if,GEO_ABT2_status,eq,1,and,GEO_ABT2_appSlab,eq,1,then
+  cmsel,s,COMPE_ABT_appSlab
+  cmsel,r,COMPE_ABT_2
+  nsle,s,active
+  *do,nthGirder,1,GEO_girderCount,1
+    girderNode                                    = FEM_jeene_pairs(1,nthGirder,GEO_supportCount)
+    slabNode                                      = nnear(girderNode)
+    FEM_jeene_pairs(2,nthGirder,GEO_supportCount) = slabNode
+  *enddo
+*endif
+
+
+!! B.  Calculate joint openings                                                                   !!
+! Initialize joint results log
+*cfopen,'JEENE_LOG','txt'
+  *vwrite,
+  ('SUP  GIRDER    L_NODE    R_NODE       L_MIN       L_MAX       R_MIN       R_MAX     GAP_MIN  LS_MIN    GAP_MAX  LS_MAX    GAP_DLT')
+*cfclos
+
+*do,nthSupport,1,GEO_supportCount,1
+  *do,nthGirder,1,GEO_girderCount,1
+    leftNode  = FEM_jeene_pairs(1,nthGirder,nthSupport)
+    rightNode = FEM_jeene_pairs(2,nthGirder,nthSupport)
+    *if,leftNode,gt,0,and,rightNode,gt,0,then
+      BRIDGE_V1_POSTJEENEPICS , leftNode , rightNode , nthSupport , nthGirder
+      BRIDGE_V1_POSTJEENELOG  , leftNode , rightNode , nthSupport , nthGirder
+    *endif
+  *enddo
+*enddo

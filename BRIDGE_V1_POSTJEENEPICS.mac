@@ -1,0 +1,115 @@
+! BRIDGE_V1_POSTJEENEPICS , leftNode , rightNode , supIndex , girderIndex
+! BRIDGE_V1_POSTJEENEPICS , ARG1     , ARG2      , ARG3     , ARG4
+
+
+_leftNode    = ARG1
+_rightNode   = ARG2
+_supIndex    = ARG3
+_girderIndex = ARG4
+
+picRes = 1200
+
+*del,ls_index,,nopr
+*dim,ls_index,,LoadStepCount
+*vfill,ls_index,ramp,1,1
+
+*if,_supIndex,eq,1,then
+  leftHeight = 1e3*(SEC_ABT_appSlab_t)
+*else
+  leftHeight = 1e3*(GIRDER_d(_supIndex-1)+SLAB_t+SLAB_hF)
+*endif
+*del   , left_h ,      , nopr
+*dim   , left_h ,      , LoadStepCount
+*vfill , left_h , ramp , leftHeight , 0
+
+*if,_supIndex,eq,GEO_supportCount,then
+  rightHeight = 1e3*(SEC_ABT_appSlab_t)
+*else
+  rightHeight = 1e3*(GIRDER_d(_supIndex)+SLAB_t+SLAB_hF)
+*endif
+*del   , right_h ,      , nopr
+*dim   , right_h ,      , LoadStepCount
+*vfill , right_h , ramp , rightHeight , 0
+
+view1w
+/view,1,0,0,1
+/auto,1
+wincln,1
+g_picres,picRes
+boldfont,1
+wintitle,1,'JUNTA JEENE: A%_supIndex%, G%_girderIndex%','ABERTURA NO TOPO DA JUNTA','+ABRE/-FECHA [mm]',,1,13
+allsel
+lplot
+
+nsol , 2 , _leftNode  , u   , x , 'UX1'
+nsol , 3 , _rightNode , u   , x , 'UX2'
+nsol , 4 , _leftNode  , rot , y , 'ROTY1'
+nsol , 5 , _rightNode , rot , y , 'ROTY2'
+
+add , 12 , 2 ,  ,  , 'LEFT_U'  ,  ,  , 1e3/(LOAD_gammaG*LOAD_dynImpact)
+add , 13 , 3 ,  ,  , 'RIGHT_U' ,  ,  , 1e3/(LOAD_gammaG*LOAD_dynImpact)
+add , 14 , 4 ,  ,  , 'LEFT_R'  ,  ,  , 1e3/(LOAD_gammaG*LOAD_dynImpact)
+add , 15 , 5 ,  ,  , 'RIGHT_R' ,  ,  , 1e3/(LOAD_gammaG*LOAD_dynImpact)
+
+*del ,  , left_u  ,  , nopr
+*del ,  , left_r  ,  , nopr
+*del ,  , right_u ,  , nopr
+*del ,  , right_r ,  , nopr
+
+vget , left_u  , 12
+vget , left_r  , 14
+vget , right_u , 13
+vget , right_r , 15
+
+afunbackup
+*afun,rad
+
+*vfact , 1        , 1e-3
+*vfun  , left_sin , sin        , left_r
+*vfact , 1        , leftHeight , 1
+*voper , left_f   , left_sin   , add    , left_u
+
+*vfact , 1         , 1e-3
+*vfun  , right_sin , sin         , right_r
+*vfact , 1         , rightHeight , 1
+*voper , right_f   , right_sin   , add     , right_u
+
+*voper , f_k , right_f , sub , left_f
+
+afunrestore
+
+vput , left_f  , 23 ,  ,  , 'L_MOVE'
+vput , right_f , 24 ,  ,  , 'R_MOVE'
+vput , f_k     , 25 ,  ,  , 'GAP'
+
+/xrange, 1     , LoadStepCount
+/gropt , divx  , LoadStepCount-1
+/gropt , curl  , 0
+/color , curve , dgra , 1
+/color , curve , lgra , 2
+/color , curve , red  , 3
+
+/axlab , x , LOAD SCENARIO
+/axlab , y , JOINT GAP [mm]
+xvar  , 1
+plvar , 23 , 24 , 25
+takepic,'IMG26a_S%_supIndex%_G%_girderIndex%_JEENE',picRes,,,,POST_resultsFolder
+
+! wrvar,23,24,'JEENE_S%_supIndex%_G%_girderIndex%'
+
+*cfopen,'JEENE_S%_supIndex%_G%_girderIndex%','txt'
+  *vwrite,_supIndex
+  ('SUPPORT: ',F4.0,TL1,' ')
+  *vwrite,_girderIndex
+  ('GIRDER:  ',F4.0,TL1,' ')
+  *vwrite,
+  (' ')
+  *vwrite,
+  ('Units: mm & mrad')
+  *vwrite,
+  (' ')
+  *vwrite,
+  ('   LS      LEFT_U      LEFT_R        LEFT_H      LEFT_F     RIGHT_U     RIGHT_R       RIGHT_H     RIGHT_F         GAP')
+  *vwrite,ls_index(1),left_u(1),left_r(1),left_h(1),left_f(1),right_u(1),right_r(1),right_h(1),right_f(1),f_k(1)
+  (F6.0,TL1,'  ',F10.4,'  ',F10.4,'  ',F12.2,'  ',F10.4,'  ',F10.4,'  ',F10.4,'  ',F12.2,'  ',F10.4,'  ',F10.4)
+*cfclos
