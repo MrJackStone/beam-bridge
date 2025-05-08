@@ -1,0 +1,269 @@
+! BRIDGE_V1_PARLOADS
+
+! Exported params:
+! arr_f_longitudinal
+! GEO_WHEELPATH_arcOffsets
+! LOAD_additionalImpactCoefficient
+! LOAD_barrierValue
+! LOAD_baseImpactCoefficient
+! LOAD_centrifugalPct
+! LOAD_columnWind
+! LOAD_deckWind
+! LOAD_degreeOfCurve
+! LOAD_dynImpact
+! LOAD_g
+! LOAD_laneCoefficient
+! LOAD_ltLength
+! LOAD_ltWheelOff_beg
+! LOAD_ltWheelOff_end
+! LOAD_ltWheelPathCount
+! LOAD_pav
+! LOAD_pedestrianTraffic
+! LOAD_plCount
+! LOAD_plDist
+! LOAD_plValue
+! LOAD_vehicleTraffic
+! LOAD_waterFlow
+! LOAD_wheelCount
+
+
+! Calculate load introduction positions
+afunbackup
+*afun,deg
+skewedDeltaY = GEO_deckLength*tan(LOAD_ltSkewness)
+afunrestore
+
+LOAD_wheelCount       = LOAD_ltCount*2
+LOAD_ltWheelPathCount = LOAD_wheelCount*LOAD_ltTransScenarioCount
+
+*del , LOAD_ltWheelOff_beg      ,  , nopr
+*del , LOAD_ltWheelOff_end      ,  , nopr
+*del , GEO_WHEELPATH_arcOffsets ,  , nopr
+*dim , LOAD_ltWheelOff_beg      ,  , LOAD_wheelCount       , LOAD_ltTransScenarioCount
+*dim , LOAD_ltWheelOff_end      ,  , LOAD_wheelCount       , LOAD_ltTransScenarioCount
+*dim , GEO_WHEELPATH_arcOffsets ,  , LOAD_ltWheelPathCount
+
+nthPath = 0
+
+*do,nthLTtransScenario,1,LOAD_ltTransScenarioCount,1
+  *do,nthLine,1,LOAD_ltCount,1
+    LOAD_ltWheelOff_beg(nthLine*2-1,nthLTtransScenario) = LOAD_ltLineOff(nthLine,nthLTtransScenario)-(LOAD_ltWidth/2)
+    LOAD_ltWheelOff_beg(nthLine*2,nthLTtransScenario)   = LOAD_ltLineOff(nthLine,nthLTtransScenario)+(LOAD_ltWidth/2)
+    LOAD_ltWheelOff_end(nthLine*2-1,nthLTtransScenario) = LOAD_ltLineOff(nthLine,nthLTtransScenario)-(LOAD_ltWidth/2)+skewedDeltaY
+    LOAD_ltWheelOff_end(nthLine*2,nthLTtransScenario)   = LOAD_ltLineOff(nthLine,nthLTtransScenario)+(LOAD_ltWidth/2)+skewedDeltaY
+  *enddo
+
+  *do,nthLT,1,LOAD_wheelCount,1
+    yBeg                              = LOAD_ltWheelOff_beg(nthLT,nthLTtransScenario)
+    nthPath                           = nthPath+1
+    GEO_WHEELPATH_arcOffsets(nthPath) = yBeg
+  *enddo
+*enddo
+
+! Calculate dynamic impact coefficient
+*if,BRIDGE_type,eq,0,then
+  ! Highway bridge
+
+  *vscfun,minSpanLength,min,GEO_spanLengths
+
+  ! Basic impact coefficient (NBR 7188)
+  LOAD_baseImpactCoefficient       = (1.35<1+1.06*(20/(minSpanLength+50)))
+  ! Additional impact coefficient (used only for slabs less than 5 meters away from a joint -- unused for now)
+  LOAD_additionalImpactCoefficient = 1.25
+  ! Lane number coefficient (should not be used for slabs -- unused for now)
+  LOAD_laneCoefficient             = (0.9>1-0.05*(GEO_laneNumber-2))
+  ! Final impact coefficient applied to vehicle loads
+  LOAD_dynImpact                   = LOAD_baseImpactCoefficient
+
+*elseif,BRIDGE_type,eq,1,then
+  ! Railway bridge (VALE)
+  LOAD_dynImpact = 1.6
+
+  ! Railway bridge (NBR 7187:2003)
+  LOAD_dynImpact = (1600-60*sqrt(minSpanLength)+2.25*minSpanLength)/1000
+  LOAD_dynImpact = (LOAD_dynImpact>1.2)
+
+*endif
+
+! Build load train
+loadtrain , LOAD_ltName , LOAD_locRep , 0 , 1 , LOAD_railcarCount ! Output: LOADTRAIN_VAR_count; LOADTRAIN_ARR_positions; LOADTRAIN_ARR_loads
+*del  , LOAD_plDist   ,      , nopr
+*del  , LOAD_plValue  ,      , nopr
+*del  , LOAD_ltLength ,      , nopr
+*vfun , LOAD_plDist   , copy , LOADTRAIN_ARR_positions
+*vfun , LOAD_plValue  , copy , LOADTRAIN_ARR_loads
+LOAD_plCount  = LOADTRAIN_VAR_count
+LOAD_ltLength = LOADTRAIN_VAR_length
+
+! Calculate longitudinal horizontal forces
+*if,BRIDGE_type,eq,0,then
+  ! Highway bridge
+
+*elseif,BRIDGE_type,eq,1,then
+  ! Railway bridge
+
+  *if,LOAD_railOpt,eq,0,then
+    ! Discontinuous rail:
+
+    ! According to AREMA (lengths input in meters, forces output in N):
+    !   f_braking      = 1e3*(200+17.5*loaded_length)
+    !   f_accelerating = 1e3*(200*sqrt(loaded_length))
+
+    ! Braking forces
+    *del   , arr_f_braking ,                    , nopr
+    *voper , arr_f_braking , GEO_genSpanLengths , mult , 17.5
+    *voper , arr_f_braking , f_braking          , add  , 200
+    *voper , arr_f_braking , arr_f_braking      , mult , 1e3
+
+    ! Accelerating forces
+    *del   , arr_f_accelerating ,                    , nopr
+    *vfun  , arr_f_accelerating , sqrt               , GEO_genSpanLengths
+    *voper , arr_f_accelerating , arr_f_accelerating , mult               , 200
+    *voper , arr_f_accelerating , arr_f_accelerating , mult               , 1e3
+
+    ! Total longitudinal forces
+    *del   , arr_f_longitudinal ,               , nopr
+    *voper , arr_f_longitudinal , arr_f_braking , max  , arr_f_accelerating
+
+  *endif
+*endif
+
+! Calculate centrifugal force percentage (AREMA)
+*if,GEO_deckRadius,ne,0,then
+  afunbackup
+  *afun,deg
+  LOAD_degreeOfCurve = 2*asin(15.24/GEO_deckRadius)
+  afunrestore
+  LOAD_centrifugalPct = 4.52e-4*(LOAD_speed**2)*LOAD_degreeOfCurve
+*else
+  LOAD_centrifugalPct = 0
+*endif
+
+! Define load combination coefficients
+*if,LOAD_combination,eq,1,then
+  ! Ultimate load: load train as main
+  ! Live loads
+  *voper,LOAD_plValue,LOAD_gammaQ*LOAD_dynImpact,MULT,LOAD_plValue
+  LOAD_vehicleTraffic    = LOAD_vehicleTraffic_k*LOAD_dynImpact*LOAD_gammaQ*LOAD_psi0
+  LOAD_pedestrianTraffic = LOAD_pedestrianTraffic_k*LOAD_gammaQ*LOAD_psi0
+  LOAD_waterFlow         = LOAD_waterFlow_k*LOAD_gammaQ*LOAD_psi0
+  LOAD_columnWind        = LOAD_columnWind_k*LOAD_gammaQ*LOAD_psi0
+  LOAD_deckWind          = LOAD_deckWind_k*LOAD_gammaQ*LOAD_psi0
+  ! Dead loads
+  LOAD_g            = LOAD_g_k*LOAD_gammaG
+  LOAD_pav          = LOAD_pav_k*LOAD_gammaG
+  LOAD_barrierValue = LOAD_barrierValue_k*LOAD_gammaG
+
+*elseif,LOAD_combination,eq,2,then
+  ! Ultimate load: wind/tide as main
+  ! Live loads
+  *voper,LOAD_plValue,LOAD_gammaQ*LOAD_dynImpact*LOAD_psi0,mult,LOAD_plValue
+  LOAD_vehicleTraffic    = LOAD_vehicleTraffic_k*LOAD_dynImpact*LOAD_gammaQ
+  LOAD_pedestrianTraffic = LOAD_pedestrianTraffic_k*LOAD_gammaQ
+  LOAD_waterFlow         = LOAD_waterFlow_k*LOAD_gammaQ*LOAD_psi0
+  LOAD_columnWind        = LOAD_columnWind_k*LOAD_gammaQ*LOAD_psi0
+  LOAD_deckWind          = LOAD_deckWind_k*LOAD_gammaQ*LOAD_psi0
+  ! Dead loads
+  LOAD_g            = LOAD_g_k*LOAD_gammaG
+  LOAD_pav          = LOAD_pav_k*LOAD_gammaG
+  LOAD_barrierValue = LOAD_barrierValue_k*LOAD_gammaG
+
+*elseif,LOAD_combination,eq,3,then
+  ! Service load ("quase-permanente")
+  ! Live loads
+  *voper,LOAD_plValue,LOAD_psi2,mult,LOAD_plValue
+  LOAD_vehicleTraffic    = LOAD_vehicleTraffic_k*LOAD_psi2
+  LOAD_pedestrianTraffic = LOAD_pedestrianTraffic_k*LOAD_psi2
+  LOAD_waterFlow         = LOAD_waterFlow_k*LOAD_psi2
+  LOAD_columnWind        = LOAD_columnWind_k*LOAD_psi2
+  LOAD_deckWind          = LOAD_deckWind_k*LOAD_psi2
+  ! Dead loads
+  LOAD_g            = LOAD_g_k
+  LOAD_pav          = LOAD_pav_k
+  LOAD_barrierValue = LOAD_barrierValue_k
+
+*elseif,LOAD_combination,eq,4,then
+  ! Service load ("rara"): load train as main
+  ! Live loads
+  *voper,LOAD_plValue,1,mult,LOAD_plValue
+  LOAD_vehicleTraffic    = LOAD_vehicleTraffic_k*LOAD_psi1
+  LOAD_pedestrianTraffic = LOAD_pedestrianTraffic_k*LOAD_psi1
+  LOAD_waterFlow         = LOAD_waterFlow_k*LOAD_psi1
+  LOAD_columnWind        = LOAD_columnWind_k*LOAD_psi1
+  LOAD_deckWind          = LOAD_deckWind_k*LOAD_psi1
+  ! Dead loads
+  LOAD_g            = LOAD_g_k
+  LOAD_pav          = LOAD_pav_k
+  LOAD_barrierValue = LOAD_barrierValue_k
+
+*elseif,LOAD_combination,eq,5,then
+  ! Service load ("rara"): wind/tide as main
+  ! Live loads
+  *voper,LOAD_plValue,LOAD_psi1,mult,LOAD_plValue
+  LOAD_vehicleTraffic    = LOAD_vehicleTraffic_k*LOAD_psi1
+  LOAD_pedestrianTraffic = LOAD_pedestrianTraffic_k*LOAD_psi1
+  LOAD_waterFlow         = LOAD_waterFlow_k*1
+  LOAD_columnWind        = LOAD_columnWind_k*1
+  LOAD_deckWind          = LOAD_deckWind_k*1
+  ! Dead loads
+  LOAD_g            = LOAD_g_k
+  LOAD_pav          = LOAD_pav_k
+  LOAD_barrierValue = LOAD_barrierValue_k
+
+*elseif,LOAD_combination,eq,6,then
+  ! Dead loads (characteristic values)
+  ! Live loads
+  *voper,LOAD_plValue,0,mult,LOAD_plValue
+  LOAD_vehicleTraffic    = 0
+  LOAD_pedestrianTraffic = 0
+  LOAD_waterFlow         = 0
+  LOAD_columnWind        = 0
+  LOAD_deckWind          = 0
+  ! Dead loads
+  LOAD_g            = LOAD_g_k
+  LOAD_pav          = LOAD_pav_k
+  LOAD_barrierValue = LOAD_barrierValue_k
+
+*elseif,LOAD_combination,eq,7,then
+  ! Live loads (characteristic values)
+  ! Live loads
+  *voper,LOAD_plValue,1,mult,LOAD_plValue
+  LOAD_vehicleTraffic    = LOAD_vehicleTraffic_k
+  LOAD_pedestrianTraffic = LOAD_pedestrianTraffic_k
+  LOAD_waterFlow         = LOAD_waterFlow_k
+  LOAD_columnWind        = LOAD_columnWind_k
+  LOAD_deckWind          = LOAD_deckWind_k
+  ! Dead loads
+  LOAD_g            = 0
+  LOAD_pav          = 0
+  LOAD_barrierValue = 0
+
+*elseif,LOAD_combination,eq,8,then
+  ! Fatigue analysis ("combinação frequente de fadiga, K.2.1")
+  ! Live loads
+  *voper,LOAD_plValue,LOAD_psi1,mult,LOAD_plValue
+  LOAD_vehicleTraffic    = LOAD_vehicleTraffic_k*LOAD_psi1
+  LOAD_pedestrianTraffic = LOAD_pedestrianTraffic_k*LOAD_psi1
+  LOAD_waterFlow         = LOAD_waterFlow_k*LOAD_psi1
+  LOAD_columnWind        = LOAD_columnWind_k*LOAD_psi1
+  LOAD_deckWind          = LOAD_deckWind_k*LOAD_psi1
+  ! Dead loads
+  LOAD_g            = LOAD_g_k
+  LOAD_pav          = LOAD_pav_k
+  LOAD_barrierValue = LOAD_barrierValue_k
+
+*elseif,LOAD_combination,eq,9,then
+  ! Service load ("frequente"): load train as main
+  ! Live loads
+  *voper,LOAD_plValue,1,mult,LOAD_plValue
+  LOAD_vehicleTraffic    = LOAD_vehicleTraffic_k*LOAD_psi2
+  LOAD_pedestrianTraffic = LOAD_pedestrianTraffic_k*LOAD_psi2
+  LOAD_waterFlow         = LOAD_waterFlow_k*LOAD_psi2
+  LOAD_columnWind        = LOAD_columnWind_k*0
+  LOAD_deckWind          = LOAD_deckWind_k*0
+  ! Dead loads
+  LOAD_g            = LOAD_g_k
+  LOAD_pav          = LOAD_pav_k
+  LOAD_barrierValue = LOAD_barrierValue_k
+
+*endif

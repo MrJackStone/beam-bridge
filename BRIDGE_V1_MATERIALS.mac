@@ -1,0 +1,63 @@
+! BRIDGE_V1_MATERIALS
+
+
+! Superstructure
+*if,MAT_girder_type,eq,0,then
+  concrete, MAT_GIRDER, MAT_GIRDER_fck, MAT_GIRDER_dens, MAT_GIRDER_poisson,,1
+*elseif,MAT_GIRDER_type,eq,1,then
+  steel, MAT_girder,MAT_GIRDER_steelE,,,,,,1
+*endif
+
+concrete, MAT_Slab, MAT_Slab_fck, MAT_Slab_dens, MAT_Slab_Poisson,,1
+*if,SLAB_longRedCoef,ne,1,and,SLAB_longRedCoef,ne,0,then
+  mp , ex  , MAT_slab , MAT_SLAB_EX
+  mp , ey  , MAT_slab , MAT_SLAB_E0
+  mp , gxy , MAT_slab , MAT_SLAB_Gxyz
+  mp , gyz , MAT_slab , MAT_SLAB_Gxyz
+  mp , gxz , MAT_slab , MAT_SLAB_Gxyz
+*endif
+
+concrete , MAT_gerber , MAT_GERBER_fck , MAT_GERBER_dens , MAT_GERBER_poisson ,  , 1
+
+mp , ex , MAT_matrix , MAT_MATRIX_E
+
+! Mesostructure
+concrete , MAT_column      , MAT_COLUMN_fck      , MAT_COLUMN_dens      , MAT_COLUMN_poisson      ,  , 1
+concrete , MAT_frameGirder , MAT_FRAMEGIRDER_fck , MAT_FRAMEGIRDER_dens , MAT_FRAMEGIRDER_poisson ,  , 1
+
+! Infrastructure
+concrete , MAT_gradeBeam , MAT_GRADEBEAM_fck , MAT_GRADEBEAM_dens , MAT_GRADEBEAM_Poisson ,  , 1
+concrete , MAT_pileCap   , MAT_PILECAP_fck   , MAT_PILECAP_dens   , MAT_PILECAP_Poisson   ,  , 1
+concrete , MAT_pile      , MAT_PILE_fck      , MAT_PILE_dens      , MAT_PILE_poisson      ,  , 1
+steel    , MAT_casing    , MAT_CASING_E      ,                    ,                       ,  ,   ,  , 1
+
+! Abutments
+concrete , MAT_abutment , MAT_ABUTMENT_fck , MAT_ABUTMENT_dens , MAT_ABUTMENT_poisson ,  , 1
+concrete , MAT_approach , MAT_APPROACH_fck , MAT_APPROACH_dens , MAT_APPROACH_poisson ,  , 1
+
+! Soil
+mp , ex   , MAT_soil , MAT_SOIL_E
+mp , prxy , MAT_soil , MAT_SOIL_Poisson
+*if,MAT_SOIL_shadm,ne,0,then
+  tb,biso,MAT_soil
+  tbdata,,MAT_SOIL_shadm*MAT_SOIL_sigScale
+*endif
+
+mp , ex   , MAT_ABT_Soil , MAT_ABT_SOIL_E
+mp , prxy , MAT_ABT_Soil , MAT_ABT_SOIL_poisson
+
+mp , ex   , MAT_pileTip , MAT_SOIL_E
+mp , prxy , MAT_pileTip , MAT_SOIL_poisson
+*if,MAT_SOIL_tipNlim,ne,0,then
+  tb,biso,MAT_pileTip
+  tbdata,,MAT_PILETIP_sadm
+*endif
+
+mp , ex   , MAT_pileLat , MAT_SOIL_E
+mp , prxy , MAT_pileLat , MAT_SOIL_Poisson
+*if,MAT_SOIL_svadm,ne,0,then
+  tb,biso,MAT_pileLat
+  tbdata,,MAT_SOIL_svadm*MAT_PILELAT_sigScale
+*endif
+
+! TODO  missing code block from master, commit 4f5f669 and the next one

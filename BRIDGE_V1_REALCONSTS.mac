@@ -1,0 +1,104 @@
+! BRIDGE_V1_REALCONSTS
+
+
+! Soil stiffnesses
+r , SEC_VSOIL_num , SEC_VSOIL_area ,  , 0
+r , SEC_HSOIL_num , SEC_HSOIL_area ,  , 0
+r , SEC_PSOIL_num , SEC_PSOIL_area ,  , -1
+
+! Girder bearing: X
+!   C1  =  KX
+!   C7  = -KX
+!   C58 =  KX
+!   Remaining values = 0
+KX = FEM_BEARING_kh
+KY = 0
+KZ = 0
+r,SEC_BEARINGX_num,  KX,  0,  0,  0,  0,   0  ! C1  - C6
+rmore,              -KX,  0,  0,  0,  0,   0  ! C7  - C12
+rmore,               KY,  0,  0,  0,  0,   0  ! C13 - C18
+rmore,              -KY,  0,  0,  0,  0,  KZ  ! C19 - C24
+rmore,                0,  0,  0,  0,  0, -KZ  ! C25 - C30
+rmore,                0,  0,  0,  0,  0,   0  ! C31 - C36
+rmore,                0,  0,  0,  0,  0,   0  ! C36 - C42
+rmore,                0,  0,  0,  0,  0,   0  ! C43 - C48
+rmore,                0,  0,  0,  0,  0,   0  ! C49 - C54
+rmore,                0,  0,  0, KX,  0,   0  ! C55 - C60
+rmore,                0,  0,  0, KY,  0,   0  ! C61 - C66
+rmore,                0,  0, KZ,  0,  0,   0  ! C67 - C72
+rmore,                0,  0,  0,  0,  0,   0  ! C73 - C78
+
+! Girder bearing: Y
+!   C13 =  KY
+!   C19 = -KY
+!   C64 =  KY
+!   Remaining values = 0
+KX = 0
+KY = FEM_BEARING_kh
+KZ = 0
+r,SEC_BEARINGY_num,  KX,  0,  0,  0,  0,   0  ! C1  - C6
+rmore,              -KX,  0,  0,  0,  0,   0  ! C7  - C12
+rmore,               KY,  0,  0,  0,  0,   0  ! C13 - C18
+rmore,              -KY,  0,  0,  0,  0,  KZ  ! C19 - C24
+rmore,                0,  0,  0,  0,  0, -KZ  ! C25 - C30
+rmore,                0,  0,  0,  0,  0,   0  ! C31 - C36
+rmore,                0,  0,  0,  0,  0,   0  ! C36 - C42
+rmore,                0,  0,  0,  0,  0,   0  ! C43 - C48
+rmore,                0,  0,  0,  0,  0,   0  ! C49 - C54
+rmore,                0,  0,  0, KX,  0,   0  ! C55 - C60
+rmore,                0,  0,  0, KY,  0,   0  ! C61 - C66
+rmore,                0,  0, KZ,  0,  0,   0  ! C67 - C72
+rmore,                0,  0,  0,  0,  0,   0  ! C73 - C78
+
+! Girder bearing: Z
+!   C24 =  KZ
+!   C30 = -KZ
+!   C69 =  KZ
+!   Remaining values = 0
+KX = 0
+KY = 0
+KZ = FEM_BEARING_kv
+r,SEC_BEARINGZ_num,  KX,  0,  0,  0,  0,   0  ! C1  - C6
+rmore,              -KX,  0,  0,  0,  0,   0  ! C7  - C12
+rmore,               KY,  0,  0,  0,  0,   0  ! C13 - C18
+rmore,              -KY,  0,  0,  0,  0,  KZ  ! C19 - C24
+rmore,                0,  0,  0,  0,  0, -KZ  ! C25 - C30
+rmore,                0,  0,  0,  0,  0,   0  ! C31 - C36
+rmore,                0,  0,  0,  0,  0,   0  ! C36 - C42
+rmore,                0,  0,  0,  0,  0,   0  ! C43 - C48
+rmore,                0,  0,  0,  0,  0,   0  ! C49 - C54
+rmore,                0,  0,  0, KX,  0,   0  ! C55 - C60
+rmore,                0,  0,  0, KY,  0,   0  ! C61 - C66
+rmore,                0,  0, KZ,  0,  0,   0  ! C67 - C72
+rmore,                0,  0,  0,  0,  0,   0  ! C73 - C78
+
+! Girder-slab friction
+!   C1  =  KX     C19 = -KY    C58 = KX
+!   C7  = -KX     C24 =  KZ    C64 = KY
+!   C13 =  KY     C30 = -KZ    C69 = KZ
+!   Remaining values = 0
+KX = FEM_Bearing_kh*10
+KY = FEM_Bearing_kh
+KZ = FEM_Bearing_kv
+r,SEC_FRICTION_num,  KX,  0,  0,  0,  0,   0  ! C1  - C6
+rmore,              -KX,  0,  0,  0,  0,   0  ! C7  - C12
+rmore,               KY,  0,  0,  0,  0,   0  ! C13 - C18
+rmore,              -KY,  0,  0,  0,  0,  KZ  ! C19 - C24
+rmore,                0,  0,  0,  0,  0, -KZ  ! C25 - C30
+rmore,                0,  0,  0,  0,  0,   0  ! C31 - C36
+rmore,                0,  0,  0,  0,  0,   0  ! C36 - C42
+rmore,                0,  0,  0,  0,  0,   0  ! C43 - C48
+rmore,                0,  0,  0,  0,  0,   0  ! C49 - C54
+rmore,                0,  0,  0, KX,  0,   0  ! C55 - C60
+rmore,                0,  0,  0, KY,  0,   0  ! C61 - C66
+rmore,                0,  0, KZ,  0,  0,   0  ! C67 - C72
+rmore,                0,  0,  0,  0,  0,   0  ! C73 - C78
+
+! Clean up
+*del,kx,,nopr
+*del,ky,,nopr
+*del,kz,,nopr
+
+! Abutment springs
+r , REAL_ABT_kv , REAL_ABT_kv_area ,  , -1
+r , REAL_ABT_kh , REAL_ABT_kh_area ,  , -1

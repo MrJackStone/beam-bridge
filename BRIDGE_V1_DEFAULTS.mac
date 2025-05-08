@@ -23,6 +23,8 @@ GEO_girderConnection = 0
 CROSSBEAM_b = 1
 CROSSBEAM_h = 1
 
+SLAB_longRedCoef = 1
+
 FEM_sgCouple_UX = 1
 FEM_sgCouple_UY = 1
 FEM_sgCouple_UZ = 1
@@ -55,12 +57,17 @@ GEO_ABT1_suppressLW=0
 GEO_ABT2_suppressLW=0
 
 GEO_ABT1_topOffset = 0
+GEO_ABT2_topOffset = 0
 
 GEO_ABT1_beamOpt = 0
 GEO_ABT2_beamOpt = 0
 
 SEC_ABT_PILE_d   = 1
 SEC_ABT_PILE_thk = 0
+
+SEC_ABT_thinTranWall_t     = SEC_ABT_tranWall_t
+GEO_ABT1_thinTranWallDepth = 0
+GEO_ABT2_thinTranWallDepth = 0
 
 
 !!                                                                                                !!
@@ -73,7 +80,7 @@ PILECAP_h   = 1
 PILE_d   = 1
 PILE_thk = 0
 
-MAT_CASING_E = 2e11
+FEM_PileTopConnection = 0
 
 
 !!                                                                                                !!
@@ -105,6 +112,8 @@ LOAD_locRep = 1
 LOAD_TSCHEBOTARIOFF_status = 0
 *del,LOAD_TSCHEBOTARIOFF_data,,nopr
 
+LOAD_ltStep = 1
+
 *get,LOAD_ltTransScenarioCount,parm,LOAD_ltLineOff,dim,y
 
 LOAD_ltGapWidth  = 0
@@ -114,6 +123,8 @@ LOAD_ltPresMethod = 'BOUSSNSQ'
 
 LOAD_barrierCount   = 0
 LOAD_barrierValue_k = 0
+
+LOAD_railcarCount = 0
 
 
 !!                                                                                                !!
@@ -168,10 +179,10 @@ MAT_Gerber_Poisson = 0.2
 MAT_Gerber_dens    = 2500
 
 ! Soil
-MAT_Soil_Poisson=0.2
+MAT_Soil_Poisson = 0.2
 
 ! Abutment soil
-MAT_ABT_Soil_Poisson=0.2
+MAT_ABT_Soil_Poisson = 0.2
 
 MAT_SOIL_tipNlim = 0
 MAT_SOIL_shadm   = 0

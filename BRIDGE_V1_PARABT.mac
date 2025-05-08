@@ -1,0 +1,148 @@
+! BRIDGE_V1_PARABT
+
+! Exported params:
+! GEO_ABT1_appSlab
+! GEO_ABT1_geometry
+! GEO_ABT1_longPiles
+! GEO_ABT1_pileCapL
+! GEO_ABT1_status
+! GEO_ABT1_topSurfArea
+! GEO_ABT1_tranPiles
+! GEO_ABT1_xMax
+! GEO_ABT1_xMin
+! GEO_ABT1_yc
+! GEO_ABT2_appSlab
+! GEO_ABT2_geometry
+! GEO_ABT2_longPiles
+! GEO_ABT2_pileCapL
+! GEO_ABT2_status
+! GEO_ABT2_topSurfArea
+! GEO_ABT2_tranPiles
+! GEO_ABT2_xMax
+! GEO_ABT2_xMin
+! GEO_ABT2_yc
+! GEO_abutmentCount
+! GEO_frameTopOffset
+! GEO_genSpanCount
+! GEO_genSpanLengths
+! GEO_genSpanLimits
+! GEO_pierCount
+
+
+! Abutments status
+*if,GEO_ABT_status,eq,0,then
+  GEO_ABT1_status = 0
+  GEO_ABT2_status = 0
+*elseif,GEO_ABT_status,eq,1,then
+  GEO_ABT1_status = 1
+  GEO_ABT2_status = 1
+*elseif,GEO_ABT_status,eq,2,then
+  GEO_ABT1_status = 1
+  GEO_ABT2_status = 0
+*elseif,GEO_ABT_status,eq,3,then
+  GEO_ABT1_status = 0
+  GEO_ABT2_status = 1
+*endif
+
+GEO_abutmentCount = GEO_ABT1_status+GEO_ABT2_status
+GEO_pierCount     = GEO_supportCount-GEO_abutmentCount
+
+! Approach slab status
+GEO_ABT1_appSlab = nint(((GEO_ABT1_appSlab*GEO_ABT1_status>0)<1))
+GEO_ABT2_appSlab = nint(((GEO_ABT2_appSlab*GEO_ABT2_status>0)<1))
+
+! Correct height increment at the beginning of the abutments
+*if,GEO_frameTopOffStatus,eq,0,then
+  *del,GEO_frameTopOffset,,nopr
+  *dim,GEO_frameTopOffset,,GEO_SupportCount
+*endif
+
+! Y coordinate of the center of each abutment
+GEO_ABT1_yc = GEO_deckOff_beg+(GEO_deckWidth_beg/2)
+GEO_ABT2_yc = GEO_deckOff_end+(GEO_deckWidth_end/2)
+
+! Surface area at the top of each abutment
+*if,GEO_ABT1_appSlab,eq,1,then
+  GEO_ABT1_topSurfArea = GEO_ABT1_width*GEO_ABT1_appSlabL
+*else
+  GEO_ABT1_topSurfArea = GEO_ABT1_width*GEO_ABT1_length
+*endif
+
+*if,GEO_ABT2_appSlab,eq,1,then
+  GEO_ABT2_topSurfArea = GEO_ABT2_width*GEO_ABT2_appSlabL
+*else
+  GEO_ABT2_topSurfArea = GEO_ABT2_width*GEO_ABT2_length
+*endif
+
+! Calculate number of piles (for curtain option)
+pileWidth = SEC_ABT_pile_d-2*GEO_ABT_pileOvlap
+*if,GEO_ABT1_type,eq,3,then
+  GEO_ABT1_tranPiles = nint((GEO_deckWidth_beg-pileWidth)/pileWidth)
+  GEO_ABT1_longPiles = nint(GEO_ABT1_length/pileWidth)
+*endif
+*if,GEO_ABT2_type,eq,3,then
+  GEO_ABT2_tranPiles = nint((GEO_deckWidth_end-pileWidth)/pileWidth)
+  GEO_ABT2_longPiles = nint(GEO_ABT2_length/pileWidth)
+*endif
+
+! Pile cap size for pile curtain
+*if,GEO_ABT1_type,eq,3,then
+  GEO_ABT1_pileCapL = GEO_ABT1_length+(GEO_ABT1_pileCapW/2)
+*endif
+*if,GEO_ABT2_type,eq,3,then
+  GEO_ABT2_pileCapL = GEO_ABT2_length+(GEO_ABT2_pileCapW/2)
+*endif
+
+! Create abutment geometry arrays
+*del,GEO_ABT1_geometry
+*dim,GEO_ABT1_geometry,,30
+GEO_ABT1_geometry(1)  = GEO_ABT1_type         , GEO_deckWidth_beg  , GEO_deckOff_beg      , GEO_ABT1_yc                , GEO_ABT1_appSlab
+GEO_ABT1_geometry(6)  = GEO_ABT1_appSlabL     , GEO_ABT1_height    , GEO_ABT1_length      , GEO_ABT1_longPiles         , GEO_ABT1_pileCapL
+GEO_ABT1_geometry(11) = GEO_ABT1_pileCapW     , GEO_ABT1_pileL     , GEO_ABT1_topOffset   , GEO_ABT1_tranPiles         , GEO_ABT1_wings
+GEO_ABT1_geometry(16) = GEO_ABT1_wingHa       , GEO_ABT1_wingL     , GEO_ABT1_pileAngle   , GEO_ABT1_suppressLW        , GEO_ABT1_curtainL
+GEO_ABT1_geometry(21) = GEO_ABT1_pileFree     , GEO_ABT1_pileShort , GEO_ABT1_trvPileCols , GEO_ABT1_wingPileCols      , GEO_ABT1_wingCapLength
+GEO_ABT1_geometry(26) = GEO_ABT1_wingCapWidth , GEO_ABT1_wingAngle , GEO_ABT1_width       , GEO_ABT1_thinTranWallDepth , GEO_ABT1_beamOpt
+
+*del,GEO_ABT2_geometry
+*dim,GEO_ABT2_geometry,,30
+GEO_ABT2_geometry(1)  = GEO_ABT2_type         , GEO_deckWidth_end  , GEO_deckOff_end      , GEO_ABT2_yc                , GEO_ABT2_appSlab
+GEO_ABT2_geometry(6)  = GEO_ABT2_appSlabL     , GEO_ABT2_height    , GEO_ABT2_length      , GEO_ABT2_longPiles         , GEO_ABT2_pileCapL
+GEO_ABT2_geometry(11) = GEO_ABT2_pileCapW     , GEO_ABT2_pileL     , GEO_ABT2_topOffset   , GEO_ABT2_tranPiles         , GEO_ABT2_wings
+GEO_ABT2_geometry(16) = GEO_ABT2_wingHa       , GEO_ABT2_wingL     , GEO_ABT2_pileAngle   , GEO_ABT2_suppressLW        , GEO_ABT2_curtainL
+GEO_ABT2_geometry(21) = GEO_ABT2_pileFree     , GEO_ABT2_pileShort , GEO_ABT2_trvPileCols , GEO_ABT2_wingPileCols      , GEO_ABT2_wingCapLength
+GEO_ABT2_geometry(26) = GEO_ABT2_wingCapWidth , GEO_ABT2_wingAngle , GEO_ABT2_width       , GEO_ABT2_thinTranWallDepth , GEO_ABT2_beamOpt
+
+! Abutment extents
+GEO_ABT1_xMin = -(GEO_ABT1_length>GEO_ABT1_appSlabL*GEO_ABT1_appSlab)
+GEO_ABT1_xMax = 0
+GEO_ABT2_xMin = GEO_deckLength
+GEO_ABT2_xMax = GEO_deckLength+(GEO_ABT2_length>GEO_ABT2_appSlabL*GEO_ABT2_appSlab)
+
+! General span lengths
+GEO_genSpanCount = GEO_spanCount+GEO_abutmentCount
+
+*del , GEO_genSpanLengths ,  , nopr
+*del , GEO_genSpanLimits  ,  , nopr
+*dim , GEO_genSpanLengths ,  , GEO_genSpanCount
+*dim , GEO_genSpanLimits  ,  , GEO_genSpanCount+1
+
+*if,GEO_abutmentCount,ge,1,then
+  *vfun , GEO_genSpanLengths(GEO_ABT1_appSlab+1) , copy , GEO_spanLengths(1)
+  *vfun , GEO_genSpanLimits(GEO_ABT1_appSlab+1)  , copy , GEO_supportX(1)
+
+  *if,GEO_ABT1_appSlab,eq,1,then
+    GEO_genSpanLengths(1) = GEO_ABT1_appSlabL
+    GEO_genSpanLimits(1)  = -GEO_ABT1_appSlabL
+  *endif
+
+  *if,GEO_ABT2_appSlab,eq,1,then
+    GEO_genSpanLengths(GEO_genSpanCount)  = GEO_ABT2_appSlabL
+    GEO_genSpanLimits(GEO_genSpanCount+1) = GEO_deckLength+GEO_ABT2_appSlabL
+  *endif
+
+*else
+  ! No abutments
+  *vfun , GEO_genSpanLengths(1) , copy , GEO_spanLengths
+  *vfun , GEO_genSpanLimits     , copy , GEO_supportX
+
+*endif

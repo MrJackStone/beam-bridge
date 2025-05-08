@@ -1,0 +1,124 @@
+! BRIDGE_V1_INDICES
+
+
+!! A.  Materials                                                                                  !!
+MAT_Girder      = 1
+MAT_Slab        = 2
+MAT_Column      = 3
+MAT_FrameGirder = 4
+MAT_GradeBeam   = 5
+MAT_PileCap     = 6
+MAT_Pile        = 7
+MAT_Abutment    = 8
+MAT_Approach    = 9
+MAT_Soil        = 10
+MAT_ABT_Soil    = 11
+MAT_Matrix      = 12
+MAT_Gerber      = 13
+MAT_CrossBeam   = 14
+MAT_PileTip     = 15
+MAT_PileLat     = 16
+MAT_casing      = 17
+
+
+!! B.  Element types                                                                              !!
+TYPE_BEAM188  = 1
+TYPE_SHELL181 = 2
+TYPE_LINK180  = 3
+TYPE_COMBIN14 = 4
+TYPE_MATRIX27 = 5
+TYPE_MPC184   = 6
+TYPE_MASS21   = 7
+
+
+!! C.  Cross-sections                                                                             !!
+SEC_GIRDER_num       = 1
+SEC_SLAB_num         = 2
+SEC_COLUMN_num       = 3
+SEC_FRAMEGIRDER_num  = 4
+SEC_PILECAP_num      = 5
+SEC_GRADEBEAM_num    = 6
+SEC_PILE_num         = 7
+SEC_VSOIL_num        = 8
+SEC_HSOIL_num        = 9
+SEC_SPRING_num       = 10
+SEC_BEARINGX_num     = 11
+SEC_BEARINGY_num     = 12
+SEC_BEARINGZ_num     = 13
+SEC_FRICTION_num     = 14
+SEC_ABT_longWall     = 15
+SEC_ABT_tranWall     = 16
+SEC_ABT_column       = 17
+SEC_ABT_beam         = 18
+SEC_ABT_wing         = 19
+SEC_ABT_appSlab      = 20
+SEC_ABT_pile         = 21
+SEC_ABT_pileCap      = 22
+REAL_ABT_kv          = 23
+REAL_ABT_kh          = 24
+SEC_COLWALL          = 25
+SEC_COLCAP           = 26
+SEC_PSOIL_num        = 27
+SEC_GERBER           = 28
+SEC_CONSOLE          = 29
+SEC_CROSSBEAM        = 30
+SEC_ABT_thinTranWall = 31
+
+*del,SEC_GIRDER_nums,,nopr
+*dim,SEC_GIRDER_nums,,GEO_girderSectionCount
+*vfill,SEC_GIRDER_nums,ramp,32,1
+
+
+!! D.  Coordinate systems                                                                         !!
+CS_global         = 11
+CS_dummy          = 12
+CY_deck           = 13
+CS_DECK_center    = 14
+CS_DECK_leftEdge  = 15
+CS_DECK_rightEdge = 16
+CS_leftFootpath   = 17
+CS_rightFootpath  = 18
+
+CS_abt1           = 20
+CS_ABT1_leftWall  = 21
+CS_ABT1_rightWall = 22
+CS_ABT1_tranWall  = 23
+CS_ABT1_pileCap   = 24
+CS_ABT1_appSlab   = 25
+
+CS_abt2           = 30
+CS_ABT2_leftWall  = 31
+CS_ABT2_rightWall = 32
+CS_ABT2_tranWall  = 33
+CS_ABT2_pileCap   = 34
+CS_ABT2_appSlab   = 35
+
+CS_free = 40
+
+*do,nthPier,1,GEO_pierCount,1
+  CS_pier%i%           = CS_free+0
+  CS_PIER%i%_pileCap   = CS_free+1
+  CS_PIER%i%_columnCap = CS_free+2
+  CS_PIER%i%_front     = CS_free+3
+  CS_PIER%i%_back      = CS_free+4
+  CS_PIER%i%_left      = CS_free+5
+  CS_PIER%i%_right     = CS_free+6
+  CS_free              = CS_free+10
+*endif
+
+*do,nthGirder,1,GEO_girderCount,1
+  CS_girder%nthGirder% = CS_free
+  CS_free              = CS_free+1
+*enddo
+
+*do,nthLT,1,LOAD_ltTransScenarioCount,1
+  *do,nthWheel,1,LOAD_wheelCount,1
+    CS_LTRAIN%nthLT%_wheel%nthWheel% = CS_free
+    CS_free                          = CS_free+1
+  *enddo
+*enddo
+
+*do,nthBarrier,1,LOAD_barrierCount,1
+  CS_barrier%nthBarrier% = CS_free
+  CS_free                = CS_free+1
+*enddo
