@@ -1,0 +1,103 @@
+! _composite
+
+
+secsPerSpan = 10
+
+*del , DKPATH_x_positions ,        , nopr
+*del , DKPATH_names       ,        , nopr
+*del , DKPATH_filenames   ,        , nopr
+*dim , DKPATH_x_positions ,        , secsPerSpan , GEO_spanCount
+*dim , DKPATH_names       , char   , secsPerSpan , GEO_spanCount
+*dim , DKPATH_filenames   , string , 248         , GEO_spanCount
+
+pasave,all,'PATHS_main','path'
+padele,all
+
+*do,nthSpan,1,GEO_spanCount,1
+  xSpanStart     = GEO_supportX(nthSpan)
+  xSpanEnd       = GEO_supportX(nthSpan+1)
+  xSpanIncrement = (xSpanEnd-xSpanStart)/(secsPerSpan-1)
+
+  *vfill,DKPATH_x_positions(1,nthSpan),ramp,xSpanStart,xSpanIncrement
+
+  cmsel,s,COMPE_SLAB_%nthSpan%
+  nsle,s
+  cm,COMPN_slabSpan,node
+
+  cmsel,s,COMPN_slabSpan
+  nsel,r,loc,x,xSpanStart
+  *get,ndYmax,node,,mxloc,y
+  nsel,r,loc,y,ndYmax
+  ndStartLeft = ndnext(0)
+
+  cmsel,s,COMPN_slabSpan
+  nsel,r,loc,x,xSpanEnd
+  *get,ndYmax,node,,mxloc,y
+  nsel,r,loc,y,ndYmax
+  ndEndLeft = ndnext(0)
+
+  cmsel,s,COMPN_slabSpan
+  nsel,r,loc,x,xSpanStart
+  *get,ndYmin,node,,mnloc,y
+  nsel,r,loc,y,ndYmin
+  ndStartRight = ndnext(0)
+
+  cmsel,s,COMPN_slabSpan
+  nsel,r,loc,x,xSpanEnd
+  *get,ndYmin,node,,mnloc,y
+  nsel,r,loc,y,ndYmin
+  ndEndRight = ndnext(0)
+
+  cmsel,s,COMPN_slabSpan
+
+  xStartLeft  = nx(ndStartLeft)
+  xStartRight = nx(ndStartRight)
+  xEndLeft    = nx(ndEndLeft)
+  xEndRight   = nx(ndEndRight)
+
+  yStartLeft  = ny(ndStartLeft)
+  yStartRight = ny(ndStartRight)
+  yEndLeft    = ny(ndEndLeft)
+  yEndRight   = ny(ndEndRight)
+
+  zStartLeft  = nz(ndStartLeft)
+  zStartRight = nz(ndStartRight)
+  zEndLeft    = nz(ndEndLeft)
+  zEndRight   = nz(ndEndRight)
+
+  xLeftDelta  = (xEndLeft-xStartLeft)
+  yLeftDelta  = (yEndLeft-yStartLeft)
+  zLeftDelta  = (zEndLeft-zStartLeft)
+
+  xRightDelta = (xEndRight-xStartRight)
+  yRightDelta = (yEndRight-yStartRight)
+  zRightDelta = (zEndRight-zStartRight)
+
+  pathSaveFile              = 'PATHS_SLAB_span%nthSpan%'
+  DKPATH_filenames(1,nthSpan) = pathSaveFile
+  padele,all
+
+  *do,nthSec,1,secsPerSpan,1
+    xSection                     = DKPATH_x_positions(nthSec,nthSpan)
+    xRelative                    = xSection-xStartLeft
+    xPercent                     = xRelative/xLeftDelta
+    xAbsoluteLeft                = xSection
+    xAbsoluteRight               = xSection
+    yAbsoluteLeft                = yStartLeft+(xPercent*yLeftDelta)
+    yAbsoluteRight               = yStartRight+(xPercent*yRightDelta)
+    zAbsoluteLeft                = zStartLeft+(xPercent*zLeftDelta)
+    zAbsoluteRight               = zStartRight+(xPercent*zRightDelta)
+    pathName                     = 'DSEC_%nthSec%'
+    DKPATH_names(nthSec,nthSpan) = pathName
+
+    path  , %pathName%
+    ppath , 1 ,  , xAbsoluteLeft  , yAbsoluteLeft  , zAbsoluteLeft
+    ppath , 2 ,  , xAbsoluteRight , yAbsoluteRight , zAbsoluteRight
+  *enddo
+
+  pasave,all,%pathSaveFile%,'path'
+
+*enddo
+
+padele,all
+paresu,all,'PATHS_main','path'

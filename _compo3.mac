@@ -1,0 +1,17 @@
+! _compo3
+
+
+!! TODO  abandon this, no need to calculate envelope before using results to calculate composite bending moment for each load step
+
+*dim,DKPATH_my_envelope,table,secsPerSpan,GEO_spanCount
+*taxis,nth
+
+*do,nthLS,1,LoadStepCount,1
+  *do,nthSpan,1,GEO_spanCount,1
+    *do,nthSec,1,secsPerSpan,1
+      nthMY  = DKPATH_my_cumulative(nthSec,nthSpan,nthLS)
+      peakMY = (peakMY>nthMY)
+      DKPATH_my_envelope(
+    *enddo
+  *enddo
+*enddo

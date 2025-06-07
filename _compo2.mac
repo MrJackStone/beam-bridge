@@ -1,0 +1,55 @@
+! _compo2
+
+
+*del,DKPATH_my_cumulative,,nopr
+*del,DKPATH_qx_cumulative,,nopr
+*dim,DKPATH_my_cumulative,,secsPerSpan,GEO_spanCount,LoadStepCount
+*dim,DKPATH_qx_cumulative,,secsPerSpan,GEO_spanCount,LoadStepCount
+
+pasave,all,'PATHS_main','path'
+padele,all
+
+*do,nthLS,1,LoadStepCount,1
+
+  *msg,ui,nthLS,LoadStepCount
+BRIDGE_V1_POSTCOMPOSITE: reading load step %I/%I.
+
+  cmsel,s,COMPE_slab
+  nsle,s,active
+  subset,nthLS
+  cshell_my,1
+  cshell_qx,1
+
+  *do,nthSpan,1,GEO_spanCount,1
+
+    pathSaveFile = DKPATH_filenames(1,nthSpan)
+    padele,all
+    paresu,all,%pathSaveFile%,'path'
+
+    cmsel,s,COMPE_SLAB_%nthSpan%
+    nsle,s,active
+
+    *do,nthSec,1,secsPerSpan,1
+      pathName = DKPATH_names(nthSec,nthSpan)
+      path,%pathName%
+
+      pdef,'MY',etab,'SHELL_MY'
+      pcalc,intg,'MY_CUM','MY','S',1
+      *get,myCumulative,path,,last,'MY_CUM'
+      DKPATH_my_cumulative(nthSec,nthSpan,nthLS) = myCumulative
+
+      pdef,'QX',etab,'SHELL_QX'
+      pcalc,intg,'QX_CUM','QX','S',1
+      *get,qxCumulative,path,,last,'QX_CUM'
+      DKPATH_qx_cumulative(nthSec,nthSpan,nthLS) = qxCumulative
+
+    *enddo
+
+  *enddo
+
+  pasave,all,%pathSaveFile%,'path'
+*enddo
+
+allsel
+padele,all
+paresu,all,'PATHS_main','path'
