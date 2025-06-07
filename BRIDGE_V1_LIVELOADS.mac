@@ -10,7 +10,7 @@ cmsel,u,COMPE_LTshadow
 NSLE,S,ACTIVE
 *get,ECount,ELEM,,COUNT
 *if,ECount,GT,0,THEN
-   SFE,ALL,2,PRES,,LOAD_vehicleTraffic
+  SFE,ALL,2,PRES,,LOAD_vehicleTraffic
 *endif
 
 ! Pedestrian traffic uniform load
@@ -22,20 +22,20 @@ cmsel,r,COMPE_loaded
 NSLE,S,ACTIVE
 *get,ECount,ELEM,,COUNT
 *if,ECount,GT,0,THEN
-   SFE,ALL,2,PRES,,LOAD_pedestrianTraffic
+  SFE,ALL,2,PRES,,LOAD_pedestrianTraffic
 *endif
 ALLSEL
 
 ! Water flow uniform load on submerged column elements
 *if,GEO_pierCount,gt,0,then
-    CMSEL,S,COMPE_Submerged
-    *if,GEO_frameOpt,eq,0,then
-        SFBEAM,ALL,2,PRES,-(LOAD_waterFlow*COLUMN_cx)
-    *elseif,GEO_frameOpt,eq,1,then
-        cmsel,s,COMPA_tubeWindFace
-        esla,r
-        sfe,ALL,1,PRES,,-LOAD_waterFlow
-    *endif
+  CMSEL,S,COMPE_Submerged
+  *if,GEO_frameOpt,eq,0,then
+    SFBEAM,ALL,2,PRES,-(LOAD_waterFlow*COLUMN_cx)
+  *elseif,GEO_frameOpt,eq,1,then
+    cmsel,s,COMPA_tubeWindFace
+    esla,r
+    sfe,ALL,1,PRES,,-LOAD_waterFlow
+  *endif
 *endif
 
 ! Water flow on submerged abutment elements
@@ -66,26 +66,26 @@ cm,COMPE_temp_submerged,elem
 
 ! Wind uniform load on exposed column elements
 *if,GEO_pierCount,gt,0,then
-    CMSEL,S,COMPE_Exposed
-    *if,GEO_frameOpt,eq,0,then
-        SFBEAM,ALL,2,PRES,-(LOAD_columnWind*COLUMN_cx)
-    *elseif,GEO_frameOpt,eq,1,then
-        cmsel,s,COMPA_tubeWindFace
-        esla,r
-        sfe,ALL,1,PRES,,-LOAD_columnWind
-    *endif
+  CMSEL,S,COMPE_Exposed
+  *if,GEO_frameOpt,eq,0,then
+    SFBEAM,ALL,2,PRES,-(LOAD_columnWind*COLUMN_cx)
+  *elseif,GEO_frameOpt,eq,1,then
+    cmsel,s,COMPA_tubeWindFace
+    esla,r
+    sfe,ALL,1,PRES,,-LOAD_columnWind
+  *endif
 *endif
 
 ! Wind lateral load on the slabs
 CMSEL,S,COMPN_Slab
 *if,GEO_deckRadius,eq,0,then
-    csys,CS_DECK_rightEdge
-    nsel,r,loc,y,0
-    csys,0
+  csys,CS_DECK_rightEdge
+  nsel,r,loc,y,0
+  csys,0
 *else
-    csys,CY_deck
-    nsel,r,loc,x,GEO_deckRadius-(GEO_deckWidth_beg/2)
-    csys,0
+  csys,CY_deck
+  nsel,r,loc,x,GEO_deckRadius-(GEO_deckWidth_beg/2)
+  csys,0
 *endif
 *get,NodeCount,NODE,,COUNT
 *vscfun,maxGirderDepth,max,GIRDER_d
@@ -95,29 +95,29 @@ F,ALL,FY,NodalLoad
 ! Loads on abutments
 *if,GEO_ABT1_status,eq,1,or,GEO_ABT2_status,eq,1,then
 
-    ! Vehicle traffic uniform load
-    cmsel,s,COMPE_ABT_Lanes
-    cmsel,r,COMPE_occupied
-    cmsel,r,COMPE_loaded
-    cmsel,u,COMPE_LTshadow
-    nsle,s,active
-    *get,ECount,elem,,count
-    *if,ECount,gt,0,then
-        sfe,all,2,pres,,LOAD_vehicleTraffic
-    *endif
+  ! Vehicle traffic uniform load
+  cmsel,s,COMPE_ABT_Lanes
+  cmsel,r,COMPE_occupied
+  cmsel,r,COMPE_loaded
+  cmsel,u,COMPE_LTshadow
+  nsle,s,active
+  *get,ECount,elem,,count
+  *if,ECount,gt,0,then
+    sfe,all,2,pres,,LOAD_vehicleTraffic
+  *endif
 
-    ! Pedestrian traffic uniform load
-    cmsel,s,COMPE_ABT_LeftFootpath
-    cmsel,a,COMPE_ABT_RightFootpath
-    cmsel,r,COMPE_occupied
-    cmsel,r,COMPE_loaded
-    nsle,s,active
-    *get,ECount,elem,,count
-    *if,ECount,gt,0,then
-        sfe,all,2,pres,,LOAD_pedestrianTraffic
-    *endif
+  ! Pedestrian traffic uniform load
+  cmsel,s,COMPE_ABT_LeftFootpath
+  cmsel,a,COMPE_ABT_RightFootpath
+  cmsel,r,COMPE_occupied
+  cmsel,r,COMPE_loaded
+  nsle,s,active
+  *get,ECount,elem,,count
+  *if,ECount,gt,0,then
+    sfe,all,2,pres,,LOAD_pedestrianTraffic
+  *endif
 
-    ! Earth pressures
-    BRIDGE_V1_EARTHPRES,2
+  ! Earth pressures
+  BRIDGE_V1_EARTHPRES,2
 
 *endif

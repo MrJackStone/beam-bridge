@@ -13,8 +13,8 @@ mesoType=GEO_mesoType(arg1)
     BRIDGE_V1_CSMESO, arg1
 
     ! Mesh frame girder
-    esel,u,elem,,all
-    nsel,u,node,,all
+    esel,none
+    nsel,none
     cmsel,s,%lcmName%
     cmsel,r,COMPL_FrameGirder
     orient,TYPE_BEAM188,MAT_FrameGirder,SEC_FrameGirder_num,,,1,FEM_ElementSize
@@ -24,8 +24,8 @@ mesoType=GEO_mesoType(arg1)
     cmpadd,'COMPN_FrameGirder'
 
     ! Mesh columns
-    esel,u,elem,,all
-    nsel,u,node,,all
+    esel,none
+    nsel,none
     cmsel,s,%lcmName%
     cmsel,r,COMPL_Column
     orient,TYPE_BEAM188,MAT_Column,SEC_Column_num,1,,,FEM_ElementSize
@@ -45,8 +45,8 @@ mesoType=GEO_mesoType(arg1)
     BRIDGE_V1_CSMESO, arg1
 
     ! Mesh frame girder
-    esel,u,elem,,all
-    nsel,u,node,,all
+    esel,none
+    nsel,none
     cmsel,s,%lcmName%
     cmsel,r,COMPL_FrameGirder
     orient,TYPE_BEAM188,MAT_FrameGirder,SEC_FrameGirder_num,,,1,FEM_ElementSize
@@ -74,8 +74,8 @@ mesoType=GEO_mesoType(arg1)
     acmName=strcat('COMPA_TUBE_',chrval(arg1))
 
     ! Walls
-    esel,u,elem,,all
-    nsel,u,node,,all
+    esel,none
+    nsel,none
     cmsel,s,%acmName%
     cmsel,r,COMPA_coltubeWall
     aesize,all,FEM_PierESize
@@ -85,8 +85,8 @@ mesoType=GEO_mesoType(arg1)
     cmpadd,'COMPN_ColTube'
 
     ! Cap
-    esel,u,elem,,all
-    nsel,u,node,,all
+    esel,none
+    nsel,none
     cmsel,s,%acmName%
     cmsel,r,COMPA_coltubeCap
     aesize,all,FEM_PierESize
