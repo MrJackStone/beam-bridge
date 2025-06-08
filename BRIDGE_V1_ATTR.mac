@@ -49,12 +49,13 @@ POST_resultsFolder     = 'memo_imgs'
 
 
 ! Mesostructure types
-CTE_MESO_frame    = 1
-CTE_MESO_tube     = 2
-CTE_MESO_beamcap  = 3
-CTE_MESO_tcolumn  = 4
-CTE_MESO_abutment = 5
-!
+CTE_MESO_frame      = 1
+CTE_MESO_tube       = 2
+CTE_MESO_beamcap    = 3
+CTE_MESO_tcolumn    = 4
+CTE_MESO_hammerhead = 5
+CTE_MESO_abutment   = 6
+
 
 
 !!                                                                                                !!
@@ -894,6 +895,8 @@ WARNING: Water level incompatible with frame height. GEO_WATERHEIGHT reduced to 
 ! Force single pile cap option for tubular piers
 *if,GEO_frameOpt,eq,1,then
   GEO_capOpt = 1
+*elseif,GEO_frameOpt,eq,3,then
+  GEO_capOpt = 1
 *endif
 
 ! Calculate pile lengths
@@ -1075,15 +1078,15 @@ arruniq,'xCoords','GEO_xTubeSlice',1
 
 ! Calculate Y positions in which to slice tubular column piers
 *if,GEO_frameOpt,eq,0,then
-    ! Column-girder frame
-    *del,ycols
-    *dim,ycols,,2
-    ycols(1)=-GEO_columnSpacing/2,GEO_columnSpacing/2
+  ! Column-girder frame
+  *del,ycols
+  *dim,ycols,,2
+  ycols(1)=-GEO_columnSpacing/2,GEO_columnSpacing/2
 *else
-    ! Tubular pier column
-    *del,ycols
-    *dim,ycols,,1
-    ycols(1)=0
+  ! Tubular pier column, cap-beam, or hammerhead
+  *del,ycols
+  *dim,ycols,,1
+  ycols(1)=0
 *endif
 
 arrjoin,'yCoords','GEO_pileYL','zero','ycols'
@@ -1096,7 +1099,7 @@ arruniq,'yCoords','GEO_yTubeSlice',1
   front = GEO_columnDepth/2
   back  = -GEO_columnDepth/2
 *else
-  ! Column-girder frame
+  ! Column-girder frame, cap-beam, or hammerhead
   front = 0
   back  = 0
 *endif
@@ -1324,6 +1327,9 @@ nthPier=0
 *elseif,GEO_frameOpt,eq,2,then
     ! Tubular pier column
     *vfill,GEO_mesoType,ramp,CTE_MESO_beamcap,0
+*elseif,GEO_frameOpt,eq,3,then
+    ! Hammerhead
+    *vfill,GEO_mesoType,ramp,CTE_MESO_hammerhead,0
 *endif
 *if,GEO_gerberStatus,eq,1,then
     *do,nthSupport,1,GEO_supportCount,1
