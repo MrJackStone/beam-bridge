@@ -11,6 +11,9 @@
   SEC_ABT_thinTranWall_t=SEC_ABT_tranWall_t
 *endif
 
+GEO_pierColumnRadius = GEO_pierColumnDiameter/2
+
+
 !!                                                                                                !!
 !!                                                                                                !!
 !! 2. PREPARATION                                                                                 !!
@@ -373,8 +376,13 @@ secdata,CONSOLE_b,CONSOLE_h
 *endif
 
 !! 2.1.3.5 COLUMNS                                                                                !!
-SECTYPE,SEC_COLUMN_num,BEAM,RECT,COLUMN_name,2
-SECDATA,COLUMN_cx,COLUMN_cy
+*if,GEO_frameOpt,eq,3,then
+  sectype,SEC_COLUMN_num,beam,csolid
+  secdata,GEO_pierColumnRadius,16,4
+*else
+  SECTYPE,SEC_COLUMN_num,BEAM,RECT,COLUMN_name,2
+  SECDATA,COLUMN_cx,COLUMN_cy
+*endif
 
 !! 2.1.3.6 FRAME GIRDER                                                                           !!
 sectype,SEC_FRAMEGIRDER_num,BEAM,RECT,FRAMEGIRDER_name,2
@@ -576,16 +584,22 @@ R,REAL_ABT_kv,REAL_ABT_kv_area,,-1
 ! HORIZONTAL SOIL SPRINGS
 REAL_ABT_kh_area=(MAT_ABT_Soil_kh*FEM_ABT_springL)/MAT_ABT_Soil_E
 R,REAL_ABT_kh,REAL_ABT_kh_area,,-1
-!
+
 !! 2.1.3.19 TUBULAR COLUMN WALLS                                                                  !!
 SECTYPE,SEC_COLWALL,SHELL,,'COLWALL'
 SECDATA,COLUMN_tWall,MAT_Column
-!
+
 !! 2.1.3.20 TUBULAR COLUMN CAP                                                                    !!
-SECTYPE,SEC_COLCAP,SHELL,,'COLCAP'
-SECDATA,COLUMN_tCap,MAT_Column
-secoffset,top
-!
+*if,GEO_frameOpt,eq,3,then
+  sectype,SEC_colcap,shell,,'PIERCAP'
+  secdata,GEO_piercapThk,MAT_column
+  secoffset,top
+*else
+  SECTYPE,SEC_COLCAP,SHELL,,'COLCAP'
+  SECDATA,COLUMN_tCap,MAT_Column
+  secoffset,top
+*endif
+
 !! 2.1.4 COORDINATE SYSTEMS                                                                       !!
 !!                                                                                                !!
 ! Reference CS
