@@ -210,7 +210,7 @@ GEO_frameHeight=8
 
 ! For hammerhead only (GEO_frameOpt=3):
     ! Column diameter
-    GEO_columnDiameter = 1.2
+    GEO_pierColumnDiameter = 1.2
     ! Cap slab width (measured along transversal direction)
     GEO_piercapWidth = 5.5
     ! Cap slab length (measured along longitudinal direction)
