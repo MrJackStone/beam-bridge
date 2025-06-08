@@ -148,6 +148,7 @@ CROSSBEAM_h = 0.7
 !    [0] Frame (two columns + girder)
 !    [1] Tubular
 !    [2] Cap-beam directly supported by piles
+!    [3] Hammerhead (single solid column + thick pier cap slab)
 GEO_frameOpt = 0
 
 ! Height of the frame (base value)
@@ -164,6 +165,16 @@ GEO_frameHeight = 8
   GEO_columnWidth = 5.1-0.35
   ! Column length
   GEO_columnDepth = 2-0.35
+
+! For hammerhead only (GEO_frameOpt=3):
+    ! Column diameter
+    GEO_columnDiameter = 1.2
+    ! Cap slab width (measured along transversal direction)
+    GEO_piercapWidth = 5.5
+    ! Cap slab length (measured along longitudinal direction)
+    GEO_piercapLength = 2.0
+    ! Cap slab thickness
+    GEO_piercapThk = 1.5
 
 ! Frame top offset:
 !    [0] Off (flat deck)
