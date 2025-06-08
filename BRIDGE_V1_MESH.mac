@@ -11,28 +11,28 @@ AMESH,ALL
 
 ! Selection components: slab elements by span
 *do,nthSpan,1,GEO_supportCount-1,1
-    *if,GEO_deckRadius,eq,0,then
-        ! Straight deck:
-        x_i=GEO_supportX(nthSpan)
-        x_j=GEO_supportX(nthSpan+1)
-        cmsel,s,COMPA_Slab
-        asel,r,loc,x,x_i,x_j
-    *else
-        ! Curved deck:
-        csys,CY_deck
-        chi_i=GEO_supportChi(nthSpan)
-        chi_j=GEO_supportChi(nthSpan+1)
-        cmsel,s,COMPA_Slab
-        asel,r,loc,y,180-chi_i,180-chi_j
-        csys,0
-    *endif
+  *if,GEO_deckRadius,eq,0,then
+    ! Straight deck:
+    x_i=GEO_supportX(nthSpan)
+    x_j=GEO_supportX(nthSpan+1)
+    cmsel,s,COMPA_Slab
+    asel,r,loc,x,x_i,x_j
+  *else
+    ! Curved deck:
+    csys,CY_deck
+    chi_i=GEO_supportChi(nthSpan)
+    chi_j=GEO_supportChi(nthSpan+1)
+    cmsel,s,COMPA_Slab
+    asel,r,loc,y,180-chi_i,180-chi_j
+    csys,0
+  *endif
 
-    esla,s
-    nsle,s,active
-    ecmName=strcat('COMPE_SLAB_',chrval(nthSpan))
-    ncmName=strcat('COMPN_SLAB_',chrval(nthSpan))
-    cm,%ecmName%,elem
-    cm,%ncmName%,node
+  esla,s
+  nsle,s,active
+  ecmName=strcat('COMPE_SLAB_',chrval(nthSpan))
+  ncmName=strcat('COMPN_SLAB_',chrval(nthSpan))
+  cm,%ecmName%,elem
+  cm,%ncmName%,node
 *enddo
 
 ! Create girders
@@ -54,31 +54,31 @@ cm,COMPE_crossBeam,elem
 
 ! Create gerber cantilever beams and consoles
 *if,GEO_gerberStatus,eq,1,then
-    cmsel,s,COMPL_Gerber
-    orient,TYPE_BEAM188,MAT_Gerber,SEC_Gerber,0,0,1
-    lmesh,all
-    cmsel,s,COMPL_Console
-    orient,TYPE_BEAM188,MAT_Gerber,SEC_Console,0,0,1,FEM_ElementSize
-    lmesh,all
+  cmsel,s,COMPL_Gerber
+  orient,TYPE_BEAM188,MAT_Gerber,SEC_Gerber,0,0,1
+  lmesh,all
+  cmsel,s,COMPL_Console
+  orient,TYPE_BEAM188,MAT_Gerber,SEC_Console,0,0,1,FEM_ElementSize
+  lmesh,all
 
-    cmsel,s,COMPK_GerberTip
-    nslk,s
-    cm,COMPN_GerberTip,node
+  cmsel,s,COMPK_GerberTip
+  nslk,s
+  cm,COMPN_GerberTip,node
 
-    cmsel,s,COMPK_GerberSupported
-    lslk,s,1
-    esll,s
-    nsle,s,active
-    cm,COMPN_GerberSupported,node
+  cmsel,s,COMPK_GerberSupported
+  lslk,s,1
+  esll,s
+  nsle,s,active
+  cm,COMPN_GerberSupported,node
 
-    cmsel,s,COMPK_Console
-    nslk,s
-    cm,COMPN_Console,node
+  cmsel,s,COMPK_Console
+  nslk,s
+  cm,COMPN_Console,node
 
-    ! Couple all DOFs: gerber tip and console
-    cmsel,s,COMPN_GerberTip
-    cmsel,a,COMPN_Console
-    cpintf,all
+  ! Couple all DOFs: gerber tip and console
+  cmsel,s,COMPN_GerberTip
+  cmsel,a,COMPN_Console
+  cpintf,all
 *endif
 
 
@@ -93,15 +93,15 @@ KPNum=0
 nsel,none
 CM,COMPN_GirderSupport,NODE
 *do,nthKP,1,KCount,1
-   KPNum=KPNEXT(KPNum)
-   xVal=KX(KPNum)
-   yVal=KY(KPNum)
-   zVal=KZ(KPNum)
-   NSEL,S,LOC,X,xVal
-   NSEL,R,LOC,Y,yVal
-   NSEL,R,LOC,Z,zVal
-   CMSEL,A,COMPN_GirderSupport
-   CM,COMPN_GirderSupport,NODE
+  KPNum=KPNEXT(KPNum)
+  xVal=KX(KPNum)
+  yVal=KY(KPNum)
+  zVal=KZ(KPNum)
+  NSEL,S,LOC,X,xVal
+  NSEL,R,LOC,Y,yVal
+  NSEL,R,LOC,Z,zVal
+  CMSEL,A,COMPN_GirderSupport
+  CM,COMPN_GirderSupport,NODE
 *enddo
 CMSEL,R,COMPN_Girder
 CM,COMPN_GirderSupport,NODE
@@ -119,69 +119,69 @@ CM,COMPN_Slab,NODE
 
 ! Girders by span
 *do,nthSpan,1,GEO_SupportCount-1,1
-    nsel,none
-    esel,none
-    *do,nthGirder,1,GEO_girderCount,1
-        ecmName_nthGirder=strcat('COMPE_S',strcat(chrval(nthSpan),strcat('_G',chrval(nthGirder))))
-        ncmName_nthGirder=strcat('COMPN_S',strcat(chrval(nthSpan),strcat('_G',chrval(nthGirder))))
-        cmsel,a,%ncmName_nthGirder%
-        cmsel,a,%ecmName_nthGirder%
-    *enddo
-    ecmName=strcat('COMPE_GIRDERS_S',chrval(nthSpan))
-    ncmName=strcat('COMPN_GIRDERS_S',chrval(nthSpan))
-    cm,%ecmName%,elem
-    cm,%ncmName%,node
+  nsel,none
+  esel,none
+  *do,nthGirder,1,GEO_girderCount,1
+    ecmName_nthGirder=strcat('COMPE_S',strcat(chrval(nthSpan),strcat('_G',chrval(nthGirder))))
+    ncmName_nthGirder=strcat('COMPN_S',strcat(chrval(nthSpan),strcat('_G',chrval(nthGirder))))
+    cmsel,a,%ncmName_nthGirder%
+    cmsel,a,%ecmName_nthGirder%
+  *enddo
+  ecmName=strcat('COMPE_GIRDERS_S',chrval(nthSpan))
+  ncmName=strcat('COMPN_GIRDERS_S',chrval(nthSpan))
+  cm,%ecmName%,elem
+  cm,%ncmName%,node
 *enddo
 
 ! Load train path
 cmsel,s,COMPL_LoadTrain
 nsll,s,1
 cm,COMPN_LoadTrain,node
-!
-!
-!
+
+
+
 !!                                                                                                !!
 !! 4.2 MESOSTRUCTURE MESH                                                                         !!
 !!                                                                                                !!
-nsel,none
-esel,none
-cm,COMPE_FrameGirder,elem
-cm,COMPN_FrameGirder,node
-cm,COMPE_Column,elem
-cm,COMPE_Column,node
-cm,COMPN_colCap,node
-cm,COMPE_colCap,elem
-cm,COMPE_ColTube,elem
-cm,COMPN_ColTube,node
-cm,COMPE_Submerged,elem
+nsel , none
+esel , none
+cm   , COMPE_FrameGirder , elem
+cm   , COMPN_FrameGirder , node
+cm   , COMPE_Column      , elem
+cm   , COMPE_Column      , node
+cm   , COMPN_colCap      , node
+cm   , COMPE_colCap      , elem
+cm   , COMPE_ColTube     , elem
+cm   , COMPN_ColTube     , node
+cm   , COMPE_Submerged   , elem
 
 *if,GEO_pierCount,gt,0,then
 
-    ! Draw mesostructure
-    *do,nthSupport,1,GEO_supportCount,1
-        BRIDGE_V1_FEMMESO, nthSupport
-    *enddo
+  ! Draw mesostructure
+  *do,nthSupport,1,GEO_supportCount,1
+    BRIDGE_V1_FEMMESO, nthSupport
+  *enddo
 
-    ! Selection components: submerged and exposed column elements
-    cmsel,s,COMPE_Column
-    cmsel,a,COMPE_ColTube
-    cm,COMPE_temp,elem
-    *if,GEO_waterHeight,GT,0,THEN
-        NSEL,S,LOC,Z,zFrameBot,zFrameBot+GEO_waterHeight
-        ESLN,r,1
-        CM,COMPE_Submerged,ELEM
-    *else
-        esel,none
-        CM,COMPE_Submerged,ELEM
-    *endif
-    cmsel,s,COMPE_temp
-    CMSEL,U,COMPE_Submerged
-    CM,COMPE_Exposed,ELEM
+  ! Selection components: submerged and exposed column elements
+  cmsel,s,COMPE_Column
+  cmsel,a,COMPE_ColTube
+  cm,COMPE_temp,elem
+  *if,GEO_waterHeight,GT,0,THEN
+    NSEL,S,LOC,Z,zFrameBot,zFrameBot+GEO_waterHeight
+    ESLN,r,1
+    CM,COMPE_Submerged,ELEM
+  *else
+    esel,none
+    CM,COMPE_Submerged,ELEM
+  *endif
+  cmsel,s,COMPE_temp
+  CMSEL,U,COMPE_Submerged
+  CM,COMPE_Exposed,ELEM
 
 *endif
-!
-!
-!
+
+
+
 !!                                                                                                !!
 !! 4.3 ABUTMENTS                                                                                  !!
 !!                                                                                                !!
@@ -340,7 +340,7 @@ nsel,none
 cmsel,s,COMPA_ABT_1
 *get,ac,area,,count
 *if,ac,gt,0,then
-    amesh,all
+  amesh,all
 *endif
 cm,COMPE_ABT_1,elem
 cm,COMPN_ABT_1,node
@@ -353,7 +353,7 @@ nsel,none
 cmsel,s,COMPA_ABT_2
 *get,ac,area,,count
 *if,ac,gt,0,then
-    amesh,all
+  amesh,all
 *endif
 cm,COMPE_ABT_2,elem
 cm,COMPN_ABT_2,node
@@ -376,8 +376,8 @@ cmsel,s,COMPE_ABT_1
 cmsel,a,COMPE_ABT_2
 cmsel,u,COMPE_Submerged
 cmpadd,'COMPE_Exposed'
-!
-!
+
+
 !! 4.3.2 PILES                                                                                    !!
 !!                                                                                                !!
 !    cmsel,s,COMPL_ABT_piles
@@ -483,14 +483,14 @@ cm,COMPE_ABT_Lanes,elem
 nsel,none
 cm,COMPN_ABT_Barrier,node
 *if,GEO_ABT1_status,eq,1,or,GEO_ABT2_status,eq,1,then
-    *if,GEO_ABT1_appSlab,eq,1,or,GEO_ABT2_appSlab,eq,1,then
-        cmsel,s,COMPL_Barrier
-        nsll,s,1
-        cmsel,s,COMPA_ABT_appSlab
-        lsla,s
-        nsla,r,1
-        cmpadd,'COMPN_ABT_Barrier'
-    *endif
+  *if,GEO_ABT1_appSlab,eq,1,or,GEO_ABT2_appSlab,eq,1,then
+    cmsel,s,COMPL_Barrier
+    nsll,s,1
+    cmsel,s,COMPA_ABT_appSlab
+    lsla,s
+    nsla,r,1
+    cmpadd,'COMPN_ABT_Barrier'
+  *endif
 *endif
 
 ! Pile cap nodes
@@ -535,14 +535,14 @@ CM,COMPE_Lanes,ELEM
 
 ! Barrier nodes
 *if,LOAD_barrierStatus,EQ,1,THEN
-   CMSEL,S,COMPL_Barrier
-   NSLL,S,1
-   CMSEL,S,COMPE_Slab
-   NSLE,R,ACTIVE
-   CM,COMPN_Barrier,NODE
+  CMSEL,S,COMPL_Barrier
+  NSLL,S,1
+  CMSEL,S,COMPE_Slab
+  NSLE,R,ACTIVE
+  CM,COMPN_Barrier,NODE
 *else
-   nsel,none
-   CM,COMPN_Barrier,NODE
+  nsel,none
+  CM,COMPN_Barrier,NODE
 *endif
 !
 !
@@ -554,18 +554,18 @@ CM,COMPE_Lanes,ELEM
 !! 4.6.1 GRADE BEAM                                                                               !!
 !!                                                                                                !!
 *if,GEO_capOpt,eq,0,then
-    ! Grade beam mesh
-    esel,none
-    nsel,none
-    CMSEL,S,COMPL_GradeBeam
-    *get,lc,line,,count
-    *if,lc,gt,0,then
-        ORIENT,TYPE_BEAM188,MAT_GradeBeam,SEC_GradeBeam_num,,,1,FEM_ElementSize
-        LMESH,ALL
-        NSLE,S,ACTIVE
-    *endif
-    CM,COMPE_GradeBeam,ELEM
-    CM,COMPN_GradeBeam,NODE
+  ! Grade beam mesh
+  esel,none
+  nsel,none
+  CMSEL,S,COMPL_GradeBeam
+  *get,lc,line,,count
+  *if,lc,gt,0,then
+    ORIENT,TYPE_BEAM188,MAT_GradeBeam,SEC_GradeBeam_num,,,1,FEM_ElementSize
+    LMESH,ALL
+    NSLE,S,ACTIVE
+  *endif
+  CM,COMPE_GradeBeam,ELEM
+  CM,COMPN_GradeBeam,NODE
 *endif
 !
 !
@@ -573,23 +573,23 @@ CM,COMPE_Lanes,ELEM
 !!                                                                                                !!
 ! Pile cap mesh
 *if,GEO_pierCount,gt,0,then
-    esel,none
-    nsel,none
-    cmsel,s,COMPA_PileCap
-    !cmsel,a,COMPA_CenterPiles
-    AATT,MAT_PileCap,,TYPE_SHELL181,CS_global,SEC_PILECAP_num
-    AESIZE,ALL,FEM_PierESize
-    *get,ac,area,,count
-    *if,ac,gt,0,then
-      AMESH,ALL
-    *endif
-    CM,COMPE_PileCap,ELEM
-    CM,COMPN_PileCap,NODE
+  esel,none
+  nsel,none
+  cmsel,s,COMPA_PileCap
+  !cmsel,a,COMPA_CenterPiles
+  AATT,MAT_PileCap,,TYPE_SHELL181,CS_global,SEC_PILECAP_num
+  AESIZE,ALL,FEM_PierESize
+  *get,ac,area,,count
+  *if,ac,gt,0,then
+    AMESH,ALL
+  *endif
+  CM,COMPE_PileCap,ELEM
+  CM,COMPN_PileCap,NODE
 *else
-    esel,none
-    nsel,none
-    CM,COMPE_PileCap,ELEM
-    CM,COMPN_PileCap,NODE
+  esel,none
+  nsel,none
+  CM,COMPE_PileCap,ELEM
+  CM,COMPN_PileCap,NODE
 *endif
 !
 !
@@ -669,40 +669,40 @@ CM,COMPN_temp,NODE
 *get,NodeCount,NODE,,COUNT
 NodeNum=0
 *do,nthNode,1,NodeCount,1
-   CMSEL,S,COMPN_temp
-   NodeNum=NDNEXT(NodeNum)
-   xVal=NX(NodeNum)
-   yVal=NY(NodeNum)
-   zVal=NZ(NodeNum)
-   CMSEL,S,COMPN_PileCap
-   cmsel,a,COMPN_ABT_pileCap
-   cmsel,a,COMPN_ABT_tranWall
-   NSEL,R,LOC,X,xVal
-   NSEL,R,LOC,Y,yVal
-   nsel,r,loc,z,zVal !! added on 20/03/2023 to filter only transversal wall nodes that interface with piles
-   cmsel,s,COMPL_ABT_pileConnections
-   nsll,a,1
-   cmsel,u,COMPN_temp
-   PCNode=nnear(NodeNum)
-   NSEL,A,NODE,,NodeNum
-   cp,next,'UX',PCNode,NodeNum
-   cp,next,'UY',PCNode,NodeNum
-   cp,next,'UZ',PCNode,NodeNum
-   cp,next,'ROTZ',PCNode,NodeNum
-   *if,FEM_PileTopConnection,eq,1,then
-       cp,next,'ROTX',PCNode,NodeNum
-       cp,next,'ROTY',PCNode,NodeNum
-   *endif
+  CMSEL,S,COMPN_temp
+  NodeNum=NDNEXT(NodeNum)
+  xVal=NX(NodeNum)
+  yVal=NY(NodeNum)
+  zVal=NZ(NodeNum)
+  CMSEL,S,COMPN_PileCap
+  cmsel,a,COMPN_ABT_pileCap
+  cmsel,a,COMPN_ABT_tranWall
+  NSEL,R,LOC,X,xVal
+  NSEL,R,LOC,Y,yVal
+  nsel,r,loc,z,zVal !! added on 20/03/2023 to filter only transversal wall nodes that interface with piles
+  cmsel,s,COMPL_ABT_pileConnections
+  nsll,a,1
+  cmsel,u,COMPN_temp
+  PCNode=nnear(NodeNum)
+  NSEL,A,NODE,,NodeNum
+  cp,next,'UX',PCNode,NodeNum
+  cp,next,'UY',PCNode,NodeNum
+  cp,next,'UZ',PCNode,NodeNum
+  cp,next,'ROTZ',PCNode,NodeNum
+  *if,FEM_PileTopConnection,eq,1,then
+    cp,next,'ROTX',PCNode,NodeNum
+    cp,next,'ROTY',PCNode,NodeNum
+  *endif
 *enddo
 
 ! Pile curtain: connect piles to each other
 *if,GEO_ABT1_type,eq,3,then
-    cmsel,s,COMPL_ABT1_piles
-    BRIDGE_V1_CURTAINCP
+  cmsel,s,COMPL_ABT1_piles
+  BRIDGE_V1_CURTAINCP
 *endif
 *if,GEO_ABT2_type,eq,3,then
-    cmsel,s,COMPL_ABT2_piles
-    BRIDGE_V1_CURTAINCP
+  cmsel,s,COMPL_ABT2_piles
+  BRIDGE_V1_CURTAINCP
 *endif
 !
 !
@@ -947,6 +947,6 @@ takepic,'IMG01d_meshExtruded',,,,,POST_resultsFolder
 
 ! Turn off automatic screen updating
 /nopr
-IMMED,0
-/uis,REPLOT,0
-/uis,MSGPOP,3
+immed,0
+/uis,replot,0
+/uis,msgpop,3
