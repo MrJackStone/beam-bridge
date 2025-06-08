@@ -66,6 +66,9 @@ cm   , COMPL_Column      , line
   *elseif,mesoType,eq,CTE_MESO_beamcap,then
     ! Cap-beam frame:
     BRIDGE_V1_SMCAPBEAM, nthSupport
+  *elseif,mesoType,eq,CTE_MESO_hammerhead,then
+    ! Hammerhead:
+    BRIDGE_V1_SMHAMMERHEAD, nthSupport
   *endif
 
 *enddo

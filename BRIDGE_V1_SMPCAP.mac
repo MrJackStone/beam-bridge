@@ -168,6 +168,12 @@ csys  , 0
     *else
       BRIDGE_V1_ARCSLICE , 1
     *endif
+
+  *elseif,GEO_frameOpt,eq,3,then
+    ! Hammerhead pier: slice around solid circular column
+    cm,COMPA_temp,area
+    radslice,'COMPA_temp',GEO_pierColumnRadius
+
   *endif
 
   cmsel,a,COMPA_centerPileCaps
