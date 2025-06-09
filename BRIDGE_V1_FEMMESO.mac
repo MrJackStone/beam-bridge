@@ -97,4 +97,54 @@ mesoType=GEO_mesoType(arg1)
     cmpadd,'COMPN_colCap'
     cmpadd,'COMPE_colCap'
 
+*elseif,mesoType,eq,CTE_MESO_hammerhead,then
+    ! Hammerhead pier:
+
+    lcmName = strcat('COMPL_HAMMER_',chrval(arg1))
+    acmName = strcat('COMPA_HAMMER_',chrval(arg1))
+
+    csbackup
+    BRIDGE_V1_CSMESO, arg1
+
+    ! Mesh column
+    esel,none
+    nsel,none
+    cmsel,s,%lcmName%
+    orient,TYPE_BEAM188,MAT_Column,SEC_COLUMN_num,1,,,FEM_ElementSize
+    lmesh,all
+    nsle,r,active
+    cmpadd,'COMPE_Column'
+    cmpadd,'COMPN_Column'
+
+    ! Mesh pier cap
+    esel,none
+    nsel,none
+    cmsel,s,%acmName%
+    aesize,all,FEM_PierESize
+    aatt,MAT_column,,TYPE_SHELL181,,SEC_colcap
+    amesh,all
+    nsle,s,active
+    cm,COMPN_nthPiercap,node
+    cmpadd,'COMPN_colCap'
+    cmpadd,'COMPE_colCap'
+
+    ! Couple column & cap with rigid region
+    csnext,'CY_temp'
+    clocal,CY_temp,cylin,0,0,0
+
+    cmsel,s,COMPK_HAMMER_%ARG1%
+    cmsel,r,COMPK_HammerColumnTop
+    nslk,s
+    ND_HAMMER%ARG1%_topMaster = ndnext(0)
+
+    cmsel,s,COMPN_nthPiercap
+    nsel,r,loc,x,0,GEO_pierColumnRadius
+    nsel,a,node,,ND_HAMMER%ARG1%_topMaster
+
+    cerig,ND_HAMMER%ARG1%_topMaster,all,all
+
+    ! Clean up
+    csrestore
+    csdele,CY_temp
+
 *endif
