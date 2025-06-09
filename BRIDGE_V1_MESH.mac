@@ -585,6 +585,9 @@ CM,COMPE_Lanes,ELEM
   *endif
   CM,COMPE_PileCap,ELEM
   CM,COMPN_PileCap,NODE
+  *if,GEO_frameOpt,eq,3,then
+    BRIDGE_V1_FEMHAMMERPCAP
+  *endif
 *else
   esel,none
   nsel,none

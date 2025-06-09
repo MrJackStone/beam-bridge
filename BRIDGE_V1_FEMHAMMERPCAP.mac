@@ -1,0 +1,28 @@
+! BRIDGE_V1_FEMHAMMERPCAP
+
+*do,nthSupport,1,GEO_supportCount,1
+
+  mesoType = GEO_mesoType(nthSupport)
+
+  *if,mesoType,eq,CTE_MESO_hammerhead,then
+
+    csbackup
+    BRIDGE_V1_CSMESO, nthSupport
+    csnext,'CY_temp'
+    clocal,CY_temp,cylin,0,0,0
+
+    cmsel,s,COMPK_HAMMER_%ARG1%
+    cmsel,r,COMPK_HammerColumnBottom
+    nslk,s
+    ND_HAMMER%ARG1%_botMaster = ndnext(0)
+
+    cmsel,s,COMPN_pileCap
+    nsel,r,loc,x,0,GEO_pierColumnRadius
+    nsel,a,node,,ND_HAMMER%ARG1%_botMaster
+
+    cerig,ND_HAMMER%ARG1%_botMaster,all,all
+
+    csrestore
+
+  *endif
+*enddo
