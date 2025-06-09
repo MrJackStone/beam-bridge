@@ -99,6 +99,10 @@ GIRDER_name0 = GIRDER_name(1,1)
 
     BRIDGE_V1_POSTFRG, 'MY'
     BRIDGE_V1_POSTFRG, 'QZ'
+
+  *elseif,GEO_frameOpt,eq,3,then
+    BRIDGE_V1_POSTHAMMERHEAD
+
   *endif
 
 
