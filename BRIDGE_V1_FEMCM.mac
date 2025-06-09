@@ -56,6 +56,9 @@
   *elseif,mesoTypeBeg,eq,CTE_MESO_tcolumn,then
     ! Tubular T-column:
     cmsel,s,COMPN_GerberTip
+  *elseif,mesoTypeBeg,eq,CTE_MESO_hammerhead,then
+    ! Hammerhead:
+    cmsel,s,COMPN_ColCap
   *elseif,mesoTypeBeg,eq,CTE_MESO_abutment,then
     ! Abutment:
     cmsel,s,COMPN_ABT_girder
@@ -77,6 +80,9 @@
   *elseif,mesoTypeEnd,eq,CTE_MESO_tcolumn,then
     ! Tubular T-column:
     cmsel,s,COMPN_GerberTip
+  *elseif,mesoTypeEnd,eq,CTE_MESO_hammerhead,then
+    ! Hammerhead:
+    cmsel,s,COMPN_ColCap
   *elseif,mesoTypeEnd,eq,CTE_MESO_abutment,then
     ! Abutment:
     cmsel,s,COMPN_ABT_girder
