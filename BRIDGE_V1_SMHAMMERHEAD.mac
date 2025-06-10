@@ -13,8 +13,10 @@ BRIDGE_V1_CSMESO, ARG1
 *get,CS_num,active,,csys
 
 ! Calculate top & bottom Z coordinates of the pier
-nthFrameZTop = zFrameTop+GEO_frameTopOffset(ARG1)
-nthFrameZBot = zFrameBot+GEO_frameBotOffset(ARG1)
+topOffset    = GEO_frameTopOffset(ARG1)
+botOffset    = GEO_frameBotOffset(ARG1)
+nthFrameZTop = zFrameTop+topOffset
+nthFrameZBot = zFrameBot+botOffset
 
 ! Draw column
 ksel,none
@@ -25,7 +27,7 @@ k , KP_col(2) , 0 , 0 , nthFrameZTop
 l,KP_col(1),KP_col(2)
 LN_column = lsnext(0)
 
-submergedHeight = GEO_waterHeight-GEO_frameBotOffset(ARG1)
+submergedHeight = GEO_waterHeight-botOffset
 *if,submergedHeight,gt,0,then
   relativePosition = submergedHeight/(nthFrameZTop-nthFrameZBot)
   kl,LN_column,relativePosition
@@ -36,7 +38,11 @@ cm,%cmkName%,kp
 ! Draw pier cap slab
 asel,none
 wpcsys,-1
+wpoffs,,,topOffset
 blc5,0,0,GEO_piercapLength,GEO_piercapWidth,0
+
+cm,%cmaName%,area
+radslice,cmaName,GEO_pierColumnRadius
 
 *if,GEO_deckRadius,eq,0,then
   BRIDGE_V1_LONGSLICE
@@ -44,11 +50,9 @@ blc5,0,0,GEO_piercapLength,GEO_piercapWidth,0
   BRIDGE_V1_ARCSLICE , 1
 *endif
 
+! Build selection components
 cm,%cmaName%,area
 
-radslice,cmaName,GEO_pierColumnRadius
-
-! Build selection components
 ksel,s,kp,,KP_col(1)
 cmpadd,'COMPK_HammerColumnBottom'
 
