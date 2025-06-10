@@ -11,16 +11,16 @@
     csnext,'CY_temp'
     clocal,CY_temp,cylin,0,0,0
 
-    cmsel,s,COMPK_HAMMER_%ARG1%
+    cmsel,s,COMPK_HAMMER_%nthSupport%
     cmsel,r,COMPK_HammerColumnBottom
     nslk,s
-    ND_HAMMER%ARG1%_botMaster = ndnext(0)
+    ND_HAMMER%nthSupport%_botMaster = ndnext(0)
 
     cmsel,s,COMPN_pileCap
     nsel,r,loc,x,0,GEO_pierColumnRadius
-    nsel,a,node,,ND_HAMMER%ARG1%_botMaster
+    nsel,a,node,,ND_HAMMER%nthSupport%_botMaster
 
-    cerig,ND_HAMMER%ARG1%_botMaster,all,all
+    cerig,ND_HAMMER%nthSupport%_botMaster,all,all
 
     csrestore
 
