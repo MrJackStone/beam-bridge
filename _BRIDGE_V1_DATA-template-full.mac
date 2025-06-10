@@ -95,13 +95,16 @@ GEO_uniGirderSection   = 0
 GEO_girderSectionCount = GEO_supportCount-1
 
 ! Cross-section
-*del,GIRDER_parms,,nopr
-*dim,GIRDER_parms,char,9
-GIRDER_parms(1)= 'GIRDER_d' , 'GIRDER_bfs' , 'GIRDER_bfi' , 'GIRDER_tfs' , 'GIRDER_tfi' , 'GIRDER_tw' , 'GIRDER_hs' , 'GIRDER_hi' , 'GIRDER_hw'
-arrinit,'GIRDER_parms',,GEO_girderSectionCount
-
-*del,GIRDER_name,,nopr
-*dim,GIRDER_name,string,248,GEO_girderSectionCount
+*del , GIRDER_d    ,  , nopr  $  *dim , GIRDER_d    ,        , GEO_girderSectionCount
+*del , GIRDER_bfs  ,  , nopr  $  *dim , GIRDER_bfs  ,        , GEO_girderSectionCount
+*del , GIRDER_bfi  ,  , nopr  $  *dim , GIRDER_bfi  ,        , GEO_girderSectionCount
+*del , GIRDER_tfs  ,  , nopr  $  *dim , GIRDER_tfs  ,        , GEO_girderSectionCount
+*del , GIRDER_tfi  ,  , nopr  $  *dim , GIRDER_tfi  ,        , GEO_girderSectionCount
+*del , GIRDER_tw   ,  , nopr  $  *dim , GIRDER_tw   ,        , GEO_girderSectionCount
+*del , GIRDER_hs   ,  , nopr  $  *dim , GIRDER_hs   ,        , GEO_girderSectionCount
+*del , GIRDER_hi   ,  , nopr  $  *dim , GIRDER_hi   ,        , GEO_girderSectionCount
+*del , GIRDER_hw   ,  , nopr  $  *dim , GIRDER_hw   ,        , GEO_girderSectionCount
+*del , GIRDER_name ,  , nopr  $  *dim , GIRDER_name , string , 248                    , GEO_girderSectionCount
 
 GIRDER_d   (1)   = 1.5
 GIRDER_bfs (1)   = 0.7
