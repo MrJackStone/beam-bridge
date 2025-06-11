@@ -48,11 +48,21 @@ cm,COMPA_Lanes,area
 ! Create frames
 ksel , none
 lsel , none
-cm   , COMPK_FrameGirder , kp
-cm   , COMPK_Column      , kp
-cm   , COMPK_FrameBottom , kp
-cm   , COMPL_FrameGirder , line
-cm   , COMPL_Column      , line
+asel , none
+cm   , COMPK_FrameGirder        , kp
+cm   , COMPK_Column             , kp
+cm   , COMPK_FrameBottom        , kp
+cm   , COMPK_hammerColumnBottom , kp
+cm   , COMPK_hammerColumnTop    , kp
+cm   , COMPK_hammerColumn       , kp
+cm   , COMPL_FrameGirder        , line
+cm   , COMPL_Column             , line
+cm   , COMPL_HammerColumn       , line
+cm   , COMPA_colTubeWall        , area
+cm   , COMPA_coltubeCap         , area
+cm   , COMPA_tubeColumn         , area
+cm   , COMPA_tubeWindFace       , area
+cm   , COMPA_hammerPierCap      , area
 
 *do,nthSupport,1,GEO_supportCount,1
 

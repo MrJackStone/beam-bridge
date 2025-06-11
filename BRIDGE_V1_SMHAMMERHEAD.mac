@@ -52,17 +52,18 @@ radslice,cmaName,GEO_pierColumnRadius
 
 ! Build selection components
 cm,%cmaName%,area
+cmpadd,'COMPA_hammerPierCap'
 
 ksel,s,kp,,KP_col(1)
-cmpadd,'COMPK_HammerColumnBottom'
+cmpadd,'COMPK_hammerColumnBottom'
 
 ksel,s,kp,,KP_col(2)
-cmpadd,'COMPK_HammerColumnTop'
+cmpadd,'COMPK_hammerColumnTop'
 
 cmsel,s,%cmlName%
 ksll,s
-cmpadd,'COMPL_HammerColumn'
-cmpadd,'COMPK_HammerColumn'
+cmpadd,'COMPL_hammerColumn'
+cmpadd,'COMPK_hammerColumn'
 
 ! Clean up
 *del , CS_num           ,  , nopr
