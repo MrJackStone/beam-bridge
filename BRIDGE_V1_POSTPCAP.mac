@@ -26,7 +26,10 @@ boldfont,1
 cmsel,s,COMPA_colTubeWall
 cmsel,a,COMPA_colTubeCap
 cmsel,a,COMPA_pileCap
+cmsel,a,COMPA_hammerPierCap
+cmsel,s,COMPL_hammerColumn
 esla
+esll,a
 nsle
 /color,cm,dgra,compe_colored
 eplot
@@ -40,7 +43,9 @@ wintitle,1,'BLOCO DE COROAMENTO',_centerTitle,_rightTitle,,1,13
 
 go2png,1200
   cmsel,s,COMPA_colTubeWall
+  cmsel,s,COMPL_HammerColumn
   esla
+  esll,a
   nsle
   eplot
   /noerase
@@ -69,7 +74,9 @@ go2png,1200
   /eshape,0
 
   cmsel,s,COMPA_colTubeWall
+  cmsel,s,COMPL_HammerColumn
   esla
+  esll,a
   nsle
   /edge,1,0
   eplot
