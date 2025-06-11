@@ -137,74 +137,75 @@ view1w
 clims
 
 ! Pile guide
+*if,GEO_ABT_status,gt,0,then
 
-/window,all,dele
-/window,1,-1,1.67,0,1
-/window,2,-1,1.67,-1,0
-/view,1,0,0,-1
-/view,2,0,0,-1
-/auto,all
-/angle,all,0
+  /window,all,dele
+  /window,1,-1,1.67,0,1
+  /window,2,-1,1.67,-1,0
+  /view,1,0,0,-1
+  /view,2,0,0,-1
+  /auto,all
+  /angle,all,0
 
-wintitle , 1 , ' ' , 'ENCONTRO 01: ID. ESTACAS' , ' ' ,  , 1
-wintitle , 2 , ' ' , 'ENCONTRO 02: ID. ESTACAS' , ' ' ,  , 1
+  wintitle , 1 , ' ' , 'ENCONTRO 01: ID. ESTACAS' , ' ' ,  , 1
+  wintitle , 2 , ' ' , 'ENCONTRO 02: ID. ESTACAS' , ' ' ,  , 1
 
-go2png,1200
+  go2png,1200
 
-  *if,GEO_ABT1_status,eq,1,then
-    /window,1,on
-    /window,2,off
-    cmsel,s,COMPA_ABT_1
-    esla,s
-    /device,vector,on
-    /edge,1,1
-    /eshape,0
-    eplot
-    /noerase
-    /user,1
-    /eshape,1
-    cmsel,s,COMPL_ABT_piles
-    cmsel,r,COMPL_ABT_1
-    esll,s
-    nsle,s,active
-    eplot
-    /pnum,line,1
-    /number,2
-    lplot
-    /number,1
-    /pnum,line,0
-    lplot
-  *endif
+    *if,GEO_ABT1_status,eq,1,then
+      /window,1,on
+      /window,2,off
+      cmsel,s,COMPA_ABT_1
+      esla,s
+      /device,vector,on
+      /edge,1,1
+      /eshape,0
+      eplot
+      /noerase
+      /user,1
+      /eshape,1
+      cmsel,s,COMPL_ABT_piles
+      cmsel,r,COMPL_ABT_1
+      esll,s
+      nsle,s,active
+      eplot
+      /pnum,line,1
+      /number,2
+      lplot
+      /number,1
+      /pnum,line,0
+      lplot
+    *endif
 
-  *if,GEO_ABT2_status,eq,1,then
-    /window,1,off
-    /window,2,on
-    cmsel,s,COMPA_ABT_2
-    esla,s
-    /device,vector,on
-    /edge,2,1
-    /eshape,0
-    eplot
-    /noerase
-    /user,2
-    /eshape,1
-    cmsel,s,COMPL_ABT_piles
-    cmsel,r,COMPL_ABT_2
-    esll,s
-    nsle,s,active
-    eplot
-    /pnum,line,1
-    /number,2
-    lplot
-    /number,1
-    /pnum,line,0
-    lplot
-  *endif
+    *if,GEO_ABT2_status,eq,1,then
+      /window,1,off
+      /window,2,on
+      cmsel,s,COMPA_ABT_2
+      esla,s
+      /device,vector,on
+      /edge,2,1
+      /eshape,0
+      eplot
+      /noerase
+      /user,2
+      /eshape,1
+      cmsel,s,COMPL_ABT_piles
+      cmsel,r,COMPL_ABT_2
+      esll,s
+      nsle,s,active
+      eplot
+      /pnum,line,1
+      /number,2
+      lplot
+      /number,1
+      /pnum,line,0
+      lplot
+    *endif
 
-endpng,'IMG12a_pile_guide',,,,,POST_resultsFolder
+  endpng,'IMG12a_pile_guide',,,,,POST_resultsFolder
 
-
-allsel
+  allsel
+*endif
 
 cmsel,s,compl_abt_piles
 cmsel,a,compl_pile

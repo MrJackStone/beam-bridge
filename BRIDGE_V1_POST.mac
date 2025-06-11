@@ -129,112 +129,117 @@ GIRDER_name0 = GIRDER_name(1,1)
   BRIDGE_V1_POSTDECK
 
 
-  !!  Abutment: approach slab                                                                       !!
-  BRIDGE_V1_POSTAPPSLAB
-  *if,GEO_ABT1_status,eq,1,then
-    BRIDGE_V1_POSTAPSLBDFL,1
-  *endif
-  *if,GEO_ABT2_status,eq,1,then
-    BRIDGE_V1_POSTAPSLBDFL,2
-  *endif
+  !!  Abutment parts                                                                              !!
+  *if,GEO_ABT1_status,eq,1,or,GEO_ABT2_status,eq,1,then
 
+    !!  Abutment: approach slab                                                                       !!
+    *if,GEO_ABT1_appSlab,eq,1,or,GEO_ABT2_appSlab,eq,1,then
+      BRIDGE_V1_POSTAPPSLAB
 
-  !!  Abutment: transversal wall                                                                    !!
-  BRIDGE_V1_POSTTWALL , 'AEAB_MX' , 'MOMENTO FLETOR (MX)' , 'ELU-Normal [kNm/m]' , 'IMG13a_TRAN_MX'
-  BRIDGE_V1_POSTTWALL , 'AEAB_MY' , 'MOMENTO FLETOR (MY)' , 'ELU-Normal [kNm/m]' , 'IMG13b_TRAN_MY'
-  BRIDGE_V1_POSTTWALL , 'AEAB_Q'  , 'F. CORTANTE'         , 'ELU-Normal [kN/m]'  , 'IMG13c_TRAN_Q'
-  BRIDGE_V1_POSTTWALL , 'EAB_NX'  , 'F. NORMAL (NX)'      , 'ELU-Normal [kN/m]'  , 'IMG13d_TRAN_NX'
-  BRIDGE_V1_POSTTWALL , 'EAB_NY'  , 'F. NORMAL (NY)'      , 'ELU-Normal [kN/m]'  , 'IMG13e_TRAN_NY'
+      *if,GEO_ABT1_appSlab,eq,1,then
+        BRIDGE_V1_POSTAPSLBDFL,1
+      *endif
 
-  BRIDGE_V1_POSTTHINWALL , 'AEAB_MX' , 'MOMENTO FLETOR (MX)' , 'ELU-Normal [kNm/m]' , 'IMG13f_TRAN_MX'
-  BRIDGE_V1_POSTTHINWALL , 'AEAB_MY' , 'MOMENTO FLETOR (MY)' , 'ELU-Normal [kNm/m]' , 'IMG13g_TRAN_MY'
-  BRIDGE_V1_POSTTHINWALL , 'AEAB_Q'  , 'F. CORTANTE'         , 'ELU-Normal [kN/m]'  , 'IMG13h_TRAN_Q'
-  BRIDGE_V1_POSTTHINWALL , 'EAB_NX'  , 'F. NORMAL (NX)'      , 'ELU-Normal [kN/m]'  , 'IMG13i_TRAN_NX'
-  BRIDGE_V1_POSTTHINWALL , 'EAB_NY'  , 'F. NORMAL (NY)'      , 'ELU-Normal [kN/m]'  , 'IMG13j_TRAN_NY'
+      *if,GEO_ABT2_appSlab,eq,1,then
+        BRIDGE_V1_POSTAPSLBDFL,2
+      *endif
+    *endif
 
-  *if,GEO_ABT1_status,eq,1,then
-    BRIDGE_V1_POSTTWALDFL,1,2
-  *endif
-  *if,GEO_ABT2_status,eq,1,then
-    BRIDGE_V1_POSTTWALDFL,2,2
-  *endif
+    !!  Abutment: transversal wall                                                                    !!
+    BRIDGE_V1_POSTTWALL , 'AEAB_MX' , 'MOMENTO FLETOR (MX)' , 'ELU-Normal [kNm/m]' , 'IMG13a_TRAN_MX'
+    BRIDGE_V1_POSTTWALL , 'AEAB_MY' , 'MOMENTO FLETOR (MY)' , 'ELU-Normal [kNm/m]' , 'IMG13b_TRAN_MY'
+    BRIDGE_V1_POSTTWALL , 'AEAB_Q'  , 'F. CORTANTE'         , 'ELU-Normal [kN/m]'  , 'IMG13c_TRAN_Q'
+    BRIDGE_V1_POSTTWALL , 'EAB_NX'  , 'F. NORMAL (NX)'      , 'ELU-Normal [kN/m]'  , 'IMG13d_TRAN_NX'
+    BRIDGE_V1_POSTTWALL , 'EAB_NY'  , 'F. NORMAL (NY)'      , 'ELU-Normal [kN/m]'  , 'IMG13e_TRAN_NY'
 
-  ! Thin portion of transversal wall as beam
-  *if,GEO_ABT_status,gt,0,then
+    BRIDGE_V1_POSTTHINWALL , 'AEAB_MX' , 'MOMENTO FLETOR (MX)' , 'ELU-Normal [kNm/m]' , 'IMG13f_TRAN_MX'
+    BRIDGE_V1_POSTTHINWALL , 'AEAB_MY' , 'MOMENTO FLETOR (MY)' , 'ELU-Normal [kNm/m]' , 'IMG13g_TRAN_MY'
+    BRIDGE_V1_POSTTHINWALL , 'AEAB_Q'  , 'F. CORTANTE'         , 'ELU-Normal [kN/m]'  , 'IMG13h_TRAN_Q'
+    BRIDGE_V1_POSTTHINWALL , 'EAB_NX'  , 'F. NORMAL (NX)'      , 'ELU-Normal [kN/m]'  , 'IMG13i_TRAN_NX'
+    BRIDGE_V1_POSTTHINWALL , 'EAB_NY'  , 'F. NORMAL (NY)'      , 'ELU-Normal [kN/m]'  , 'IMG13j_TRAN_NY'
+
+    *if,GEO_ABT1_status,eq,1,then
+      BRIDGE_V1_POSTTWALDFL,1,2
+    *endif
+    *if,GEO_ABT2_status,eq,1,then
+      BRIDGE_V1_POSTTWALDFL,2,2
+    *endif
+
+    ! Thin portion of transversal wall as beam
     BRIDGE_V1_POSTTWBEAM
+
+
+    !!  Abutment: wings                                                                               !!
+    ! BRIDGE_V1_POSTWINGS , etable    , subtitle                      , imgName
+    BRIDGE_V1_POSTWINGS   , 'AEAB_MX' , 'MOMENTO FLETOR (MX) [kNm/m]' , 'IMG15a_WINGS_MX'
+    BRIDGE_V1_POSTWINGS   , 'AEAB_MY' , 'MOMENTO FLETOR (MY) [kNm/m]' , 'IMG15b_WINGS_MY'
+    BRIDGE_V1_POSTWINGS   , 'AEAB_Q'  , 'F. CORTANTE [kN/m]'          , 'IMG15c_WINGS_Q'! , 0.55
+    BRIDGE_V1_POSTWINGS   , 'EAB_NX'  , 'F. NORMAL (NX) [kN/m]'       , 'IMG15d_WINGS_NX'
+    BRIDGE_V1_POSTWINGS   , 'EAB_NY'  , 'F. NORMAL (NY) [kN/m]'       , 'IMG15e_WINGS_NY'
+
+    *if,GEO_ABT1_type,eq,4,then
+      BRIDGE_V1_POSTWINGDFL,1
+    *endif
+    *if,GEO_ABT2_type,eq,4,then
+      BRIDGE_V1_POSTWINGDFL,2
+    *endif
+
+    *if,GEO_ABT1_type,eq,1,then
+      BRIDGE_V1_POSTLWDFL,1
+    *endif
+    *if,GEO_ABT2_type,eq,1,then
+      BRIDGE_V1_POSTLWDFL,2
+    *endif
+
+
+    !!  Abutment: longitudinal wall                                                                   !!
+    *if,GEO_ABT1_status,eq,1,then
+      BRIDGE_V1_POSTLWALL , 1 , 'AEAB_MX' , 'MOMENTO FLETOR (MX)' , 'ELU-Normal [kNm/m]' , 'IMG16a_LWALL_MX'
+      BRIDGE_V1_POSTLWALL , 1 , 'AEAB_MY' , 'MOMENTO FLETOR (MY)' , 'ELU-Normal [kNm/m]' , 'IMG16b_LWALL_MY'
+      BRIDGE_V1_POSTLWALL , 1 , 'AEAB_Q'  , 'F. CORTANTE'         , 'ELU-Normal [kN/m]'  , 'IMG16c_LWALL_Q'  ! , 0.55
+      BRIDGE_V1_POSTLWALL , 1 , 'EAB_NX'  , 'F. NORMAL (NX) '     , 'ELU-Normal [kN/m]'  , 'IMG16d_LWALL_NX'
+      BRIDGE_V1_POSTLWALL , 1 , 'EAB_NY'  , 'F. NORMAL (NY) '     , 'ELU-Normal [kN/m]'  , 'IMG16e_LWALL_NY'
+    *endif
+
+    *if,GEO_ABT2_status,eq,1,then
+      BRIDGE_V1_POSTLWALL , 2 , 'AEAB_MX' , 'MOMENTO FLETOR (MX)' , 'ELU-Normal [kNm/m]' , 'IMG17a_LWALL_MX'
+      BRIDGE_V1_POSTLWALL , 2 , 'AEAB_MY' , 'MOMENTO FLETOR (MY)' , 'ELU-Normal [kNm/m]' , 'IMG17b_LWALL_MY'
+      BRIDGE_V1_POSTLWALL , 2 , 'AEAB_Q'  , 'F. CORTANTE'         , 'ELU-Normal [kN/m]'  , 'IMG17c_LWALL_Q'  ! , 0.55
+      BRIDGE_V1_POSTLWALL , 2 , 'EAB_NX'  , 'F. NORMAL (NX) '     , 'ELU-Normal [kN/m]'  , 'IMG17d_LWALL_NX'
+      BRIDGE_V1_POSTLWALL , 2 , 'EAB_NY'  , 'F. NORMAL (NY) '     , 'ELU-Normal [kN/m]'  , 'IMG17e_LWALL_NY'
+    *endif
+
+    !!  Abutment: overhangs                                                                           !!
+    *if,GEO_ABT1_status,eq,1,then
+      BRIDGE_V1_POSTABTOVHANG , 1 , 'MX' , 'MOMENTO FLETOR' , 'kNm/m' , 0.7
+      BRIDGE_V1_POSTABTOVHANG , 1 , 'Q'  , 'F. CORTANTE'    , 'kN/m'  , 0.7
+    *endif
+    *if,GEO_ABT2_status,eq,1,then
+      BRIDGE_V1_POSTABTOVHANG , 2 , 'MX' , 'MOMENTO FLETOR' , 'kNm/m' , 0.7
+      BRIDGE_V1_POSTABTOVHANG , 2 , 'Q'  , 'F. CORTANTE'    , 'kN/m'  , 0.7
+    *endif
+
+    !!  Abutment: pile caps                                                                           !!
+    *if,GEO_ABT1_status,eq,1,then
+      BRIDGE_V1_POSTABTCAP , 1 , 'MX' , 'MOMENTO FLETOR (MX)' , 'kNm/m'
+      BRIDGE_V1_POSTABTCAP , 1 , 'MY' , 'MOMENTO FLETOR (MY)' , 'kNm/m'
+      BRIDGE_V1_POSTABTCAP , 1 , 'Q'  , 'F. CORTANTE'         , 'kN/m'
+    *endif
+    *if,GEO_ABT2_status,eq,1,then
+      BRIDGE_V1_POSTABTCAP , 2 , 'MX' , 'MOMENTO FLETOR (MX)' , 'kNm/m'
+      BRIDGE_V1_POSTABTCAP , 2 , 'MY' , 'MOMENTO FLETOR (MY)' , 'kNm/m'
+      BRIDGE_V1_POSTABTCAP , 2 , 'Q'  , 'F. CORTANTE'         , 'kN/m'
+    *endif
+
+
+    !!  Abutment: column (transversal wall)                                                           !!
+    BRIDGE_V1_POSTABTCOL
+
+
+    !!  Abutment: back beam                                                                           !!
+    BRIDGE_V1_POSTABTBEAM
+
   *endif
-
-
-  !!  Abutment: wings                                                                               !!
-  ! BRIDGE_V1_POSTWINGS , etable    , subtitle                      , imgName
-  BRIDGE_V1_POSTWINGS   , 'AEAB_MX' , 'MOMENTO FLETOR (MX) [kNm/m]' , 'IMG15a_WINGS_MX'
-  BRIDGE_V1_POSTWINGS   , 'AEAB_MY' , 'MOMENTO FLETOR (MY) [kNm/m]' , 'IMG15b_WINGS_MY'
-  BRIDGE_V1_POSTWINGS   , 'AEAB_Q'  , 'F. CORTANTE [kN/m]'          , 'IMG15c_WINGS_Q'! , 0.55
-  BRIDGE_V1_POSTWINGS   , 'EAB_NX'  , 'F. NORMAL (NX) [kN/m]'       , 'IMG15d_WINGS_NX'
-  BRIDGE_V1_POSTWINGS   , 'EAB_NY'  , 'F. NORMAL (NY) [kN/m]'       , 'IMG15e_WINGS_NY'
-
-  *if,GEO_ABT1_type,eq,4,then
-    BRIDGE_V1_POSTWINGDFL,1
-  *endif
-  *if,GEO_ABT2_type,eq,4,then
-    BRIDGE_V1_POSTWINGDFL,2
-  *endif
-
-  *if,GEO_ABT1_type,eq,1,then
-    BRIDGE_V1_POSTLWDFL,1
-  *endif
-  *if,GEO_ABT2_type,eq,1,then
-    BRIDGE_V1_POSTLWDFL,2
-  *endif
-
-
-  !!  Abutment: longitudinal wall                                                                   !!
-  *if,GEO_ABT1_status,eq,1,then
-    BRIDGE_V1_POSTLWALL , 1 , 'AEAB_MX' , 'MOMENTO FLETOR (MX)' , 'ELU-Normal [kNm/m]' , 'IMG16a_LWALL_MX'
-    BRIDGE_V1_POSTLWALL , 1 , 'AEAB_MY' , 'MOMENTO FLETOR (MY)' , 'ELU-Normal [kNm/m]' , 'IMG16b_LWALL_MY'
-    BRIDGE_V1_POSTLWALL , 1 , 'AEAB_Q'  , 'F. CORTANTE'         , 'ELU-Normal [kN/m]'  , 'IMG16c_LWALL_Q'  ! , 0.55
-    BRIDGE_V1_POSTLWALL , 1 , 'EAB_NX'  , 'F. NORMAL (NX) '     , 'ELU-Normal [kN/m]'  , 'IMG16d_LWALL_NX'
-    BRIDGE_V1_POSTLWALL , 1 , 'EAB_NY'  , 'F. NORMAL (NY) '     , 'ELU-Normal [kN/m]'  , 'IMG16e_LWALL_NY'
-  *endif
-
-  *if,GEO_ABT2_status,eq,1,then
-    BRIDGE_V1_POSTLWALL , 2 , 'AEAB_MX' , 'MOMENTO FLETOR (MX)' , 'ELU-Normal [kNm/m]' , 'IMG17a_LWALL_MX'
-    BRIDGE_V1_POSTLWALL , 2 , 'AEAB_MY' , 'MOMENTO FLETOR (MY)' , 'ELU-Normal [kNm/m]' , 'IMG17b_LWALL_MY'
-    BRIDGE_V1_POSTLWALL , 2 , 'AEAB_Q'  , 'F. CORTANTE'         , 'ELU-Normal [kN/m]'  , 'IMG17c_LWALL_Q'  ! , 0.55
-    BRIDGE_V1_POSTLWALL , 2 , 'EAB_NX'  , 'F. NORMAL (NX) '     , 'ELU-Normal [kN/m]'  , 'IMG17d_LWALL_NX'
-    BRIDGE_V1_POSTLWALL , 2 , 'EAB_NY'  , 'F. NORMAL (NY) '     , 'ELU-Normal [kN/m]'  , 'IMG17e_LWALL_NY'
-  *endif
-
-  !!  Abutment: overhangs                                                                           !!
-  *if,GEO_ABT1_status,eq,1,then
-    BRIDGE_V1_POSTABTOVHANG , 1 , 'MX' , 'MOMENTO FLETOR' , 'kNm/m' , 0.7
-    BRIDGE_V1_POSTABTOVHANG , 1 , 'Q'  , 'F. CORTANTE'    , 'kN/m'  , 0.7
-  *endif
-  *if,GEO_ABT2_status,eq,1,then
-    BRIDGE_V1_POSTABTOVHANG , 2 , 'MX' , 'MOMENTO FLETOR' , 'kNm/m' , 0.7
-    BRIDGE_V1_POSTABTOVHANG , 2 , 'Q'  , 'F. CORTANTE'    , 'kN/m'  , 0.7
-  *endif
-
-  !!  Abutment: pile caps                                                                           !!
-  *if,GEO_ABT1_status,eq,1,then
-    BRIDGE_V1_POSTABTCAP , 1 , 'MX' , 'MOMENTO FLETOR (MX)' , 'kNm/m'
-    BRIDGE_V1_POSTABTCAP , 1 , 'MY' , 'MOMENTO FLETOR (MY)' , 'kNm/m'
-    BRIDGE_V1_POSTABTCAP , 1 , 'Q'  , 'F. CORTANTE'         , 'kN/m'
-  *endif
-  *if,GEO_ABT2_status,eq,1,then
-    BRIDGE_V1_POSTABTCAP , 2 , 'MX' , 'MOMENTO FLETOR (MX)' , 'kNm/m'
-    BRIDGE_V1_POSTABTCAP , 2 , 'MY' , 'MOMENTO FLETOR (MY)' , 'kNm/m'
-    BRIDGE_V1_POSTABTCAP , 2 , 'Q'  , 'F. CORTANTE'         , 'kN/m'
-  *endif
-
-
-  !!  Abutment: column (transversal wall)                                                           !!
-  BRIDGE_V1_POSTABTCOL
-
-
-  !!  Abutment: back beam                                                                           !!
-  BRIDGE_V1_POSTABTBEAM
-
 *endif
 
 /post1
