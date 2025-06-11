@@ -143,7 +143,7 @@ lsel,none
 cm,COMPL_Barrier,line
 *if,LOAD_barrierStatus,EQ,1,THEN
   *do,nthBarrier,1,LOAD_barrierCount,1
-    center_off=LOAD_barrierOffset(nthBarrier)
+    center_off=LOAD_barrierOffset_beg(nthBarrier)
     lsel,a,loc,x,GEO_deckRadius+center_off
   *enddo
   cm,COMPL_Barrier,line
