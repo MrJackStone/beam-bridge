@@ -4,6 +4,8 @@
 
 _sliceAtGirders = ARG1
 
+csbackup
+
 cm,COMPA_temp,area
 
 *if,_sliceAtGirders,eq,1,then
@@ -18,3 +20,5 @@ wpcsys,-1,CY_deck
   nthRadius = GEO_deckRadius+arc_offsets(nthY)
   radslice,'COMPA_temp',nthRadius
 *enddo
+
+csrestore

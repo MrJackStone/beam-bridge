@@ -129,22 +129,18 @@ mesoType=GEO_mesoType(arg1)
     cmpadd,'COMPE_colCap'
 
     ! Couple column & cap with rigid region
-    csnext,'CY_temp'
-    clocal,CY_temp,cylin,0,0,0
-
     cmsel,s,COMPK_HAMMER_%ARG1%
     cmsel,r,COMPK_HammerColumnTop
     nslk,s
     ND_HAMMER%ARG1%_topMaster = ndnext(0)
 
-    cmsel,s,COMPN_nthPiercap
-    nsel,r,loc,x,0,GEO_pierColumnRadius
+    cmsel,s,COMPA_HAMMER%ARG1%_topInterface
+    nsla,s,1
     nsel,a,node,,ND_HAMMER%ARG1%_topMaster
 
     cerig,ND_HAMMER%ARG1%_topMaster,all,all
 
     ! Clean up
     csrestore
-    csdele,CY_temp
 
 *endif

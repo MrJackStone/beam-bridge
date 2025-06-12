@@ -1,0 +1,73 @@
+! BRIDGE_V1_SLICEAROUNDBEAM , cmaName , shape , diam , Cx   , Cy   , cmaOutput
+! BRIDGE_V1_SLICEAROUNDBEAM , ARG1    , ARG2  , ARG3 , ARG4 , ARG5 , ARG6
+
+
+! Parse inputs
+_cmaName   = ARG1
+_shape     = upcase(ARG2)
+_radius    = ARG3/2
+_cx        = ARG4
+_cy        = ARG5
+_cmaOutput = ARG6
+
+*get,parType,parm,_cmaName,type
+*if,parType,eq,3,then
+  cmaInput = _cmaName
+*else
+  cmaInput = 'COMPA_input'
+  cm,%cmaInput%,area
+*endif
+
+cmaOutput = 'COMPA_output'
+*get,parType,parm,_cmaOutput,type
+*if,parType,eq,3,then
+  cmaOutput = _cmaOutput
+*endif
+
+! Prepare environment
+csbackup
+csnext,'dummyCS'
+
+! Slice around shape
+*if,_shape,eq,'C',then
+  ! Circular shape
+  cswpla,dummyCS,cylin
+
+  radslice,cmaInput,_radius
+
+  cmsel,s,%cmaInput%
+  asel,r,loc,x,0,_radius
+  cm,%cmaOutput%,area
+
+*elseif,_shape,eq,'R',then
+  ! Rectangular shape
+  cmsel,s,%cmaInput%
+
+  cswpla,dummyCS,cart
+
+  wprota,,,90
+  wpoffs,,,_cx/2
+  asbw,all,,delete
+  wpoffs,,,-_cx
+  asbw,all,,delete
+  wprota,,90
+  wpoffs,,,_cy/2
+  asbw,all,,delete
+  wpoffs,,,-_cy
+  asbw,all,,delete
+
+  wpcsys,-1
+
+  cm,%cmaInput%,area
+
+  asel,s,loc,x,-_cx/2,_cx/2
+  asel,r,loc,y,-_cy/2,_cy/2
+  cmsel,r,%cmaInput%
+  cm,%cmaOutput%,area
+
+*endif
+
+! Clean up
+cmsel,s,%cmaInput%
+csrestore
+csdele,dummyCS

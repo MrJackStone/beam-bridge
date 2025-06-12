@@ -170,8 +170,15 @@ GEO_frameHeight = 8
   GEO_columnDepth = 2-0.35
 
 ! For hammerhead only (GEO_frameOpt=3):
-    ! Column diameter
+    ! Column cross-sectional shape:
+    !   ['C']  circle (default)
+    !   ['R']  rectangle
+    GEO_pierColumnShape = 'C'
+    ! Column diameter (for GEO_pierColumnShape equal to 'C')
     GEO_pierColumnDiameter = 1.2
+    ! Column side dimensions (for GEO_pierColumnShape equal to 'R')
+    GEO_pierColumnCx = 1.2
+    GEO_pierColumnCy = 1.2
     ! Cap slab width (measured along transversal direction)
     GEO_piercapWidth = 5.5
     ! Cap slab length (measured along longitudinal direction)

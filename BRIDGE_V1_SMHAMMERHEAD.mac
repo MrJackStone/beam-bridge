@@ -3,9 +3,10 @@
 
 
 ! Prepare environment
-cmaName = 'COMPA_HAMMER_%ARG1%'
-cmlName = 'COMPL_HAMMER_%ARG1%'
-cmkName = 'COMPK_HAMMER_%ARG1%'
+cmaName      = 'COMPA_HAMMER_%ARG1%'
+cmlName      = 'COMPL_HAMMER_%ARG1%'
+cmkName      = 'COMPK_HAMMER_%ARG1%'
+cmaInterface = 'COMPA_HAMMER%ARG1%_topInterface'
 
 csbackup
 
@@ -40,10 +41,6 @@ asel,none
 wpcsys,-1
 wpoffs,,,topOffset
 blc5,0,0,GEO_piercapLength,GEO_piercapWidth,0
-
-cm,%cmaName%,area
-radslice,cmaName,GEO_pierColumnRadius
-
 wprota,,,90
 asbw,all,,delete
 
@@ -52,6 +49,11 @@ asbw,all,,delete
 *else
   BRIDGE_V1_ARCSLICE , 1
 *endif
+
+cm,%cmaName%,area
+
+wpcsys,-1
+BRIDGE_V1_SLICEAROUNDBEAM , cmaName , GEO_pierColumnShape , GEO_pierColumnDiameter , GEO_pierColumnCx , GEO_pierColumnCy , cmaInterface
 
 ! Build selection components
 cm,%cmaName%,area

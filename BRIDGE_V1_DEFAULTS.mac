@@ -46,7 +46,10 @@ FRAMEGIRDER_h = 2
 
 COLUMN_tWall = 0.35
 
+GEO_pierColumnShape    = 'C'
 GEO_pierColumnDiameter = 1
+GEO_pierColumnCx       = 1
+GEO_pierColumnCy       = 1
 GEO_piercapWidth       = 1
 GEO_piercapLength      = 1
 GEO_piercapThk         = 1

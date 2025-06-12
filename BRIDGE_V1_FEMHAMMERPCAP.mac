@@ -8,16 +8,14 @@
 
     csbackup
     BRIDGE_V1_CSMESO, nthSupport
-    csnext,'CY_temp'
-    clocal,CY_temp,cylin,0,0,0
 
     cmsel,s,COMPK_HAMMER_%nthSupport%
     cmsel,r,COMPK_HammerColumnBottom
     nslk,s
     ND_HAMMER%nthSupport%_botMaster = ndnext(0)
 
-    cmsel,s,COMPN_pileCap
-    nsel,r,loc,x,0,GEO_pierColumnRadius
+    cmsel,s,COMPA_HAMMER%nthSupport%_botInterface
+    nsla,s,1
     nsel,a,node,,ND_HAMMER%nthSupport%_botMaster
 
     cerig,ND_HAMMER%nthSupport%_botMaster,all,all

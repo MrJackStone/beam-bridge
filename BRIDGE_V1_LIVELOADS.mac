@@ -32,7 +32,7 @@ ALLSEL
   *if,GEO_frameOpt,eq,0,then
     SFBEAM,ALL,2,PRES,-(LOAD_waterFlow*COLUMN_cx)
   *elseif,GEO_frameOpt,eq,3,then
-    SFBEAM,ALL,2,PRES,-(LOAD_waterFlow*GEO_pierColumnDiameter)
+    sfbeam,all,2,pres,-(LOAD_waterFlow*GEO_pierColumnFlowWidth)
   *elseif,GEO_frameOpt,eq,1,then
     cmsel,s,COMPA_tubeWindFace
     esla,r
@@ -72,7 +72,7 @@ cm,COMPE_temp_submerged,elem
   *if,GEO_frameOpt,eq,0,then
     SFBEAM,ALL,2,PRES,-(LOAD_columnWind*COLUMN_cx)
   *elseif,GEO_frameOpt,eq,3,then
-    SFBEAM,ALL,2,PRES,-(LOAD_columnWind*GEO_pierColumnDiameter)
+    sfbeam,all,2,pres,-(LOAD_columnWind*GEO_pierColumnFlowWidth)
   *elseif,GEO_frameOpt,eq,1,then
     cmsel,s,COMPA_tubeWindFace
     esla,r

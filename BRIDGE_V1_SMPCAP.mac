@@ -171,8 +171,7 @@ csys  , 0
 
   *elseif,GEO_frameOpt,eq,3,then
     ! Hammerhead pier: slice around solid circular column
-    cm,COMPA_temp,area
-    radslice,'COMPA_temp',GEO_pierColumnRadius
+    BRIDGE_V1_SLICEAROUNDBEAM ,  , GEO_pierColumnShape , GEO_pierColumnDiameter , GEO_pierColumnCx , GEO_pierColumnCy , 'COMPA_HAMMER%ARG1%_botInterface'
 
   *endif
 
