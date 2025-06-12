@@ -1,0 +1,124 @@
+! BRIDGE_V1_POSTHAMMERCOLUMN , reaction
+! BRIDGE_V1_POSTHAMMERCOLUMN , ARG1
+
+
+*if,upcase(arg1),eq,'MY',then
+  key   = 'MY'
+  unit  = 'kNm'
+  name1 = 'MOMENTO FLETOR'
+  etab1 = 'eab_%key%i'
+  etab2 = 'eab_%key%j'
+*elseif,upcase(arg1),eq,'MZ',then
+  key   = 'MZ'
+  unit  = 'kNm'
+  name1 = 'MOMENTO FLETOR'
+  etab1 = 'eab_%key%i'
+  etab2 = 'eab_%key%j'
+*elseif,upcase(arg1),eq,'QZ',then
+  key   = 'QZ'
+  unit  = 'kN'
+  name1 = 'FOR. CORTANTE'
+  etab1 = 'eab_%key%i'
+  etab2 = 'eab_%key%j'
+*elseif,upcase(arg1),eq,'QY',then
+  key   = 'QY'
+  unit  = 'kN'
+  name1 = 'FOR. CORTANTE'
+  etab1 = 'eab_%key%i'
+  etab2 = 'eab_%key%j'
+*elseif,upcase(arg1),eq,'N',then
+  key   = 'N'
+  unit  = 'kN'
+  name1 = 'FOR. NORMAL'
+  etab1 = 'eab_%key%i'
+  etab2 = 'eab_%key%j'
+*elseif,upcase(arg1),eq,'MOBL',then
+  key   = 'M'
+  unit  = 'kNm'
+  name1 = 'MOMENTO FLETOR'
+  etab1 = 'M_OD_EST'
+  etab2 = 'M_OD_EST'
+*elseif,upcase(arg1),eq,'QOBL',then
+  key   = 'Q'
+  unit  = 'kN'
+  name1 = 'FOR. CORTANTE'
+  etab1 = 'Q_OD_EST'
+  etab2 = 'Q_OD_EST'
+*endif
+
+view1w
+windefa,1
+wincln,1
+clims
+boldfont,1
+/annot,dele
+/edge,1,0
+
+/view,1,-1,-1,1
+/angle,1,0
+/auto,1
+/eshape,0
+cmsel,s,COMPA_hammerPierCap
+cmsel,a,COMPA_pileCap
+esla
+cm,compe_colored,elem
+/color,cm,dgra,compe_colored
+eplot
+/user,1
+
+/plopts,leg3,on
+/udoc,1,cntr,right
+/gformat,F,1,1
+
+wintitle , 1 , 'MESOESTRUTURA - PILARES' , '%name1%' , 'ELU-Normal [%unit%]' ,  , 1 , 13
+
+go2png,1200
+  /edge,1,1
+  eplot
+  /noerase
+
+  cmsel,s,COMPL_hammerColumn
+  esll,s
+  nsle,s,active
+  /edge,1,0
+  /vup,1,x
+  /angle,1,-60,zs
+  /gline,,0
+  /udoc,1,cntr,off
+  cleanplot,'plls',etab1,etab2,,'1'
+  /gline,,0
+
+  /type,1,3
+  /edge,1,1
+  /device,vector,on
+  esel,s,type,,2
+  eplot
+  /device,vector,off
+  /vup,1,z
+  /angle,1,0,zs
+
+  /device,vector,on
+  /eshape,1
+  cmsel,s,COMPL_hammerColumn
+  esll
+  nsle,,active
+  eplot
+  /eshape,0
+  /device,vector,off
+
+  cmsel,s,COMPL_hammerColumn
+  esll,s
+  nsle,s,active
+  *get,fcx_auto,graph,1,focus,x
+  *get,fcy_auto,graph,1,focus,y
+  *get,fcz_auto,graph,1,focus,z
+  /focus,1,1e6
+  /udoc,1,cntr,right
+  cleanplot,'plls',etab1,etab2,,'1'
+  /focus,1,fcx_auto,fcy_auto,fcz_auto
+
+endpng,'HAMMERCOLUMN_%key%',,,,,POST_resultsFolder
+/erase
+/annot,dele
+view1w
+windefa,1
