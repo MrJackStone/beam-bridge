@@ -113,6 +113,7 @@ LOAD_TSCHEBOTARIOFF_status = 0
 
 LOAD_ltGapWidth  = 0
 LOAD_ltGapLength = 0
+LOAD_ltSkewness  = 0
 
 LOAD_ltPresMethod = 'BOUSSNSQ'
 
