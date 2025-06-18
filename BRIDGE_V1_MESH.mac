@@ -820,6 +820,11 @@ cm , COMPN_ABT2_pileRestrained , node
 cm , COMPN_PILE_absentSoil     , node
 
 ! Create selection component with pile nodes that will not have soil envelopment
+cmsel,s,COMPK_pileTop
+cmsel,a,COMPK_ABT_pileTop
+nslk,s
+cm,COMPN_PILE_absentSoil,node
+
 *if,MAT_SOIL_absentOpt,eq,1,then
   *do,nthSupport,1,GEO_supportCount,1
     topLevel = MAT_SOIL_absent_top(nthSupport)
