@@ -192,9 +192,9 @@ ksel,none
       BRIDGE_V1_ABT4,CS_ABT1,'GEO_ABT1_geometry'
       ABT1_angCoef = 0
       ABT1_linCoef = 0
-      CS_ABT1_trv  = CS_trvWall
-      CS_ABT1_lw   = CS_leftWing
-      CS_ABT1_rw   = CS_rightWing
+      CS_ABT1_trv  = CS_trvWall   ! TODO  check -- I think these are wrong, incompatible with other ABT types & ESYS definition
+      CS_ABT1_lw   = CS_leftWing  !
+      CS_ABT1_rw   = CS_rightWing !
 
     *elseif,GEO_ABT1_type,eq,5,then
       BRIDGE_V1_ABT5 , CS_ABT1 , 'GEO_ABT1_geometry' , 'GEO_ABT1_pile_data' , 'GEO_girderY_beg' , 1
@@ -206,10 +206,10 @@ ksel,none
 
     *else
       BRIDGE_V1_ABT,CS_ABT1,'GEO_ABT1_geometry',1
-      ABT1_angCoef=angCoef
-      ABT1_linCoef=linCoef
-      CS_ABT1_lw=CS_leftWall
-      CS_ABT1_rw=CS_rightWall
+      ABT1_angCoef = angCoef
+      ABT1_linCoef = linCoef
+      CS_ABT1_lw   = CS_leftWall
+      CS_ABT1_rw   = CS_rightWall
 
     *endif
 *endif
@@ -230,11 +230,11 @@ ksel,none
 
     *if,GEO_ABT2_type,eq,4,then
       BRIDGE_V1_ABT4,CS_ABT2,'GEO_ABT2_geometry'
-      ABT2_angCoef=0
-      ABT2_linCoef=0
-      CS_ABT2_trv=CS_trvWall
-      CS_ABT2_lw=CS_leftWing
-      CS_ABT2_rw=CS_rightWing
+      ABT2_angCoef = 0
+      ABT2_linCoef = 0
+      CS_ABT2_trv  = CS_trvWall
+      CS_ABT2_lw   = CS_leftWing
+      CS_ABT2_rw   = CS_rightWing
 
     *elseif,GEO_ABT2_type,eq,5,then
       BRIDGE_V2_ABT5 , CS_ABT2 , 'GEO_ABT2_geometry' , 'GEO_ABT2_pile_data' , 'GEO_girderY_end' , 1
@@ -246,10 +246,10 @@ ksel,none
 
     *else
       BRIDGE_V1_ABT,CS_ABT2,'GEO_ABT2_geometry', 1
-      ABT2_angCoef=angCoef
-      ABT2_linCoef=linCoef
-      CS_ABT2_lw=CS_leftWall
-      CS_ABT2_rw=CS_rightWall
+      ABT2_angCoef = angCoef
+      ABT2_linCoef = linCoef
+      CS_ABT2_lw   = CS_leftWall
+      CS_ABT2_rw   = CS_rightWall
 
     *endif
 *endif
