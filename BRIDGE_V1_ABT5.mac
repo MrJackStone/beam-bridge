@@ -276,6 +276,7 @@ nummrg,kp
   l,post_kps(1),post_kps(2)
   cm,COMPL_ABT%_abtIndex%_post%nthPost%,line
   cmpadd,cmlPosts
+  cmpadd,'COMPL_ABT_posts'
 
   BRIDGE_V1_SLICEAROUNDBEAM , cmaPileCap , 'R' ,  , GEO_ABT_postCx , GEO_ABT_postCy
 *enddo
