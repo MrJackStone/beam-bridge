@@ -164,6 +164,20 @@ cswpla,%csNamePiles%,cart
   cswpla,%csNamePile%,cart
 *enddo
 
+! Output coordinate systems, for compatibility with main code
+! TODO  get rid of this, improve the approach
+csnext,'CS_trvWall'
+csys,_localCS
+clocal,CS_trvWall,cart
+
+csnext,'CS_leftWall'
+csys,_localCS
+clocal,CS_leftWall,cart,,,,90,180
+
+csnext,'CS_rightWall'
+csys,_localCS
+clocal,CS_rightWall,cart,,,,90,180
+
 
 !! D.  Draw area parts                                                                            !!
 ! Draw pile cap
