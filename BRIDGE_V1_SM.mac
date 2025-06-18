@@ -238,7 +238,7 @@ ksel,none
       CS_ABT2_rw   = CS_rightWing
 
     *elseif,GEO_ABT2_type,eq,5,then
-      BRIDGE_V2_ABT5 , CS_ABT2 , 'GEO_ABT2_geometry' , 'GEO_ABT2_pile_data' , 'GEO_girderY_end' , 1
+      BRIDGE_V1_ABT5 , CS_ABT2 , 'GEO_ABT2_geometry' , 'GEO_ABT2_pile_data' , 'GEO_girderY_end' , 2
       ABT2_angCoef = 0
       ABT2_linCoef = 0
       CS_ABT2_trv  = CS_trvWall
