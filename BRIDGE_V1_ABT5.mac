@@ -280,6 +280,7 @@ nummrg,kp
   l,pile_kps(1),pile_kps(2)
   cm,COMPL_ABT%_abtIndex%_pile%nthPile%,line
   cmpadd,cmlPiles
+  cmpadd,'COMPL_ABT_piles'
 
   BRIDGE_V1_SLICEAROUNDBEAM , cmaPileCap , 'C' , GEO_ABT_pileDiameter
 *enddo
