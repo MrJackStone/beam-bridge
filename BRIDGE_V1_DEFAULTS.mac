@@ -58,16 +58,35 @@ GEO_piercapThk         = 1
 !!                                                                                                !!
 !! 1.3  Abutments                                                                                 !!
 !!                                                                                                !!
-GEO_ABT1_suppressLW=0
-GEO_ABT2_suppressLW=0
+GEO_ABT1_suppressLW = 0
+GEO_ABT2_suppressLW = 0
 
 GEO_ABT1_topOffset = 0
 
 GEO_ABT1_beamOpt = 0
 GEO_ABT2_beamOpt = 0
 
+GEO_ABT_beamH     = 0
+GEO_ABT_colW      = 0
+GEO_ABT_wingHe    = 0
+GEO_ABT_pileOff   = 0
+GEO_ABT_pileOvlap = 0
+
+SEC_ABT_wing_t    = 1
+SEC_ABT_appSlab_t = 1
+GEO_ABT_postCx    = 1
+GEO_ABT_postCy    = 1
+
 SEC_ABT_PILE_d   = 1
 SEC_ABT_PILE_thk = 0
+
+GEO_ABT1_pileCapOffset = 0
+GEO_ABT1_postHeight    = 0
+GEO_ABT1_postOffset    = 0
+
+GEO_ABT2_pileCapOffset = 0
+GEO_ABT2_postHeight    = 0
+GEO_ABT2_postOffset    = 0
 
 
 !!                                                                                                !!

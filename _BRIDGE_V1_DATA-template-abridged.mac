@@ -284,6 +284,10 @@ SEC_ABT_pile_d = 0.4
 ! Pile cap height
 SEC_ABT_pileCap_h = 1.5
 
+! For abutment type 5
+GEO_ABT_postCx = 1
+GEO_ABT_postCy = 1
+
 ! Material properties
 MAT_Abutment_fck = 40e6
 MAT_Approach_fck = 40e6
@@ -296,6 +300,7 @@ MAT_Approach_fck = 40e6
 !    [2] Block-beam (pile cap block-beam + transversal wall)
 !    [3] Pile curtain (piles as retention walls)
 !    [4] Wall-column with angled wings (pile caps + transversal wall + wings)
+!    [5] Open box with girder posts
 GEO_ABT1_type = 4
 
 ! Length
@@ -371,6 +376,20 @@ GEO_ABT1_wingPileCols  = 2
 GEO_ABT1_wingCapLength = 7
 GEO_ABT1_wingCapWidth  = 2
 
+! Options for abutment type 5:
+GEO_ABT1_pileCapOffset = 0
+GEO_ABT1_postHeight    = 0
+GEO_ABT1_postOffset    = 0
+
+GEO_ABT1_pileCount = 6
+*del,GEO_ABT1_pile_data,,nopr
+*del,GEO_ABT1_pile_data,,6,GEO_ABT1_pileCount
+GEO_ABT1_pile_data(1,1) = x , y , L , alpha , beta , id
+GEO_ABT1_pile_data(1,2) = x , y , L , alpha , beta , id
+GEO_ABT1_pile_data(1,3) = x , y , L , alpha , beta , id
+GEO_ABT1_pile_data(1,4) = x , y , L , alpha , beta , id
+GEO_ABT1_pile_data(1,5) = x , y , L , alpha , beta , id
+GEO_ABT1_pile_data(1,6) = x , y , L , alpha , beta , id
 
 
 !! 1.3.3  Second abutment                                                                         !!
@@ -379,6 +398,7 @@ GEO_ABT1_wingCapWidth  = 2
 !    [2] Block-beam (pile cap block-beam + transversal wall)
 !    [3] Pile curtain (piles as retention walls)
 !    [4] Wall-column with angled wings (pile caps + transversal wall + wings)
+!    [5] Open box with girder posts
 GEO_ABT2_type = 4
 
 ! Length
@@ -454,6 +474,20 @@ GEO_ABT2_wingPileCols  = 2
 GEO_ABT2_wingCapLength = 7
 GEO_ABT2_wingCapWidth  = 2
 
+! Options for abutment type 5:
+GEO_ABT2_pileCapOffset = 0
+GEO_ABT2_postHeight    = 0
+GEO_ABT2_postOffset    = 0
+
+GEO_ABT2_pileCount = 6
+*del,GEO_ABT2_pile_data,,nopr
+*del,GEO_ABT2_pile_data,,6,GEO_ABT2_pileCount
+GEO_ABT2_pile_data(1,1) = x , y , L , alpha , beta , id
+GEO_ABT2_pile_data(1,2) = x , y , L , alpha , beta , id
+GEO_ABT2_pile_data(1,3) = x , y , L , alpha , beta , id
+GEO_ABT2_pile_data(1,4) = x , y , L , alpha , beta , id
+GEO_ABT2_pile_data(1,5) = x , y , L , alpha , beta , id
+GEO_ABT2_pile_data(1,6) = x , y , L , alpha , beta , id
 
 
 !!                                                                                                !!
