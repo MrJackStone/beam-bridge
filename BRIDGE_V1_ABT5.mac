@@ -1,0 +1,366 @@
+! BRIDGE_V1_ABT5 , localCS , abt_data , pile_data , girder_y , index
+! BRIDGE_V1_ABT5 , ARG1    , ARG2     , ARG3      , ARG4     , ARG5
+
+! Exported selection components:
+!   COMPA_ABT_[i]
+!   COMPL_ABT_[i]
+!   COMPK_ABT_[i]
+!
+!   COMPA_ABT[i]_pileCap
+!   COMPA_ABT[i]_tranWall
+!   COMPA_ABT[i]_leftWall
+!   COMPA_ABT[i]_rightWall
+!
+!   COMPL_ABT[i]_piles
+!   COMPL_ABT[i]_posts
+!
+!   COMPK_ABT[i]_postBottoms
+!   COMPK_ABT[i]_postTops
+!   COMPK_ABT[i]_pileTops
+!   COMPK_ABT[i]_pileBottoms
+!
+!   COMPL_ABT[i]_post[j]
+!   COMPL_ABT[i]_pile[j]
+!
+!   COMPA_ABT[i]_POST[j]_itf
+!   COMPA_ABT[i]_PILE[j]_itf
+
+
+!! A.  Collect params                                                                             !!
+_localCS  = ARG1
+_abtIndex = ARG5
+
+GEO_ABT_width         = %ARG2%(28)
+GEO_ABT_length        = %ARG2%(8)
+GEO_ABT_height        = %ARG2%(7)
+GEO_ABT_pileCapW      = %ARG2%(11)
+GEO_ABT_pileCapL      = %ARG2%(10)
+GEO_ABT_pileCapOffset = %ARG2%(31)
+GEO_ABT_postHeight    = %ARG2%(32)
+GEO_ABT_postCx        = %ARG2%(33)
+GEO_ABT_postCy        = %ARG2%(34)
+GEO_ABT_postOffset    = %ARG2%(35)
+GEO_ABT_pileCapHeight = SEC_ABT_pileCap_h
+GEO_ABT_pileDiameter  = SEC_ABT_pile_d
+
+*get , pileCount   , parm , %ARG3% , dim , y
+*get , girderCount , parm , %ARG4% , dim , x
+
+! GEO_ABT_pileData:
+!   pos  param  description
+!    1   x      X coordinate at the center of the pile
+!    2   y      Y coordinate at the center of the pile
+!    3   L      pile length
+!    4   alpha  angle with the vertical (gravitational) axis (applied after alpha)
+!    5   beta   angle at the horizontal plane (applied first, before alpha)
+!    6   id     global pile identification number (optional)
+
+
+!! B.  Prepare environment                                                                        !!
+csbackup
+
+allsel
+cm , COMPA_previous , area
+cm , COMPL_previous , line
+cm , COMPK_previous , kp
+
+asel , none
+lsel , none
+ksel , none
+
+csNameAbutmentEnd = 'CS_ABT%_abtIndex%_end'
+csNamePileCap     = 'CS_ABT%_abtIndex%_pileCap'
+csNameTranWall    = 'CS_ABT%_abtIndex%_tranWall'
+csNameLeftWall    = 'CS_ABT%_abtIndex%_leftWall'
+csNameRightWall   = 'CS_ABT%_abtIndex%_rightWall'
+csNamePiles       = 'CS_ABT%_abtIndex%_piles'
+csNamePosts       = 'CS_ABT%_abtIndex%_posts'
+
+cmaAbutment    = 'COMPA_ABT_%_abtIndex%'
+cmlAbutment    = 'COMPL_ABT_%_abtIndex%'
+cmkAbutment    = 'COMPK_ABT_%_abtIndex%'
+cmaPileCap     = 'COMPA_ABT%_abtIndex%_pileCap'
+cmaTranWall    = 'COMPA_ABT%_abtIndex%_tranWall'
+cmaLeftWall    = 'COMPA_ABT%_abtIndex%_leftWall'
+cmaRightWall   = 'COMPA_ABT%_abtIndex%_rightWall'
+cmlPiles       = 'COMPL_ABT%_abtIndex%_piles'
+cmlPosts       = 'COMPL_ABT%_abtIndex%_posts'
+cmkPostBottoms = 'COMPK_ABT%_abtIndex%_postBottoms'
+cmkPostTops    = 'COMPK_ABT%_abtIndex%_postTops'
+cmkPileTops    = 'COMPK_ABT%_abtIndex%_pileTops'
+cmkPileBottoms = 'COMPK_ABT%_abtIndex%_pileBottoms'
+
+
+!! C.  Coordinate systems                                                                         !!
+csnext,csNameAbutmentEnd
+csys,_localCS
+wpcsys,-1
+wpoffs,GEO_ABT_length
+wprota,,,90
+cswpla,%csNameAbutmentEnd%,cart
+
+csnext,csNamePileCap
+csys,_localCS
+wpcsys,-1
+wpoffs,GEO_ABT_pileCapOffset,,-GEO_ABT_height
+cswpla,%csNamePileCap%,cart
+
+csnext,csNameTranWall
+csys,_localCS
+wpcsys,-1
+wprota,,,90
+cswpla,%csNameTranWall%,cart
+
+csnext,csNameLeftWall
+csys,_localCS
+wpcsys,-1
+wpoffs,,GEO_ABT_width/2
+wprota,,-90
+cswpla,%csNameLeftWall%,cart
+
+csnext,csNameRightWall
+csys,_localCS
+wpcsys,-1
+wpoffs,,-GEO_ABT_width/2
+wprota,,-90
+cswpla,%csNameRightWall%,cart
+
+csnext,csNamePosts
+csys,_localCS
+wpcsys,-1
+wpoffs,-GEO_ABT_postOffset,,-GEO_ABT_height
+cswpla,%csNamePosts%,cart
+
+*do,nthGirder,1,girderCount,1
+  csNamePost    = 'CS_ABT%_abtIndex%_post%nthGirder%'
+  yGirderGlobal = %ARG4%(nthGirder)
+  glo2loc,0,yGirderGlobal,0,_localCS,,'yGirderLocal'
+  csnext,csNamePost
+  csys,%csNamePosts%
+  wpcsys,-1
+  wpoffs,,yGirderLocal
+  cswpla,%csNamePost%,cart
+*enddo
+
+csnext,csNamePiles
+csys,_localCS
+wpcsys,-1
+wpoffs,,,-(GEO_ABT_height+GEO_ABT_pileCapHeight)
+cswpla,%csNamePiles%,cart
+
+*do,nthPile,1,pileCount,1
+  xCenter = %ARG3%(1,nthPile)
+  yCenter = %ARG3%(2,nthPile)
+  alpha   = %ARG3%(4,nthPile)
+  beta    = %ARG3%(5,nthPile)
+
+  csNamePile = 'CS_ABT%_abtIndex%_pile%nthPile%'
+  csnext,csNamePile
+  csys,%csNamePiles%
+  wpcsys,-1
+  wpoffs,xCenter,yCenter
+  wprota,beta
+  wprota,,180+alpha
+  cswpla,%csNamePile%,cart
+*enddo
+
+
+!! D.  Draw area parts                                                                            !!
+! Draw pile cap
+asel,none
+csys,%csNamePileCap%
+wpcsys,-1
+blc5,GEO_ABT_pileCapL/2,0,GEO_ABT_pileCapL,GEO_ABT_pileCapW
+cm,%cmaPileCap%,area
+
+! Draw transversal wall
+asel,none
+csys,%csNameTranWall%
+wpcsys,-1
+blc5,GEO_ABT_height/2,0,GEO_ABT_height,GEO_ABT_width
+cm,%cmaTranWall%,area
+
+! Draw longitudinal walls
+asel,none
+csys,%csNameLeftWall%
+wpcsys,-1
+blc4,0,0,GEO_ABT_length,GEO_ABT_height
+cm,%cmaLeftWall%,area
+
+asel,none
+csys,%csNameRightWall%
+wpcsys,-1
+blc4,0,0,GEO_ABT_length,GEO_ABT_height
+cm,%cmaRightWall%,area
+
+
+!! E.  Join area parts                                                                            !!
+! Area interfaces
+cmsel,s,%cmaPileCap%
+wpcsys,-1,%csNameAbutmentEnd%
+asbw,all,,delete
+wpcsys,-1,%csNameTranWall%
+asbw,all,,delete
+wpcsys,-1,%csNameLeftWall%
+asbw,all,,delete
+wpcsys,-1,%csNameRightWall%
+asbw,all,,delete
+cm,%cmaPileCap%,area
+
+! Pile centers
+*del,x_centers,,nopr
+*del,y_centers,,nopr
+*dim,x_centers,,pileCount
+*dim,y_centers,,pileCount
+
+x_centers(1:pileCount) = %ARG3%(1,1:pileCount)
+y_centers(1:pileCount) = %ARG3%(2,1:pileCount)
+arruniq,'x_centers','x_centers',1
+arruniq,'y_centers','y_centers',1
+*get,xUniqueCount,parm,x_centers,dim,x
+*get,yUniqueCount,parm,y_centers,dim,x
+
+*do,nthX,1,xUniqueCount,1
+  xCoord = x_centers(nthX)
+  csys,%csNamePiles%
+  wpcsys,-1
+  wpoffs,xCoord
+  wprota,,,90
+  cmwslice,cmaPileCap
+*enddo
+
+*do,nthY,1,yUniqueCount,1
+  yCoord = y_centers(nthY)
+  csys,%csNamePiles%
+  wpcsys,-1
+  wpoffs,,yCoord
+  wprota,,90
+  cmwslice,cmaPileCap
+*enddo
+
+! Merge areas
+cmsel , s , %cmaPileCap%
+cmsel , a , %cmaTranWall%
+cmsel , a , %cmaLeftWall%
+cmsel , a , %cmaRightWall%
+lsla
+ksll
+nummrg,kp
+
+
+!! F.  Draw line parts                                                                            !!
+! Draw girder posts
+*do,nthPost,1,girderCount,1
+  csNamePost = 'CS_ABT%_abtIndex%_post%nthPost%'
+  csys,%csNamePost%
+  wpcsys,-1
+
+  nextkp,'post_kps',2
+  lsel,none
+  k,post_kps(1),0,0,0
+  k,post_kps(2),0,0,GEO_ABT_postHeight
+  l,post_kps(1),post_kps(2)
+  cm,COMPL_ABT%_abtIndex%_post%nthPost%,line
+  cmpadd,cmlPosts
+
+  BRIDGE_V1_SLICEAROUNDBEAM , cmaPileCap , 'R' ,  , GEO_ABT_postCx , GEO_ABT_postCy
+*enddo
+
+! Draw piles
+*do,nthPile,1,pileCount,1
+  csNamePile = 'CS_ABT%_abtIndex%_pile%nthPile%'
+  length     = %ARG3%(3,nthPile)
+  csys,%csNamePile%
+  wpcsys,-1
+
+  nextkp,'pile_kps',2
+  lsel,none
+  k,pile_kps(1),0,0,0
+  k,pile_kps(2),0,0,length
+  l,pile_kps(1),pile_kps(2)
+  cm,COMPL_ABT%_abtIndex%_pile%nthPile%,line
+  cmpadd,cmlPiles
+
+  BRIDGE_V1_SLICEAROUNDBEAM , cmaPileCap , 'C' , GEO_ABT_pileDiameter
+*enddo
+
+
+!! G.  Build selection components                                                                 !!
+allsel
+cmsel , u , COMPA_previous
+cmsel , u , COMPL_previous
+cmsel , u , COMPK_previous
+
+cm , %cmaAbutment% , area
+cm , %cmlAbutment% , line
+cm , %cmkAbutment% , kp
+
+csys,%csNamePileCap%
+cmsel,s,%cmaAbutment%
+asel,r,loc,z,0
+cm,%cmaPileCap%,area
+
+csys,%csNameTranWall%
+cmsel,s,%cmaAbutment%
+asel,r,loc,z,0
+cm,%cmaTranWall%,area
+
+csys,%csNameLeftWall%
+cmsel,s,%cmaAbutment%
+asel,r,loc,z,0
+cm,%cmaLeftWall%,area
+
+csys,%csNameRightWall%
+cmsel,s,%cmaAbutment%
+asel,r,loc,z,0
+cm,%cmaRightWall%,area
+
+csys,%csNamePosts%
+cmsel,s,%cmlPosts%
+ksll
+ksel,r,loc,z,0
+cm,%cmkPostBottoms%,kp
+ksel,inve
+ksll,r
+cm,%cmkPostTops%,kp
+
+csys,%csNamePiles%
+cmsel,s,%cmlPiles%
+ksll,s
+ksel,r,loc,z,0
+cm,%cmkPileTops%,kp
+ksel,inve
+ksll,r
+cm,%cmkPileBottoms%,kp
+
+*do,nthPost,1,girderCount,1
+  csNamePost = 'CS_ABT%_abtIndex%_post%nthPost%'
+  csys,%csNamePost%
+  wpcsys,-1
+  BRIDGE_V1_SELECTAROUNDBEAM , cmaPileCap , 'R' , , GEO_ABT_postCx   , GEO_ABT_postCy   , 'COMPA_ABT%_abtIndex%_POST%nthPost%_itf'
+*enddo
+
+*do,nthPile,1,pileCount,1
+  csNamePile = 'CS_ABT%_abtIndex%_pile%nthPile%'
+  csys,%csNamePile%
+  wpcsys,-1
+  BRIDGE_V1_SELECTAROUNDBEAM , cmaPileCap , 'C' , GEO_ABT_pileDiameter ,  ,  , 'COMPA_ABT%_abtIndex%_PILE%nthPost%_itf'
+*enddo
+
+
+!! H.  Clean up                                                                                   !!
+allsel
+cmdele,COMPA_prev
+cmdele,COMPL_prev
+cmdele,COMPK_prev
+
+cmsel,s,%cmaAbutment%
+cmsel,s,%cmlAbutment%
+cmsel,s,%cmkAbutment%
+
+*del , pile_kps  ,  , nopr
+*del , post_kps  ,  , nopr
+*del , x_centers ,  , nopr
+*del , y_centers ,  , nopr
+
+csrestore
