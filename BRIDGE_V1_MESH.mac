@@ -684,47 +684,101 @@ nsle,s,active
 cm,COMPN_PIER_piles,node
 cm,COMPE_PIER_piles,elem
 
-!    cmsel,s,COMPL_ABT_piles
-!    ksel,s,loc,x,0
-!    ksel,a,loc,x,GEO_deckLength
-!    ksll,r
-!    lslk,r
-!    cm,COMPL_ABT_twPiles,line
-!    cmsel,s,COMPL_ABT_piles
-!    cmsel,u,COMPL_ABT_twPiles
-!    cm,COMPL_ABT_lwPiles,line
+! TODO  the following approach to connect piles is, in general, quite bad -- revise
 
-! Connect pile to pile cap with nodal couplings
-CMSEL,S,COMPK_PileTop
-cmsel,a,COMPK_ABT_pileTop
-NSLK,S
-CM,COMPN_temp,NODE
-*get,NodeCount,NODE,,COUNT
-NodeNum=0
-*do,nthNode,1,NodeCount,1
-  CMSEL,S,COMPN_temp
-  NodeNum=NDNEXT(NodeNum)
-  xVal=NX(NodeNum)
-  yVal=NY(NodeNum)
-  zVal=NZ(NodeNum)
-  CMSEL,S,COMPN_PileCap
-  cmsel,a,COMPN_ABT_pileCap
-  cmsel,a,COMPN_ABT_tranWall
-  NSEL,R,LOC,X,xVal
-  NSEL,R,LOC,Y,yVal
-  nsel,r,loc,z,zVal !! added on 20/03/2023 to filter only transversal wall nodes that interface with piles
-  cmsel,s,COMPL_ABT_pileConnections
-  nsll,a,1
-  cmsel,u,COMPN_temp
-  PCNode=nnear(NodeNum)
-  NSEL,A,NODE,,NodeNum
-  cp,next,'UX',PCNode,NodeNum
-  cp,next,'UY',PCNode,NodeNum
-  cp,next,'UZ',PCNode,NodeNum
-  cp,next,'ROTZ',PCNode,NodeNum
+! Connect pier pile to pier pile cap with nodal couplings
+cmsel,s,COMPK_PileTop
+nslk,s
+cm,COMPN_pileNodePool,node
+*get,nc,node,,count
+pileNode = 0
+
+*do,nthNode,1,nc,1
+  cmsel,s,COMPN_pileNodePool
+
+  pileNode = ndnext(pileNode)
+  xVal     = nx(pileNode)
+  yVal     = ny(pileNode)
+  zVal     = nz(pileNode)
+
+  cmsel , s , COMPN_PileCap
+  nsel  , r , loc           , x , xVal
+  nsel  , r , loc           , y , yVal
+  nsel  , r , loc           , z , zVal
+  cmsel , u , COMPN_pileNodePool
+  capNode = nnear(pileNode)
+
+  nsel,a,node,,pileNode
+  cp , next , 'UX'   , capNode , pileNode
+  cp , next , 'UY'   , capNode , pileNode
+  cp , next , 'UZ'   , capNode , pileNode
+  cp , next , 'ROTZ' , capNode , pileNode
   *if,FEM_PileTopConnection,eq,1,then
-    cp,next,'ROTX',PCNode,NodeNum
-    cp,next,'ROTY',PCNode,NodeNum
+    cp , next , 'ROTX' , capNode , pileNode
+    cp , next , 'ROTY' , capNode , pileNode
+  *endif
+
+*enddo
+
+cmdele,COMPN_pileNodePool
+
+! Connect abutment pile to abutment pile cap: couplings or contacts
+*do,nthAbutment,1,2,1
+
+  *if,GEO_ABT%nthAbutment%_type,eq,5,then
+
+    *do,nthPile,1,GEO_ABT%nthAbutment%_pileCount
+      ndName  = 'ND_ABT%nthAbutment%_PILE%nthPile%_pilot'
+      cmaName = 'COMPA_ABT%nthAbutment%_PILE%nthPile%_itf'
+
+      cmsel,s,COMPL_ABT%nthAbutment%_pile%nthPile%
+      ksll,s
+      cmsel,r,COMPK_ABT%nthAbutment%_pileTops
+      nslk,s
+      %ndName% = ndnext(0)
+
+      n2acnt , %ndName% , cmaName
+    *enddo
+
+  *else
+
+    cmsel,s,COMPK_ABT_pileTop
+    cmsel,r,COMPK_ABT_%nthAbutment%
+    nslk,s
+    cm,COMPN_pileNodePool,node
+    *get,nc,node,,count
+    pileNode = 0
+
+    *do,nthNode,1,nc,1
+      cmsel,s,COMPN_pileNodePool
+
+      pileNode = ndnext(pileNode)
+      xVal     = nx(pileNode)
+      yVal     = ny(pileNode)
+      zVal     = nz(pileNode)
+
+      cmsel,s,COMPN_ABT_pileCap
+      cmsel,a,COMPN_ABT_tranWall
+      nsel,r,loc,x,xVal
+      nsel,r,loc,y,yVal
+      nsel,r,loc,z,zVal
+      cmsel,s,COMPL_ABT_pileConnections
+      nsll,a,1
+      cmsel,r,COMPN_ABT_%nthAbutment%
+      cmsel,u,COMPN_pileNodePool
+      capNode = nnear(pileNode)
+
+      nsel,a,node,,pileNode
+      cp , next , 'UX'   , capNode , pileNode
+      cp , next , 'UY'   , capNode , pileNode
+      cp , next , 'UZ'   , capNode , pileNode
+      cp , next , 'ROTZ' , capNode , pileNode
+      *if,FEM_PileTopConnection,eq,1,then
+        cp , next , 'ROTX' , capNode , pileNode
+        cp , next , 'ROTY' , capNode , pileNode
+      *endif
+    *enddo
+
   *endif
 *enddo
 
@@ -737,8 +791,8 @@ NodeNum=0
   cmsel,s,COMPL_ABT2_piles
   BRIDGE_V1_CURTAINCP
 *endif
-!
-!
+
+
 !! 4.6.4 PILE ENVELOPING SOIL                                                                     !!
 !!                                                                                                !!
 ! Initialize selection components
