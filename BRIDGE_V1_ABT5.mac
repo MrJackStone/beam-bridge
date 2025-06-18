@@ -375,7 +375,23 @@ cmpadd,'COMPK_ABT_pileBase'
 *enddo
 
 
-!! H.  Clean up                                                                                   !!
+!! H.  Enforce area orientation                                                                   !!
+csys,_localCS
+
+cmsel,s,%cmaTranWall%
+arxori,-1
+
+cmsel,s,%cmaLeftWall%
+aryori,1
+
+cmsel,s,%cmaRightWall%
+aryori,-1
+
+cmsel,s,%cmaPileCap%
+arzori,-1
+
+
+!! I.  Clean up                                                                                   !!
 allsel
 cmdele,COMPA_prev
 cmdele,COMPL_prev
