@@ -295,26 +295,36 @@ cmsel , u , COMPK_previous
 cm , %cmaAbutment% , area
 cm , %cmlAbutment% , line
 cm , %cmkAbutment% , kp
+cmpadd,'COMPA_abutment'
 
 csys,%csNamePileCap%
 cmsel,s,%cmaAbutment%
 asel,r,loc,z,0
 cm,%cmaPileCap%,area
+cmpadd,'COMPA_ABT_pileCap'
 
 csys,%csNameTranWall%
 cmsel,s,%cmaAbutment%
 asel,r,loc,z,0
 cm,%cmaTranWall%,area
+cmpadd,'COMPA_ABT_tranWall'
+cmpadd,'COMPA_ABT_walls'
 
 csys,%csNameLeftWall%
 cmsel,s,%cmaAbutment%
 asel,r,loc,z,0
 cm,%cmaLeftWall%,area
+cmpadd,'COMPA_ABT_longWalls'
+cmpadd,'COMPA_ABT_leftSide'
+cmpadd,'COMPA_ABT_walls'
 
 csys,%csNameRightWall%
 cmsel,s,%cmaAbutment%
 asel,r,loc,z,0
 cm,%cmaRightWall%,area
+cmpadd,'COMPA_ABT_longWalls'
+cmpadd,'COMPA_ABT_rightSide'
+cmpadd,'COMPA_ABT_walls'
 
 csys,%csNamePosts%
 cmsel,s,%cmlPosts%
@@ -330,9 +340,11 @@ cmsel,s,%cmlPiles%
 ksll,s
 ksel,r,loc,z,0
 cm,%cmkPileTops%,kp
+cmpadd,'COMPK_ABT_pileTop'
 ksel,inve
 ksll,r
 cm,%cmkPileBottoms%,kp
+cmpadd,'COMPK_ABT_pileBase'
 
 *do,nthPost,1,girderCount,1
   csNamePost = 'CS_ABT%_abtIndex%_post%nthPost%'
