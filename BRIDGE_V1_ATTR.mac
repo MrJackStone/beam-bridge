@@ -584,7 +584,7 @@ secoffset,top
 
 ! Girder posts
 sectype,SEC_ABT_girderPost,beam,rect,,'GPOST'
-secdata,GEO_ABT_postCx,GEO_ABT_postCy
+secdata,GEO_ABT_postCy,GEO_ABT_postCx
 
 ! VERTICAL SOIL SPRINGS
 REAL_ABT_kv_area=(MAT_ABT_Soil_kv*FEM_ABT_springL)/MAT_ABT_Soil_E
