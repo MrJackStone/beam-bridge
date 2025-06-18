@@ -378,13 +378,27 @@ cmsel,u,COMPE_Submerged
 cmpadd,'COMPE_Exposed'
 
 
-!! 4.3.2 PILES                                                                                    !!
+!! 4.3.2 POSTS                                                                                    !!
 !!                                                                                                !!
-!    cmsel,s,COMPL_ABT_piles
-!    orient,TYPE_BEAM188,MAT_Pile,SEC_ABT_pile,1,,,FEM_PileELength
-!    lmesh,all
-!
-!
+csys,CS_ABT1
+cmsel,s,COMPL_ABT_posts
+cmsel,r,COMPL_ABT_1
+*get,lc,line,,count
+*if,lc,gt,0,then
+  orient,TYPE_BEAM188,MAT_abutment,SEC_ABT_girderPost,1,,,,10 ! TODO  remove hardcoded mesh size
+  lmesh,all
+*endif
+
+csys,CS_ABT2
+cmsel,s,COMPL_ABT_posts
+cmsel,r,COMPL_ABT_2
+*get,lc,line,,count
+*if,lc,gt,0,then
+  orient,TYPE_BEAM188,MAT_abutment,SEC_ABT_girderPost,1,,,,10 ! TODO  remove hardcoded mesh size
+  lmesh,all
+*endif
+
+
 !! 4.3.3 NODAL COUPLINGS                                                                          !!
 !!                                                                                                !!
 ! Nodal selection component: nodes at wall-slab-bridge interface
@@ -502,9 +516,16 @@ cm,COMPN_ABT_pileCap,node
 cmsel,s,COMPA_ABT_tranWall
 nsla,s,1
 cm,COMPN_ABT_tranWall,node
-!
-!
-!
+
+! Girder posts
+cmsel,s,COMPL_ABT_posts
+esll,s
+nsle,s,active
+cm,COMPE_ABT_posts,elem
+cm,COMPN_ABT_posts,node
+
+
+
 !!                                                                                                !!
 !! 4.4 CONNECT SUPERSTRUCTURE TO MESOSTRUCTURE/ABUTMENTS                                          !!
 !!                                                                                                !!
