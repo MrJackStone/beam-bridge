@@ -1,0 +1,16 @@
+! BRIDGE_V1_FEMJOINPOSTS , abtIndex
+! BRIDGE_V1_FEMJOINPOSTS , ARG1
+
+
+*do,nthPost,1,GEO_girderCount,1
+  ndName  = 'ND_ABT%_abtIndex%_POST%nthPost%_pilot'
+  cmaName = 'COMPA_ABT%_abtIndex%_POST%nthPost%_itf'
+
+  cmsel,s,COMPL_ABT%_abtIndex%_post%nthPost%
+  ksll,s
+  cmsel,r,COMPK_ABT%_abtIndex%_postBottoms
+  nslk,s
+  %ndName% = ndnext(0)
+
+  n2acnt , %ndName% , cmaName
+*enddo
