@@ -364,17 +364,23 @@ cm,%cmkPileBottoms%,kp
 cmpadd,'COMPK_ABT_pileBase'
 
 *do,nthPost,1,girderCount,1
-  csNamePost = 'CS_ABT%_abtIndex%_post%nthPost%'
+  csNamePost   = 'CS_ABT%_abtIndex%_post%nthPost%'
+  cmaInterface = 'COMPA_ABT%_abtIndex%_POST%nthPost%_itf'
   csys,%csNamePost%
   wpcsys,-1
-  BRIDGE_V1_SELECTAROUNDBEAM , cmaPileCap , 'R' , , GEO_ABT_postCx   , GEO_ABT_postCy   , 'COMPA_ABT%_abtIndex%_POST%nthPost%_itf'
+  BRIDGE_V1_SELECTAROUNDBEAM , cmaPileCap , 'R' ,  , GEO_ABT_postCx , GEO_ABT_postCy , cmaInterface
+  cmsel,s,%cmaInterface%
+  cmpadd,'COMPA_ABT_postInterface'
 *enddo
 
 *do,nthPile,1,pileCount,1
-  csNamePile = 'CS_ABT%_abtIndex%_pile%nthPile%'
+  csNamePile   = 'CS_ABT%_abtIndex%_pile%nthPile%'
+  cmaInterface = 'COMPA_ABT%_abtIndex%_PILE%nthPile%_itf'
   csys,%csNamePile%
   wpcsys,-1
-  BRIDGE_V1_SELECTAROUNDBEAM , cmaPileCap , 'C' , GEO_ABT_pileDiameter ,  ,  , 'COMPA_ABT%_abtIndex%_PILE%nthPost%_itf'
+  BRIDGE_V1_SELECTAROUNDBEAM , cmaPileCap , 'C' , GEO_ABT_pileDiameter ,  ,  , cmaInterface
+  cmsel,s,%cmaInterface%
+  cmpadd,'COMPA_ABT_pileInterface'
 *enddo
 
 

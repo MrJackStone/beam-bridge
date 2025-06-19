@@ -377,6 +377,11 @@ cmsel,a,COMPE_ABT_2
 cmsel,u,COMPE_Submerged
 cmpadd,'COMPE_Exposed'
 
+! Selection components: nodes without soil support
+cmsel,s,COMPA_ABT_pileInterface
+nsla,s,1
+cm,COMPN_ABT_pileInterface,node
+
 
 !! 4.3.2 POSTS                                                                                    !!
 !!                                                                                                !!

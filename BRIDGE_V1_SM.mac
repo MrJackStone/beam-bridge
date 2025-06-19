@@ -179,6 +179,8 @@ cm , COMPL_ABT_vxPiles         , line
 cm , COMPA_ABT_leftOverhang    , area
 cm , COMPA_ABT_rightOverhang   , area
 cm , COMPA_ABT_overhangs       , area
+cm , COMPA_ABT_postInterface   , area
+cm , COMPA_ABT_pileInterface   , area
 
 ! First abutment (before X=0)
 asel,none
