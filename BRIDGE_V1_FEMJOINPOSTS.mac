@@ -2,6 +2,8 @@
 ! BRIDGE_V1_FEMJOINPOSTS , ARG1
 
 
+_abtIndex = ARG1
+
 *do,nthPost,1,GEO_girderCount,1
   ndName  = 'ND_ABT%_abtIndex%_POST%nthPost%_pilot'
   cmaName = 'COMPA_ABT%_abtIndex%_POST%nthPost%_itf'
