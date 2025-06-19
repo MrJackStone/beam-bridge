@@ -89,6 +89,7 @@ cmkPostBottoms = 'COMPK_ABT%_abtIndex%_postBottoms'
 cmkPostTops    = 'COMPK_ABT%_abtIndex%_postTops'
 cmkPileTops    = 'COMPK_ABT%_abtIndex%_pileTops'
 cmkPileBottoms = 'COMPK_ABT%_abtIndex%_pileBottoms'
+cmaAreas       = 'COMPA_ABT%_abtIndex%_areas'
 
 
 !! C.  Coordinate systems                                                                         !!
@@ -219,7 +220,11 @@ wpcsys,-1,%csNameLeftWall%
 asbw,all,,delete
 wpcsys,-1,%csNameRightWall%
 asbw,all,,delete
-cm,%cmaPileCap%,area
+
+cmsel,a,%cmaTranWall%
+cmsel,a,%cmaLeftWall%
+cmsel,a,%cmaRightWall%
+cm,%cmaAreas%,area
 
 ! Pile centers
 *del,x_centers,,nopr
@@ -240,7 +245,7 @@ arruniq,'y_centers','y_centers',1
   wpcsys,-1
   wpoffs,xCoord
   wprota,,,90
-  cmwslice,cmaPileCap
+  cmwslice,cmaAreas
 *enddo
 
 *do,nthY,1,yUniqueCount,1
@@ -249,14 +254,11 @@ arruniq,'y_centers','y_centers',1
   wpcsys,-1
   wpoffs,,yCoord
   wprota,,90
-  cmwslice,cmaPileCap
+  cmwslice,cmaAreas
 *enddo
 
 ! Merge areas
-cmsel , s , %cmaPileCap%
-cmsel , a , %cmaTranWall%
-cmsel , a , %cmaLeftWall%
-cmsel , a , %cmaRightWall%
+cmsel,s,%cmaAreas%
 lsla
 ksll
 nummrg,kp
@@ -278,7 +280,7 @@ nummrg,kp
   cmpadd,cmlPosts
   cmpadd,'COMPL_ABT_posts'
 
-  BRIDGE_V1_SLICEAROUNDBEAM , cmaPileCap , 'R' ,  , GEO_ABT_postCx , GEO_ABT_postCy
+  BRIDGE_V1_SLICEAROUNDBEAM , cmaAreas , 'R' ,  , GEO_ABT_postCx , GEO_ABT_postCy
 *enddo
 
 ! Draw piles
@@ -297,7 +299,7 @@ nummrg,kp
   cmpadd,cmlPiles
   cmpadd,'COMPL_ABT_piles'
 
-  BRIDGE_V1_SLICEAROUNDBEAM , cmaPileCap , 'C' , GEO_ABT_pileDiameter
+  BRIDGE_V1_SLICEAROUNDBEAM , cmaAreas , 'C' , GEO_ABT_pileDiameter
 *enddo
 
 
