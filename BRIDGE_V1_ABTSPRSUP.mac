@@ -1,17 +1,27 @@
-! BRIDGE_V1_ABTSPRSUP , deckWidth , abtType , abtCS , trvCS , lwCS , rwCS , beamOpt
-! BRIDGE_V1_ABTSPRSUP , arg1      , arg2    , arg3  , arg4  , arg5 , arg6 , ARG7
+! BRIDGE_V1_ABTSPRSUP , abtIndex , deckWidth , abtType , abtCS , trvCS , lwCS , rwCS , beamOpt
+! BRIDGE_V1_ABTSPRSUP , ARG1     , ARG2      , ARG3    , ARG4  , ARG5  , ARG6 , ARG7 , ARG8
+
+
+_abtIndex  = ARG1
+_deckWidth = ARG2
+_abtType   = ARG3
+_abtCS     = ARG4
+_trvCS     = ARG5
+_lwCS      = ARG6
+_rwCS      = ARG7
+_beamOpt   = ARG8
 
 cm,COMPN_valid,node
 
-*if,arg2,eq,4,then
+*if,_abtType,eq,4,then
   ! Wings
-  csys,arg3
+  csys,_abtCS
   cmsel,s,COMPA_ABT_longWalls
   nsla,r,1
   cm,COMPN_TEMP_wings,node
 
   ! Left wing
-  csys,arg5
+  csys,_lwCS
   cmsel,s,COMPN_valid
   cmsel,r,COMPN_TEMP_wings
   nsel,r,loc,y,0,1e6
@@ -20,7 +30,7 @@ cm,COMPN_valid,node
   d,all,uy,0,,,,ux
 
   ! Right wing
-  csys,arg6
+  csys,_rwCS
   cmsel,s,COMPN_valid
   cmsel,r,COMPN_TEMP_wings
   nsel,r,loc,y,0,1e6
@@ -29,7 +39,7 @@ cm,COMPN_valid,node
   d,all,uy,0,,,,ux
 
   ! Transversal wall
-  csys,arg4
+  csys,_trvCS
   cmsel,s,COMPA_ABT_tranWall
   nsla,s,1
   cmsel,r,COMPN_valid
@@ -42,7 +52,7 @@ cm,COMPN_valid,node
   ! Longitudinal walls and wings
   cmsel,s,COMPA_ABT_longWalls
   cmsel,a,COMPA_ABT_wings
-  asel,r,loc,y,-arg1,0
+  asel,r,loc,y,-_deckWidth,0
   nsla,s,1
   cmsel,r,COMPN_valid
   sprsup,0,FEM_ABT_springL,0,MAT_ABT_Soil,REAL_ABT_kh,TYPE_LINK180,'COMPN_sup','COMPE_sup',1,5
@@ -51,7 +61,7 @@ cm,COMPN_valid,node
 
   cmsel,s,COMPA_ABT_longWalls
   cmsel,a,COMPA_ABT_wings
-  asel,r,loc,y,0,arg1
+  asel,r,loc,y,0,_deckWidth
   nsla,s,1
   cmsel,r,COMPN_valid
   sprsup,0,-FEM_ABT_springL,0,MAT_ABT_Soil,REAL_ABT_kh,TYPE_LINK180,'COMPN_sup','COMPE_sup',1,5
@@ -68,28 +78,29 @@ cm,COMPN_valid,node
 *endif
 
 ! Approach slab
-cmsel,s,COMPA_ABT_appSlab
-nsla,s,1
-csbackup
-csys,arg3
-nsel,u,loc,x,0,FEM_unsupportedAppSlabLength
-csrestore
-cmsel,r,COMPN_valid
-sprsup,,,-FEM_ABT_springL,MAT_ABT_Soil,REAL_ABT_kv,TYPE_LINK180,'COMPN_sup','COMPE_sup',1,3
-cmsel,s,COMPN_sup
-cmsel,s,COMPA_ABT_pileCap
-nsla,s,1
-cmsel,r,COMPN_valid
-cm,COMPN_remoteSup,node
-*get,rnc,node,,count
-cmsel,s,COMPN_sup
-*get,nc,node,,count
-nn=0
-*do,nthNode,1,nc,1
+*if,GEO_ABT%_abtIndex%_appSlab,eq,1,then
+  cmsel,s,COMPA_ABT_appSlab
+  nsla,s,1
+  csbackup
+  csys,_abtCS
+  nsel,u,loc,x,0,FEM_unsupportedAppSlabLength
+  csrestore
+  cmsel,r,COMPN_valid
+  sprsup,,,-FEM_ABT_springL,MAT_ABT_Soil,REAL_ABT_kv,TYPE_LINK180,'COMPN_sup','COMPE_sup',1,3
+  cmsel,s,COMPN_sup
+  cmsel,s,COMPA_ABT_pileCap
+  nsla,s,1
+  cmsel,r,COMPN_valid
+  cm,COMPN_remoteSup,node
+  *get,rnc,node,,count
+  cmsel,s,COMPN_sup
+  *get,nc,node,,count
+  nn=0
+  *do,nthNode,1,nc,1
     cmsel,s,COMPN_sup
     nn=ndnext(nn)
 
-    *if,arg2,eq,4,then
+    *if,_abtType,eq,4,then
       d,nn,uz,0
     *else
       *if,rnc,gt,0,then
@@ -102,10 +113,11 @@ nn=0
       *endif
     *endif
 
-*enddo
+  *enddo
+*endif
 
 ! Beams
-*if,ARG7,eq,1,then
+*if,_beamOpt,eq,1,then
   cmsel,s,COMPA_ABT_beam
   lsla,s
   nsla,s,1
