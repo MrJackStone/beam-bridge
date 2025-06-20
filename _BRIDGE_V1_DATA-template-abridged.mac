@@ -300,7 +300,7 @@ MAT_Approach_fck = 40e6
 !    [2] Block-beam (pile cap block-beam + transversal wall)
 !    [3] Pile curtain (piles as retention walls)
 !    [4] Wall-column with angled wings (pile caps + transversal wall + wings)
-!    [5] Open box with girder posts
+!    [5] Span-facing open box
 GEO_ABT1_type = 4
 
 ! Length
@@ -398,7 +398,7 @@ GEO_ABT1_pile_data(1,6) = x , y , L , alpha , beta , id
 !    [2] Block-beam (pile cap block-beam + transversal wall)
 !    [3] Pile curtain (piles as retention walls)
 !    [4] Wall-column with angled wings (pile caps + transversal wall + wings)
-!    [5] Open box with girder posts
+!    [5] Span-facing open box
 GEO_ABT2_type = 4
 
 ! Length

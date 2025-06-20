@@ -96,7 +96,7 @@ cmaAreas       = 'COMPA_ABT%_abtIndex%_areas'
 csnext,csNameAbutmentEnd
 csys,_localCS
 wpcsys,-1
-wpoffs,GEO_ABT_length
+wpoffs,-GEO_ABT_length
 wprota,,,90
 cswpla,%csNameAbutmentEnd%,cart
 
@@ -199,13 +199,13 @@ cm,%cmaTranWall%,area
 asel,none
 csys,%csNameLeftWall%
 wpcsys,-1
-blc4,0,0,GEO_ABT_length,GEO_ABT_height
+blc4,0,0,-GEO_ABT_length,GEO_ABT_height
 cm,%cmaLeftWall%,area
 
 asel,none
 csys,%csNameRightWall%
 wpcsys,-1
-blc4,0,0,GEO_ABT_length,GEO_ABT_height
+blc4,0,0,-GEO_ABT_length,GEO_ABT_height
 cm,%cmaRightWall%,area
 
 
