@@ -1,6 +1,12 @@
 ! BRIDGE_V1_POSTTWBEAM
 
 
+cmsel,s,COMPA_ABT_thinTranWall
+*get,ac,area,,count
+*if,ac,eq,0,then
+  *return,-1
+*endif
+
 !! Display settings                                                                               !!
 /device,font,3,Arial,1000,0,-64,0,0,,,
 /device,font,1,Arial,1000,0,-42,0,0,,,
