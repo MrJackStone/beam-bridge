@@ -5,20 +5,28 @@ allsel
 
 ! Initialize arrays
 *get,nodeCount,parm,NLIST_apportioned,dim,x
-*del , top_level    ,  , nopr
-*del , height_above ,  , nopr
-*del , dw_pres_vert ,  , nopr
-*del , sc_pres_vert ,  , nopr
-*del , dw_pres_horz ,  , nopr
-*del , sc_pres_horz ,  , nopr
-*del , ch_pres_horz ,  , nopr
-*dim , top_level    ,  , nodeCount
-*dim , height_above ,  , nodeCount
-*dim , dw_pres_vert ,  , nodeCount
-*dim , sc_pres_vert ,  , nodeCount
-*dim , dw_pres_horz ,  , nodeCount
-*dim , sc_pres_horz ,  , nodeCount
-*dim , ch_pres_horz ,  , nodeCount
+*del , top_level      ,  , nopr
+*del , height_above   ,  , nopr
+*del , dw_pres_vert   ,  , nopr
+*del , dirt_pres_vert ,  , nopr
+*del , dirt_forc_vert ,  , nopr
+*del , dirt_forc_horz ,  , nopr
+*del , sc_pres_vert   ,  , nopr
+*del , dw_pres_horz   ,  , nopr
+*del , dirt_pres_horz ,  , nopr
+*del , sc_pres_horz   ,  , nopr
+*del , ch_pres_horz   ,  , nopr
+*dim , top_level      ,  , nodeCount
+*dim , height_above   ,  , nodeCount
+*dim , dw_pres_vert   ,  , nodeCount
+*dim , dirt_pres_vert ,  , nodeCount
+*dim , dirt_forc_vert ,  , nodeCount
+*dim , dirt_forc_horz ,  , nodeCount
+*dim , sc_pres_vert   ,  , nodeCount
+*dim , dw_pres_horz   ,  , nodeCount
+*dim , dirt_pres_horz ,  , nodeCount
+*dim , sc_pres_horz   ,  , nodeCount
+*dim , ch_pres_horz   ,  , nodeCount
 
 ! Calculate soil height above each node
 *voper , top_level    , NLIST_x   , mult , ABT%ARG1%_angCoef
@@ -53,6 +61,17 @@ cteSurcharge = LOAD_vehicleTraffic
 *voper , forc_vert , pres_vert , mult , NLIST_apportioned
 *voper , forc_horz , pres_horz , mult , NLIST_apportioned
 
+! Calculate total pressures & forces considering only dead soil weight, needed for elements that are
+! not affected by paving or surcharge stress increases (e.g. ABT5's longitudinal walls)
+*vfact , ARG2
+*voper , dirt_pres_vert , height_above   , mult , MAT_ABT_soil_dens*LOAD_g
+*voper , dirt_pres_horz , dirt_pres_vert , mult , MAT_ABT_SOIL_ka
+*voper , dirt_pres_horz , dirt_pres_horz , sub  , ch_pres_horz
+*voper , dirt_pres_horz , dirt_pres_horz , max  , 0
+
+*voper , dirt_forc_vert , dirt_pres_vert , mult , NLIST_apportioned
+*voper , dirt_forc_horz , dirt_pres_horz , mult , NLIST_apportioned
+
 ! Longitudinal wall and wing (right side, Y<0)
 cmsel,s,COMPA_ABT_longWalls
 cmsel,a,COMPA_ABT_wings
@@ -68,6 +87,10 @@ nsla,s,1
   f, N_n(1:nc), fx, F_hx(1:nc)
   f, N_n(1:nc), fy, F_hy(1:nc)
   *afun,rad
+*elseif,GEO_ABT%ARG1%_type,eq,5,then
+  ! For ABT type 5 the longitudinal walls project forward, therefore the soil lies outside the open box
+  nslcomp,'F_h','N_n','nc','dirt_forc_horz',-ARG4
+  f, N_n(1:nc), fy, F_h(1:nc)
 *else
   nslcomp,'F_h','N_n','nc','forc_horz',ARG4
   f, N_n(1:nc), fy, F_h(1:nc)
@@ -88,6 +111,10 @@ nsla,s,1
   f, N_n(1:nc), fx, F_hx(1:nc)
   f, N_n(1:nc), fy, F_hy(1:nc)
   *afun,rad
+*elseif,GEO_ABT%ARG1%_type,eq,5,then
+  ! For ABT type 5 the longitudinal walls project forward, therefore the soil lies outside the open box
+  nslcomp,'F_h','N_n','nc','dirt_forc_horz',ARG4
+  f, N_n(1:nc), fy, F_h(1:nc)
 *else
   nslcomp,'F_h','N_n','nc','forc_horz',-ARG4
   f, N_n(1:nc), fy, F_h(1:nc)

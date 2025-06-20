@@ -31,35 +31,40 @@ nbackup
     topPressure  = _Fz/GEO_ABT1_topSurfArea
     soilPressure = topPressure*MAT_ABT_SOIL_ka
 
-    ! Longitudinal wall and wing (Y<0)
-    cmsel,s,COMPA_ABT_longWalls
-    cmsel,a,COMPA_ABT_wings
-    cmsel,r,COMPA_ABT_1
-    csys,CS_ABT1
-    asel,r,loc,y,-GEO_deckWidth_beg,0
-    csys,0
-    nsla,s,1
-    *if,LOAD_ltPresMethod,eq,'BOUSSNSQ',then
-      boussinesq,'LOAD_ABT1_F','LOAD_ABT1_nn','LOAD_ABT1_nc',_Fz, _xVal, _yVal, zVal, 'H', 'Z', 1, impactCoefOpt
-    *elseif,LOAD_ltPresMethod,eq,'HYDROSTA',then
-      BRIDGE_V1_ABTPRES2FORCE ,'LOAD_ABT1_F','LOAD_ABT1_nn','LOAD_ABT1_nc', soilPressure
-    *endif
-    f,LOAD_ABT1_nn(1:LOAD_ABT1_nc),fy,LOAD_ABT1_F(1:LOAD_ABT1_nc)
+    ! Longitudinal walls
+    *if,GEO_ABT1_type,eq,5,then
+      ! No loads on longitudinal walls
+    *else
+      ! Longitudinal wall and wing (Y<0)
+      cmsel,s,COMPA_ABT_longWalls
+      cmsel,a,COMPA_ABT_wings
+      cmsel,r,COMPA_ABT_1
+      csys,CS_ABT1
+      asel,r,loc,y,-GEO_deckWidth_beg,0
+      csys,0
+      nsla,s,1
+      *if,LOAD_ltPresMethod,eq,'BOUSSNSQ',then
+        boussinesq,'LOAD_ABT1_F','LOAD_ABT1_nn','LOAD_ABT1_nc',_Fz, _xVal, _yVal, zVal, 'H', 'Z', 1, impactCoefOpt
+      *elseif,LOAD_ltPresMethod,eq,'HYDROSTA',then
+        BRIDGE_V1_ABTPRES2FORCE ,'LOAD_ABT1_F','LOAD_ABT1_nn','LOAD_ABT1_nc', soilPressure
+      *endif
+      f,LOAD_ABT1_nn(1:LOAD_ABT1_nc),fy,LOAD_ABT1_F(1:LOAD_ABT1_nc)
 
-    ! Longitudinal wall and wing (Y>0)
-    cmsel,s,COMPA_ABT_longWalls
-    cmsel,a,COMPA_ABT_wings
-    cmsel,r,COMPA_ABT_1
-    csys,CS_ABT1
-    asel,r,loc,y,0,GEO_deckWidth_beg
-    csys,0
-    nsla,s,1
-    *if,LOAD_ltPresMethod,eq,'BOUSSNSQ',then
-      boussinesq,'LOAD_ABT1_F','LOAD_ABT1_nn','LOAD_ABT1_nc',-(_Fz), _xVal, _yVal, zVal, 'H', 'Z', 1, impactCoefOpt
-    *elseif,LOAD_ltPresMethod,eq,'HYDROSTA',then
-      BRIDGE_V1_ABTPRES2FORCE ,'LOAD_ABT1_F','LOAD_ABT1_nn','LOAD_ABT1_nc', -soilPressure
+      ! Longitudinal wall and wing (Y>0)
+      cmsel,s,COMPA_ABT_longWalls
+      cmsel,a,COMPA_ABT_wings
+      cmsel,r,COMPA_ABT_1
+      csys,CS_ABT1
+      asel,r,loc,y,0,GEO_deckWidth_beg
+      csys,0
+      nsla,s,1
+      *if,LOAD_ltPresMethod,eq,'BOUSSNSQ',then
+        boussinesq,'LOAD_ABT1_F','LOAD_ABT1_nn','LOAD_ABT1_nc',-(_Fz), _xVal, _yVal, zVal, 'H', 'Z', 1, impactCoefOpt
+      *elseif,LOAD_ltPresMethod,eq,'HYDROSTA',then
+        BRIDGE_V1_ABTPRES2FORCE ,'LOAD_ABT1_F','LOAD_ABT1_nn','LOAD_ABT1_nc', -soilPressure
+      *endif
+      f,LOAD_ABT1_nn(1:LOAD_ABT1_nc),fy,LOAD_ABT1_F(1:LOAD_ABT1_nc)
     *endif
-    f,LOAD_ABT1_nn(1:LOAD_ABT1_nc),fy,LOAD_ABT1_F(1:LOAD_ABT1_nc)
 
     ! Transversal wall
     cmsel,s,COMPA_ABT_tranWall
@@ -104,35 +109,39 @@ nbackup
     topPressure  = _Fz/GEO_ABT2_topSurfArea
     soilPressure = topPressure*MAT_ABT_SOIL_ka
 
-    ! Longitudinal wall and wing (Y<0)
-    cmsel,s,COMPA_ABT_longWalls
-    cmsel,a,COMPA_ABT_wings
-    cmsel,r,COMPA_ABT_2
-    csys,CS_ABT2
-    asel,r,loc,y,-GEO_deckWidth_end,0
-    csys,0
-    nsla,s,1
-    *if,LOAD_ltPresMethod,eq,'BOUSSNSQ',then
-      boussinesq,'LOAD_ABT2_F','LOAD_ABT2_nn','LOAD_ABT2_nc',-(_Fz), _xVal, _yVal, zVal, 'H', 'Z', 1, impactCoefOpt
-    *elseif,LOAD_ltPresMethod,eq,'HYDROSTA',then
-      BRIDGE_V1_ABTPRES2FORCE ,'LOAD_ABT2_F','LOAD_ABT2_nn','LOAD_ABT2_nc', -soilPressure
-    *endif
-    f,LOAD_ABT2_nn(1:LOAD_ABT2_nc),fy,LOAD_ABT2_F(1:LOAD_ABT2_nc)
+    *if,GEO_ABT2_type,eq,5,then
+      ! No loads on longitudinal walls
+    *else
+      ! Longitudinal wall and wing (Y<0)
+      cmsel,s,COMPA_ABT_longWalls
+      cmsel,a,COMPA_ABT_wings
+      cmsel,r,COMPA_ABT_2
+      csys,CS_ABT2
+      asel,r,loc,y,-GEO_deckWidth_end,0
+      csys,0
+      nsla,s,1
+      *if,LOAD_ltPresMethod,eq,'BOUSSNSQ',then
+        boussinesq,'LOAD_ABT2_F','LOAD_ABT2_nn','LOAD_ABT2_nc',-(_Fz), _xVal, _yVal, zVal, 'H', 'Z', 1, impactCoefOpt
+      *elseif,LOAD_ltPresMethod,eq,'HYDROSTA',then
+        BRIDGE_V1_ABTPRES2FORCE ,'LOAD_ABT2_F','LOAD_ABT2_nn','LOAD_ABT2_nc', -soilPressure
+      *endif
+      f,LOAD_ABT2_nn(1:LOAD_ABT2_nc),fy,LOAD_ABT2_F(1:LOAD_ABT2_nc)
 
-    ! Longitudinal wall and wing (Y>0)
-    cmsel,s,COMPA_ABT_longWalls
-    cmsel,a,COMPA_ABT_wings
-    cmsel,r,COMPA_ABT_2
-    csys,CS_ABT2
-    asel,r,loc,y,0,GEO_deckWidth_end
-    csys,0
-    nsla,s,1
-    *if,LOAD_ltPresMethod,eq,'BOUSSNSQ',then
-      boussinesq,'LOAD_ABT2_F','LOAD_ABT2_nn','LOAD_ABT2_nc',_Fz, _xVal, _yVal, zVal, 'H', 'Z', 1, impactCoefOpt
-    *elseif,LOAD_ltPresMethod,eq,'HYDROSTA',then
-      BRIDGE_V1_ABTPRES2FORCE ,'LOAD_ABT2_F','LOAD_ABT2_nn','LOAD_ABT2_nc', soilPressure
+      ! Longitudinal wall and wing (Y>0)
+      cmsel,s,COMPA_ABT_longWalls
+      cmsel,a,COMPA_ABT_wings
+      cmsel,r,COMPA_ABT_2
+      csys,CS_ABT2
+      asel,r,loc,y,0,GEO_deckWidth_end
+      csys,0
+      nsla,s,1
+      *if,LOAD_ltPresMethod,eq,'BOUSSNSQ',then
+        boussinesq,'LOAD_ABT2_F','LOAD_ABT2_nn','LOAD_ABT2_nc',_Fz, _xVal, _yVal, zVal, 'H', 'Z', 1, impactCoefOpt
+      *elseif,LOAD_ltPresMethod,eq,'HYDROSTA',then
+        BRIDGE_V1_ABTPRES2FORCE ,'LOAD_ABT2_F','LOAD_ABT2_nn','LOAD_ABT2_nc', soilPressure
+      *endif
+      f,LOAD_ABT2_nn(1:LOAD_ABT2_nc),fy,LOAD_ABT2_F(1:LOAD_ABT2_nc)
     *endif
-    f,LOAD_ABT2_nn(1:LOAD_ABT2_nc),fy,LOAD_ABT2_F(1:LOAD_ABT2_nc)
 
     ! Transversal wall
     cmsel,s,COMPA_ABT_tranWall
