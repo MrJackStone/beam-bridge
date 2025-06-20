@@ -1030,6 +1030,8 @@ d,all,uz,0
 !!                                                                                                !!
 allsel
 
+! Needed because of the approach used to apply loads, which requires continuous sequence of node numbers
+! TODO  causes previously stored node numbers to become broken references (eg. FEM_bearing_pairs)
 numcmp,node
 
 ! Capture image of the mesh

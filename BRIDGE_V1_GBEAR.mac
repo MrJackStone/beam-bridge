@@ -132,6 +132,9 @@
     BRIDGE_V1_FEMBEARING , connectionBeg , GBNode , SBNode
     BRIDGE_V1_FEMBEARING , connectionEnd , GENode , SENode
 
+    ! TODO  FIXME  these references are lost because of the NUMCMP command executed later on.
+    !              a new approach is needed to transfer the information of these node pairs to
+    !              post-process stage.
     FEM_bearing_pairs(1,nthGirder,nthSpan) = GBNode
     FEM_bearing_pairs(2,nthGirder,nthSpan) = SBNode
     FEM_bearing_pairs(3,nthGirder,nthSpan) = GENode
