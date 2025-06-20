@@ -230,11 +230,13 @@ mp , prxy , MAT_PileLat , MAT_Soil_Poisson
 
 !! 2.1.1.15 SPRING                                                                                !!
 MAT_Spring_E=1e10
-MP,EX,MAT_Spring,MAT_Spring_E
+MP , EX   , MAT_Spring , MAT_Spring_E
+mp , prxy , MAT_spring , 0.2
 
 !! 2.1.1.16 Bearing & FRICTION (MATRIX27 ELEMENTS)                                               !!
 MAT_Matrix_E=1e10
-MP,EX,MAT_Matrix,MAT_Matrix_E
+MP , EX   , MAT_Matrix , MAT_Matrix_E
+mp , prxy , MAT_matrix , 0.2
 
 !! 2.1.1.17  Pile steel casing                                                                    !!
 steel , MAT_casing,MAT_CASING_E,,,,,,1
