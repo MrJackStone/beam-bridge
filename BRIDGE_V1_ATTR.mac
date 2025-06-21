@@ -582,7 +582,7 @@ secoffset,bot
 ! PILE CAP
 sectype,SEC_ABT_pileCap,shell,,'ABT_SLAB'
 secdata,SEC_ABT_pileCap_h,MAT_Abutment
-secoffset,top
+secoffset,bot  ! TODO  compatible with ABT5, ensure compatibility with other abutment types
 
 ! Girder posts
 sectype,SEC_ABT_girderPost,beam,rect,,'GPOST'
