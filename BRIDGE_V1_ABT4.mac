@@ -93,7 +93,7 @@ asel,none
 sm_pilesup_retwall,CS_leftWing,'left_wing_params', 'ABT_LW'
 cmpadd,'COMPA_ABT_leftSide'
 
-! Delete first pile row (overlaps with transverwall wall's)
+! Delete first pile row (overlaps with transversal wall's)
 *do,nthPileCol,1,GEO_ABT_wingPileCols,1
   cmsel,s,COMPL_ABT_LW_pile%nthPileCol%
   cmsel,a,COMPL_ABT_LW_pileConnection%nthPileCol%
@@ -122,7 +122,7 @@ cmpadd,'COMPA_ABT_rightSide'
 cmsel,s,COMPA_ABT_RW_wall
 areverse,all
 
-! Delete first pile row (overlaps with transverwall wall's)
+! Delete first pile row (overlaps with transversal wall's)
 *do,nthPileCol,1,GEO_ABT_wingPileCols,1
   cmsel,s,COMPL_ABT_RW_pile%nthPileCol%
   cmsel,a,COMPL_ABT_RW_pileConnection%nthPileCol%
@@ -224,6 +224,8 @@ cm,COMPA_TEMP_appSlab,area
 !!                                                                                                !!
 !! D. Merge pile caps                                                                             !!
 !!                                                                                                !!
+csys,ARG1
+
 cmsel,s,COMPA_ABT_TRV_cap
 cmsel,a,COMPA_ABT_LW_cap
 aovlap,all
@@ -232,6 +234,8 @@ cm,COMPA_leftSideComplement,area
 cmsel,a,COMPA_ABT_RW_cap
 aovlap,all
 cm,COMPA_ABT_mergedCaps,area
+
+arzori,-1
 
 ! Collect left/right side cap areas to rebuild degenerated components later
 cmsel,u,COMPA_leftSideComplement
