@@ -181,6 +181,7 @@ l,asLeftKP,asRightKP
 cm,COMPL_temp_appSlab,line
 
 ! Draw approach slab
+asel,none
 cmsel,s,COMPL_temp_appSlab
 cmsel,a,COMPL_temp_abtInterface
 ksll,s
