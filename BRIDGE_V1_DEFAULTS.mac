@@ -72,6 +72,8 @@ GEO_ABT_wingHe    = 0
 GEO_ABT_pileOff   = 0
 GEO_ABT_pileOvlap = 0
 
+SEC_ABT_col_W     = 1
+SEC_ABT_beam_W    = 1
 SEC_ABT_wing_t    = 1
 SEC_ABT_appSlab_t = 1
 GEO_ABT_postCx    = 1
