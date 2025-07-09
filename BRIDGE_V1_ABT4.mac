@@ -273,7 +273,7 @@ cmpadd,'COMPL_Barrier'
 
 ! Sides
 cmsel,s,COMPA_leftSideComplement
-cmpadd,'COMPA_leftSide'
+cmpadd,'COMPA_ABT_leftSide'
 cmsel,s,COMPA_rightSideComplement
 cmpadd,'COMPA_ABT_rightSide'
 
