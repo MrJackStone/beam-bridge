@@ -94,9 +94,9 @@ etable , 'DUMMY'               , eras
 
 
 !! Dead weight results (first load step) element tables                                           !!
-defetabs , 0   , 'DW_' , 1e3  , 1
-defetabs , 181 , 'DW_' , 1e-3 , 1
-defetabs , 188 , 'DW_' , 1e-3 , 1
+defa181etabs , 'DW_' , 1e-3
+defa188etabs , 'DW_' , 1e-3
+defadofetabs , 'DW_' , 1e3
 
 ! SHELL181 oblique shear force
 etbsqsum , 'DW_Q' , 'DW_QX' , 'DW_QY'
@@ -126,42 +126,23 @@ sadd   , 'N_cgk' , 'N_cg'  ,         , 1/LOAD_gammaG
 
 
 !! Envelope including dead & live loads:                                                          !!
-baseTableCount = 24
+! Calculate envelopes for selected element tables
+etableCount = 24
 
-*del , etable_suffixes ,      , nopr
-*del , etable_scales   ,      , nopr
-*dim , etable_suffixes , char , baseTableCount
-*dim , etable_scales   ,      , baseTableCount
+*del , etable_names ,      , nopr
+*dim , etable_names , char , etableCount
 
-etable_suffixes(1)  = 'UX' , 'UY' , 'UZ'  , 'ROTX' , 'ROTY' , 'ROTZ'
-etable_scales(1)    = 1e3  , 1e3  , 1e3   , 1e3    , 1e3    , 1e3
-etable_suffixes(7)  = 'MX' , 'MY' , 'NX'  , 'NY'   , 'QX'   , 'QY'
-etable_scales(7)    = 1e-3 , 1e-3 , 1e-3  , 1e-3   , 1e-3   , 1e-3   ,
-etable_suffixes(13) = 'Ni' , 'Nj' , 'QZi' , 'QZj'  , 'QYi'  , 'QYj'  , 'MYi' , 'MYj' , 'MZi' , 'MZj' , 'TQi' , 'TQj'
-etable_scales(13)   = 1e-3 , 1e-3 , 1e-3  , 1e-3   , 1e-3   , 1e-3   , 1e-3  , 1e-3  , 1e-3  , 1e-3  , 1e-3  , 1e-3
+etable_names(1)  = 'UX' , 'UY' , 'UZ'  , 'ROTX' , 'ROTY' , 'ROTZ'
+etable_names(7)  = 'MX' , 'MY' , 'NX'  , 'NY'   , 'QX'   , 'QY'
+etable_names(13) = 'Ni' , 'Nj' , 'QZi' , 'QZj'  , 'QYi'  , 'QYj'  , 'MYi' , 'MYj' , 'MZi' , 'MZj' , 'TQi' , 'TQj'
 
-! Create element tables that update with REFL
-defetabs , 0   ,  , 1 , 0
-defetabs , 181 ,  , 1 , 0
-defetabs , 188 ,  , 1 , 0
+etbenv , 1 , LoadStepCount , 'etable_names' , 'BRIDGE_V1_ETBUPDATE'
 
-! Loop over load steps updating element tables
-etenv,1,LoadStepCount,'etable_suffixes'
-
-! Scale envelope element tables
-*do,nthEtable,1,baseTableCount,1
-  etSuffix = etable_suffixes(nthEtable)
-  etScale  = etable_scales(nthEtable)
-  sadd,'EMX_%etSuffix%','EMX_%etSuffix%',,etScale
-  sadd,'EMN_%etSuffix%','EMN_%etSuffix%',,etScale
-  sadd,'EAB_%etSuffix%','EAB_%etSuffix%',,etScale
+*do,nthEtable,1,etableCount,1
+  etableName = etable_names(nthEtable)
+  etable,'%etableName%',eras
 *enddo
-
-! Delete unused tables
-*do,nthEtable,1,baseTableCount,1
-  etSuffix=etable_suffixes(nthEtable)
-  etable,'%etSuffix%',eras
-*enddo
+*del,etable_names,,nopr
 
 ! SHELL181 oblique shear force
 etbsqsum , 'EAB_Q' , 'EAB_QX' , 'EAB_QY'
