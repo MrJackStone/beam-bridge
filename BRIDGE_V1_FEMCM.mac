@@ -121,3 +121,8 @@
 
   *enddo
 *enddo
+
+/eof
+
+*get,xx,elem,4300,efor,4395,fx
+*get,zzz,fsum,,item,fz

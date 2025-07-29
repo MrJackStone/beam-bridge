@@ -240,6 +240,9 @@ GIRDER_name0 = GIRDER_name(1,1)
     BRIDGE_V1_POSTABTBEAM
 
   *endif
+
+  BRIDGE_V1_POSTBEARING
+
 *endif
 
 /post1

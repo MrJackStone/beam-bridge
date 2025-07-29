@@ -124,7 +124,7 @@ pst26
     esln,s
     cm,COMPE_slabEnd,elem
 
-    *del,dummy,nopr
+    *del,dummy,,nopr
     vget,dummy,1
     *get,arrayDim,parm,dummy,dim,x
     *vfill,dummy,ramp,0,0
