@@ -13,6 +13,11 @@
 !   k: supportIndex
 
 
+finish
+allsel
+pst26
+
+
 !! A.  Create matrix with pairs of nodes for Jeene joint calculation                              !!
 *del,FEM_jeene_pairs,,nopr
 *dim,FEM_jeene_pairs,,2,GEO_girderCount,GEO_supportCount
