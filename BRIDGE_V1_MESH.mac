@@ -994,28 +994,33 @@ cm,COMPN_base,node
 *endif
 
 ! Selection components
-cmsel,s,COMPN_PIER_VSoil
-cmsel,a,COMPN_ABT1_VSoil
-cmsel,a,COMPN_ABT2_VSoil
-cm,COMPN_VSoil,node
-cmsel,s,COMPN_PIER_HSoil
-cmsel,a,COMPN_ABT1_HSoil
-cmsel,a,COMPN_ABT2_HSoil
-cm,COMPN_HSoil,node
-cmsel,s,COMPE_PIER_VSoil
-cmsel,a,COMPE_ABT1_VSoil
-cmsel,a,COMPE_ABT2_VSoil
-cm,COMPE_VSoil,elem
-cmsel,s,COMPE_PIER_HSoil
-cmsel,a,COMPE_ABT1_HSoil
-cmsel,a,COMPE_ABT2_HSoil
-cm,COMPE_HSoil,elem
-cmsel,s,COMPE_HSoil
-cmsel,a,COMPE_VSoil
-cm,COMPE_Soil,elem
-cmsel,s,COMPN_HSoil
-cmsel,a,COMPN_VSoil
-cm,COMPN_Soil,node
+cmsel , s           , COMPN_PIER_VSoil
+cmsel , a           , COMPN_ABT1_VSoil
+cmsel , a           , COMPN_ABT2_VSoil
+cm    , COMPN_VSoil , node
+
+cmsel , s           , COMPN_PIER_HSoil
+cmsel , a           , COMPN_ABT1_HSoil
+cmsel , a           , COMPN_ABT2_HSoil
+cm    , COMPN_HSoil , node
+
+cmsel , s           , COMPE_PIER_VSoil
+cmsel , a           , COMPE_ABT1_VSoil
+cmsel , a           , COMPE_ABT2_VSoil
+cm    , COMPE_VSoil , elem
+
+cmsel , s           , COMPE_PIER_HSoil
+cmsel , a           , COMPE_ABT1_HSoil
+cmsel , a           , COMPE_ABT2_HSoil
+cm    , COMPE_HSoil , elem
+
+cmsel , s           , COMPE_HSoil
+cmsel , a           , COMPE_VSoil
+cm    , COMPE_Soil  , elem
+
+cmsel , s           , COMPN_HSoil
+cmsel , a           , COMPN_VSoil
+cm    , COMPN_Soil  , node
 
 ! Soil springs supports
 cmsel,s,COMPN_HSoil
