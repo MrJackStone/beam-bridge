@@ -1,128 +1,33 @@
 ! BRIDGE_V1_FEMCM
 
 
-*del,bearing_pairs,,nopr
-*dim,bearing_pairs,,4,GEO_girderCount,GEO_spanCount
+! Node pairs representing girder bearings
+*del,FEM_bearing_pairs,,nopr
+*dim,FEM_bearing_pairs,,4,GEO_girderCount,GEO_spanCount
 
 *do,nthSpan,1,GEO_spanCount,1
-
-  begSupportIdx = nthSpan
-  endSupportIdx = nthSpan+1
-
-  cmsel,s,COMPN_GirderSupport
-  cmsel,r,COMPN_GIRDERS_S%nthSpan%
-  cm,COMPN_girderBoth,node
-
-  ! Select nodes at each extremity of the span's girders
-  *if,GEO_deckRadius,ne,0,then
-    ! Curved deck:
-    csys,CY_deck
-    *get,chi_min,node,,mnloc,y
-    *get,chi_max,node,,mxloc,y
-    nsel,s,loc,y,chi_min
-    cm,COMPN_mxloc,node
-    nsel,s,loc,y,chi_max
-    cm,COMPN_mnloc,node
-    csys,0
-  *else
-    ! Straight deck:
-    *get,x_min,node,,mnloc,x
-    *get,x_max,node,,mxloc,x
-    nsel,s,loc,x,x_min
-    cm,COMPN_mnloc,node
-    nsel,s,loc,x,x_max
-    cm,COMPN_mxloc,node
-  *endif
-
-  ! Nodes on girders
-  cmsel,s,COMPN_girderBoth
-  cmsel,r,COMPN_mnloc
-  cm,COMPN_girderBeg,node
-  cmsel,s,COMPN_girderBoth
-  cmsel,r,COMPN_mxloc
-  cm,COMPN_girderEnd,node
-
-  ! Nodes on beginning support (frames, column caps, or gerber tips)
-  mesoTypeBeg=GEO_mesoType(begSupportIdx)
-  *if,mesoTypeBeg,eq,CTE_MESO_frame,then
-    ! Column-girder frame:
-    cmsel,s,COMPN_FrameGirder
-  *elseif,mesoTypeBeg,eq,CTE_MESO_beamcap,then
-    ! Cap-beam frame:
-    cmsel,s,COMPN_FrameGirder
-  *elseif,mesoTypeBeg,eq,CTE_MESO_tube,then
-    ! Tubular pier column:
-    cmsel,s,COMPN_ColCap
-  *elseif,mesoTypeBeg,eq,CTE_MESO_tcolumn,then
-    ! Tubular T-column:
-    cmsel,s,COMPN_GerberTip
-  *elseif,mesoTypeBeg,eq,CTE_MESO_hammerhead,then
-    ! Hammerhead:
-    cmsel,s,COMPN_ColCap
-  *elseif,mesoTypeBeg,eq,CTE_MESO_abutment,then
-    ! Abutment:
-    cmsel,s,COMPN_ABT_girder
-  *endif
-  cmsel,r,COMPN_mnloc
-  cm,COMPN_supBeg,node
-
-  ! Nodes on end support (frames, column caps, or gerber tips)
-  mesoTypeEnd=GEO_mesoType(endSupportIdx)
-  *if,mesoTypeEnd,eq,CTE_MESO_frame,then
-    ! Column-girder frame:
-    cmsel,s,COMPN_FrameGirder
-  *elseif,mesoTypeEnd,eq,CTE_MESO_beamcap,then
-    ! Cap-beam frame:
-    cmsel,s,COMPN_FrameGirder
-  *elseif,mesoTypeEnd,eq,CTE_MESO_tube,then
-    ! Tubular pier column:
-    cmsel,s,COMPN_ColCap
-  *elseif,mesoTypeEnd,eq,CTE_MESO_tcolumn,then
-    ! Tubular T-column:
-    cmsel,s,COMPN_GerberTip
-  *elseif,mesoTypeEnd,eq,CTE_MESO_hammerhead,then
-    ! Hammerhead:
-    cmsel,s,COMPN_ColCap
-  *elseif,mesoTypeEnd,eq,CTE_MESO_abutment,then
-    ! Abutment:
-    cmsel,s,COMPN_ABT_girder
-  *endif
-  cmsel,r,COMPN_mxloc
-  cm,COMPN_supEnd,node
-
-  ! Couple DOFs: girders & supports
   *do,nthGirder,1,GEO_girderCount,1
-    ncmName       = 'COMPN_S%nthSpan%_G%nthGirder%'
-    connectionBeg = FEM_GIRDER_bearings(1,nthGirder,nthSpan)
-    connectionEnd = FEM_GIRDER_bearings(2,nthGirder,nthSpan)
+    cmsel,s,COMPN_BEARING_S%nthSpan%G%nthGirder%_girderBeg
+    GBNode = ndnext(0)
 
-    ! Girder node at the beginning
-    cmsel,s,%ncmName%
-    cmsel,r,COMPN_girderBeg
-    GBNode=ndnext(0)
+    cmsel,s,COMPN_BEARING_S%nthSpan%G%nthGirder%_girderEnd
+    GENode = ndnext(0)
 
-    ! Girder node at the end
-    cmsel,s,%ncmName%
-    cmsel,r,COMPN_girderEnd
-    GENode=ndnext(0)
+    cmsel,s,COMPN_BEARING_S%nthSpan%G%nthGirder%_mesoBeg
+    SBNode = ndnext(0)
 
-    ! Support node at the beginning
-    cmsel,s,COMPN_supBeg
-    SBNode=nnear(GBNode)
+    cmsel,s,COMPN_BEARING_S%nthSpan%G%nthGirder%_mesoEnd
+    SENode = ndnext(0)
 
-    ! Support node at the end
-    cmsel,s,COMPN_supEnd
-    SENode=nnear(GENode)
+    FEM_bearing_pairs(1,nthGirder,nthSpan) = GBNode
+    FEM_bearing_pairs(2,nthGirder,nthSpan) = SBNode
+    FEM_bearing_pairs(3,nthGirder,nthSpan) = GENode
+    FEM_bearing_pairs(4,nthGirder,nthSpan) = SENode
 
-    bearing_pairs(1,nthGirder,nthSpan) = GBNode
-    bearing_pairs(2,nthGirder,nthSpan) = SBNode
-    bearing_pairs(3,nthGirder,nthSpan) = GENode
-    bearing_pairs(4,nthGirder,nthSpan) = SENode
+    cmdele , COMPN_BEARING_S%nthSpan%G%nthGirder%_girderBeg
+    cmdele , COMPN_BEARING_S%nthSpan%G%nthGirder%_girderEnd
+    cmdele , COMPN_BEARING_S%nthSpan%G%nthGirder%_mesoBeg
+    cmdele , COMPN_BEARING_S%nthSpan%G%nthGirder%_mesoEnd
 
   *enddo
 *enddo
-
-/eof
-
-*get,xx,elem,4300,efor,4395,fx
-*get,zzz,fsum,,item,fz

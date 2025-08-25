@@ -91,10 +91,10 @@ pst26
 *do,nthSpan,1,GEO_spanCount,1
   *do,nthGirder,1,GEO_girderCount,1
 
-    ndGirderBeg = bearing_pairs(1,nthGirder,nthSpan)
-    ndMesoBeg   = bearing_pairs(2,nthGirder,nthSpan)
-    ndGirderEnd = bearing_pairs(3,nthGirder,nthSpan)
-    ndMesoEnd   = bearing_pairs(4,nthGirder,nthSpan)
+    ndGirderBeg = FEM_bearing_pairs(1,nthGirder,nthSpan)
+    ndMesoBeg   = FEM_bearing_pairs(2,nthGirder,nthSpan)
+    ndGirderEnd = FEM_bearing_pairs(3,nthGirder,nthSpan)
+    ndMesoEnd   = FEM_bearing_pairs(4,nthGirder,nthSpan)
 
     nsel,s,node,,ndGirderBeg
     esln

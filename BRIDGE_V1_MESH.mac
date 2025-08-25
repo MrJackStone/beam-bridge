@@ -550,9 +550,9 @@ cm,COMPN_ABT_posts,node
 !! 4.4 CONNECT SUPERSTRUCTURE TO MESOSTRUCTURE/ABUTMENTS                                          !!
 !!                                                                                                !!
 BRIDGE_V1_GBEAR
-!
-!
-!
+
+
+
 !!                                                                                                !!
 !! 4.5 SELECTION COMPONENTS FOR LOADING                                                           !!
 !!                                                                                                !!
@@ -1036,7 +1036,8 @@ d,all,uz,0
 allsel
 
 ! Needed because of the approach used to apply loads, which requires continuous sequence of node numbers
-! TODO  causes previously stored node numbers to become broken references (eg. FEM_bearing_pairs)
+! Note: causes node numbers previously stored in variables to become broken references
+!       (using nodal selection components to store nodes instead prevents this issue)
 numcmp,node
 
 ! Create mesh components for post-processing

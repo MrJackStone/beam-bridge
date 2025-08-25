@@ -1,8 +1,16 @@
 ! BRIDGE_V1_GBEAR
 
 
-*del,FEM_bearing_pairs,,nopr
-*dim,FEM_bearing_pairs,,4,GEO_girderCount,GEO_spanCount
+! Initialize selection components to temporarily hold bearing node pairs
+nsel,nonde
+*do,nthSpan,1,GEO_spanCount,1
+  *do,nthGirder,1,GEO_girderCount,1
+    cm , COMPN_BEARING_S%nthSpan%G%nthGirder%_girderBeg , node
+    cm , COMPN_BEARING_S%nthSpan%G%nthGirder%_girderEnd , node
+    cm , COMPN_BEARING_S%nthSpan%G%nthGirder%_mesoBeg   , node
+    cm , COMPN_BEARING_S%nthSpan%G%nthGirder%_mesoEnd   , node
+  *enddo
+*enddo
 
 ! Connect girders to frame girders
 *do,nthSpan,1,GEO_spanCount,1
@@ -132,13 +140,10 @@
     BRIDGE_V1_FEMBEARING , connectionBeg , GBNode , SBNode
     BRIDGE_V1_FEMBEARING , connectionEnd , GENode , SENode
 
-    ! TODO  FIXME  these references are lost because of the NUMCMP command executed later on.
-    !              a new approach is needed to transfer the information of these node pairs to
-    !              post-process stage.
-    FEM_bearing_pairs(1,nthGirder,nthSpan) = GBNode
-    FEM_bearing_pairs(2,nthGirder,nthSpan) = SBNode
-    FEM_bearing_pairs(3,nthGirder,nthSpan) = GENode
-    FEM_bearing_pairs(4,nthGirder,nthSpan) = SENode
+    cmpadd , 'COMPN_BEARING_S%nthSpan%G%nthGirder%_girderBeg' ,  , GBNode
+    cmpadd , 'COMPN_BEARING_S%nthSpan%G%nthGirder%_girderEnd' ,  , GENode
+    cmpadd , 'COMPN_BEARING_S%nthSpan%G%nthGirder%_mesoBeg'   ,  , SBNode
+    cmpadd , 'COMPN_BEARING_S%nthSpan%G%nthGirder%_mesoEnd'   ,  , SENode
 
   *enddo
 
