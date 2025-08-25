@@ -13,3 +13,4 @@
  ⭕ 13. Add vehicle collision load
  ⭕ 14. Replace CP/CPINTF/CE approach with MPC contacts -- kinda urgent, can break when using hammerhead pier type
  ⭕ 15. Create circular rigid regions at pile/cap interface to avoid single-node coupling
+ ⭕ 16. Improve fatigue post-processing
