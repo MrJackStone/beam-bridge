@@ -1,5 +1,8 @@
 ! BRIDGE_V1_REPORTPILE
 
+
+csys,CS_global
+
 cmsel,s,COMPL_pile
 cmsel,a,COMPL_ABT_piles
 ! cmsel,a,COMPL_column
@@ -53,7 +56,7 @@ enum=0
   zmax=0
   *if,pileLine,ne,0,then
     lsel,s,line,,pileLine
-    nsll,s
+    nsll,s,1
     cmsel,r,COMPN_pile
     *get,zmax,node,,mxloc,z
   *endif
