@@ -2,7 +2,7 @@
 
 
 ! Initialize selection components to temporarily hold bearing node pairs
-nsel,nonde
+nsel,none
 *do,nthSpan,1,GEO_spanCount,1
   *do,nthGirder,1,GEO_girderCount,1
     cm , COMPN_BEARING_S%nthSpan%G%nthGirder%_girderBeg , node
