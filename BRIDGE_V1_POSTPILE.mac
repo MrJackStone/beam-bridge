@@ -155,56 +155,89 @@ clims
     *if,GEO_ABT1_status,eq,1,then
       /window,1,on
       /window,2,off
+      cmsel,s,COMPL_ABT_piles
       cmsel,s,COMPA_ABT_1
+      lsla,a
+      cmsel,r,COMPL_ABT_1
+      ksll,s
+      kplot
+      /user,1
+      /noerase
       esla,s
       /device,vector,on
       /edge,1,1
       /eshape,0
       eplot
-      /noerase
-      /user,1
       /eshape,1
       cmsel,s,COMPL_ABT_piles
       cmsel,r,COMPL_ABT_1
       esll,s
       nsle,s,active
+      cm,COMPE_tempPiles,elem
+      /color,cm,red,COMPE_tempPiles
+      /gline,1,-1
+      /device,vector,off
       eplot
+      cmdele,COMPE_tempPiles
+      /device,vector,on
+      /gline,1,0
       /pnum,line,1
       /number,2
       lplot
       /number,1
       /pnum,line,0
+      cm,COMPL_tempPiles,line
+      /color,cm,dgra,COMPL_tempPiles
       lplot
+      cmdele,COMPL_tempPiles
     *endif
 
     *if,GEO_ABT2_status,eq,1,then
       /window,1,off
       /window,2,on
+      cmsel,s,COMPL_ABT_piles
       cmsel,s,COMPA_ABT_2
+      lsla,a
+      cmsel,r,COMPL_ABT_2
+      ksll,s
+      kplot
+      /user,2
+      /noerase
       esla,s
       /device,vector,on
       /edge,2,1
       /eshape,0
       eplot
-      /noerase
-      /user,2
       /eshape,1
       cmsel,s,COMPL_ABT_piles
       cmsel,r,COMPL_ABT_2
       esll,s
       nsle,s,active
+      cm,COMPE_tempPiles,elem
+      /color,cm,red,COMPE_tempPiles
+      /gline,2,-1
+      /device,vector,off
       eplot
+      cmdele,COMPE_tempPiles
+      /device,vector,on
+      /gline,2,0
       /pnum,line,1
       /number,2
       lplot
       /number,1
       /pnum,line,0
+      cm,COMPL_tempPiles,line
+      /color,cm,dgra,COMPL_tempPiles
       lplot
+      cmdele,COMPL_tempPiles
     *endif
 
   endpng,'IMG12a_pile_guide',,,,,POST_resultsFolder
 
+  /annot,dele
+  /erase
   allsel
+
 *endif
 
 cmsel,s,compl_abt_piles
