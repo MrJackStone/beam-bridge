@@ -42,6 +42,7 @@ GEO_ABT_pileL         = %arg2%(12)
 GEO_ABT_tranPiles     = %arg2%(14)
 GEO_ABT_wingHa        = %arg2%(16)
 GEO_ABT_wingL         = %arg2%(17)
+GEO_ABT_pileAngle     = %arg2%(18)
 GEO_ABT_trvPileCols   = %arg2%(23)
 GEO_ABT_wingPileCols  = %arg2%(24)
 GEO_ABT_wingCapLength = %arg2%(25)
@@ -71,9 +72,10 @@ clocal,CS_trvWall,0,0,-GEO_ABT_deckWidth/2,-GEO_ABT_height  ! TODO  csys
 csys,CS_trvWall
 
 *del,transversal_wall_params,,nopr
-*dim,transversal_wall_params,,10
-transversal_wall_params(1) = GEO_ABT_deckWidth , GEO_ABT_height , GEO_ABT_height    , GEO_ABT_pileCapL    , GEO_ABT_pileCapW
-transversal_wall_params(6) = SEC_ABT_pileCap_h , GEO_ABT_pileL  , GEO_ABT_tranPiles , GEO_ABT_trvPileCols , GEO_ABT_pileOff
+*dim,transversal_wall_params,,11
+transversal_wall_params(1)  = GEO_ABT_deckWidth , GEO_ABT_height , GEO_ABT_height    , GEO_ABT_pileCapL    , GEO_ABT_pileCapW
+transversal_wall_params(6)  = SEC_ABT_pileCap_h , GEO_ABT_pileL  , GEO_ABT_tranPiles , GEO_ABT_trvPileCols , GEO_ABT_pileOff
+transversal_wall_params(11) = GEO_ABT_pileAngle
 
 sm_pilesup_retwall,CS_trvWall,'transversal_wall_params', 'ABT_TRV'
 csys,arg1
