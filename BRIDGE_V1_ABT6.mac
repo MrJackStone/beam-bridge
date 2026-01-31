@@ -1,60 +1,19 @@
-! BRIDGE_V1_ABT6 , CS_local , geoArray , pos
-! BRIDGE_V1_ABT  , ARG1     , ARG2     , ARG3
+! BRIDGE_V1_ABT6 , CS_local , geoArray
+! BRIDGE_V1_ABT  , ARG1     , ARG2
 
 
-!!                                                                                                !!
-!! A. INPUT PARAMETERS                                                                            !!
-!!                                                                                                !!
-! pos=1: beginning (X=0)
-! pos=2: end (X=deckLength)
-! xdir=1 : local axis and global axis point in the same direction
-! xdir=-1: local axis points to negative global X
-csys,arg1
-
-!! A.1 ABUTMENT GEOMETRY                                                                          !!
-!!                                                                                                !!
-! Geometric parameters
-GEO_ABT_appSlabL   = %arg2%(6)
-GEO_ABT_height     = %arg2%(7)
-GEO_ABT_length     = %arg2%(8)
-GEO_ABT_pileL      = %arg2%(12)
-GEO_ABT_topOffset  = %arg2%(13)
-GEO_ABT_tranPiles  = %arg2%(14)
-GEO_ABT_pileAngle  = %arg2%(18)
-GEO_ABT_width      = %arg2%(28)
+! COMPA_Abutment
+!
+! COMPA_ABT_appSlab
+!
+! COMPL_ABT_piles
+!
+! COMPK_ABT_base
+! COMPK_ABT_pileTop
+! COMPK_ABT_pileBase
 
 
-!! A.2 KEYPOINT NUMBERS                                                                           !!
-!!                                                                                                !!
-*get,KMXD,kp,,num,maxd
-
-! Approach slab
-KA=KMXD+29
-KB=KMXD+30
-KC=KMXD+31
-KD=KMXD+32
-
-
-
-!! A.3 KEYPOINT COORDINATES                                                                       !!
-!!                                                                                                !!
-x01 = 0
-x05 = GEO_ABT_length
-xc  = x01+GEO_ABT_appSlabL
-
-y01 = -(GEO_ABT_width/2) ! right wall
-y02 = y01+GEO_ABT_width  ! left wall
-
-z01 = 0
-z03 = z01-GEO_ABT_height
-zc  = z01+GEO_ABT_topOffset*(GEO_ABT_appSlabL/GEO_ABT_length)
-
-
-
-!!                                                                                                !!
-!! B. DRAW AREAS                                                                                  !!
-!!                                                                                                !!
-! Store previous selection
+! Prepare environment
 abackup
 lbackup
 kbackup
@@ -66,7 +25,34 @@ arestore
 lrestore
 krestore
 
-! Draw approach slab
+csys,arg1
+
+! Collect geometric parameters
+GEO_ABT_appSlabL   = %arg2%(6)
+GEO_ABT_height     = %arg2%(7)
+GEO_ABT_length     = %arg2%(8)
+GEO_ABT_pileL      = %arg2%(12)
+GEO_ABT_topOffset  = %arg2%(13)
+GEO_ABT_tranPiles  = %arg2%(14)
+GEO_ABT_pileAngle  = %arg2%(18)
+GEO_ABT_width      = %arg2%(28)
+
+! Draw approach slab areas
+*get,KMXD,kp,,num,maxd
+
+KA  = KMXD+1
+KB  = KMXD+2
+KC  = KMXD+3
+KD  = KMXD+4
+x01 = 0
+x05 = GEO_ABT_length
+xc  = x01+GEO_ABT_appSlabL
+y01 = -(GEO_ABT_width/2)
+y02 = y01+GEO_ABT_width
+z01 = 0
+z03 = z01-GEO_ABT_height
+zc  = z01+GEO_ABT_topOffset*(GEO_ABT_appSlabL/GEO_ABT_length)
+
 asel,none
 k , KA , x01 , y01 , z01
 k , KB , x01 , y02 , z01
@@ -77,28 +63,16 @@ a, KA, KC, KD, KB
 
 cmpadd,'COMPA_ABT_appSlab'
 
-
-!! C.2 AT PILES                                                                                   !!
-!!                                                                                                !!
-
-!! C.2.2 TRANSVERSAL PILES                                                                        !!
-! Slice transversal wall
-deltaZT = (GEO_ABT_width-2*GEO_ABT_pileOff)/(GEO_ABT_tranPiles-1)
-firstZT = GEO_ABT_pileOff
-
-
-!! C.4 AT BRIDGE SUPERSTRUCTURE                                                                   !!
-!!                                                                                                !!
-! Slice approach slab
+! Slice approach slab at bridge superstructure
 cmsel,s,COMPA_ABT_appSlab
 cmsel,u,COMPA_prev
 BRIDGE_V1_LONGSLICE
 cmpadd,'COMPA_ABT_appSlab'
 
 
-!!                                                                                                !!
-!! E. DRAW PILES                                                                                  !!
-!!                                                                                                !!
+! Calculate pile positions
+deltaZT     = (GEO_ABT_width-2*GEO_ABT_pileOff)/(GEO_ABT_tranPiles-1)
+firstZT     = GEO_ABT_pileOff
 bot_delta_X = -GEO_ABT_pileL*tan(GEO_ABT_pileAngle*pi/180)
 
 ! Keypoints at pile cap level
@@ -113,7 +87,7 @@ cmsel,r,COMPK_ABT_base
 
 ! Keypoints at the top of each transversal pile
 ksel,none
-y_i=y02-firstZT
+y_i = y02-firstZT
 *do,nthPile,1,GEO_ABT_tranPiles,1
   ksel,a,loc,y,y_i
   y_i=y_i-deltaZT
@@ -121,11 +95,8 @@ y_i=y02-firstZT
 cmsel,r,COMPK_ABT_base
 cm,COMPK_ABT_temp1,kp
 
-cmsel,u,COMPK_ABT_temp2
-cm,COMPK_ABT_temp3,kp
-
-kgen,2,COMPK_ABT_temp3
-cmsel,u,COMPK_ABT_temp3
+kgen,2,COMPK_ABT_temp1
+cmsel,u,COMPK_ABT_temp1
 cm,COMPK_twPileTop,kp
 cmpadd,'COMPK_ABT_pileTop'
 
@@ -136,15 +107,15 @@ lsel,none
 *get,kmnx,kp,,mnloc,x
 *get,kmxx,kp,,mxloc,x
 *get,kc,kp,,count
-knum=0
+knum = 0
 *do,nthKP,1,kc,1
   cmsel,s,COMPK_twPileTop
   cmsel,u,COMPK_prev
-  knum=kpnext(knum)
+  knum = kpnext(knum)
   ksel,s,kp,,knum
-  nthK_deltaXmn=abs(kx(knum)-kmnx)
-  nthK_deltaXmx=abs(kx(knum)-kmxx)
-  fuzz=1e-3
+  nthK_deltaXmn = abs(kx(knum)-kmnx)
+  nthK_deltaXmx = abs(kx(knum)-kmxx)
+  fuzz          = 1e-3
   *if,nthK_deltaXmn,le,fuzz,then
     kgen,2,knum,,,bot_delta_X,,-GEO_ABT_pileL
   *elseif,nthK_deltaXmx,lt,fuzz,then
@@ -160,11 +131,7 @@ knum=0
 cmpadd,'COMPL_ABT_twPiles'
 cmpadd,'COMPL_ABT_piles'
 
-
-!!                                                                                                !!
-!! F. SELECTION COMPONENTS                                                                        !!
-!!                                                                                                !!
-! Barrier lines
+! Barrier lines selection component
 lsel,none
 *if,LOAD_barrierStatus,EQ,1,THEN
   *do,nthBarrier,1,LOAD_barrierCount,1
@@ -178,7 +145,7 @@ lsel,none
 *endif
 cmpadd,'COMPL_Barrier'
 
-! Whole abutment
+! Whole abutment selection components
 asel,none
 cmsel,a,COMPA_ABT_appSlab
 cmpadd,'COMPA_Abutment'
@@ -195,30 +162,9 @@ cmsel,u,COMPA_prev
 cmsel,u,COMPL_prev
 cmsel,u,COMPK_prev
 
-
-!!                                                                                                !!
-!! G. Coordinate systems for local ESYS                                                           !!
-!!                                                                                                !!
+! Coordinate systems for ESYS
 csys,arg1
 csnext,'CS_leftWall'
 clocal,CS_leftWall,cart,0,0,0,,90  ! TODO  csys
 csnext,'CS_rightWall'
 clocal,CS_leftWall,cart,0,0,0,180,90  ! TODO  csys
-
-! COMPA_Abutment
-!
-! COMPA_ABT_tranWall
-! COMPA_ABT_longWalls
-! COMPA_ABT_columns
-! COMPA_ABT_wings
-! COMPA_ABT_beam
-! COMPA_ABT_appSlab
-!
-! COMPL_ABT_piles
-!
-! COMPK_ABT_base
-! COMPK_ABT_pileTop
-! COMPK_ABT_pileBase
-!
-! COMPA_ABT_rightSide
-! COMPA_ABT_leftSide
