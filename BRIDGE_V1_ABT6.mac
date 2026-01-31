@@ -1,0 +1,925 @@
+! BRIDGE_V1_ABT6 , CS_local , geoArray , pos
+! BRIDGE_V1_ABT  , ARG1     , ARG2     , ARG3
+
+
+!!                                                                                                !!
+!! A. INPUT PARAMETERS                                                                            !!
+!!                                                                                                !!
+! pos=1: beginning (X=0)
+! pos=2: end (X=deckLength)
+! xdir=1 : local axis and global axis point in the same direction
+! xdir=-1: local axis points to negative global X
+csys,arg1
+
+!! A.1 ABUTMENT GEOMETRY                                                                          !!
+!!                                                                                                !!
+! Geometric parameters
+GEO_ABT_type       = %arg2%(1)
+GEO_ABT_deckWidth  = %arg2%(2)
+GEO_ABT_yOffset    = %arg2%(3)
+GEO_ABT_yc         = %arg2%(4)
+GEO_ABT_appSlab    = %arg2%(5)
+GEO_ABT_appSlabL   = %arg2%(6)
+GEO_ABT_height     = %arg2%(7)
+GEO_ABT_length     = %arg2%(8)
+GEO_ABT_longPiles  = %arg2%(9)
+GEO_ABT_pileCapL   = %arg2%(10)
+GEO_ABT_pileCapW   = %arg2%(11)
+GEO_ABT_pileL      = %arg2%(12)
+GEO_ABT_topOffset  = %arg2%(13)
+GEO_ABT_tranPiles  = %arg2%(14)
+GEO_ABT_wings      = %arg2%(15)
+GEO_ABT_wingHa     = %arg2%(16)
+GEO_ABT_wingL      = %arg2%(17)
+GEO_ABT_pileAngle  = %arg2%(18)
+GEO_ABT_suppressLW = %arg2%(19)
+GEO_ABT_curtainL   = %arg2%(20)
+GEO_ABT_pileFree   = %arg2%(21)
+GEO_ABT_pileShort  = %arg2%(22)
+GEO_ABT_width      = %arg2%(28)
+GEO_ABT_thinDepth  = %arg2%(29)
+GEO_ABT_beamOpt    = %arg2%(30)
+
+GEO_ABT_pileCap=1
+*if,GEO_ABT_type,eq,2,then
+    GEO_ABT_pileCap=0
+*endif
+
+posKey=GEO_longPosKey(arg3)
+
+*if,arg3,eq,1,then
+    ! Beginning
+    xLocalOrientation=-1
+*else
+    ! End
+    xLocalOrientation=1
+*endif
+!
+!
+!! A.2 KEYPOINT NUMBERS                                                                           !!
+!!                                                                                                !!
+*get,KMXD,kp,,num,maxd
+
+! Abutment walls
+K01=KMXD+1
+K02=KMXD+2
+K03=KMXD+3
+K04=KMXD+4
+K05=KMXD+5
+K06=KMXD+6
+K07=KMXD+7
+K08=KMXD+8
+
+! Columns
+K09=KMXD+9
+K10=KMXD+10
+K11=KMXD+11
+K12=KMXD+12
+
+! Wings
+K13=KMXD+13
+K14=KMXD+14
+K15=KMXD+15
+K16=KMXD+16
+K17=KMXD+17
+K18=KMXD+18
+
+! Beam
+K19=KMXD+19
+K20=KMXD+20
+
+! Pile cap
+K21=KMXD+21
+K22=KMXD+22
+K23=KMXD+23
+K24=KMXD+24
+! Pile cap (subtract middle for GEO_ABT_type=3)
+K21b=KMXD+25
+K22b=KMXD+26
+K23b=KMXD+27
+K24b=KMXD+28
+
+! Approach slab
+KA=KMXD+29
+KB=KMXD+30
+KC=KMXD+31
+KD=KMXD+32
+
+! Left overhang
+KE=KMXD+33
+KF=KMXD+34
+KG=KMXD+35
+KH=KMXD+36
+
+! Right overhang
+KI=KMXD+37
+KJ=KMXD+38
+KK=KMXD+39
+KL=KMXD+40
+
+! Left wing overhang
+KM=KMXD+41
+KN=KMXD+42
+
+! Right wing overhang
+KO=KMXD+43
+KP=KMXD+44
+
+
+
+!
+!
+!! A.3 KEYPOINT COORDINATES                                                                       !!
+!!                                                                                                !!
+x01=0
+x05=GEO_ABT_length
+x13=x05+GEO_ABT_wingL
+xc =x01+GEO_ABT_appSlabL
+x23=x01+GEO_ABT_pileCapL
+x25a=x01+GEO_ABT_pileCapW/2
+x25b=x01-GEO_ABT_pileCapW/2
+! x02=x01 ; x03=x01 ; x04=x01
+! x06=x05 ; x07=x05 ; x08=x05
+! x09=x05 ; x10=x05 ; x11=x05
+! x12=x05 ; x14=x13 ; x15=x05
+! x16=x13 ; x17=x13 ; x18=x05
+! x19=x05 ; x20=x05 ; x21=x01
+! x22=x01 ; x24=x23
+! xa =x01 ; xb =x01 ; xd =xc
+x21b=x01+GEO_ABT_pileCapW
+x23b=x23
+! x22b=x21b ; x24b=x23b
+
+y01=-(GEO_ABT_width/2) ! right wall
+y02=y01+GEO_ABT_width  ! left wall
+y09=y01-GEO_ABT_colW
+y11=y02+GEO_ABT_colW
+*if,GEO_ABT_type,eq,1,or,GEO_ABT_type,eq,2,then
+    y21=-GEO_ABT_pileCapW/2
+    y22=GEO_ABT_pileCapW/2
+*elseif,GEO_ABT_type,eq,3,then
+    ! Pile curtain:
+    y21=y01-(GEO_ABT_pileCapW/2)
+    y22=y02+(GEO_ABT_pileCapW/2)
+*elseif,GEO_ABT_type,eq,4,then
+    ! Wall-column:
+    y25a=y02+((GEO_ABT_pileCapL-GEO_ABT_width)/2)
+    y25b=y01-((GEO_ABT_pileCapL-GEO_ABT_width)/2)
+*endif
+! y03=y01 ; y04=y02 ; y05=y01
+! y06=y02 ; y07=y01 ; y08=y02
+! y10=y09 ; y12=y11 ; y13=y01
+! y14=y01 ; y15=y01 ; y16=y02
+! y17=y02 ; y18=y02 ; y19=y01
+! y20=y02 ; y23=y21 ; y24=y22
+! ya =y01 ; yb =y02 ; yc =y01 ; yd =y02
+y21b=y21+GEO_ABT_pileCapW
+y22b=y22-GEO_ABT_pileCapW
+! y24b=y22b ; y23b=y21b
+y26=y02+(GEO_ABT_deckWidth-GEO_ABT_width)/2
+y27=y01-(GEO_ABT_deckWidth-GEO_ABT_width)/2
+
+z01=0
+z03=z01-GEO_ABT_height
+z05=z01+GEO_ABT_topOffset
+z13=z01+GEO_ABT_topOffset*((GEO_ABT_length+GEO_ABT_wingL)/GEO_ABT_length)
+z14=z13-GEO_ABT_wingHe
+z15=z05-GEO_ABT_wingHa
+*if,GEO_ABT_beamOpt,eq,0,then
+  z19=z15-GEO_ABT_beamH
+*elseif,GEO_ABT_beamOpt,eq,1,then
+  z19=z03+GEO_ABT_beamH
+*endif
+zc =z01+GEO_ABT_topOffset*(GEO_ABT_appSlabL/GEO_ABT_length)
+z25=z01-GEO_ABT_thinDepth
+! z02=z01 ; z04=z03 ; z06=z05
+! z07=z03 ; z08=z03 ; z09=z05
+! z10=z03 ; z11=z05 ; z12=z03
+! z16=z13 ; z17=z14 ; z18=z15
+! z20=z19 ; z21=z03 ; z22=z03
+! z23=z03 ; z24=z03
+! za =z01 ; zb =z01 ; zd =zc
+
+! Calculate coefficients for abutment pavement slope
+angCoef=(z05-z01)/(x05-x01)
+linCoef=z01-angCoef*x01
+!
+!
+!!                                                                                                !!
+!! B. DRAW AREAS                                                                                  !!
+!!                                                                                                !!
+! Store previous selection
+abackup
+lbackup
+kbackup
+allsel
+cm,COMPA_prev,area
+cm,COMPL_prev,line
+cm,COMPK_prev,kp
+arestore
+lrestore
+krestore
+
+! Draw abutment walls
+k , K01 , x01 , y01 , z01
+k , K02 , x01 , y02 , z01
+k , K03 , x01 , y01 , z03
+k , K04 , x01 , y02 , z03
+k , K05 , x05 , y01 , z05
+k , K06 , x05 , y02 , z05
+k , K07 , x05 , y01 , z03
+k , K08 , x05 , y02 , z03
+
+asel,none
+a, K01, K02, K04, K03
+
+*if,GEO_ABT_suppressLW,ne,1,then
+    a, K01, K03, K07, K05
+    a, K02, K06, K08, K04
+*endif
+
+wpcsys,-1,arg1
+kwpave,K01
+asbw,all,,delete
+
+cmpadd,'COMPA_ABT_walls'
+
+
+! Draw columns
+*if,GEO_ABT_colW,gt,0,then
+    k , K09 , x05 , y09 , z05
+    k , K10 , x05 , y09 , z03
+    k , K11 , x05 , y11 , z05
+    k , K12 , x05 , y11 , z03
+
+    asel,none
+    a, K05, K09, K10, K07
+    a, K11, K06, K08, K12
+
+    cmpadd,'COMPA_ABT_columns'
+*endif
+
+
+! Draw wings
+*if,GEO_ABT_wings,eq,1,then
+    k , K13 , x13, y01, z13
+    k , K14 , x13, y01, z14
+    k , K15 , x05, y01, z15
+    k , K16 , x13, y02, z13
+    k , K17 , x13, y02, z14
+    k , K18 , x05, y02, z15
+
+    asel,none
+    a, K05, K15, K14, K13
+    a, K06, K16, K17, K18
+
+    cmpadd,'COMPA_ABT_wings'
+
+    *if,GEO_ABT_deckWidth,ne,GEO_ABT_width,then
+      k , KM , x05 , y27 , z13
+      k , KN , x13 , y27 , z13
+      k , KO , x05 , y26 , z13
+      k , KP , x13 , y26 , z13
+
+      asel,none
+      a , K05 , KM  , KN , K13
+      cmpadd,'COMPA_ABT_leftOverhang'
+
+      asel,none
+      a , K06 , K16 , KP , KO
+      cmpadd,'COMPA_ABT_rightOverhang'
+
+      cmsel,s,COMPA_ABT_leftOverhang
+      cmsel,a,COMPA_ABT_rightOverhang
+      cmpadd,'COMPA_ABT_overhangs'
+    *endif
+
+*else
+
+    k , K15 , x05, y01, z15
+    k , K18 , x05, y02, z15
+
+*endif
+
+! Draw beam
+*if,GEO_ABT_suppressLW,eq,0,and,GEO_ABT_beamH,gt,0,then
+  asel,none
+
+  k , K19 , x05 , y01 , z19
+  k , K20 , x05 , y02 , z19
+
+  *if,GEO_ABT_beamOpt,eq,0,then
+    ! Beam below wings
+    a, K15, K19, K20, K18
+
+  *elseif,GEO_ABT_beamOpt,eq,1,then
+    ! Half-wall above pile cap
+    a, K07, K19, K20, K08
+
+  *endif
+
+  cmpadd,'COMPA_ABT_beam'
+*endif
+
+
+! Draw pile cap
+asel,none
+*if,GEO_ABT_type,eq,1,then
+  ! Box
+  k , K21 , x01 , y21 , z03
+  k , K22 , x01 , y22 , z03
+  k , K23 , x23 , y21 , z03
+  k , K24 , x23 , y22 , z03
+
+  a, K03, K04, K08, K07
+  a, K21, K22, K24, K23
+  aovlap,all
+
+*elseif,GEO_ABT_type,eq,3,then
+  ! Pile curtain
+  k , K21 , x01 , y21 , z03
+  k , K22 , x01 , y22 , z03
+  k , K23 , x23 , y21 , z03
+  k , K24 , x23 , y22 , z03
+
+  a, K03, K04, K08, K07
+  a, K21, K22, K24, K23
+
+  a_1=arnext(0)
+  a_2=arnext(a_1)
+  k, K21b , x21b , y21b , z03
+  k, K22b , x21b , y22b , z03
+  k, K23b , x23b , y21b , z03
+  k, K24b , x23b , y22b , z03
+  a, K21b, K22b, K24b, K23b
+  a_3=arnext(a_2)
+  asba,a_1,a_3,,delete,keep
+  asba,a_2,a_3,,delete,delete
+  aovlap,all
+
+*elseif,GEO_ABT_type,eq,4,then
+  ! Wall-column
+  k , K21 , x25a , y25a , z03
+  k , K22 , x25a , y25b , z03
+  k , K23 , x25b , y25a , z03
+  k , K24 , x25b , y25b , z03
+
+  a, K21, K22, K24, K23
+
+*endif
+cmpadd,'COMPA_ABT_pileCap'
+
+! Draw approach slab
+asel,none
+*if,GEO_ABT_appSlab,eq,1,then
+    k , KA , x01 , y01 , z01
+    k , KB , x01 , y02 , z01
+    k , KC , xc  , y01 , zc
+    k , KD , xc  , y02 , zc
+
+    a, KA, KC, KD, KB
+*endif
+
+cmpadd,'COMPA_ABT_appSlab'
+
+! Draw left overhang
+*if,GEO_ABT_deckWidth,ne,GEO_ABT_width,then
+  asel,none
+  k , KE , x01 , y02 , z01
+  k , KF , x01 , y26 , z01
+  k , KG , x05 , y02 , z05
+  k , KH , x05 , y26 , z05
+
+  a, KE, KG, KH, KF
+  cmpadd,'COMPA_ABT_leftOverhang'
+
+  ! Draw right overhang
+  asel,none
+  k , KI , x01 , y27 , z01
+  k , KJ , x01 , y01 , z01
+  k , KK , x05 , y27 , z05
+  k , KL , x05 , y01 , z05
+
+  a, KI, KK, KL, KJ
+  cmpadd,'COMPA_ABT_rightOverhang'
+
+  cmsel,s,COMPA_ABT_leftOverhang
+  cmsel,a,COMPA_ABT_rightOverhang
+  cmpadd,'COMPA_ABT_overhangs'
+*endif
+
+!
+!
+!
+!!                                                                                                !!
+!! C. SLICE AREAS                                                                                 !!
+!!                                                                                                !!
+
+! Split pile cap at transversal wall (wall-column only)
+*if,GEO_ABT_type,eq,4,then
+  cmsel,s,COMPA_ABT_pileCap
+  cmsel,u,COMPA_prev
+
+  kwplan,,K03,K04,K01
+
+  asbw,all,,delete
+  wprota,,,90
+  asbw,all,,delete
+  wpoffs,,,GEO_ABT_width
+  asbw,all,,delete
+
+  cmpadd,'COMPA_ABT_pileCap'
+  wpcsys,,arg1
+*endif
+
+!! C.1 AT BEAM (XY PLANE)                                                                         !!
+!!                                                                                                !!
+! Split walls and columns at wings and beam
+!!*if,GEO_ABT_wings,eq,1,then
+    wpcsys,,arg1
+
+    kwpave,K15
+    cmsel,s,COMPA_ABT_walls
+    cmsel,u,COMPA_prev
+    asbw,all,,delete
+    kwpave,K19
+    asbw,all,,delete
+    cmpadd,'COMPA_ABT_walls'
+
+    kwpave,K15
+    cmsel,s,COMPA_ABT_columns
+    cmsel,u,COMPA_prev
+    *get,ac,area,,count
+    *if,ac,gt,0,then
+        asbw,all,,delete
+        kwpave,K19
+        asbw,all,,delete
+    *endif
+    cmpadd,'COMPA_ABT_columns'
+
+    cmsel,s,COMPA_ABT_walls
+    cmsel,a,COMPA_ABT_columns
+    cmsel,a,COMPA_ABT_wings
+    cmsel,a,COMPA_ABT_beam
+    lsla,s
+    ksll,s
+    nummrg,kp
+
+    cmsel,s,COMPA_ABT_walls
+    asel,r,loc,x,x01
+    cmpadd,'COMPA_ABT_tranWall'
+    cmsel,s,COMPA_ABT_walls
+    cmsel,u,COMPA_ABT_tranWall
+    cmpadd,'COMPA_ABT_longWalls'
+
+    wpcsys,,arg1
+!!*endif
+!
+!
+!! C.2 AT PILES                                                                                   !!
+!!                                                                                                !!
+
+!! C.2.1 LONGITUDINAL PILES                                                                       !!
+! Calculate positions
+*if,GEO_ABT_type,eq,4,then
+  ! Wall-column:
+  deltaZL=(GEO_ABT_pileCapW-2*GEO_ABT_pileOff)/(GEO_ABT_longPiles-1)
+  firstZL=GEO_ABT_pileOff-(GEO_ABT_pileCapW/2)
+*else
+  deltaZL=(GEO_ABT_length-2*(GEO_ABT_pileOff))/(GEO_ABT_longPiles-1)
+  firstZL=GEO_ABT_pileOff
+*endif
+
+! Slice longitudinal walls
+*if,GEO_ABT_suppressLW,ne,1,then
+    cmsel,s,COMPA_ABT_longWalls
+    cmsel,u,COMPA_prev
+    kwplan,,K03,K04,K01
+    wpoffs,,,firstZL
+    *do,nthPile,1,GEO_ABT_longPiles,1
+        asbw,all,,delete
+        wpoffs,,,deltaZL
+    *enddo
+    cmpadd,'COMPA_ABT_longWalls'
+    cmsel,a,COMPA_ABT_tranWall
+    cmpadd,'COMPA_ABT_walls'
+    wpcsys,,arg1
+*endif
+
+! Slice pile cap
+*if,GEO_ABT_pileCap,eq,1,then
+    cmsel,s,COMPA_ABT_pileCap
+    cmsel,u,COMPA_prev
+    kwplan,,K03,K04,K01
+    wpoffs,,,firstZL
+    *do,nthPile,1,GEO_ABT_longPiles,1
+        asbw,all,,delete
+        wpoffs,,,deltaZL
+    *enddo
+    cmpadd,'COMPA_ABT_pileCap'
+    wpcsys,,arg1
+*endif
+
+! Slice overhangs
+*if,GEO_ABT_deckWidth,ne,GEO_ABT_width,then
+  cmsel,s,COMPA_ABT_leftOverhang
+  cmsel,u,COMPA_prev
+  kwplan,,K03,K04,K01
+  wpoffs,,,firstZL
+  *do,nthPile,1,GEO_ABT_longPiles,1
+    asbw,all,,delete
+    wpoffs,,,deltaZL
+  *enddo
+  cmpadd,'COMPA_ABT_leftOverhang'
+  cmsel,a,COMPA_ABT_rightOverhang
+  cmpadd,'COMPA_ABT_overhangs'
+  wpcsys,,arg1
+*endif
+
+*if,GEO_ABT_deckWidth,ne,GEO_ABT_width,then
+  cmsel,s,COMPA_ABT_rightOverhang
+  cmsel,u,COMPA_prev
+  kwplan,,K03,K04,K01
+  wpoffs,,,firstZL
+  *do,nthPile,1,GEO_ABT_longPiles,1
+    asbw,all,,delete
+    wpoffs,,,deltaZL
+  *enddo
+  cmpadd,'COMPA_ABT_rightOverhang'
+  cmsel,a,COMPA_ABT_leftOverhang
+  cmpadd,'COMPA_ABT_overhangs'
+  wpcsys,,arg1
+*endif
+
+!! C.2.2 TRANSVERSAL PILES                                                                        !!
+! Slice transversal wall
+*if,GEO_ABT_type,eq,4,then
+  ! Wall-column:
+  deltaZT=(GEO_ABT_pileCapL-2*GEO_ABT_pileOff)/(GEO_ABT_tranPiles-1)
+  firstZT=GEO_ABT_pileOff-((GEO_ABT_pileCapL-GEO_ABT_width)/2)
+
+*else
+  ! Abutment types 1 through 3:
+  *if,GEO_ABT_longPiles,gt,0,then
+    deltaZT = GEO_ABT_width/(GEO_ABT_tranPiles+1)
+    firstZT = deltaZT
+  *else
+    deltaZT=(GEO_ABT_width-2*GEO_ABT_pileOff)/(GEO_ABT_tranPiles-1)
+    firstZT=GEO_ABT_pileOff
+  *endif
+*endif
+
+cmsel,s,COMPA_ABT_tranWall
+cmsel,u,COMPA_prev
+ksel,all
+kwplan,,K04,K08,K02
+wpoffs,,,firstZT
+*do,nthPile,1,GEO_ABT_tranPiles,1
+    asbw,all,,delete
+    wpoffs,,,deltaZT
+*enddo
+cmpadd,'COMPA_ABT_tranWall'
+cmsel,a,COMPA_ABT_longWalls
+cmpadd,'COMPA_ABT_walls'
+wpcsys,,arg1
+
+! Slice pile cap
+*if,GEO_ABT_pileCap,eq,1,then
+    cmsel,s,COMPA_ABT_pileCap
+    cmsel,u,COMPA_prev
+    ksel,all
+    kwplan,,K04,K08,K02
+    wpoffs,,,firstZT
+    *do,nthPile,1,GEO_ABT_tranPiles,1
+        asbw,all,,delete
+        wpoffs,,,deltaZT
+    *enddo
+    cmpadd,'COMPA_ABT_pileCap'
+    wpcsys,,arg1
+*endif
+!
+!
+!! C.3 AT COLUMNS                                                                                 !!
+!!                                                                                                !!
+*if,GEO_ABT_pileCap,eq,1,then
+    *if,GEO_ABT_colW,gt,0,then
+        ! Slice pile cap
+        cmsel,s,COMPA_ABT_pileCap
+        cmsel,u,COMPA_prev
+        kwplan,,K07,K08,K05
+        asbw,all,,delete
+        kwplan,,K07,K03,K05
+        wpoffs,,,-GEO_ABT_colW
+        asbw,all,,delete
+        kwplan,,K08,K04,K06
+        wpoffs,,,GEO_ABT_colW
+        asbw,all,,delete
+        cmpadd,'COMPA_ABT_pileCap'
+        wpcsys,,arg1
+    *endif
+*endif
+!
+!
+!! C.4 AT BRIDGE SUPERSTRUCTURE                                                                   !!
+!!                                                                                                !!
+! Slice transversal wall and pile cap
+cmsel,s,COMPA_ABT_tranWall
+cmsel,a,COMPA_ABT_pileCap
+cmsel,u,COMPA_prev
+BRIDGE_V1_LONGSLICE
+cm,COMPA_ABT_temp,area
+asel,r,loc,z,z03
+cmpadd,'COMPA_ABT_pileCap'
+cmsel,s,COMPA_ABT_temp
+cmsel,u,COMPA_ABT_pileCap
+cmpadd,'COMPA_ABT_tranWall'
+cmsel,a,COMPA_ABT_longWalls
+cmpadd,'COMPA_ABT_walls'
+
+! Slice approach slab
+*if,GEO_ABT_appSlab,eq,1,then
+    cmsel,s,COMPA_ABT_appSlab
+    cmsel,u,COMPA_prev
+    BRIDGE_V1_LONGSLICE
+    cmpadd,'COMPA_ABT_appSlab'
+*endif
+!
+!
+!
+!!                                                                                                !!
+!! D. MERGE ENTITIES                                                                              !!
+!!                                                                                                !!
+! Merge pile cap, walls, and columns
+cmsel,s,COMPA_ABT_pileCap
+cmsel,a,COMPA_ABT_walls
+cmsel,a,COMPA_ABT_columns
+cmsel,a,COMPA_ABT_overhangs
+cmsel,u,COMPA_prev
+lsla,s
+ksll,s
+nummrg,kp
+cm,COMPK_ABT_temp,kp
+!
+!
+!
+!!                                                                                                !!
+!! E. DRAW PILES                                                                                  !!
+!!                                                                                                !!
+bot_delta_X=-GEO_ABT_pileL*tan(GEO_ABT_pileAngle*pi/180)
+
+! Keypoints at pile cap level
+cmsel,s,COMPK_ABT_temp
+ksel,r,loc,z,z03
+cmpadd,'COMPK_ABT_base'
+
+! Keypoints at the bottom of the longitudinal walls
+*if,GEO_ABT_suppressLW,ne,1,then
+    ksel,s,loc,y,y01
+    ksel,a,loc,y,y02
+    cmsel,r,COMPK_ABT_base
+    cm,COMPK_lWallBot,kp
+*endif
+
+! Keypoints at the bottom of the transversal wall
+ksel,s,loc,x,x01
+*if,GEO_ABT_suppressLW,eq,1,then
+    ksel,a,loc,x,x05
+*endif
+cmsel,r,COMPK_ABT_base
+cm,COMPK_tWallBot,kp
+
+! Keypoints at the top of each longitudinal pile
+ksel,none
+cm,COMPK_ABT_temp2,kp
+*if,GEO_ABT_suppressLW,ne,1,then
+    x_i=firstZL
+    *do,nthPile,1,GEO_ABT_longPiles,1
+        ksel,a,loc,x,x_i
+        x_i=x_i+deltaZL
+    *enddo
+    cmsel,r,COMPK_ABT_base
+    cmsel,r,COMPK_lWallBot
+    cm,COMPK_ABT_temp2,kp
+    kgen,2,COMPK_ABT_temp2
+    cmsel,u,COMPK_ABT_temp2
+    cm,COMPK_lwPileTop,kp
+    cmpadd,'COMPK_ABT_pileTop'
+*endif
+
+! Keypoints at the top of each transversal pile
+ksel,none
+y_i=y02-firstZT
+*do,nthPile,1,GEO_ABT_tranPiles,1
+    ksel,a,loc,y,y_i
+    y_i=y_i-deltaZT
+*enddo
+cmsel,r,COMPK_ABT_base
+cm,COMPK_ABT_temp1,kp
+
+*if,GEO_ABT_type,eq,4,then
+  ksel,none
+  x_i=x01+firstZL
+  *do,nthPile,1,GEO_ABT_longPiles,1
+    ksel,a,loc,x,x_i
+    x_i=x_i+deltaZL
+  *enddo
+  cmsel,r,COMPK_ABT_temp1
+*else
+  cmsel,r,COMPK_tWallBot
+*endif
+cmsel,u,COMPK_ABT_temp2
+cm,COMPK_ABT_temp3,kp
+
+kgen,2,COMPK_ABT_temp3
+cmsel,u,COMPK_ABT_temp3
+cm,COMPK_twPileTop,kp
+cmpadd,'COMPK_ABT_pileTop'
+
+! Draw longitudinal wall pile lines
+*if,GEO_ABT_suppressLW,ne,1,then
+    cmsel,s,COMPK_lwPileTop
+    cmsel,u,COMPK_prev
+    lsel,none
+    *get,kxmx,kp,,mxloc,x
+    *get,kxmn,kp,,mnloc,x
+    *get,kc,kp,,count
+    knum=0
+    *do,nthKP,1,kc,1
+        cmsel,s,COMPK_lwPileTop
+        cmsel,u,COMPK_prev
+        knum=kpnext(knum)
+        x_pileTop=kx(knum)
+
+        nthK_deltaXmn=abs(x_pileTop-kxmn)
+        nthK_deltaXmx=abs(x_pileTop-kxmx)
+        fuzz=1e-3
+
+        *if,GEO_ABT_type,eq,3,then
+            ! Pile curtain
+            *if,x_pileTop,le,GEO_ABT_curtainL,then
+                ! Long pile
+                pileLength=GEO_ABT_pileL
+            *else
+                ! Short pile
+                pileLength=GEO_ABT_pileShort
+            *endif
+            x_delta=0
+        *else
+            pileLength=GEO_ABT_pileL
+            *if,nthK_deltaXmx,le,fuzz,then !x_pileTop,eq,kxmx,then
+                x_delta=-bot_delta_X
+            *elseif,nthK_deltaXmn,le,fuzz,then !x_pileTop,eq,kxmn,then
+                x_delta=bot_delta_X
+            *else
+                x_delta=0
+            *endif
+        *endif
+        ksel,s,kp,,knum
+        kgen,2,knum,,,x_delta,,-pileLength
+        *get,knew,kp,,num,max
+        l,knum,knew
+        ksel,s,kp,,knew
+        cmpadd,'COMPK_ABT_pileBase'
+    *enddo
+    cmpadd,'COMPL_ABT_lwPiles'
+    cmpadd,'COMPL_ABT_piles'
+*endif
+
+! Draw transversal wall pile lines
+cmsel,s,COMPK_twPileTop
+cmsel,u,COMPK_prev
+lsel,none
+*get,kmnx,kp,,mnloc,x
+*get,kmxx,kp,,mxloc,x
+*get,kc,kp,,count
+knum=0
+*do,nthKP,1,kc,1
+    cmsel,s,COMPK_twPileTop
+    cmsel,u,COMPK_prev
+    knum=kpnext(knum)
+    ksel,s,kp,,knum
+    nthK_deltaXmn=abs(kx(knum)-kmnx)
+    nthK_deltaXmx=abs(kx(knum)-kmxx)
+    fuzz=1e-3
+    *if,nthK_deltaXmn,le,fuzz,then
+        kgen,2,knum,,,bot_delta_X,,-GEO_ABT_pileL
+    *elseif,nthK_deltaXmx,lt,fuzz,then
+        kgen,2,knum,,,-bot_delta_X,,-GEO_ABT_pileL
+    *else
+        kgen,2,knum,,,0,,-GEO_ABT_pileL
+    *endif
+    *get,knew,kp,,num,max
+    l,knum,knew
+    ksel,s,kp,,knew
+    cmpadd,'COMPK_ABT_pileBase'
+*enddo
+cmpadd,'COMPL_ABT_twPiles'
+cmpadd,'COMPL_ABT_piles'
+
+! Pile curtain: piles at the longitudinal-transversal wall intersection
+*if,GEO_ABT_type,eq,3,then
+    cmsel,s,COMPL_ABT_lwPiles
+    cmsel,u,COMPL_prev
+    cm,COMPL_lwTemp,line
+    ksll,s
+    cm,COMPK_lwTemp,kp
+    *get,lw_xmin,kp,,mnloc,x
+    ksel,s,loc,x,lw_xmin
+    cmsel,r,COMPK_lwTemp
+    cmsel,s,COMPL_lwTemp
+    lslk,r
+    cmpadd,'COMPL_ABT_vxPiles'
+*else
+    lsel,none
+    cmpadd,'COMPL_ABT_vxPiles'
+*endif
+!
+!
+!
+!!                                                                                                !!
+!! F. SELECTION COMPONENTS                                                                        !!
+!!                                                                                                !!
+! Barrier lines
+lsel,none
+*if,GEO_ABT_appSlab,eq,1,and,LOAD_barrierStatus,EQ,1,THEN
+    *do,nthBarrier,1,LOAD_barrierCount,1
+        nthCS=CS_barriers(nthBarrier)
+        csys,nthCS
+        lsel,a,loc,y,0
+        csys,arg1
+    *enddo
+    cmsel,s,COMPA_ABT_appSlab
+    lsla,r
+*endif
+cmpadd,'COMPL_Barrier'
+
+! Abutment walls (longitudinal and transversal)
+cmsel,s,COMPA_ABT_walls
+asel,r,loc,x,x01
+cmpadd,'COMPA_ABT_tranWall'
+asel,r,loc,z,z01,z25
+cmpadd,'COMPA_ABT_thinTranWall'
+cmsel,s,COMPA_ABT_walls
+cmsel,u,COMPA_ABT_tranWall
+cmpadd,'COMPA_ABT_longWalls'
+
+! Whole abutment
+cmsel,s,COMPA_ABT_walls
+cmsel,a,COMPA_ABT_columns
+cmsel,a,COMPA_ABT_wings
+cmsel,a,COMPA_ABT_beam
+cmsel,a,COMPA_ABT_pileCap
+cmsel,a,COMPA_ABT_appSlab
+cmsel,a,COMPA_ABT_overhangs
+cmpadd,'COMPA_Abutment'
+
+lsla,s
+cmsel,a,COMPL_ABT_piles
+cmpadd,'COMPL_Abutment'
+
+ksll,s
+cmpadd,'COMPK_Abutment'
+
+cmsel,s,COMPA_ABT_longWalls
+cmsel,a,COMPA_ABT_wings
+asel,r,loc,y,y01
+cmpadd,'COMPA_ABT_rightSide'
+
+cmsel,s,COMPA_ABT_longWalls
+cmsel,a,COMPA_ABT_wings
+asel,r,loc,y,y02
+cmpadd,'COMPA_ABT_leftSide'
+
+allsel
+cmsel,u,COMPA_prev
+cmsel,u,COMPL_prev
+cmsel,u,COMPK_prev
+
+!!                                                                                                !!
+!! G. Coordinate systems for local ESYS                                                           !!
+!!                                                                                                !!
+csys,arg1
+csnext,'CS_leftWall'
+clocal,CS_leftWall,cart,0,0,0,,90  ! TODO  csys
+csnext,'CS_rightWall'
+clocal,CS_leftWall,cart,0,0,0,180,90  ! TODO  csys
+
+! COMPA_Abutment
+!
+! COMPA_ABT_walls
+! COMPA_ABT_tranWall
+! COMPA_ABT_longWalls
+! COMPA_ABT_columns
+! COMPA_ABT_wings
+! COMPA_ABT_beam
+! COMPA_ABT_pileCap
+! COMPA_ABT_appSlab
+!
+! COMPL_ABT_piles
+!
+! COMPK_ABT_base
+! COMPK_ABT_pileTop
+! COMPK_ABT_pileBase
+!
+! COMPA_ABT_rightSide
+! COMPA_ABT_leftSide
