@@ -115,8 +115,8 @@ cmsel,r,COMPK_ABT_base
 ksel,none
 y_i=y02-firstZT
 *do,nthPile,1,GEO_ABT_tranPiles,1
-    ksel,a,loc,y,y_i
-    y_i=y_i-deltaZT
+  ksel,a,loc,y,y_i
+  y_i=y_i-deltaZT
 *enddo
 cmsel,r,COMPK_ABT_base
 cm,COMPK_ABT_temp1,kp
@@ -138,24 +138,24 @@ lsel,none
 *get,kc,kp,,count
 knum=0
 *do,nthKP,1,kc,1
-    cmsel,s,COMPK_twPileTop
-    cmsel,u,COMPK_prev
-    knum=kpnext(knum)
-    ksel,s,kp,,knum
-    nthK_deltaXmn=abs(kx(knum)-kmnx)
-    nthK_deltaXmx=abs(kx(knum)-kmxx)
-    fuzz=1e-3
-    *if,nthK_deltaXmn,le,fuzz,then
-        kgen,2,knum,,,bot_delta_X,,-GEO_ABT_pileL
-    *elseif,nthK_deltaXmx,lt,fuzz,then
-        kgen,2,knum,,,-bot_delta_X,,-GEO_ABT_pileL
-    *else
-        kgen,2,knum,,,0,,-GEO_ABT_pileL
-    *endif
-    *get,knew,kp,,num,max
-    l,knum,knew
-    ksel,s,kp,,knew
-    cmpadd,'COMPK_ABT_pileBase'
+  cmsel,s,COMPK_twPileTop
+  cmsel,u,COMPK_prev
+  knum=kpnext(knum)
+  ksel,s,kp,,knum
+  nthK_deltaXmn=abs(kx(knum)-kmnx)
+  nthK_deltaXmx=abs(kx(knum)-kmxx)
+  fuzz=1e-3
+  *if,nthK_deltaXmn,le,fuzz,then
+    kgen,2,knum,,,bot_delta_X,,-GEO_ABT_pileL
+  *elseif,nthK_deltaXmx,lt,fuzz,then
+    kgen,2,knum,,,-bot_delta_X,,-GEO_ABT_pileL
+  *else
+    kgen,2,knum,,,0,,-GEO_ABT_pileL
+  *endif
+  *get,knew,kp,,num,max
+  l,knum,knew
+  ksel,s,kp,,knew
+  cmpadd,'COMPK_ABT_pileBase'
 *enddo
 cmpadd,'COMPL_ABT_twPiles'
 cmpadd,'COMPL_ABT_piles'
@@ -167,14 +167,14 @@ cmpadd,'COMPL_ABT_piles'
 ! Barrier lines
 lsel,none
 *if,LOAD_barrierStatus,EQ,1,THEN
-    *do,nthBarrier,1,LOAD_barrierCount,1
-        nthCS=CS_barriers(nthBarrier)
-        csys,nthCS
-        lsel,a,loc,y,0
-        csys,arg1
-    *enddo
-    cmsel,s,COMPA_ABT_appSlab
-    lsla,r
+  *do,nthBarrier,1,LOAD_barrierCount,1
+    nthCS=CS_barriers(nthBarrier)
+    csys,nthCS
+    lsel,a,loc,y,0
+    csys,arg1
+  *enddo
+  cmsel,s,COMPA_ABT_appSlab
+  lsla,r
 *endif
 cmpadd,'COMPL_Barrier'
 
