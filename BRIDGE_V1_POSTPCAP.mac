@@ -44,6 +44,7 @@ wintitle,1,'BLOCO DE COROAMENTO',_centerTitle,_rightTitle,,1,13
 go2png,1200
   cmsel,s,COMPA_colTubeWall
   cmsel,s,COMPL_HammerColumn
+  cmsel,a,COMPL_column
   esla
   esll,a
   nsle
@@ -75,6 +76,7 @@ go2png,1200
 
   cmsel,s,COMPA_colTubeWall
   cmsel,s,COMPL_HammerColumn
+  cmsel,a,COMPL_column
   esla
   esll,a
   nsle
