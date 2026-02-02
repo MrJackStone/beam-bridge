@@ -353,6 +353,7 @@ MAT_Approach_dens    = 2500
 !    [3] Pile curtain (piles as retention walls)
 !    [4] Wall-column with angled wings (pile caps + transversal wall + wings)
 !    [5] Span-facing open box
+!    [6] Block-beam with approach slab (no soil retainment)
 GEO_ABT1_type=4
 
 ! Length
@@ -456,6 +457,7 @@ GEO_ABT1_pile_data(1,6) = x , y , L , alpha , beta , id
 !    [3] Pile curtain (piles as retention walls)
 !    [4] Wall-column with angled wings (pile caps + transversal wall + wings)
 !    [5] Span-facing open box
+!    [6] Block-beam with approach slab (no soil retainment)
 GEO_ABT2_type=4
 
 ! Length
