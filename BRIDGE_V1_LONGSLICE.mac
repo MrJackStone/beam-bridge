@@ -1,13 +1,35 @@
-! BRIDGE_V1_LONGSLICE
+! BRIDGE_V1_LONGSLICE , cmName , smKind
+! BRIDGE_V1_LONGSLICE , ARG1   , ARG2
 
+
+! Parse inputs
+rebuildComponent = 0
+*get,parType,parm,ARG1,type
+*if,parType,eq,3,then
+  rebuildComponent = 1
+  cmsel,s,%ARG1%
+*endif
+
+booleanOper = 'asbw'
+cmType      = 'area'
+*get,parType,parm,ARG2,type
+*if,parType,eq,3,then
+  *if,upcase(ARG2),'LINE',then
+    booleanOper = 'lsbw'
+    cmType      = 'line'
+  *endif
+*endif
+
+! Prepare environment
 csbackup
 
+! Slice solid model
 *do,nthGirder,1,GEO_girderCount,1
   nthCS=CS_girders(nthGirder)
   csys,nthCS
   wpcsys,-1,nthCS
   wprota,,90
-  asbw,all,,delete
+  %booleanOper%,all,,delete
   csys,0
   wpcsys,-1,0
 *enddo
@@ -17,7 +39,7 @@ csbackup
   csys,nthCS
   wpcsys,-1,nthCS
   wprota,,90
-  asbw,all,,delete
+  %booleanOper%,all,,delete
   csys,0
   wpcsys,-1,0
 *enddo
@@ -28,7 +50,7 @@ csbackup
     csys,nthCS
     wpcsys,-1,nthCS
     wprota,,90
-    asbw,all,,delete
+    %booleanOper%,all,,delete
     csys,0
     wpcsys,-1,0
   *enddo
@@ -38,7 +60,7 @@ csbackup
   csys,CS_leftFootpath
   wpcsys,-1
   wprota,,90
-  asbw,all,,delete
+  %booleanOper%,all,,delete
   csys,0
   wpcsys,-1,0
 *endif
@@ -47,9 +69,15 @@ csbackup
   csys,CS_rightFootpath
   wpcsys,-1
   wprota,,90
-  asbw,all,,delete
+  %booleanOper%,all,,delete
   csys,0
   wpcsys,-1,0
 *endif
 
+! Exported selection components
+*if,rebuildComponent,eq,1,then
+  cm,%ARG1%,%cmType%
+*endif
+
+! Clean up
 csrestore
