@@ -719,10 +719,10 @@ LOAD_TSCHEBOTARIOFF_data(1,2) = 2 , 0 , 2 ,  30e3 , 1, 0
 
 !! 1.7.3  Live loads (static)                                                                     !!
 ! Live load: uniform vehicle traffic
-LOAD_vehicleTraffic_k = 5
+LOAD_vehicleTraffic_k = 5e3
 
 ! Live load: uniform pedestrian traffic
-LOAD_pedestrianTraffic_k = 3
+LOAD_pedestrianTraffic_k = 3e3
 
 ! Height of the barriers (used to calculate lateral wind force)
 GEO_barrierHeight = 0.9
@@ -733,7 +733,7 @@ LOAD_deckWind_k = 2e3 !570*2.1*0.68
 LOAD_columnWind_k = 0 !2e3
 
 ! Height of the water level (measured up from the base of the column)
-GEO_waterHeight = 0
+GEO_waterHeight = 0  ! TODO  a better way to define water level is needed, some kind of universal elevation scale that does not depend upon the dimensions of the structure
 ! Water flow pressure [N/m²]
 LOAD_waterFlow_k = 0
 
