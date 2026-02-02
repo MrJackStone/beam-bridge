@@ -12,6 +12,7 @@ nthFrameZTop=zFrameTop+GEO_frameTopOffset(arg1)
 nthFrameZBot=zFrameBot+GEO_frameBotOffset(arg1)
 
 ! Create array with keypoint numbers
+*get,FGKcount,parm,GEO_frameGirderY_%arg1%,dim,x
 *get,KMaxD,KP,,NUM,MAXD
 *del,FGKPs
 *dim,FGKPs,ARRAY,FGKcount
@@ -22,7 +23,7 @@ LSEL,U,LINE,,ALL
 KSEL,U,KP,,ALL
 *do,nthKP,1,FGKcount,1
     KNum=FGKPs(nthKP)
-    yVal=GEO_frameGirderY(nthKP)
+    yVal=GEO_frameGirderY_%ARG1%(nthKP)
 
     K,KNum,0,yVal,nthFrameZTop
     *if,nthKP,NE,1,THEN
