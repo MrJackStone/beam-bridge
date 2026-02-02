@@ -1,0 +1,174 @@
+! temp2 , nthSupport ,      ,      , girder_y , supIndex
+! temp2 , arg1       , ARG2 , ARG3 , ARG4     , ARG5
+
+! Parameters:
+! - wall thk
+! - girder length
+! - gider width
+! - gider depth
+! - number of columns
+! - column 'length' (along X)
+! - column 'width' (along Y)
+! - total height
+! - approach slab length
+! - approach slab width
+! - approach slab gap
+! - number of pile rows (along X)
+! - number of pile columns (along Y)
+! - angle of piles on outer columns
+! - pile length
+! - pile diameter
+! - unbraced pile segments
+
+! Parse inputs
+_abutmentCS = ARG1
+
+*get,girderCount,parm,%ARG4%,dim,x
+
+! Calculate geometric parameters
+GEO_ABT_wallHeight    = girderHeight+postHeight+(frameGirderDepth/2)
+GEO_ABT_wallOffset    = (frameGirderWidth-wallThk)/2
+GEO_ABT_frameGirderZ  = -(girderHeight+postHeight+(frameGirderDepth/2))
+GEO_ABT_postTopZ      = GEO_ABT_frameGirderZ+(frameGirderDepth/2)+postHeight
+GEO_ABT_columnBottomZ = GEO_ABT_frameGirderZ-GEO_ABT_height
+
+! Draw approach slab
+asel,none
+csys,_abutmentCS
+wpcsys,-1
+wpoffs,,-GEO_ABT_appSlabW/2
+blc4,0,0,GEO_ABT_appSlabL,GEO_ABT_appSlabW
+cm,cma_approachSlab,area
+
+! Draw wall
+asel,none
+csys,_abutmentCS
+wpcsys,-1
+wpoffs,GEO_ABT_wallOffset
+wprota,,,-90
+wpoffs,,-GEO_ABT_width/2
+blc4,0,0,GEO_ABT_wallHeight,GEO_ABT_width
+cm,cma_cantileverWall,area
+
+! Draw girder
+lsel,none
+csys,_abutmentCS
+nextkp,'frame_girder_kps',2
+k , frame_girder_kps(1) , 0 , -GEO_ABT_width , 0
+k , frame_girder_kps(2) , 0 , GEO_ABT_width  , 0
+l,frame_girder_kps(1),frame_girder_kps(2)
+cm,cml_frameGirder,line
+
+! Draw posts
+csys,_abutmentCS
+*do,nthPost,1,girderCount,1
+  yGirderGlobal = %ARG4%(nthGirder)
+  glo2loc,0,yGirderGlobal,0,_abutmentCS,,'yGirderLocal'
+  nextkp,'post_kps',2
+  lsel,none
+  k,post_kps(1),0,yGirderLocal,GEO_ABT_frameGirderZ
+  k,post_kps(2),0,yGirderLocal,GEO_ABT_postTopZ
+  l,post_kps(1),post_kps(2)
+  cm,cml_post%nthPost%,line
+  cmpadd,'cml_posts'
+*enddo
+
+! Draw columns  TODO  currently hard-coded to always work with 2 columns
+csys,_abutmentCS
+*do,nthColumn,1,GEO_ABT_colCount,1
+  yColumn = GEO_columnY_%ARG5%(nthCol)
+  nextkp,'column_kps',2
+  lsel,none
+  k,column_kps(1),0,yColumn,GEO_ABT_frameGirderZ
+  k,column_kps(2),0,yColumn,GEO_ABT_columnBottomZ
+  l,column_kps(1),column_kps(2)
+  cm,cml_column%nthColumn%,line
+  cmpadd,'cml_columns'
+*enddo
+
+! Connect frame girder, columns & posts
+lsel,none
+cmsel,a,cml_posts
+cmsel,a,cml_columns
+cm,cml_vertical,line
+cmsel,a,cml_frameGirder
+lsbl,cml_frameGirder,cml_vertical,,delete,keep
+cmsel,u,cml_vertical
+cm,cml_frameGirder,line
+
+! Slice approach slab, frame girder & wall at superstructure positions
+BRIDGE_V1_LONGSLICE , 'cma_cantileverWall'
+BRIDGE_V1_LONGSLICE , 'cma_approachSlab'
+BRIDGE_V1_LONGSLICE , 'cml_frameGirder'    , 'line'
+
+! Slice cantilever wall & frame girder at additional approach slab vertices: left & right edges
+csys,_abutmentCS
+wpcsys,-1
+wpoffs,,-GEO_ABT_appSlabW/2
+wprota,,90
+cmwslice,'cma_cantileverWall'
+cmwslice,'cml_frameGirder'
+wpcsys,-1
+wpoffs,,GEO_ABT_appSlabW/2
+wprota,,90
+cmwslice,'cma_cantileverWall'
+cmwslice,'cml_frameGirder'
+
+! Slice cantilever wall & approach slab at posts & columns  TODO  hard-coded for 2 columns
+csys,_abutmentCS
+wpcsys,-1
+wpoffs,,GEO_columnY_%ARG5%(1)
+wprota,,90
+cmwslice,'cma_cantileverWall'
+cmwslice,'cma_approachSlab'
+wpcsys,-1
+wpoffs,,GEO_columnY_%ARG5%(2)
+wprota,,90
+cmwslice,'cma_cantileverWall'
+cmwslice,'cma_approachSlab'
+
+cmsel,s,cml_posts
+ksll,s
+ksel,r,loc,z,GEO_ABT_frameGirderZ
+cm,cmk_posts,kp
+kpNum = 0
+*get,kc,kp,,count
+
+*do,nthPost,1,kc,1
+  cmsel,s,cmk_posts
+  kpNum = kpnext(kpNum)
+  csys,_abutmentCS
+  wpcsys,-1
+  kwpave,kpNum
+  wprota,,90
+  cmwslice,'cma_cantileverWall'
+  cmwslice,'cma_approachSlab'
+*enddo
+
+! Slice columns at water level  TODO  this doesn't quite work because 'zFrameBot' is only ever
+!                                     properly defined for non-abutment mesostructure -- water level
+!                                     approach needs to be redefined
+GEO_ABT_waterHeightZ = zFrameBot+GEO_waterHeight
+*if,GEO_ABT_waterHeightZ,gt,GEO_ABT_columnBottomZ,then
+  csys,_abutmentCS
+  wpcsys,-1
+  wpoffs,,,GEO_ABT_waterHeightZ
+  cmwslice,'cml_columns'
+*endif
+
+! Draw pile cap
+! Draw piles
+! Match mesh: girder & wall bottom
+! Match mesh: wall top & approach slab
+! Connect: posts & girder through elastomer
+! Connect: approach slab & wall top
+! Connect: wall bottom & girder
+
+'COMPK_FRAME_%abtnum%'
+'COMPL_FRAME_%abtnum%'
+
+cmpadd,'COMPK_FrameGirder'
+cmpadd,'COMPL_FrameGirder'
+cmpadd,'COMPK_FrameBottom'
+cmpadd,'COMPL_Column'
+cmpadd,'COMPK_Column'
