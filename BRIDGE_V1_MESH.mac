@@ -608,8 +608,8 @@ CM,COMPE_Lanes,ELEM
   CM,COMPE_GradeBeam,ELEM
   CM,COMPN_GradeBeam,NODE
 *endif
-!
-!
+
+
 !! 4.6.2 PILE CAPS                                                                                !!
 !!                                                                                                !!
 ! Pile cap mesh
@@ -617,7 +617,6 @@ CM,COMPE_Lanes,ELEM
   esel,none
   nsel,none
   cmsel,s,COMPA_PileCap
-  !cmsel,a,COMPA_CenterPiles
   AATT,MAT_PileCap,,TYPE_SHELL181,CS_global,SEC_PILECAP_num
   AESIZE,ALL,FEM_PierESize
   *get,ac,area,,count
@@ -635,8 +634,8 @@ CM,COMPE_Lanes,ELEM
   CM,COMPE_PileCap,ELEM
   CM,COMPN_PileCap,NODE
 *endif
-!
-!
+
+
 !! 4.6.3 PILES                                                                                    !!
 !!                                                                                                !!
 ! Pile mesh

@@ -1,6 +1,7 @@
 ! BRIDGE_V1_SMPCAP, nthSupport
 ! BRIDGE_V1_SMPCAP, arg1
 
+
 xCenter = GEO_supportX(arg1)
 *if,GEO_deckRadius,eq,0,then
   ! Straight deck:
