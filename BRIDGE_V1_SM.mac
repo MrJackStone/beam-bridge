@@ -91,7 +91,6 @@ cm   , COMPA_hammerPierCap      , area
 ! Create pile cap and grade beam
 ksel,none
 lsel,none
-CM,COMPK_GradeBeam,KP
 CM,COMPL_GradeBeam,LINE
 asel,none
 CM,COMPA_LeftPileCaps,AREA

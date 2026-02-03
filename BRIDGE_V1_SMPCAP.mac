@@ -137,7 +137,6 @@ csys  , 0
   ksel,a,kp,,KRight
   lsel,none
   L,KLeft,KRight
-  cmpadd,'COMPK_GradeBeam'
   cmpadd,'COMPL_GradeBeam'
 
   cmsel,s,COMPA_PileCap
