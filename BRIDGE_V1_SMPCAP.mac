@@ -1,5 +1,38 @@
-! BRIDGE_V1_SMPCAP, nthSupport
-! BRIDGE_V1_SMPCAP, arg1
+! BRIDGE_V1_SMPCAP , nthSupport
+! BRIDGE_V1_SMPCAP , ARG1
+
+
+! Dependencies:
+!   GEO_capLength
+!   GEO_capOpt
+!   GEO_capWidth
+!   XSliceCount
+!   YSliceCount
+!   GEO_columnWidth
+!
+!   GEO_xCapSlice
+!   GEO_yCapSlice
+
+!   GEO_deckLength
+!   GEO_deckOff_beg
+!   GEO_deckOff_end
+!   GEO_deckRadius
+!   GEO_deckWidth_beg
+!   GEO_chordOff
+!
+!   GEO_columnY_<i>
+!   GEO_frameBotOffset
+!   GEO_frameTopOffset
+!   GEO_supportChi
+!   GEO_supportX
+
+! Exported:
+!   CS_INFRA_C<i>
+!   CS_INFRA_L<i>
+!   CS_INFRA_R<i>
+!
+!   COMPL_GradeBeam
+!   COMPA_PileCap
 
 
 xCenter = GEO_supportX(arg1)
