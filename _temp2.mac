@@ -23,6 +23,10 @@
 ! Parse inputs
 _abutmentCS = ARG1
 
+GEO_ABT_appSlabL = %ARG2%(6)
+GEO_ABT_appSlabW = %ARG2%('?')
+GEO_ABT_width    = %ARG2%(28)
+
 *get,girderCount,parm,%ARG4%,dim,x
 
 ! Calculate geometric parameters
@@ -75,7 +79,7 @@ csys,_abutmentCS
 
 ! Draw columns  TODO  currently hard-coded to always work with 2 columns
 csys,_abutmentCS
-*do,nthColumn,1,GEO_ABT_colCount,1
+*do,nthColumn,1,2,1
   yColumn = GEO_columnY_%ARG5%(nthCol)
   nextkp,'column_kps',2
   lsel,none
