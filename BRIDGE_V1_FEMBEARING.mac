@@ -7,6 +7,16 @@ _bearingType = ARG1
 _girderNode  = ARG2
 _mesoNode    = ARG3
 
+bearingStatus = valchr(_bearingType)
+*if,bearingStatus,eq,0,then
+  *msg,warn
+BRIDGE_V1_FEMBEARING warning: inactive girder bearing between nodes I% and I%.%/&
+This girder will not be connected to this support.%/&
+Check input to make sure this is the intended behavior.%/&
+BRIDGE_V1_FEMBEARING macro ignored.
+  *return,-1
+*endif
+
 ! Set constants
 bitCount = 6
 
