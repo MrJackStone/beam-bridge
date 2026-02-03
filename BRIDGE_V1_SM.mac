@@ -96,7 +96,6 @@ CM,COMPL_GradeBeam,LINE
 asel,none
 CM,COMPA_LeftPileCaps,AREA
 CM,COMPA_RightPileCaps,AREA
-cm,COMPA_centerPileCaps,area
 CM,COMPA_PileCap,AREA
 
 *do,nthSupport,1,GEO_supportCount,1
