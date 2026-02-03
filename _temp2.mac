@@ -23,18 +23,25 @@
 ! Parse inputs
 _abutmentCS = ARG1
 
-GEO_ABT_appSlabL = %ARG2%(6)
-GEO_ABT_appSlabW = %ARG2%('?')
-GEO_ABT_width    = %ARG2%(28)
+GEO_ABT_columnHeight = %ARG2%(7)
+GEO_ABT_girderLength = %ARG2%(28)
+GEO_ABT_girderB      = %ARG2%('?')
+GEO_ABT_girderH      = %ARG2%('?')
+GEO_ABT_cantWallThk  = %ARG2%('?')
+GEO_ABT_appSlabL     = %ARG2%(6)
+GEO_ABT_appSlabW     = %ARG2%('?')
+GEO_ABT_postHeight   = %ARG2%(32)
+
+girderHeight         = GIRDER_d(1)  ! TODO  hard-coded, improve
 
 *get,girderCount,parm,%ARG4%,dim,x
 
 ! Calculate geometric parameters
-GEO_ABT_wallHeight    = girderHeight+postHeight+(frameGirderDepth/2)
-GEO_ABT_wallOffset    = (frameGirderWidth-wallThk)/2
-GEO_ABT_frameGirderZ  = -(girderHeight+postHeight+(frameGirderDepth/2))
-GEO_ABT_postTopZ      = GEO_ABT_frameGirderZ+(frameGirderDepth/2)+postHeight
-GEO_ABT_columnBottomZ = GEO_ABT_frameGirderZ-GEO_ABT_height
+GEO_ABT_wallHeight    = girderHeight+GEO_ABT_postHeight+(GEO_ABT_girderH/2)
+GEO_ABT_wallOffset    = (GEO_ABT_girderB-GEO_ABT_cantWallThk)/2
+GEO_ABT_frameGirderZ  = -(girderHeight+GEO_ABT_postHeight+(GEO_ABT_girderH/2))
+GEO_ABT_postTopZ      = GEO_ABT_frameGirderZ+(GEO_ABT_girderH/2)+GEO_ABT_postHeight
+GEO_ABT_columnBottomZ = GEO_ABT_frameGirderZ-GEO_ABT_columnHeight
 
 ! Draw approach slab
 asel,none
@@ -50,16 +57,16 @@ csys,_abutmentCS
 wpcsys,-1
 wpoffs,GEO_ABT_wallOffset
 wprota,,,-90
-wpoffs,,-GEO_ABT_width/2
-blc4,0,0,GEO_ABT_wallHeight,GEO_ABT_width
+wpoffs,,-GEO_ABT_girderLength/2
+blc4,0,0,GEO_ABT_wallHeight,GEO_ABT_girderLength
 cm,cma_cantileverWall,area
 
-! Draw girder
+! Draw frame girder
 lsel,none
 csys,_abutmentCS
 nextkp,'frame_girder_kps',2
-k , frame_girder_kps(1) , 0 , -GEO_ABT_width , 0
-k , frame_girder_kps(2) , 0 , GEO_ABT_width  , 0
+k , frame_girder_kps(1) , 0 , -GEO_ABT_girderLength , 0
+k , frame_girder_kps(2) , 0 , GEO_ABT_girderLength  , 0
 l,frame_girder_kps(1),frame_girder_kps(2)
 cm,cml_frameGirder,line
 
