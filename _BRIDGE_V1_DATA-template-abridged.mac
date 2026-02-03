@@ -402,6 +402,12 @@ GEO_ABT1_thinTranWallDepth = 2
   GEO_ABT1_capLy  = 4.0
   GEO_ABT1_capThk = 1.4
 
+  ! Piles
+  GEO_ABT1_pileCount  = 4
+  GEO_ABT1_pileConfig = 'A'
+  GEO_ABT1_pilePitchX = 1.25
+  GEO_ABT1_pilePitchY = 1.25
+
 
 !! 1.3.3  Second abutment                                                                         !!
 ! Type:
@@ -510,6 +516,12 @@ GEO_ABT2_thinTranWallDepth = 2
   GEO_ABT2_capLx  = 4.0
   GEO_ABT2_capLy  = 4.0
   GEO_ABT2_capThk = 1.4
+
+  ! Piles
+  GEO_ABT2_pileCount  = 4
+  GEO_ABT2_pileConfig = 'A'
+  GEO_ABT2_pilePitchX = 1.25
+  GEO_ABT2_pilePitchY = 1.25
 
 
 !!                                                                                                !!
