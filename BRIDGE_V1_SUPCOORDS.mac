@@ -1,0 +1,41 @@
+! BRIDGE_V1_SUPCOORDS , supIdx , xLeft , xRight , xCenter , yLeft , yRight , yCenter , zTop , zBot , zAngle
+! BRIDGE_V1_SUPCOORDS , ARG1   , ARG2  , ARG3   , ARG4    , ARG5  , ARG6   , ARG7    , ARG8 , ARG9 , AR10
+
+/eof
+! Note: kinda gave up on this idea, this macro was never used...
+
+xCenter = GEO_supportX(ARG1)
+
+*if,GEO_deckRadius,eq,0,then
+  ! Straight deck:
+  xLeft   = xCenter
+  xRight  = xCenter
+
+  yCenter = GEO_deckOff_beg+(GEO_deckOff_end-GEO_deckOff_beg)*(xCenter/GEO_deckLength)+(GEO_deckWidth_beg/2)
+  yLeft   = yCenter+GEO_columnY_%ARG1%(1)
+  yRight  = yCenter+GEO_columnY_%ARG1%(2)
+
+  zAngle  = 0
+
+*else
+  ! Curved deck:
+  afunbackup,'DEG'
+
+  chi_i   = GEO_supportChi(ARG1)
+
+  xLeft   = (GEO_deckLength/2)-(GEO_deckRadius+GEO_columnY_%ARG1%(1))*cos(chi_i)
+  xRight  = (GEO_deckLength/2)-(GEO_deckRadius+GEO_columnY_%ARG1%(2))*cos(chi_i)
+
+  yCenter = GEO_deckRadius*sin(chi_i)-GEO_chordOff
+  yLeft   = (GEO_deckRadius+GEO_columnY_%ARG1%(1))*sin(chi_i)-GEO_chordOff
+  yRight  = (GEO_deckRadius+GEO_columnY_%ARG1%(2))*sin(chi_i)-GEO_chordOff
+
+  zAngle  = 90-chi_i
+
+  afunrestore
+
+*endif
+
+! Top and bottom Z coordinates of the frame
+nthFrameZTop = zFrameTop+GEO_frameTopOffset(ARG1)
+nthFrameZBot = zFrameBot+GEO_frameBotOffset(ARG1)
