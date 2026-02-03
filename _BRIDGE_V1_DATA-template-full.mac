@@ -286,43 +286,43 @@ MAT_FrameGirder_dens    = 2500
 !    [1] ON (both ends)
 !    [2] Beginning only
 !    [3] End only
-GEO_ABT_status=1
+GEO_ABT_status = 1
 
 ! Beam depth (zero to deactivate)
-GEO_ABT_beamH=0.8
+GEO_ABT_beamH = 0.8
 
 ! Column width (zero to deactivate)
-GEO_ABT_colW=0
+GEO_ABT_colW = 0
 
 ! Wing height at end
-GEO_ABT_wingHe=0
+GEO_ABT_wingHe = 0
 
 ! Pile center offset from pile cap faces
-GEO_ABT_pileOff=0.4
+GEO_ABT_pileOff = 0.4
 
 ! Pile overlap (for GEO_ABT_type=3 only)
-GEO_ABT_pileOvlap=0
+GEO_ABT_pileOvlap = 0
 
 ! Longitudinal wall thickness
-SEC_ABT_longWall_t=0.6
+SEC_ABT_longWall_t = 0.6
 
 ! Transversal wall thickness
-SEC_ABT_tranWall_t=1.3
+SEC_ABT_tranWall_t = 1.3
 
 ! Thickness of thin segment of transversal wall
-SEC_ABT_thinTranWall_t=0.4
+SEC_ABT_thinTranWall_t = 0.4
 
 ! Column width
-SEC_ABT_col_W=0.4
+SEC_ABT_col_W = 0.4
 
 ! Beam width
-SEC_ABT_beam_W=0.4
+SEC_ABT_beam_W = 0.4
 
 ! Wing thickness
-SEC_ABT_wing_t=0.6
+SEC_ABT_wing_t = 0.6
 
 ! Approach slab thickness
-SEC_ABT_appSlab_t=0.4
+SEC_ABT_appSlab_t = 0.4
 
 ! Piles
 ! (set THK > 0 for composite steel-concrete pile section)
@@ -330,9 +330,9 @@ SEC_ABT_pile_d   = 0.4
 SEC_ABT_pile_thk = 0
 
 ! Pile cap height
-SEC_ABT_pileCap_h=1.5
+SEC_ABT_pileCap_h = 1.5
 
-! For abutment type 5
+! For abutment type 5 & 6
 GEO_ABT_postCx = 1
 GEO_ABT_postCy = 1
 
@@ -353,101 +353,106 @@ MAT_Approach_dens    = 2500
 !    [3] Pile curtain (piles as retention walls)
 !    [4] Wall-column with angled wings (pile caps + transversal wall + wings)
 !    [5] Span-facing open box
-!    [6] Block-beam with approach slab (no soil retainment)
-GEO_ABT1_type=4
+!    [6] Frame girder with approach slab (no soil retainment)
+GEO_ABT1_type = 4
 
-! Length
-GEO_ABT1_length=1.3
+! Overall dimensions
+GEO_ABT1_length = 1.3
+GEO_ABT1_height = 4.3
+GEO_ABT1_width  = 4.2
 
-! Height
-GEO_ABT1_height=4.3
+! Girder posts (currently works for ABT types 5 & 6 only)
+GEO_ABT1_postHeight = 0
+GEO_ABT1_postOffset = 0
 
-! Width
-GEO_ABT1_width=4.2
-
-! Height increment at the end of the abutment (wall/wing interface)
-GEO_ABT1_topOffset=0
-
-! Depth of thin segment of transversal wall
-GEO_ABT1_thinTranWallDepth=2
-
-! Wing status
-!    [0] OFF
-!    [1] ON
-GEO_ABT1_wings=0
-
-! Wing length
-GEO_ABT1_wingL=7
-
-! Wing height at abutment
-GEO_ABT1_wingHa=2
+! Wings:
+!   [0] OFF
+!   [1] ON
+GEO_ABT1_wings  = 0
+GEO_ABT1_wingL  = 7
+GEO_ABT1_wingHa = 2
 
 ! Tie beam option:
 !   [0] Beam below wings
 !   [1] Half-wall above pile cap
 GEO_ABT1_beamOpt = 0
 
-! Approach slab status:
-!    [0] OFF
-!    [1] ON
-GEO_ABT1_appSlab=1
+! Approach slab:
+!   [0] OFF
+!   [1] ON
+GEO_ABT1_appSlab  = 1
+GEO_ABT1_appSlabL = 4
+GEO_ABT1_appSlabW = 4  ! (ABT type 6 only)
 
-! Approach slab length
-GEO_ABT1_appSlabL=4
+! Pile cap
+GEO_ABT1_pileCapW  = 3
+GEO_ABT1_pileCapL  = 6
 
-! Pile cap width
-GEO_ABT1_pileCapW=3
-
-! Pile cap length
-GEO_ABT1_pileCapL=6
-
-! Number of piles along longitudinal walls
-GEO_ABT1_longPiles=2
-
-! Number of piles in transversal wall
-GEO_ABT1_tranPiles=4
-
-! Angle of piles closest to the span side
-GEO_ABT1_pileAngle=0
-
-! Pile length
-GEO_ABT1_pileL=10
-
-! Length of short piles
-GEO_ABT1_pileShort=4
-
-! Curtain depth along longitudinal walls (for GEO_ABT1_type=3 only)
-GEO_ABT1_curtainL=3
-
-! Unrestrained pile length
-GEO_ABT1_pileFree=0
+! Piles
+GEO_ABT1_longPiles = 2
+GEO_ABT1_tranPiles = 4
+GEO_ABT1_pileAngle = 0
+GEO_ABT1_pileL     = 10
+GEO_ABT1_pileShort = 4
+GEO_ABT1_pileFree  = 0
 
 ! Suppress longitudinal walls:
 !    [0] OFF (include longitudinal walls)
 !    [1] ON (suppress longitudinal walls)
 GEO_ABT1_suppressLW=1
 
+! Height increment at the end of the abutment (wall/wing interface)
+GEO_ABT1_topOffset = 0
+
+! Depth of thin segment of transversal wall
+GEO_ABT1_thinTranWallDepth = 2
+
+! Options for abutment type 3:
+  ! Curtain depth along longitudinal walls
+  GEO_ABT1_curtainL=3
+
 ! Options for abutment type 4:
-GEO_ABT1_wingAngle     = 50
-GEO_ABT1_trvPileCols   = 2
-GEO_ABT1_wingPileCols  = 2
-GEO_ABT1_wingCapLength = 7
-GEO_ABT1_wingCapWidth  = 2
+  GEO_ABT1_wingAngle     = 50
+  GEO_ABT1_trvPileCols   = 2
+  GEO_ABT1_wingPileCols  = 2
+  GEO_ABT1_wingCapLength = 7
+  GEO_ABT1_wingCapWidth  = 2
 
 ! Options for abutment type 5:
-GEO_ABT1_pileCapOffset = 0
-GEO_ABT1_postHeight    = 0
-GEO_ABT1_postOffset    = 0
+  GEO_ABT1_pileCapOffset = 0
 
-GEO_ABT1_pileCount = 6
-*del,GEO_ABT1_pile_data,,nopr
-*dim,GEO_ABT1_pile_data,,6,GEO_ABT1_pileCount
-GEO_ABT1_pile_data(1,1) = x , y , L , alpha , beta , id
-GEO_ABT1_pile_data(1,2) = x , y , L , alpha , beta , id
-GEO_ABT1_pile_data(1,3) = x , y , L , alpha , beta , id
-GEO_ABT1_pile_data(1,4) = x , y , L , alpha , beta , id
-GEO_ABT1_pile_data(1,5) = x , y , L , alpha , beta , id
-GEO_ABT1_pile_data(1,6) = x , y , L , alpha , beta , id
+  GEO_ABT1_pileCount = 6
+  *del,GEO_ABT1_pile_data,,nopr
+  *dim,GEO_ABT1_pile_data,,6,GEO_ABT1_pileCount
+  GEO_ABT1_pile_data(1,1) = x , y , L , alpha , beta , id
+  GEO_ABT1_pile_data(1,2) = x , y , L , alpha , beta , id
+  GEO_ABT1_pile_data(1,3) = x , y , L , alpha , beta , id
+  GEO_ABT1_pile_data(1,4) = x , y , L , alpha , beta , id
+  GEO_ABT1_pile_data(1,5) = x , y , L , alpha , beta , id
+  GEO_ABT1_pile_data(1,6) = x , y , L , alpha , beta , id
+
+! Options for abutment type 6:
+  ! Column
+  GEO_ABT1_columnHeight  = 5
+  GEO_ABT1_columnSpacing = 3
+  GEO_ABT1_columnCx      = 1.0
+  GEO_ABT1_columnCy      = 1.0
+
+  ! Frame girder
+  GEO_ABT1_girderLength = 5
+  GEO_ABT1_girderB      = 1.2
+  GEO_ABT1_girderH      = 1.0
+
+  ! Cantilever wall
+  GEO_ABT1_cantWallThk = 0.40
+
+  ! Pile cap
+  !   [0] Individual caps + grade beam
+  !   [1] Single cap
+  GEO_ABT1_capOpt = 0
+  GEO_ABT1_capLx  = 4.0
+  GEO_ABT1_capLy  = 4.0
+  GEO_ABT1_capThk = 1.4
 
 
 !! 1.3.3  Second abutment                                                                         !!
@@ -457,102 +462,106 @@ GEO_ABT1_pile_data(1,6) = x , y , L , alpha , beta , id
 !    [3] Pile curtain (piles as retention walls)
 !    [4] Wall-column with angled wings (pile caps + transversal wall + wings)
 !    [5] Span-facing open box
-!    [6] Block-beam with approach slab (no soil retainment)
-GEO_ABT2_type=4
+!    [6] Frame girder with approach slab (no soil retainment)
+GEO_ABT2_type = 4
 
-! Length
-GEO_ABT2_length=1.3
+! Overall dimensions
+GEO_ABT2_length = 1.3
+GEO_ABT2_height = 4.3
+GEO_ABT2_width  = 4.2
 
-! Height
-GEO_ABT2_height=4.3
+! Girder posts (currently works for ABT types 5 & 6 only)
+GEO_ABT2_postHeight = 0
+GEO_ABT2_postOffset = 0
 
-! Width
-GEO_ABT2_width=4.2
-
-! Height increment at the end of the abutment (wall/wing interface)
-GEO_ABT2_topOffset=0
-
-! Depth of thin segment of transversal wall
-GEO_ABT2_thinTranWallDepth=2
-
-! Wing status
-!    [0] OFF
-!    [1] ON
-GEO_ABT2_wings=0
-
-! Wing length
-GEO_ABT2_wingL=7
-
-! Wing height at abutment
-GEO_ABT2_wingHa=2
+! Wings:
+!   [0] OFF
+!   [1] ON
+GEO_ABT2_wings  = 0
+GEO_ABT2_wingL  = 7
+GEO_ABT2_wingHa = 2
 
 ! Tie beam option:
 !   [0] Beam below wings
 !   [1] Half-wall above pile cap
 GEO_ABT2_beamOpt = 0
 
-! Approach slab status:
-!    [0] OFF
-!    [1] ON
-GEO_ABT2_appSlab=1
+! Approach slab:
+!   [0] OFF
+!   [1] ON
+GEO_ABT2_appSlab  = 1
+GEO_ABT2_appSlabL = 4
+GEO_ABT2_appSlabW = 4  ! (ABT type 6 only)
 
-! Approach slab length
-GEO_ABT2_appSlabL=4
+! Pile cap
+GEO_ABT2_pileCapW  = 3
+GEO_ABT2_pileCapL  = 6
 
-! Pile cap width
-GEO_ABT2_pileCapW=3
-
-! Pile cap length
-GEO_ABT2_pileCapL=6
-
-! Number of piles along longitudinal walls
-GEO_ABT2_longPiles=2
-
-! Number of piles in transversal wall
-GEO_ABT2_tranPiles=4
-
-! Angle of piles closest to the span side
-GEO_ABT2_pileAngle=0
-
-! Pile length
-GEO_ABT2_pileL=10
-
-! Length of short piles
-GEO_ABT2_pileShort=4
-
-! Curtain depth along longitudinal walls (for GEO_ABT2_type=3 only)
-GEO_ABT2_curtainL=3
-
-! Unrestrained pile length
-GEO_ABT2_pileFree=0
+! Piles
+GEO_ABT2_longPiles = 2
+GEO_ABT2_tranPiles = 4
+GEO_ABT2_pileAngle = 0
+GEO_ABT2_pileL     = 10
+GEO_ABT2_pileShort = 4
+GEO_ABT2_pileFree  = 0
 
 ! Suppress longitudinal walls:
 !    [0] OFF (include longitudinal walls)
 !    [1] ON (suppress longitudinal walls)
 GEO_ABT2_suppressLW=1
 
+! Height increment at the end of the abutment (wall/wing interface)
+GEO_ABT2_topOffset = 0
+
+! Depth of thin segment of transversal wall
+GEO_ABT2_thinTranWallDepth = 2
+
+! Options for abutment type 3:
+  ! Curtain depth along longitudinal walls
+  GEO_ABT2_curtainL=3
+
 ! Options for abutment type 4:
-GEO_ABT2_wingAngle     = 50
-GEO_ABT2_trvPileCols   = 2
-GEO_ABT2_wingPileCols  = 2
-GEO_ABT2_wingCapLength = 7
-GEO_ABT2_wingCapWidth  = 2
+  GEO_ABT2_wingAngle     = 50
+  GEO_ABT2_trvPileCols   = 2
+  GEO_ABT2_wingPileCols  = 2
+  GEO_ABT2_wingCapLength = 7
+  GEO_ABT2_wingCapWidth  = 2
 
 ! Options for abutment type 5:
-GEO_ABT2_pileCapOffset = 0
-GEO_ABT2_postHeight    = 0
-GEO_ABT2_postOffset    = 0
+  GEO_ABT2_pileCapOffset = 0
 
-GEO_ABT2_pileCount = 6
-*del,GEO_ABT2_pile_data,,nopr
-*dim,GEO_ABT2_pile_data,,6,GEO_ABT2_pileCount
-GEO_ABT2_pile_data(1,1) = x , y , L , alpha , beta , id
-GEO_ABT2_pile_data(1,2) = x , y , L , alpha , beta , id
-GEO_ABT2_pile_data(1,3) = x , y , L , alpha , beta , id
-GEO_ABT2_pile_data(1,4) = x , y , L , alpha , beta , id
-GEO_ABT2_pile_data(1,5) = x , y , L , alpha , beta , id
-GEO_ABT2_pile_data(1,6) = x , y , L , alpha , beta , id
+  GEO_ABT2_pileCount = 6
+  *del,GEO_ABT2_pile_data,,nopr
+  *dim,GEO_ABT2_pile_data,,6,GEO_ABT2_pileCount
+  GEO_ABT2_pile_data(1,1) = x , y , L , alpha , beta , id
+  GEO_ABT2_pile_data(1,2) = x , y , L , alpha , beta , id
+  GEO_ABT2_pile_data(1,3) = x , y , L , alpha , beta , id
+  GEO_ABT2_pile_data(1,4) = x , y , L , alpha , beta , id
+  GEO_ABT2_pile_data(1,5) = x , y , L , alpha , beta , id
+  GEO_ABT2_pile_data(1,6) = x , y , L , alpha , beta , id
 
+! Options for abutment type 6:
+  ! Column
+  GEO_ABT2_columnHeight  = 5
+  GEO_ABT2_columnSpacing = 3
+  GEO_ABT2_columnCx      = 1.0
+  GEO_ABT2_columnCy      = 1.0
+
+  ! Frame girder
+  GEO_ABT2_girderLength = 5
+  GEO_ABT2_girderB      = 1.2
+  GEO_ABT2_girderH      = 1.0
+
+  ! Cantilever wall
+  GEO_ABT2_cantWallThk = 0.40
+
+  ! Pile cap
+  !   [0] Individual caps + grade beam
+  !   [1] Single cap
+  GEO_ABT2_capOpt = 0
+  GEO_ABT2_capLx  = 4.0
+  GEO_ABT2_capLy  = 4.0
+  GEO_ABT2_capThk = 1.4
 
 
 !!                                                                                                !!
