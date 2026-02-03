@@ -176,7 +176,6 @@ csys  , 0
 
   *endif
 
-  cmsel,a,COMPA_PileCap
-  cm,COMPA_PileCap,area
+  cmpadd,'COMPA_PileCap'
 
 *endif
