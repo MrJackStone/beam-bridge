@@ -980,7 +980,6 @@ arruniq,'xCoords','GEO_xTubeSlice',1
 
 arrjoin,'yCoords','GEO_pileYL','zero','ycols'
 arruniq,'yCoords','GEO_yTubeSlice',1
-*get,YTubeSliceCount,PARM,GEO_yCapSlice,DIM,X
 
 ! Calculate positions in which to slice the pile cap along the YZ plane
 *if,GEO_frameOpt,eq,1,then
@@ -994,7 +993,6 @@ arruniq,'yCoords','GEO_yTubeSlice',1
 *endif
 arrjoin,'xCoords','GEO_xTubeSlice','front','back'
 arruniq,'xCoords','GEO_xCapSlice',1
-*get,XSliceCount,PARM,GEO_xCapSlice,DIM,X
 
 ! Calculate positions in which to slice the pile cap along the XZ plane
 ! TODO: this is gonna be a bitch to fix...
@@ -1004,7 +1002,6 @@ arruniq,'xCoords','GEO_xCapSlice',1
   arrjoin,'yCoords','GEO_yTubeSlice','GEO_columnY'
 *endif
 arruniq,'yCoords','GEO_yCapSlice',1
-*get,YSliceCount,PARM,GEO_yCapSlice,DIM,X
 
 ! Determine the Z coordinate (vertical position) of the top & bottom of each pile
 *if,SEC_offset,EQ,1,THEN

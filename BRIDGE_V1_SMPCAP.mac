@@ -84,6 +84,9 @@ local , CS_left   , cart , xLeft   , yLeft   , nthFrameZBot , zAngle  ! TODO  cs
 local , CS_right  , cart , xRight  , yRight  , nthFrameZBot , zAngle  ! TODO  csys
 csys  , 0
 
+*get , XSliceCount , parm , GEO_xCapSlice , dim , x
+*get , YSliceCount , parm , GEO_yCapSlice , dim , x
+
 *if,GEO_capOpt,eq,0,then
   ! Two pile caps connected by grade beam:
 
