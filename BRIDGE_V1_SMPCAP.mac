@@ -66,8 +66,8 @@ csys  , 0
   asel,none
   blc5,0,0,GEO_capWidth,GEO_capLength
 
-  ! Slice pile cap: YZ plane
   *do,nthX,1,XSliceCount,1
+    ! Slice pile cap: YZ plane
     xOff = GEO_xCapSlice(nthX)
     wpoffs,xOff
     wprota,,,90
@@ -76,8 +76,8 @@ csys  , 0
     wpoffs,-xOff
   *enddo
 
-  ! Slice pile cap: XZ plane
   *do,nthY,1,YSliceCount,1
+    ! Slice pile cap: XZ plane
     yOff = GEO_yCapSlice(nthY)
     wpoffs,,yOff
     wprota,,90
@@ -86,7 +86,7 @@ csys  , 0
     wpoffs,,-yOff
   *enddo
 
-  cmpadd,'COMPA_LeftPileCaps'
+  cmpadd,'COMPA_PileCap'
 
   ! Right pile cap
   csys,CS_right
@@ -100,8 +100,8 @@ csys  , 0
   asel,none
   blc5,0,0,GEO_capWidth,GEO_capLength
 
-  ! Slice pile cap: YZ plane
   *do,nthX,1,XSliceCount,1
+    ! Slice pile cap: YZ plane
     xOff = GEO_xCapSlice(nthX)
     wpoffs,xOff
     wprota,,,90
@@ -110,8 +110,8 @@ csys  , 0
     wpoffs,-xOff
   *enddo
 
-  ! Slice pile cap: XZ plane
   *do,nthY,1,YSliceCount,1
+    ! Slice pile cap: XZ plane
     yOff = GEO_yCapSlice(nthY)
     wpoffs,,yOff
     wprota,,90
@@ -120,7 +120,7 @@ csys  , 0
     wpoffs,,-yOff
   *enddo
 
-  cmpadd,'COMPA_RightPileCaps'
+  cmpadd,'COMPA_PileCap'
 
   ! Create grade beam
   csys,CS_center
@@ -138,11 +138,6 @@ csys  , 0
   lsel,none
   L,KLeft,KRight
   cmpadd,'COMPL_GradeBeam'
-
-  cmsel,s,COMPA_PileCap
-  cmsel,a,COMPA_LeftPileCaps
-  cmsel,a,COMPA_RightPileCaps
-  cm,COMPA_PileCap,area
 
 *elseif,GEO_capOpt,eq,1,then
   ! Single pile cap for both columns
