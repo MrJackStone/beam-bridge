@@ -1,0 +1,166 @@
+! BRIDGE_V1_CALCPILECOORDS , x_coords , y_coords , pileCount , pileConfig , pileD , lngPileDist , trvPileDist , columnCx , columnCy , capLength , capWidth
+! BRIDGE_V1_CALCPILECOORDS , ARG1     , ARG2     , ARG3      , ARG4       , ARG5  , ARG6        , ARG7        , ARG8     , ARG9     , AR10      , AR11
+
+
+! Parse inputs
+_x_coords    = ARG1
+_y_coords    = ARG2
+_pileCount   = ARG3
+_pileConfig  = ARG4
+_pileD       = ARG5
+_lngPileDist = ARG6
+_trvPileDist = ARG7
+_columnCx    = ARG8
+_columnCy    = ARG9
+_capLength   = AR10
+_capWidth    = AR11
+
+config = upcase(strcat(chrval(_pileCount),_pileConfig))
+
+! Calculate common longitudinal pile spacings (along X)
+! Many scenarios
+ex1 = _lngPileDist*(1.0)
+ex2 = _lngPileDist*(0.5)
+! 3 piles
+ex3 = _lngPileDist*(sqrt(3)/3)
+ex4 = _lngPileDist*(sqrt(3)/6)
+! 4 piles
+ex5 = _lngPileDist*(1.5)
+! 5 piles
+ex6 = _lngPileDist*(sqrt(2)/2)
+ex7 = _lngPileDist(0.26287)
+ex8 = _lngPileDist(0.68819)
+ex9 = _lngPileDist(0.85065)
+
+! Calculate common transversal pile spacings (along Y)
+! Many scenarios
+ey1 = _trvPileDist*(1.0)
+ey2 = _trvPileDist*(0.5)
+ey3 = _trvPileDist*(1.5)
+! 5 piles
+ey4 = _trvPileDist*(sqrt(2)/2)
+ey5 = _trvPileDist*(0.80902)
+! 10 piles
+ey6 = _trvPileDist*(2.0)
+
+! Initialize pile position arrays
+*del , %_x_coords% ,  , nopr
+*del , %_y_coords% ,  , nopr
+*dim , %_x_coords% ,  , _pileCount
+*dim , %_y_coords% ,  , _pileCount
+
+! Calculate relative coordinates of the piles in the pile cap
+*if,config,eq,'2A',then
+  %_x_coords%(1) = 0    , 0
+  %_y_coords%(1) = -ey2 , ey2
+  minLength      = (_trvPileDist)+(2*_pileD)
+  minWidth       = (2*_pileD)
+
+*elseif,config,eq,'2B',then
+  %_x_coords%(1) = ex2 , -ex2
+  %_y_coords%(1) = 0   , 0
+  minLength      = (2*_pileD)
+  minWidth       = (_lngPileDist)+(2*_pileD)
+
+*elseif,config,eq,'3A',then
+  %_x_coords%(1) = 0    , 0 , 0
+  %_y_coords%(1) = -ey1 , 0 , ey1
+  minLength      = (2*_trvPileDist)+(2*_pileD)
+  minWidth       = (2*_pileD)
+
+*elseif,config,eq,'3B',then
+  %_x_coords%(1) = ex1 , 0 , -ex1
+  %_y_coords%(1) = 0   , 0 , 0
+  minLength      = (2*_pileD)
+  minWidth       = (2*_lngPileDist)+(2*_pileD)
+
+*elseif,config,eq,'3C',then
+  %_x_coords%(1) = ex4  , ex4 , -ex3
+  %_y_coords%(1) = -ey2 , ey2 , 0
+  minLength      = (_trvPileDist)+(2*_pileD)
+  minWidth       = ((2/3)*(sqrt(3))*_lngPileDist)+(2*_pileD)
+
+*elseif,config,eq,'4A',then
+  %_x_coords%(1) = ex2  , ex2 , -ex2 , -ex2
+  %_y_coords%(1) = -ey2 , ey2 , -ey2 , ey2
+  minLength      = (_trvPileDist)+(2*_pileD)
+  minWidth       = (_lngPileDist)+(2*_pileD)
+
+*elseif,config,eq,'4B',then
+  %_x_coords%(1) = 0    , 0    , 0   , 0
+  %_y_coords%(1) = -ey3 , -ey2 , ey2 , ey3
+  minLength      = (3*_trvPileDist)+(2*_pileD)
+  minWidth       = (2*_pileD)
+
+*elseif,config,eq,'4C',then
+  %_x_coords%(1) = ex5 , ex2 , -ex2 , -ex5
+  %_y_coords%(1) = 0   , 0   , 0    , 0
+  minLength      = (2*_pileD)
+  minWidth       = (3*_lngPileDist)+(2*_pileD)
+
+*elseif,config,eq,'5A',then
+  %_x_coords%(1) = ex6  , ex6 , 0 , -ex6 , -ex6
+  %_y_coords%(1) = -ey4 , ey4 , 0 , -ey4 , ey4
+  minLength      = ((sqrt(2)*_trvPileDist)+(2*_pileD)
+  minWidth       = ((sqrt(2)*_lngPileDist)+(2*_pileD)
+
+*elseif,config,eq,'5B',then
+  %_x_coords%(1) = ex9 , ex7  , ex7 , -ex8 , -ex8
+  %_y_coords%(1) = 0   , -ey5 , ey5 , -ey2 , ey2
+  minLength      = ((1.61804)*_trvPileDist)+(2*_pileD)
+  minWidth       = ((1.70130)*_lngPileDist)+(2*_pileD)
+
+*elseif,config,eq,'6A',then
+  %_x_coords%(1) = ex2  , ex2 , ex2 , -ex2 , -ex2 , -ex2
+  %_y_coords%(1) = -ey1 , 0   , ey1 , -ey1 , 0    , ey1
+  minLength      = (2*_trvPileDist)+(2*_pileD)
+  minWidth       = (_lngPileDist)+(2*_pileD)
+
+*elseif,config,eq,'6B',then
+  %_x_coords%(1) = ex1  , ex1 , 0    , 0   , -ex1 , -ex1
+  %_y_coords%(1) = -ey2 , ey2 , -ey2 , ey2 , -ey2 , ey2
+  minLength      = (_trvPileDist)+(2*_pileD)
+  minWidth       = (2*_lngPileDist)+(2*_pileD)
+
+*elseif,config,eq,'8A',then
+  %_x_coords%(1) = ex2  , ex2  , ex2 , ex2 , -ex2 , -ex2 , -ex2 , -ex2
+  %_y_coords%(1) = -ey3 , -ey2 , ey2 , ey3 , -ey3 , -ey2 , ey2  , ey3
+  minLength      = (3*_trvPileDist)+(2*_pileD)
+  minWidth       = (_lngPileDist)+(2*_pileD)
+
+*elseif,config,eq,'9A',then
+  %_x_coords%(1) = ex1  , ex1 , ex1 , 0    , 0 , 0   , -ex1 , -ex1 , -ex1
+  %_y_coords%(1) = -ey1 , 0   , ey1 , -ey1 , 0 , ey1 , -ey1 , 0    , ey1
+  minLength      = (2*_trvPileDist)+(2*_pileD)
+  minWidth       = (2*_lngPileDist)+(2*_pileD)
+
+*elseif,config,eq,'10A',then
+  %_x_coords%(1) = ex2 , ex2  , ex2 , ex2 , ex2 , -ex2 , -ex2 , -ex2 , -ex2 , -ex2
+  %_y_coords%(1) = ey6 , -ey1 , 0   , ey1 , ey6 , -ey6 , -ey1 , 0    , ey1  , ey6
+  minLength      = (4*_trvPileDist)+(2*_pileD)
+  minWidth       = (_lngPileDist)+(2*_pileD)
+
+*endif
+
+! Check minimum dimensions of pile cap
+*if,_columnCy,gt,1e-2,and,_capLength,gt,1e-2,then
+  minLength = (minLength<_columnCy)
+  *if,_capLength,lt,minLength,then
+    *msg,warn,_capLength,minLength
+    WARNING: Pile cap length too small.%/&
+    Assigned length: %Gm.%/&
+    Minimum length: %Gm.%/&
+    Check inputs to make sure pile cap length was set correctly.
+  *endif
+*endif
+
+*if,_columnCx,gt,1e-2,and,_capWidth,gt,1e-2,then
+  minWidth  = (minWidth<_columnCx)
+  *if,_capWidth,lt,minWidth,then
+    *msg,warn,_capWidth,minWidth
+    WARNING: Pile cap width too small.%/&
+    Assigned width: %Gm.%/&
+    Minimum width: %Gm.%/&
+    Check inputs to make sure pile cap width was set correctly.
+  *endif
+*endif
