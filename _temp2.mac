@@ -31,6 +31,13 @@ GEO_ABT_cantWallThk  = %ARG2%('?')
 GEO_ABT_appSlabL     = %ARG2%(6)
 GEO_ABT_appSlabW     = %ARG2%('?')
 GEO_ABT_postHeight   = %ARG2%(32)
+GEO_ABT_capOpt       = %ARG2%('?')
+GEO_ABT_capLx        = %ARG2%('?')
+GEO_ABT_capLy        = %ARG2%('?')
+
+GEO_ABT_pileCount  = %ARG2%('?')
+GEO_ABT_pileConfig = %ARG2%('?')
+GEO_ABT_pileD      = SEC_ABT_pile_d
 
 girderHeight         = GIRDER_d(1)  ! TODO  hard-coded, improve
 

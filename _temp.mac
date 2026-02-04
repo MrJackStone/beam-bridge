@@ -1,0 +1,22 @@
+allsel
+
+sadd , 'MX_Gd'  , 'DW_MX'  ,         , 1
+sadd , 'MX_Gk'  , 'MX_Gd'  ,         , 1/LOAD_gammaG
+sadd , 'MX+_Qd' , 'EMX_MX' , 'MX_Gd' , 1             , -1
+sadd , 'MX+_Qk' , 'MX+_Qd' ,         , 1/LOAD_gammaQ
+
+sadd , 'MX-_Qd' , 'EMN_MX' , 'MX_Gd' , 1             , -1
+sadd , 'MX-_Qk' , 'MX-_Qd' ,         , 1/LOAD_gammaQ
+
+sadd , 'MX-_k' , 'MX_Gk' , 'MX-_Qk' , 1 , 1
+sadd , 'MX+_k' , 'MX_Gk' , 'MX+_Qk' , 1 , 1
+
+sabs , 1
+smax , 'MX*_k' , 'MX-_k' , 'MX+_k' , 1 , 1
+sabs , 0
+
+sabs , 1
+smax , 'MX*_fad' , 'MX+_Qk' , 'MX-_Qk' , 1 , 1
+sabs , 0
+
+cshell_mx

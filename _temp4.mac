@@ -1,0 +1,152 @@
+! _temp4
+
+! BRIDGE_V1_SMPCAP , nthSupport
+! BRIDGE_V1_SMPCAP , ARG1
+
+
+! Dependencies:
+!   GEO_ABT_capLx
+!   GEO_capOpt
+!   XSliceCount
+!   YSliceCount
+!   GEO_columnWidth
+
+!   GEO_deckLength
+!   GEO_deckOff_beg
+!   GEO_deckOff_end
+!   GEO_deckRadius
+!   GEO_deckWidth_beg
+!   GEO_chordOff
+!
+!   GEO_columnY_<i>
+!   GEO_frameBotOffset
+!   GEO_frameTopOffset
+!   GEO_supportChi
+!   GEO_supportX
+
+! Exported:
+!   CS_INFRA_C<i>
+!   CS_INFRA_L<i>
+!   CS_INFRA_R<i>
+!
+!   COMPL_GradeBeam
+!   COMPA_PileCap
+
+
+! Calculate pile coordinates in local pile cap CSYS
+BRIDGE_V1_CALCPILECOORDS , 'GEO_ABT_pileXL' , 'GEO_ABT_pileYL' , GEO_ABT_pileCount , GEO_ABT_pileConfig , GEO_ABT_pileD , GEO_ABT_pilePitchX , GEO_ABT_pilePitchY , GEO_ABT_columnCx , GEO_ABT_columnCy , GEO_ABT_capLx , GEO_ABT_capLy
+
+! Calculate slicing positions
+zero         = 0
+leftColumnY  = -GEO_columnSpacing/2
+rightColumnY = GEO_columnSpacing/2
+
+arrjoin , 'xCoords' , 'GEO_ABT_pileXL'    , 'zero'
+arruniq , 'xCoords' , 'GEO_ABT_xCapSlice' , 1
+*get,XSliceCount,parm,GEO_ABT_xCapSlice,dim,x
+
+arrjoin , 'yCoords' , 'GEO_ABT_pileYL'    , 'zero' , 'leftColumnY' , 'rightColumnY'
+arruniq , 'yCoords' , 'GEO_ABT_yCapSlice' , 1
+*get,YSliceCount,parm,GEO_ABT_yCapSlice,dim,x
+
+! Calculate support position
+xCenter = GEO_supportX(ARG1)
+*if,GEO_deckRadius,eq,0,then
+  ! Straight deck:
+  xLeft  = xCenter
+  xRight = xCenter
+
+  yCenter = GEO_deckOff_beg+(GEO_deckOff_end-GEO_deckOff_beg)*(xCenter/GEO_deckLength)+(GEO_deckWidth_beg/2)
+  yLeft   = yCenter+GEO_columnY_%ARG1%(1)
+  yRight  = yCenter+GEO_columnY_%ARG1%(2)
+
+  zAngle = 0
+
+*else
+  ! Curved deck:
+  *afun,deg
+  chi_i = GEO_supportChi(ARG1)
+
+  xLeft  = (GEO_deckLength/2)-(GEO_deckRadius+GEO_columnY_%ARG1%(1))*cos(chi_i)
+  xRight = (GEO_deckLength/2)-(GEO_deckRadius+GEO_columnY_%ARG1%(2))*cos(chi_i)
+
+  yCenter = GEO_deckRadius*sin(chi_i)-GEO_chordOff
+  yLeft   = (GEO_deckRadius+GEO_columnY_%ARG1%(1))*sin(chi_i)-GEO_chordOff
+  yRight  = (GEO_deckRadius+GEO_columnY_%ARG1%(2))*sin(chi_i)-GEO_chordOff
+
+  zAngle = 90-chi_i
+  *afun,rad
+*endif
+
+! Top and bottom Z coordinates of the frame
+nthFrameZTop = zFrameTop+GEO_frameTopOffset(ARG1)
+nthFrameZBot = zFrameBot+GEO_frameBotOffset(ARG1)
+
+CS_center = 41+(10*ARG1)
+CS_left   = CS_center+1
+CS_right  = CS_center+2
+
+cCS_name = strcat('CS_INFRA_C',chrval(ARG1))
+lCS_name = strcat('CS_INFRA_L',chrval(ARG1))
+rCS_name = strcat('CS_INFRA_R',chrval(ARG1))
+
+%cCS_name% = CS_center
+%lCS_name% = CS_left
+%rCS_name% = CS_right
+
+local , CS_center , cart , xCenter , yCenter , nthFrameZBot , zAngle  ! TODO  csys
+local , CS_left   , cart , xLeft   , yLeft   , nthFrameZBot , zAngle  ! TODO  csys
+local , CS_right  , cart , xRight  , yRight  , nthFrameZBot , zAngle  ! TODO  csys
+csys  , 0
+
+*if,GEO_ABT_capOpt,eq,0,then
+  ! Two pile caps connected by grade beam:
+
+  ! Left pile cap
+  asel,none
+  csys,CS_left
+  wpcsys,,CS_left
+  blc5,0,0,GEO_ABT_capLy,GEO_ABT_capLx
+  batch_sliceyz,'GEO_ABT_xCapSlice',1
+  batch_slicexz,'GEO_ABT_yCapSlice',1
+  cmpadd,'COMPA_ABT_pileCap'
+
+  ! Right pile cap
+  asel,none
+  csys,CS_right
+  wpcsys,,CS_right
+  blc5,0,0,GEO_ABT_capLy,GEO_ABT_capLx
+  batch_sliceyz,'GEO_ABT_xCapSlice',1
+  batch_slicexz,'GEO_ABT_yCapSlice',1
+  cmpadd,'COMPA_ABT_pileCap'
+
+  ! Create grade beam
+  csys,CS_center
+  wpcsys,,CS_center
+  ksel,s,loc,x,0
+  ksel,r,loc,y,yLeft+(GEO_ABT_capLx/2)
+  ksel,r,loc,z,0
+  *get,KLeft,kp,,num,min
+  ksel,s,loc,x,0
+  ksel,r,loc,y,yRight-(GEO_ABT_capLx/2)
+  ksel,r,loc,z,0
+  *get,KRight,kp,,num,min
+  ksel,s,kp,,KLeft
+  ksel,a,kp,,KRight
+  lsel,none
+  L,KLeft,KRight
+  cmpadd,'COMPL_GradeBeam'
+
+*elseif,GEO_capOpt,eq,1,then
+  ! Single pile cap for both columns
+
+  ! Draw pile cap
+  csys,CS_center
+  wpcsys,,CS_center
+  asel,none
+  blc5,0,0,GEO_ABT_capLy,GEO_ABT_capLx
+  batch_sliceyz,'GEO_ABT_xCapSlice',1
+  batch_slicexz,'GEO_ABT_yCapSlice',1
+  cmpadd,'COMPA_ABT_pileCap'
+
+*endif
