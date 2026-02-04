@@ -1,0 +1,34 @@
+! BRIDGE_V1_GRADEBEAM , cs   , cmaCapLeft , cmaCapRight , cmlName
+! BRIDGE_V1_GRADEBEAM , ARG1 , ARG2       , ARG3        , ARG4
+
+
+! Prepare environment
+csys,ARG1
+wpcsys,-1
+
+! Get connection keypoint on left pile cap
+cmsel,s,%ARG2%
+lsla
+ksll
+ksel,r,loc,x,0
+ksel,r,loc,z,0
+*get,yMin,kp,,mnloc,y
+ksel,r,loc,y,yMin
+KP_gradeBeamLeft = kpnext(0)
+
+! Get connection keypoint on right pile cap
+cmsel,s,%ARG3%
+lsla
+ksll
+ksel,r,loc,x,0
+ksel,r,loc,z,0
+*get,yMax,kp,,mxloc,y
+ksel,r,loc,y,yMax
+KP_gradeBeamRight = kpnext(0)
+
+! Draw & export grade beam
+lsel,none
+ksel,s,kp,,KP_gradeBeamLeft
+ksel,a,kp,,KP_gradeBeamRight
+l,KP_gradeBeamLeft,KP_gradeBeamRight
+cm,%ARG4%,line
