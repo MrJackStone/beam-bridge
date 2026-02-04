@@ -43,98 +43,59 @@ rightColumnY = GEO_columnSpacing/2
 
 arrjoin , 'xCoords' , 'GEO_ABT_pileXL'    , 'zero'
 arruniq , 'xCoords' , 'GEO_ABT_xCapSlice' , 1
-*get,XSliceCount,parm,GEO_ABT_xCapSlice,dim,x
 
 arrjoin , 'yCoords' , 'GEO_ABT_pileYL'    , 'zero' , 'leftColumnY' , 'rightColumnY'
 arruniq , 'yCoords' , 'GEO_ABT_yCapSlice' , 1
-*get,YSliceCount,parm,GEO_ABT_yCapSlice,dim,x
-
-! Calculate support position
-xCenter = GEO_supportX(ARG1)
-*if,GEO_deckRadius,eq,0,then
-  ! Straight deck:
-  xLeft  = xCenter
-  xRight = xCenter
-
-  yCenter = GEO_deckOff_beg+(GEO_deckOff_end-GEO_deckOff_beg)*(xCenter/GEO_deckLength)+(GEO_deckWidth_beg/2)
-  yLeft   = yCenter+GEO_columnY_%ARG1%(1)
-  yRight  = yCenter+GEO_columnY_%ARG1%(2)
-
-  zAngle = 0
-
-*else
-  ! Curved deck:
-  *afun,deg
-  chi_i = GEO_supportChi(ARG1)
-
-  xLeft  = (GEO_deckLength/2)-(GEO_deckRadius+GEO_columnY_%ARG1%(1))*cos(chi_i)
-  xRight = (GEO_deckLength/2)-(GEO_deckRadius+GEO_columnY_%ARG1%(2))*cos(chi_i)
-
-  yCenter = GEO_deckRadius*sin(chi_i)-GEO_chordOff
-  yLeft   = (GEO_deckRadius+GEO_columnY_%ARG1%(1))*sin(chi_i)-GEO_chordOff
-  yRight  = (GEO_deckRadius+GEO_columnY_%ARG1%(2))*sin(chi_i)-GEO_chordOff
-
-  zAngle = 90-chi_i
-  *afun,rad
-*endif
-
-! Top and bottom Z coordinates of the frame
-nthFrameZTop = zFrameTop+GEO_frameTopOffset(ARG1)
-nthFrameZBot = zFrameBot+GEO_frameBotOffset(ARG1)
-
-CS_center = 41+(10*ARG1)
-CS_left   = CS_center+1
-CS_right  = CS_center+2
-
-cCS_name = strcat('CS_INFRA_C',chrval(ARG1))
-lCS_name = strcat('CS_INFRA_L',chrval(ARG1))
-rCS_name = strcat('CS_INFRA_R',chrval(ARG1))
-
-%cCS_name% = CS_center
-%lCS_name% = CS_left
-%rCS_name% = CS_right
-
-local , CS_center , cart , xCenter , yCenter , nthFrameZBot , zAngle  ! TODO  csys
-local , CS_left   , cart , xLeft   , yLeft   , nthFrameZBot , zAngle  ! TODO  csys
-local , CS_right  , cart , xRight  , yRight  , nthFrameZBot , zAngle  ! TODO  csys
-csys  , 0
 
 *if,GEO_ABT_capOpt,eq,0,then
   ! Two pile caps connected by grade beam:
 
   ! Left pile cap
   asel,none
-  csys,CS_left
-  wpcsys,,CS_left
+  csys,CS_INFRA_l%ARG1%
+  wpcsys,-1
   blc5,0,0,GEO_ABT_capLy,GEO_ABT_capLx
   batch_sliceyz,'GEO_ABT_xCapSlice',1
   batch_slicexz,'GEO_ABT_yCapSlice',1
+  cm,cma_ABT_leftPileCap,area
   cmpadd,'COMPA_ABT_pileCap'
 
   ! Right pile cap
   asel,none
-  csys,CS_right
-  wpcsys,,CS_right
+  csys,CS_INFRA_r%ARG1%
+  wpcsys,-1
   blc5,0,0,GEO_ABT_capLy,GEO_ABT_capLx
   batch_sliceyz,'GEO_ABT_xCapSlice',1
   batch_slicexz,'GEO_ABT_yCapSlice',1
+  cm,cma_ABT_rightPileCap,area
   cmpadd,'COMPA_ABT_pileCap'
 
   ! Create grade beam
-  csys,CS_center
-  wpcsys,,CS_center
-  ksel,s,loc,x,0
-  ksel,r,loc,y,yLeft+(GEO_ABT_capLx/2)
+  csys,CS_INFRA_c%ARG1%
+  wpcsys,-1
+
+  cmsel,s,cma_ABT_leftPileCap
+  lsla
+  ksll
+  ksel,r,loc,x,0
   ksel,r,loc,z,0
-  *get,KLeft,kp,,num,min
-  ksel,s,loc,x,0
-  ksel,r,loc,y,yRight-(GEO_ABT_capLx/2)
+  *get,yMin,kp,,mnloc,y
+  ksel,r,loc,y,yMin
+  KP_gradeBeamLeft = kpnext(0)
+
+  cmsel,s,cma_ABT_rightPileCap
+  lsla
+  ksll
+  ksel,r,loc,x,0
   ksel,r,loc,z,0
-  *get,KRight,kp,,num,min
-  ksel,s,kp,,KLeft
-  ksel,a,kp,,KRight
-  lsel,none
-  L,KLeft,KRight
+  *get,yMax,kp,,mxloc,y
+  ksel,r,loc,y,yMax
+  KP_gradeBeamRight = kpnext(0)
+
+  ksel,s,kp,,KP_gradeBeamLeft
+  ksel,a,kp,,KP_gradeBeamRight
+  l,KP_gradeBeamLeft,KP_gradeBeamRight
+
   cmpadd,'COMPL_GradeBeam'
 
 *elseif,GEO_capOpt,eq,1,then
@@ -144,6 +105,8 @@ csys  , 0
   csys,CS_center
   wpcsys,,CS_center
   asel,none
+  csys,CS_INFRA_c%ARG1%
+  wpcsys,-1
   blc5,0,0,GEO_ABT_capLy,GEO_ABT_capLx
   batch_sliceyz,'GEO_ABT_xCapSlice',1
   batch_slicexz,'GEO_ABT_yCapSlice',1
