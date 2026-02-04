@@ -1,0 +1,30 @@
+! BRIDGE_V1_BLC5SLICED , cs   , xLength , yLength , x_slices , y_slices , cmaName
+! BRIDGE_V1_BLC5SLICED , ARG1 , ARG2    , ARG3    , ARG4     , ARG5     , ARG6
+
+
+! Parse inputs
+_cs       = ARG1
+_xLength  = ARG2
+_yLength  = ARG3
+_cmaName  = ARG4
+_x_slices = ARG5
+_y_slices = ARG6
+
+! Prepare environment
+asel,none
+
+csbackup
+
+csys,_cs
+wpcsys,-1
+
+! Draw, slice, & export area
+blc5,0,0,_xLength,_yLength
+
+batch_sliceyz , _x_slices , 1
+batch_slicexz , _y_slices , 1
+
+cm,%_cmaName%,area
+
+! Clean up
+csrestore
