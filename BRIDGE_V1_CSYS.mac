@@ -1,6 +1,49 @@
 ! BRIDGE_V1_CSYS
 
 
+! Create coordinate systems at the center of each pile cap
+*do,nthSupport,1,GEO_supportCount,1
+
+  xCenter = GEO_supportX(nthSupport)
+
+  *if,GEO_deckRadius,eq,0,then
+    xLeft   = xCenter
+    xRight  = xCenter
+    yCenter = GEO_deckOff_beg+(GEO_deckOff_end-GEO_deckOff_beg)*(xCenter/GEO_deckLength)+(GEO_deckWidth_beg/2)
+    yLeft   = yCenter+GEO_columnY_%nthSupport%(1)
+    yRight  = yCenter+GEO_columnY_%nthSupport%(2)
+    zAngle  = 0
+  *else
+    afunbackup,'DEG'
+    chi_i   = GEO_supportChi(nthSupport)
+    xLeft   = (GEO_deckLength/2)-(GEO_deckRadius+GEO_columnY_%nthSupport%(1))*cos(chi_i)
+    xRight  = (GEO_deckLength/2)-(GEO_deckRadius+GEO_columnY_%nthSupport%(2))*cos(chi_i)
+    yCenter = GEO_deckRadius*sin(chi_i)-GEO_chordOff
+    yLeft   = (GEO_deckRadius+GEO_columnY_%nthSupport%(1))*sin(chi_i)-GEO_chordOff
+    yRight  = (GEO_deckRadius+GEO_columnY_%nthSupport%(2))*sin(chi_i)-GEO_chordOff
+    zAngle  = 90-chi_i
+    afunrestore
+  *endif
+
+  nthFrameZTop = zFrameTop+GEO_frameTopOffset(nthSupport)
+  nthFrameZBot = zFrameBot+GEO_frameBotOffset(nthSupport)
+
+  CS_INFRA_c%nthSupport% = 41+(10*nthSupport)
+  CS_INFRA_l%nthSupport% = 42+(10*nthSupport)
+  CS_INFRA_r%nthSupport% = 43+(10*nthSupport)
+
+  local , CS_INFRA_c%nthSupport% , cart , xCenter , yCenter , nthFrameZBot , zAngle
+  local , CS_INFRA_l%nthSupport% , cart , xLeft   , yLeft   , nthFrameZBot , zAngle
+  local , CS_INFRA_r%nthSupport% , cart , xRight  , yRight  , nthFrameZBot , zAngle
+
+  csys  , 0
+
+*enddo
+
+/eof
+
+! Note: everything below is work in progress and clashes with the existing code.
+
 ! TODO  consolidate
 
 ! Indices
@@ -82,8 +125,6 @@ index=0
 
 ! Create coordinate systems
 
-
-!!                                                                                                !!
 
 /eof
 csys,CS_abt1

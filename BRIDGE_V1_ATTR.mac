@@ -618,9 +618,9 @@ local,CS_global,cart
 csys,0
 local,CY_deck,cylin,GEO_deckLength/2,-GEO_chordOff,0  ! TODO  csys
 csys,0
-!
-!
-!
+
+
+
 !!                                                                                                !!
 !! 2.2 GEOMETRY                                                                                   !!
 !!                                                                                                !!
@@ -1509,3 +1509,11 @@ LOAD_ltLength=LOADTRAIN_VAR_length
 
 ! Time at the end of dead load introduction load step (dynamic analysis only)
 SOLU_dlTime=1
+
+
+
+!!                                                                                                !!
+!! 2.6  Coordinate systems                                                                        !!
+!!                                                                                                !!
+! TODO  consolidate
+BRIDGE_V1_CSYS
