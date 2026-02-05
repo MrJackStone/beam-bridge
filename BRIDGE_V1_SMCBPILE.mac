@@ -21,7 +21,7 @@ colKP=0
   xCol=kx(colKP)
   yCol=ky(colKP)
   zCol=kz(colKP)
-  zBottom=zTransition-pileLength
+  zBottom=zTransition-pileLength  ! TODO  BUGFIX  param 'zTransition' is never defined anywhere!
 
   nextkp,'botKP'
   k,botKP,xCol,yCol,zBottom
