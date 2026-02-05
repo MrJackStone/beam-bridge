@@ -98,9 +98,24 @@ CM,COMPA_RightPileCaps,AREA
 CM,COMPA_PileCap,AREA
 
 *do,nthSupport,1,GEO_supportCount,1
-  mesoType=GEO_mesoType(nthSupport)
+
+  mesoType = GEO_mesoType(nthSupport)
+
   *if,mesoType,ne,CTE_MESO_abutment,and,mesoType,ne,CTE_MESO_beamcap,then
-    BRIDGE_V1_SMPCAP,nthSupport
+
+    BRIDGE_V1_SMPCAP , nthSupport , GEO_capOpt , GEO_capLength , GEO_capWidth , 'GEO_PIERCAP_x_slices' , 'GEO_PIERCAP_y_slices'
+
+    ! Additional slicing for certain types of mesostructure
+    cmsel,s,COMPA_pileCap
+    *if,GEO_frameOpt,eq,1,then
+      ! Tubular pier column: slice at superstructure positions
+      BRIDGE_V1_SUPERSLICE
+    *elseif,GEO_frameOpt,eq,3,then
+      ! Hammerhead pier: slice around solid circular column
+      BRIDGE_V1_SLICEAROUNDBEAM ,  , GEO_pierColumnShape , GEO_pierColumnDiameter , GEO_pierColumnCx , GEO_pierColumnCy , 'COMPA_HAMMER%nthSupport%_botInterface'
+    *endif
+    cm,COMPA_pileCap,area
+
   *endif
 *enddo
 
