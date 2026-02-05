@@ -956,7 +956,7 @@ WARNING: Water level incompatible with frame height. GEO_WATERHEIGHT reduced to 
 !
 !! 2.2.3 INFRASTRUCTURE   *** this needs revising ***                                             !!
 !!                                                                                                !!
-! Force single pile cap option for tubular piers
+! Force single pile cap option for tubular i& hammerhead piers
 *if,GEO_frameOpt,eq,1,then
   GEO_capOpt = 1
 *elseif,GEO_frameOpt,eq,3,then
