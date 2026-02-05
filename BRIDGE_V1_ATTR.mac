@@ -840,8 +840,7 @@ arrjoin , 'GEO_arc_offsets' , 'GEO_WHEELPATH_arcOffsets' , 'GEO_FOOTPATH_arcOffs
 ! Number of piers
 GEO_pierCount = GEO_supportCount-(GEO_ABT1_status+GEO_ABT2_status)
 
-! Create correspondence between support & pier indices
-! XZ coordinates of each pier
+! Calculate pier coordinates & support index correspondence
 *if,GEO_frameBotOffStatus,eq,0,then
   *del,GEO_frameBotOffset,,nopr
   *dim,GEO_frameBotOffset,ARRAY,GEO_SupportCount
@@ -862,10 +861,11 @@ nthPier = 0
     skip = 1
   *endif
   *if,skip,eq,0,then
-    nthPier               = nthPier+1
-    GEO_pierX(nthPier)    = GEO_supportX(nthSupport)
-    GEO_pierZBot(nthPier) = zFrameBot+GEO_frameBotOffset(nthSupport)
-    GEO_pierZTop(nthPier) = zFrameTop+GEO_frameTopOffset(nthSupport)
+    nthPier                      = nthPier+1
+    GEO_pierX(nthPier)           = GEO_supportX(nthSupport)
+    GEO_pierZBot(nthPier)        = zFrameBot+GEO_frameBotOffset(nthSupport)
+    GEO_pierZTop(nthPier)        = zFrameTop+GEO_frameTopOffset(nthSupport)
+    GEO_PIER_supportIdx(nthPier) = nthSupport
   *endif
 *enddo
 
