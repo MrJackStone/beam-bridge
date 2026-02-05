@@ -1,56 +1,72 @@
-! BRIDGE_V1_SMPCAP , nthSupport
-! BRIDGE_V1_SMPCAP , ARG1
+! BRIDGE_V1_SMPCAP , supIdx , capLx , capLy , x_slices , y_slices , cmInfix
+! BRIDGE_V1_SMPCAP , ARG1   , ARG2  , ARG3  , ARG4     , ARG5     , ARG6
 
 
 ! Dependencies:
 !   CS_INFRA_C<i>
 !   CS_INFRA_L<i>
 !   CS_INFRA_R<i>
-!
-!   GEO_ABT_capLx
-!   GEO_ABT_capOpt
 
 ! Exported:
-!   COMPL_ABT_GradeBeam
-!   COMPA_ABT_PileCap
+!   COMPL_<cmInfix_>GradeBeam
+!   COMPA_<cmInfix_>PileCap
 
 
-! Calculate pile coordinates in local pile cap CSYS
-BRIDGE_V1_CALCPILECOORDS , 'x_piles' , 'y_piles' , GEO_ABT_pileCount , GEO_ABT_pileConfig , GEO_ABT_pileD , GEO_ABT_pilePitchX , GEO_ABT_pilePitchY , GEO_ABT_columnCx , GEO_ABT_columnCy , GEO_ABT_capLx , GEO_ABT_capLy
+! Parse inputs
+_supIdx   = ARG1
+_capOpt   = ARG2
+_capLx    = ARG3
+_capLy    = ARG4
+_x_slices = ARG5
+_y_slices = ARG6
+_cmInfix  = ARG7
 
-! Calculate slicing positions
-zero  =  0
-left  = -GEO_ABT_columnSpacing/2
-right =  GEO_ABT_columnSpacing/2
+infix = ''
+*get,parType,parm,_cmInfix,type
+*if,parType,eq,3,then
+  infix = strcat(_cmInfix,'_')
+*endif
 
-arrjoin , 'x_temp' , 'x_piles'  , 'zero'
-arruniq , 'x_temp' , 'x_slices' , 1
+! Prepare environment
+lsel , none
+asel , none
+cm   , cma_pileCap      , area
+cm   , cma_pileCapLeft  , area
+cm   , cma_pileCapRight , area
+cm   , cml_gradeBeam    , line
 
-arrjoin , 'y_temp' , 'y_piles'  , 'zero' , 'left' , 'right'
-arruniq , 'y_temp' , 'y_slices' , 1
+! Compile slicing positions
+arruniq , _x_slices , 'x_slices' , 1
+arruniq , _y_slices , 'y_slices' , 1
 
 *if,GEO_ABT_capOpt,eq,0,then
   ! Two pile caps connected by grade beam:
 
   ! Left & right pile caps
-  BRIDGE_V1_BLC5SLICED , CS_INFRA_l%ARG1% , GEO_ABT_capLy , GEO_ABT_capLx , 'x_slices' , 'y_slices' , 'cma_pileCapLeft'
-  BRIDGE_V1_BLC5SLICED , CS_INFRA_r%ARG1% , GEO_ABT_capLy , GEO_ABT_capLx , 'x_slices' , 'y_slices' , 'cma_pileCapRight'
+  BRIDGE_V1_BLC5SLICED , CS_INFRA_l%_supIdx% , GEO_ABT_capLy , GEO_ABT_capLx , 'x_slices' , 'y_slices' , 'cma_pileCapLeft'
+  BRIDGE_V1_BLC5SLICED , CS_INFRA_r%_supIdx% , GEO_ABT_capLy , GEO_ABT_capLx , 'x_slices' , 'y_slices' , 'cma_pileCapRight'
   cmsel,s,cma_pileCapLeft
   cmsel,a,cma_pileCapRight
   cm,cma_pileCap,area
 
   ! Create grade beam
-  BRIDGE_V1_GRADEBEAM , CS_INFRA_c%ARG1% , 'cma_pileCapLeft' , 'cma_pileCapRight' , 'cml_gradeBeam'
+  BRIDGE_V1_GRADEBEAM , CS_INFRA_c%_supIdx% , 'cma_pileCapLeft' , 'cma_pileCapRight' , 'cml_gradeBeam'
 
 *elseif,GEO_ABT_capOpt,eq,1,then
   ! Single pile cap for both columns:
-  BRIDGE_V1_BLC5SLICED , CS_INFRA_c%ARG1% , GEO_ABT_capLy , GEO_ABT_capLx , 'x_slices' , 'y_slices' , 'cma_pileCap'
+  BRIDGE_V1_BLC5SLICED , CS_INFRA_c%_supIdx% , GEO_ABT_capLy , GEO_ABT_capLx , 'x_slices' , 'y_slices' , 'cma_pileCap'
 
 *endif
 
 ! Export selection components
 cmsel,s,cma_pileCap
-cmpadd,'COMPA_ABT_pileCap'
+cmpadd,'COMPA_%infix%pileCap'
 
 cmsel,s,cml_gradeBeam
-cmpadd,'COMPL_ABT_GradeBeam'
+cmpadd,'COMPL_%infix%gradeBeam'
+
+! Clean up
+cmdele , cma_pileCap
+cmdele , cma_pileCapLeft
+cmdele , cma_pileCapRight
+cmdele , cml_gradeBeam

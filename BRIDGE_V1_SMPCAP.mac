@@ -1,100 +1,72 @@
-! BRIDGE_V1_SMPCAP , nthSupport
-! BRIDGE_V1_SMPCAP , ARG1
+! BRIDGE_V1_SMPCAP , supIdx , capOpt , capLx , capLy , x_slices , y_slices , cmInfix
+! BRIDGE_V1_SMPCAP , ARG1   , ARG2   , ARG3  , ARG4  , ARG5     , ARG6     , ARG7
 
 
 ! Dependencies:
-!   GEO_capLength
-!   GEO_capOpt
-!   GEO_capWidth
-!   XSliceCount
-!   YSliceCount
-!   GEO_columnWidth
-!
-!   GEO_xCapSlice
-!   GEO_yCapSlice
-
-!   GEO_deckLength
-!   GEO_deckOff_beg
-!   GEO_deckOff_end
-!   GEO_deckRadius
-!   GEO_deckWidth_beg
-!   GEO_chordOff
-!
-!   GEO_columnY_<i>
-!   GEO_frameBotOffset
-!   GEO_frameTopOffset
-!   GEO_supportChi
-!   GEO_supportX
-
-! Exported:
 !   CS_INFRA_C<i>
 !   CS_INFRA_L<i>
 !   CS_INFRA_R<i>
-!
-!   COMPL_GradeBeam
-!   COMPA_PileCap
 
-! Calculate slicing positions
-zero  = 0
-front = 0
-back  = 0
-left  = 0
-right = 0
+! Exported:
+!   COMPL_<cmInfix_>GradeBeam
+!   COMPA_<cmInfix_>PileCap
 
-*if,GEO_frameOpt,eq,0,then
-  ! Column-girder frame
-  left = -GEO_columnSpacing/2
-  right = GEO_columnSpacing/2
-*elseif,GEO_frameOpt,eq,1,then
-  ! Tubular pier column
-  front =  GEO_columnDepth/2
-  back  = -GEO_columnDepth/2
+
+! Parse inputs
+_supIdx   = ARG1
+_capOpt   = ARG2
+_capLx    = ARG3
+_capLy    = ARG4
+_x_slices = ARG5
+_y_slices = ARG6
+_cmInfix  = ARG7
+
+infix = ''
+*get,parType,parm,_cmInfix,type
+*if,parType,eq,3,then
+  infix = strcat(_cmInfix,'_')
 *endif
 
-arrjoin , 'x_temp' , 'GEO_pileXL' , 'zero' , 'front' , 'back'
-arruniq , 'x_temp' , 'x_slices'   , 1
+! Prepare environment
+lsel , none
+asel , none
+cm   , cma_pileCap      , area
+cm   , cma_pileCapLeft  , area
+cm   , cma_pileCapRight , area
+cm   , cml_gradeBeam    , line
 
-arrjoin , 'y_temp' , 'GEO_pileYL' , 'zero' , 'left' , 'right'
-arruniq , 'y_temp' , 'y_slices'   , 1
+! Compile slicing positions
+arruniq , _x_slices , 'x_slices' , 1
+arruniq , _y_slices , 'y_slices' , 1
 
-*if,GEO_capOpt,eq,0,then
+*if,_capOpt,eq,0,then
   ! Two pile caps connected by grade beam:
 
   ! Left & right pile caps
-  BRIDGE_V1_BLC5SLICED , CS_INFRA_l%ARG1% , GEO_capLength , GEO_capWidth , 'x_slices' , 'y_slices' , 'cma_pileCapLeft'
-  BRIDGE_V1_BLC5SLICED , CS_INFRA_r%ARG1% , GEO_capLength , GEO_capWidth , 'x_slices' , 'y_slices' , 'cma_pileCapRight'
+  BRIDGE_V1_BLC5SLICED , CS_INFRA_l%_supIdx% , _capLy , _capLx , 'x_slices' , 'y_slices' , 'cma_pileCapLeft'
+  BRIDGE_V1_BLC5SLICED , CS_INFRA_r%_supIdx% , _capLy , _capLx , 'x_slices' , 'y_slices' , 'cma_pileCapRight'
   cmsel,s,cma_pileCapLeft
   cmsel,a,cma_pileCapRight
   cm,cma_pileCap,area
 
   ! Create grade beam
-  BRIDGE_V1_GRADEBEAM , CS_INFRA_c%ARG1% , 'cma_pileCapLeft' , 'cma_pileCapRight' , 'cml_gradeBeam'
+  BRIDGE_V1_GRADEBEAM , CS_INFRA_c%_supIdx% , 'cma_pileCapLeft' , 'cma_pileCapRight' , 'cml_gradeBeam'
 
-*elseif,GEO_capOpt,eq,1,then
+*elseif,_capOpt,eq,1,then
   ! Single pile cap for both columns:
-  BRIDGE_V1_BLC5SLICED , CS_INFRA_c%ARG1% , GEO_capLength , GEO_capWidth , 'x_slices' , 'y_slices' , 'cma_pileCap'
-
-  ! Additional slicing for certain types of mesostructure
-  *if,GEO_frameOpt,eq,1,then
-    ! Tubular pier column: slice at superstructure positions
-    wpslicexz , -GEO_columnWidth/2
-    wpslicexz , GEO_columnWidth/2
-    *if,GEO_deckRadius,eq,0,then
-      BRIDGE_V1_LONGSLICE
-    *else
-      BRIDGE_V1_ARCSLICE , 1
-    *endif
-  *elseif,GEO_frameOpt,eq,3,then
-    ! Hammerhead pier: slice around solid circular column
-    BRIDGE_V1_SLICEAROUNDBEAM ,  , GEO_pierColumnShape , GEO_pierColumnDiameter , GEO_pierColumnCx , GEO_pierColumnCy , 'COMPA_HAMMER%ARG1%_botInterface'
-  *endif
-  cm,cma_pileCap,area
+  BRIDGE_V1_BLC5SLICED , CS_INFRA_c%_supIdx% , _capLy , _capLx , 'x_slices' , 'y_slices' , 'cma_pileCap'
 
 *endif
 
 ! Export selection components
 cmsel,s,cma_pileCap
-cmpadd,'COMPA_pileCap'
+cmpadd,'COMPA_%infix%pileCap'
 
 cmsel,s,cml_gradeBeam
-cmpadd,'COMPL_GradeBeam'
+cmpadd,'COMPL_%infix%gradeBeam'
+
+! Clean up
+cmdele , cma_pileCap
+cmdele , cma_pileCapLeft
+cmdele , cma_pileCapRight
+cmdele , cml_gradeBeam
