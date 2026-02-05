@@ -144,14 +144,23 @@ cm   , COMPK_Support , kp
 cm   , COMPK_PileTop , kp
 
 *do,nthSupport,1,GEO_supportCount,1
-  lsel,none
-  mesoType=GEO_mesoType(nthSupport)
+
+  mesoType = GEO_mesoType(nthSupport)
+  pierIdx  = GEO_SUPPORT_pierIdx(nthSupport)
+
   *if,mesoType,eq,CTE_MESO_beamcap,then
-    BRIDGE_V1_SMCBPILE,nthSupport
+    BRIDGE_V1_SMCBPILE , nthSupport ,            , GEO_PIER%pierIdx%_pile_data , 'SUP%nthSupport%'
   *elseif,mesoType,ne,CTE_MESO_abutment,then
-    BRIDGE_V1_SMPILE,nthSupport
+    BRIDGE_V1_SMPILE   , nthSupport , GEO_capOpt , GEO_PIER%pierIdx%_pile_data , 'SUP%nthSupport%'
   *endif
-  cm,COMPL_SUP%nthSupport%_piles,line
+
+  cmsel,s,COMPK_SUP%nthSupport%_pileTop
+  cmpadd,'COMPK_pileTop'
+  cmsel,s,COMPK_SUP%nthSupport%_support
+  cmpadd,'COMPK_support'
+  cmsel,s,COMPL_SUP%nthSupport%_pile
+  cmpadd,'COMPL_pile'
+
 *enddo
 
 cmsel,s,COMPK_PileTop
@@ -219,6 +228,9 @@ ksel,none
       CS_ABT1_trv  = CS_trvWall
       CS_ABT1_lw   = CS_leftWall
       CS_ABT1_rw   = CS_rightWall
+
+    *elseif,GEO_ABT1_type,eq,6,then
+      ! TODO  (wip)
 
     *else
       BRIDGE_V1_ABT,CS_ABT1,'GEO_ABT1_geometry',1

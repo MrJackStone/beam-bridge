@@ -2,21 +2,40 @@
 ! BRIDGE_V1_SMCBPILE , ARG1       , ARG2 , ARG3      , ARG4
 
 
+! Parse inputs
+_supIdx    = ARG1
+_pile_data = ARG3
+_cmInfix   = ARG4
+
+infix = ''
+*get,parType,parm,_cmInfix,type
+*if,parType,eq,3,then
+  infix = strcat(_cmInfix,'_')
+*endif
+
+! Use length of first pile as default for all piles
+pileLength = %_pile_data%(3,1)
+
+! Prepare environment
 csys,0
 
-pileLength = GEO_pileLengths(arg1)
+ksel , none
+asel , none
+cm   , cmk_support , kp
+cm   , cmk_pileTop , kp
+cm   , cml_pile    , line
 
-! Get keypoints at the column-pile transition for all columns of this frame
+! Create piles starting at the column-pile transition
 cmsel,s,COMPK_FrameBottom
-cmsel,r,COMPK_FRAME_%arg1%
+cmsel,r,COMPK_FRAME_%_supIdx%
 cm,cmk_nthFrameBottom,kp
 
-! Create piles
 *get,kc,kp,,count
 colKP = 0
 
 *do,nthColumn,1,kc,1
   cmsel,s,cmk_nthFrameBottom
+  lsel,none
 
   colKP   = kpnext(colKP)
   xCol    = kx(colKP)
@@ -29,12 +48,25 @@ colKP = 0
 
   lstr,botKP,colKP
 
+  cmpadd,'cml_pile'
   ksel,s,kp,,botKP
-  cmpadd,'COMPK_Support'
-
+  cmpadd,'cmk_support'
   ksel,s,kp,,colKP
-  cmpadd,'COMPK_PileTop'
+  cmpadd,'cmk_pileTop'
 
 *enddo
 
-! TODO  copy approach from BRIDGE_V1_SMPILE, especially exported selection component
+! Export
+cmsel,s,cmk_support
+cm,COMPK_%infix%support,kp
+
+cmsel,s,cmk_pileTop
+cm,COMPK_%infix%pileTop,kp
+
+cmsel,s,cml_pile
+cm,COMPL_%infix%pile,line
+
+! Clean up
+cmdele , cmk_support
+cmdele , cmk_pileTop
+cmdele , cml_pile
