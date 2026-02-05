@@ -959,6 +959,28 @@ WARNING: Water level incompatible with frame height. GEO_WATERHEIGHT reduced to 
 ! Calculate relative coordinates of the piles in the pile cap
 BRIDGE_V1_CALCPILECOORDS , 'GEO_pileXL' , 'GEO_pileYL' , GEO_pileCount , GEO_pileConfig , PILE_d , GEO_pileDistLong , GEO_pileDistTran , COLUMN_cx , COLUMN_cy , GEO_capLength , GEO_capWidth
 
+! Calculate pier pile cap slicing positions
+zero  = 0
+front = 0
+back  = 0
+left  = 0
+right = 0
+
+*if,GEO_frameOpt,eq,0,then
+  ! Column-girder frame
+  left  = -GEO_columnSpacing/2
+  right =  GEO_columnSpacing/2
+*elseif,GEO_frameOpt,eq,1,then
+  ! Tubular pier column
+  left  = -GEO_columnWidth/2
+  right =  GEO_columnWidth/2
+  front =  GEO_columnDepth/2
+  back  = -GEO_columnDepth/2
+*endif
+
+arrjoin , 'GEO_PIERCAP_x_slices' , 'GEO_pileXL' , 'zero' , 'front' , 'back'
+arrjoin , 'GEO_PIERCAP_y_slices' , 'GEO_pileYL' , 'zero' , 'left' , 'right'
+
 ! Determine the Z coordinate (vertical position) of the top & bottom of each pile
 *if,SEC_offset,EQ,1,THEN
   zPileTop = zFrameBot-PILECAP_h+0.1
@@ -1034,6 +1056,23 @@ pileWidth=SEC_ABT_pile_d-2*GEO_ABT_pileOvlap
 *endif
 *if,GEO_ABT2_type,eq,3,then
     GEO_ABT2_pileCapL=GEO_ABT2_length+(GEO_ABT2_pileCapW/2)
+*endif
+
+! Pile & pile cap data for frame-type abutment
+zero = 0
+*if,GEO_ABT1_type,eq,6,then
+  BRIDGE_V1_CALCPILECOORDS , 'GEO_ABT1_x_piles' , 'GEO_ABT1_y_piles' , GEO_ABT1_pileCount , GEO_ABT1_pileConfig , SEC_ABT_pile_d , GEO_ABT1_pilePitchX , GEO_ABT1_pilePitchY , GEO_ABT1_columnCx , GEO_ABT1_columnCy , GEO_ABT1_capLx , GEO_ABT1_capLy
+  left  = -GEO_ABT1_columnSpacing/2
+  right =  GEO_ABT1_columnSpacing/2
+  arrjoin , 'GEO_ABT1_CAP_x_slices' , 'GEO_ABT1_x_piles'  , 'zero'
+  arrjoin , 'GEO_ABT1_CAP_y_slices' , 'GEO_ABT1_y_piles'  , 'zero' , 'left' , 'right'
+*endif
+*if,GEO_ABT2_type,eq,6,then
+  BRIDGE_V1_CALCPILECOORDS , 'GEO_ABT2_x_piles' , 'GEO_ABT2_y_piles' , GEO_ABT2_pileCount , GEO_ABT2_pileConfig , SEC_ABT_pile_d , GEO_ABT2_pilePitchX , GEO_ABT2_pilePitchY , GEO_ABT2_columnCx , GEO_ABT2_columnCy , GEO_ABT2_capLx , GEO_ABT2_capLy
+  left  = -GEO_ABT2_columnSpacing/2
+  right =  GEO_ABT2_columnSpacing/2
+  arrjoin , 'GEO_ABT2_CAP_x_slices' , 'GEO_ABT2_x_piles'  , 'zero'
+  arrjoin , 'GEO_ABT2_CAP_y_slices' , 'GEO_ABT2_y_piles'  , 'zero' , 'left' , 'right'
 *endif
 
 ! Thin transversal wall depth
