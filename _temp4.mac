@@ -19,14 +19,14 @@
 BRIDGE_V1_CALCPILECOORDS , 'x_piles' , 'y_piles' , GEO_ABT_pileCount , GEO_ABT_pileConfig , GEO_ABT_pileD , GEO_ABT_pilePitchX , GEO_ABT_pilePitchY , GEO_ABT_columnCx , GEO_ABT_columnCy , GEO_ABT_capLx , GEO_ABT_capLy
 
 ! Calculate slicing positions
-zero         = 0
-leftColumnY  = -GEO_ABT_columnSpacing/2
-rightColumnY = GEO_ABT_columnSpacing/2
+zero  =  0
+left  = -GEO_ABT_columnSpacing/2
+right =  GEO_ABT_columnSpacing/2
 
 arrjoin , 'x_temp' , 'x_piles'  , 'zero'
 arruniq , 'x_temp' , 'x_slices' , 1
 
-arrjoin , 'y_temp' , 'y_piles'  , 'zero' , 'leftColumnY' , 'rightColumnY'
+arrjoin , 'y_temp' , 'y_piles'  , 'zero' , 'left' , 'right'
 arruniq , 'y_temp' , 'y_slices' , 1
 
 *if,GEO_ABT_capOpt,eq,0,then
