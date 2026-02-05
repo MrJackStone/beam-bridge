@@ -1,24 +1,27 @@
 ! BRIDGE_V1_SMPILE, nthSupport
 ! BRIDGE_V1_SMPILE, arg1
 
-cCS_name=strcat('CS_INFRA_C',chrval(arg1))
-CS_active=%cCS_name%
+
+*del,pilecap_cs,,nopr
+*dim,pilecap_cs,,2
 
 *if,GEO_capOpt,eq,0,then
-  capCount=2
+  ! Two connected pile caps:
+  pilecapCount  = 2
+  pilecap_cs(1) = CS_INFRA_l%ARG1%, CS_INFRA_r%ARG1%
 *elseif,GEO_capOpt,eq,1,then
-  capCount=1
+  ! Single pile cap:
+  pilecapCount  = 1
+  pilecap_cs(1) = CS_INFRA_c%ARG1%
 *endif
 
-*do,nthCap,1,capCount,1
+*do,nthCap,1,pilecapCount,1
 
-  *if,GEO_capOpt,eq,0,then
-    CS_active=CS_active+1
-  *endif
+  nthCS = pilecap_cs(nthCap)
 
   *do,nthPile,1,GEO_pileCount,1
     ! Calculate X, Y & Z coordinates of the pile's ends
-    pileLen = GEO_pileLengths(arg1)
+    pileLen = GEO_pileLengths(ARG1)
     zTop    = 0
     zBot    = zTop-pileLen
     xLoc    = GEO_pileXL(nthPile)
@@ -33,7 +36,7 @@ CS_active=%cCS_name%
     *afun,RAD
 
     ! Create pile line
-    csys,CS_active
+    csys,nthCS
     *get,KMaxD,KP,,NUM,MAXD
     KTop=KMaxD+1
     KBot=KMaxD+2
