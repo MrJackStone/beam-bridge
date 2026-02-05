@@ -47,13 +47,13 @@ GEO_ABT_pileDiameter  = SEC_ABT_pile_d
 *get , girderCount , parm , %ARG4% , dim , x
 
 ! GEO_ABT_pileData:
-!   pos  param  description
-!    1   x      X coordinate at the center of the pile
-!    2   y      Y coordinate at the center of the pile
-!    3   L      pile length
-!    4   alpha  angle with the vertical (gravitational) axis (applied after alpha)
-!    5   beta   angle at the horizontal plane (applied first, before alpha)
-!    6   id     global pile identification number (optional)
+!   i-pos  param  description
+!   1      x      X coordinate at the center of the pile (at the top)
+!   2      y      Y coordinate at the center of the pile (at the top)
+!   3      L      pile length (vertical projection)
+!   4      alpha  angle with the vertical (gravitational) axis (applied second, after beta)
+!   5      beta   angle at the horizontal plane (applied first, before alpha)
+!   6      id     global pile identification number (optional)
 
 
 !! B.  Prepare environment                                                                        !!
