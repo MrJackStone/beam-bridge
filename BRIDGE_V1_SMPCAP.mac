@@ -60,117 +60,41 @@ arruniq , 'y_temp' , 'y_slices'   , 1
 *if,GEO_capOpt,eq,0,then
   ! Two pile caps connected by grade beam:
 
-  ! Left pile cap
-  BRIDGE_V1_BLC5SLICED , CS_INFRA_l%ARG1% , GEO_capLy , GEO_capLx , 'x_slices' , 'y_slices' , 'cma_pileCapLeft'
-  BRIDGE_V1_BLC5SLICED , CS_INFRA_r%ARG1% , GEO_capLy , GEO_capLx , 'x_slices' , 'y_slices' , 'cma_pileCapRight'
+  ! Left & right pile caps
+  BRIDGE_V1_BLC5SLICED , CS_INFRA_l%ARG1% , GEO_capLength , GEO_capWidth , 'x_slices' , 'y_slices' , 'cma_pileCapLeft'
+  BRIDGE_V1_BLC5SLICED , CS_INFRA_r%ARG1% , GEO_capLength , GEO_capWidth , 'x_slices' , 'y_slices' , 'cma_pileCapRight'
   cmsel,s,cma_pileCapLeft
   cmsel,a,cma_pileCapRight
   cm,cma_pileCap,area
 
-  *do,nthX,1,XSliceCount,1
-    ! Slice pile cap: YZ plane
-    xOff = GEO_xCapSlice(nthX)
-    wpoffs,xOff
-    wprota,,,90
-    asbw,all,,delete
-    wprota,,,-90
-    wpoffs,-xOff
-  *enddo
-
-  *do,nthY,1,YSliceCount,1
-    ! Slice pile cap: XZ plane
-    yOff = GEO_yCapSlice(nthY)
-    wpoffs,,yOff
-    wprota,,90
-    asbw,all,,delete
-    wprota,,-90
-    wpoffs,,-yOff
-  *enddo
-
-  cmpadd,'COMPA_PileCap'
-
-  ! Right pile cap
-  csys,CS_right
-  wpcsys,,CS_right
-
-  ksel,s,loc,x,0
-  ksel,r,loc,y,0
-  ksel,r,loc,z,0
-  *get,KNum,kp,,num,min
-
-  asel,none
-  blc5,0,0,GEO_capWidth,GEO_capLength
-
-  *do,nthX,1,XSliceCount,1
-    ! Slice pile cap: YZ plane
-    xOff = GEO_xCapSlice(nthX)
-    wpoffs,xOff
-    wprota,,,90
-    asbw,all,,delete
-    wprota,,,-90
-    wpoffs,-xOff
-  *enddo
-
-  *do,nthY,1,YSliceCount,1
-    ! Slice pile cap: XZ plane
-    yOff = GEO_yCapSlice(nthY)
-    wpoffs,,yOff
-    wprota,,90
-    asbw,all,,delete
-    wprota,,-90
-    wpoffs,,-yOff
-  *enddo
-
-  cmpadd,'COMPA_PileCap'
-
   ! Create grade beam
-  csys,CS_center
-  wpcsys,,CS_center
-  ksel,s,loc,x,0
-  ksel,r,loc,y,yLeft+(GEO_capLength/2)
-  ksel,r,loc,z,0
-  *get,KLeft,kp,,num,min
-  ksel,s,loc,x,0
-  ksel,r,loc,y,yRight-(GEO_capLength/2)
-  ksel,r,loc,z,0
-  *get,KRight,kp,,num,min
-  ksel,s,kp,,KLeft
-  ksel,a,kp,,KRight
-  lsel,none
-  L,KLeft,KRight
-  cmpadd,'COMPL_GradeBeam'
+  BRIDGE_V1_GRADEBEAM , CS_INFRA_c%ARG1% , 'cma_pileCapLeft' , 'cma_pileCapRight' , 'cml_gradeBeam'
 
 *elseif,GEO_capOpt,eq,1,then
-  ! Single pile cap for both columns
+  ! Single pile cap for both columns:
+  BRIDGE_V1_BLC5SLICED , CS_INFRA_c%ARG1% , GEO_capLength , GEO_capWidth , 'x_slices' , 'y_slices' , 'cma_pileCap'
 
-  ! Draw pile cap
-  csys,CS_center
-  wpcsys,,CS_center
-  asel,none
-  blc5,0,0,GEO_capWidth,GEO_capLength
-
-  ! Slice cap
-  batch_sliceyz,'GEO_xCapSlice',1
-  batch_slicexz,'GEO_yCapSlice',1
-
+  ! Additional slicing for certain types of mesostructure
   *if,GEO_frameOpt,eq,1,then
     ! Tubular pier column: slice at superstructure positions
-    *del,XZslice,,nopr
-    *dim,XZslice,,2
-    XZslice(1)=-GEO_columnWidth/2,GEO_columnWidth/2
-    batch_slicexz,'XZslice',1
+    wpslicexz , -GEO_columnWidth/2
+    wpslicexz , GEO_columnWidth/2
     *if,GEO_deckRadius,eq,0,then
       BRIDGE_V1_LONGSLICE
     *else
       BRIDGE_V1_ARCSLICE , 1
     *endif
-
   *elseif,GEO_frameOpt,eq,3,then
     ! Hammerhead pier: slice around solid circular column
     BRIDGE_V1_SLICEAROUNDBEAM ,  , GEO_pierColumnShape , GEO_pierColumnDiameter , GEO_pierColumnCx , GEO_pierColumnCy , 'COMPA_HAMMER%ARG1%_botInterface'
-
   *endif
-
-  cmpadd,'COMPA_PileCap'
+  cm,cma_pileCap,area
 
 *endif
+
+! Export selection components
+cmsel,s,cma_pileCap
+cmpadd,'COMPA_pileCap'
+
+cmsel,s,cml_gradeBeam
+cmpadd,'COMPL_GradeBeam'
