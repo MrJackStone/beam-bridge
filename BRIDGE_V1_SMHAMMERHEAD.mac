@@ -44,11 +44,7 @@ blc5,0,0,GEO_piercapLength,GEO_piercapWidth,0
 wprota,,,90
 asbw,all,,delete
 
-*if,GEO_deckRadius,eq,0,then
-  BRIDGE_V1_LONGSLICE
-*else
-  BRIDGE_V1_ARCSLICE , 1
-*endif
+BRIDGE_V1_SUPERSLICE
 
 cm,%cmaName%,area
 

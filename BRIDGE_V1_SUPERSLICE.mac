@@ -1,0 +1,8 @@
+! BRIDGE_V1_SUPERSLICE
+
+
+*if,GEO_deckRadius,eq,0,then
+  BRIDGE_V1_LONGSLICE
+*else
+  BRIDGE_V1_ARCSLICE , 1
+*endif

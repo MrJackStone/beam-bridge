@@ -61,11 +61,7 @@ asel,u,loc,y,-GEO_columnWidth/2
 asel,u,loc,y, GEO_columnWidth/2
 
 ! Slice at superstructure positions
-*if,GEO_deckRadius,eq,0,then
-  BRIDGE_V1_LONGSLICE
-*else
-  BRIDGE_V1_ARCSLICE , 1
-*endif
+BRIDGE_V1_SUPERSLICE
 
 ! Slice at infrastructure positions
 zero = 0
