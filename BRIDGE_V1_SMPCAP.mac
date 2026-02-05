@@ -44,9 +44,6 @@ arruniq , _y_slices , 'y_slices' , 1
   ! Left & right pile caps
   BRIDGE_V1_BLC5SLICED , CS_INFRA_l%_supIdx% , _capLy , _capLx , 'x_slices' , 'y_slices' , 'cma_pileCapLeft'
   BRIDGE_V1_BLC5SLICED , CS_INFRA_r%_supIdx% , _capLy , _capLx , 'x_slices' , 'y_slices' , 'cma_pileCapRight'
-  cmsel,s,cma_pileCapLeft
-  cmsel,a,cma_pileCapRight
-  cm,cma_pileCap,area
   ! Create grade beam
   BRIDGE_V1_GRADEBEAM , CS_INFRA_c%_supIdx% , 'cma_pileCapLeft' , 'cma_pileCapRight' , 'cml_gradeBeam'
 *elseif,_capOpt,eq,1,then
@@ -55,7 +52,9 @@ arruniq , _y_slices , 'y_slices' , 1
 *endif
 
 ! Export selection components
-cmsel,s,cma_pileCap
+cmsel , s , cma_pileCapLeft
+cmsel , a , cma_pileCapRight
+cmsel , s , cma_pileCap
 cmpadd,'COMPA_%infix%pileCap'
 
 cmsel,s,cml_gradeBeam
