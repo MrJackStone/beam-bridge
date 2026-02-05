@@ -1024,19 +1024,7 @@ arrjoin , 'GEO_PIERCAP_y_slices' , 'GEO_pileYL' , 'zero' , 'left' , 'right'
 !! 2.2.4 ABUTMENTS                                                                                !!
 !!                                                                                                !!
 ! Abutments status
-*if,GEO_ABT_status,eq,0,then
-    GEO_ABT1_status=0
-    GEO_ABT2_status=0
-*elseif,GEO_ABT_status,eq,1,then
-    GEO_ABT1_status=1
-    GEO_ABT2_status=1
-*elseif,GEO_ABT_status,eq,2,then
-    GEO_ABT1_status=1
-    GEO_ABT2_status=0
-*elseif,GEO_ABT_status,eq,3,then
-    GEO_ABT1_status=0
-    GEO_ABT2_status=1
-*endif
+GEO_ABT_status = (GEO_ABT1_status>GEO_ABT2_status)
 
 ! Approach slab status
 GEO_ABT1_appSlab=nint(((GEO_ABT1_appSlab>0)<1))
