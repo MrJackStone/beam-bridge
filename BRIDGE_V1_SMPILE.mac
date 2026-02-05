@@ -2,6 +2,14 @@
 ! BRIDGE_V1_SMPILE, arg1
 
 
+! Prepare environment
+ksel , none
+asel , none
+cm   , cmk_support , kp
+cm   , cmk_pileTop , kp
+cm   , cml_pile    , line
+
+! Get pile cap CSYS
 *del,pilecap_cs,,nopr
 *dim,pilecap_cs,,2
 
@@ -15,6 +23,7 @@
   pilecap_cs(1) = CS_INFRA_c%ARG1%
 *endif
 
+! Draw piles
 *do,nthCap,1,pilecapCount,1
 
   nthCS = pilecap_cs(nthCap)
@@ -34,11 +43,13 @@
     afunrestore
 
     ! Create pile line
+    lsel,none
     csys,nthCS
     nextkp,'pile_ends',2
     k , pile_ends(1) , xTop , yTop , zTop
     k , pile_ends(2) , xBot , yBot , zBot
     l , pile_ends(1) , pile_ends(2)
+    cmpadd,'cml_pile'
 
     ksel,s,kp,,pile_ends(2)
     cmpadd,'COMPK_Support'
@@ -47,3 +58,18 @@
     cmpadd,'COMPK_PileTop'
   *enddo
 *enddo
+
+! Export
+cmsel,s,cmk_support
+cm,COMPK_%infix%support,kp
+
+cmsel,s,cmk_pileTop
+cm,COMPK_%infix%pileTop,kp
+
+cmsel,s,cml_pile
+cm,COMPL_%infix%pile,line
+
+! Clean up
+cmdele , cmk_support
+cmdele , cmk_pileTop
+cmdele , cml_pile
