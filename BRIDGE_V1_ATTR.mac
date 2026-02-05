@@ -846,13 +846,17 @@ GEO_pierCount = GEO_supportCount-(GEO_ABT1_status+GEO_ABT2_status)
   *dim,GEO_frameBotOffset,ARRAY,GEO_SupportCount
 *endif
 
-*del , GEO_pierX    ,  , nopr
-*del , GEO_pierZBot ,  , nopr
-*del , GEO_pierZTop ,  , nopr
-*dim , GEO_pierX    ,  , GEO_pierCount
-*dim , GEO_pierZBot ,  , GEO_pierCount
-*dim , GEO_pierZTop ,  , GEO_pierCount
-nthPier = 0
+*del , GEO_pierX           ,  , nopr
+*del , GEO_pierZBot        ,  , nopr
+*del , GEO_pierZTop        ,  , nopr
+*del , GEO_PIER_supportIdx ,  , nopr
+*del , GEO_SUPPORT_pierIdx ,  , nopr
+*dim , GEO_pierX           ,  , GEO_pierCount
+*dim , GEO_pierZBot        ,  , GEO_pierCount
+*dim , GEO_pierZTop        ,  , GEO_pierCount
+*dim , GEO_PIER_supportIdx ,  , GEO_pierCount
+*dim , GEO_SUPPORT_pierIdx ,  , GEO_supportCount
+pierIdx = 0
 *do,nthSupport,1,GEO_supportCount,1
   skip = 0
   *if,nthSupport,eq,1,and,GEO_ABT1_status,eq,1,then
@@ -861,11 +865,12 @@ nthPier = 0
     skip = 1
   *endif
   *if,skip,eq,0,then
-    nthPier                      = nthPier+1
-    GEO_pierX(nthPier)           = GEO_supportX(nthSupport)
-    GEO_pierZBot(nthPier)        = zFrameBot+GEO_frameBotOffset(nthSupport)
-    GEO_pierZTop(nthPier)        = zFrameTop+GEO_frameTopOffset(nthSupport)
-    GEO_PIER_supportIdx(nthPier) = nthSupport
+    pierIdx                         = pierIdx+1
+    GEO_pierX(pierIdx)              = GEO_supportX(nthSupport)
+    GEO_pierZBot(pierIdx)           = zFrameBot+GEO_frameBotOffset(nthSupport)
+    GEO_pierZTop(pierIdx)           = zFrameTop+GEO_frameTopOffset(nthSupport)
+    GEO_PIER_supportIdx(pierIdx)    = nthSupport
+    GEO_SUPPORT_pierIdx(nthSupport) = pierIdx
   *endif
 *enddo
 
@@ -988,8 +993,26 @@ WARNING: Water level incompatible with frame height. GEO_WATERHEIGHT reduced to 
   *endif
 *endif
 
-! Calculate relative coordinates of the piles in the pile cap
+! Calculate pier piles data
+! Note: prepared to implementation of non-uniform piers (TODO)
 BRIDGE_V1_CALCPILECOORDS , 'GEO_pileXL' , 'GEO_pileYL' , GEO_pileCount , GEO_pileConfig , PILE_d , GEO_pileDistLong , GEO_pileDistTran , COLUMN_cx , COLUMN_cy , GEO_capLength , GEO_capWidth
+
+*do,nthPier,1,GEO_pierCount,1
+
+  supportIdx = GEO_PIER_supportIdx(nthPier)
+
+  *del,GEO_PIER%nthPier%_pile_data,,nopr
+  *dim,GEO_PIER%nthPier%_pile_data,,GEO_pileCount
+
+  *do,nthPile,1,GEO_pileCount,1
+    GEO_PIER%nthPier%_pile_data(1,nthPile) = GEO_pileXL(nthPile)
+    GEO_PIER%nthPier%_pile_data(2,nthPile) = GEO_pileYL(nthPile)
+    GEO_PIER%nthPier%_pile_data(3,nthPile) = GEO_pileLengths(supportIdx)
+    GEO_PIER%nthPier%_pile_data(4,nthPile) = GEO_pileYAngle(nthPile)  ! TODO  these X & Y angles don't exactly match the alpha & beta
+    GEO_PIER%nthPier%_pile_data(5,nthPile) = GEO_pileXAngle(nthPile)  !       approach adopted for pile data -- revise DATA and elsewhere
+    GEO_PIER%nthPier%_pile_data(6,nthPile) = 0
+  *enddo
+*enddo
 
 ! Calculate pier pile cap slicing positions
 zero  = 0
