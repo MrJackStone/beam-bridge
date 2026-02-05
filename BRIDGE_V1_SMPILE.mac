@@ -20,34 +20,30 @@
   nthCS = pilecap_cs(nthCap)
 
   *do,nthPile,1,GEO_pileCount,1
-    ! Calculate X, Y & Z coordinates of the pile's ends
+    ! Calculate pile's top & bottom (X,Y,Z) coordinates
+    afunbackup,'DEG'
     pileLen = GEO_pileLengths(ARG1)
-    zTop    = 0
-    zBot    = zTop-pileLen
-    xLoc    = GEO_pileXL(nthPile)
-    yLoc    = GEO_pileYL(nthPile)
+    xTop    = GEO_pileXL(nthPile)
+    yTop    = GEO_pileYL(nthPile)
     xAngle  = GEO_pileXAngle(nthPile)
     yAngle  = GEO_pileYAngle(nthPile)
-    xTop    = xLoc
-    yTop    = yLoc
-    *afun,DEG
-    xBot=xTop+TAN(yAngle)*pileLen
-    yBot=yTop+TAN(xAngle)*pileLen
-    *afun,RAD
+    zTop    = 0
+    zBot    = zTop-pileLen
+    xBot    = xTop+tan(yAngle)*pileLen
+    yBot    = yTop+tan(xAngle)*pileLen
+    afunrestore
 
     ! Create pile line
     csys,nthCS
-    *get,KMaxD,KP,,NUM,MAXD
-    KTop=KMaxD+1
-    KBot=KMaxD+2
-    K,KTop,xTop,yTop,zTop
-    K,KBot,xBot,yBot,zBot
-    L,KBot,KTop
+    nextkp,'pile_ends',2
+    k , pile_ends(1) , xTop , yTop , zTop
+    k , pile_ends(2) , xBot , yBot , zBot
+    l , pile_ends(1) , pile_ends(2)
 
-    ksel,s,kp,,KBot
+    ksel,s,kp,,pile_ends(2)
     cmpadd,'COMPK_Support'
 
-    ksel,s,kp,,KTop
+    ksel,s,kp,,pile_ends(1)
     cmpadd,'COMPK_PileTop'
   *enddo
 *enddo
