@@ -959,50 +959,6 @@ WARNING: Water level incompatible with frame height. GEO_WATERHEIGHT reduced to 
 ! Calculate relative coordinates of the piles in the pile cap
 BRIDGE_V1_CALCPILECOORDS , 'GEO_pileXL' , 'GEO_pileYL' , GEO_pileCount , GEO_pileConfig , PILE_d , GEO_pileDistLong , GEO_pileDistTran , COLUMN_cx , COLUMN_cy , GEO_capLength , GEO_capWidth
 
-! Calculate X positions in which to slice tubular column piers
-zero=0
-arrjoin,'xCoords','GEO_pileXL','zero'
-arruniq,'xCoords','GEO_xTubeSlice',1
-*get,XTubeSliceCount,PARM,GEO_xTubSlice,DIM,X
-
-! Calculate Y positions in which to slice tubular column piers
-*if,GEO_frameOpt,eq,0,then
-  ! Column-girder frame
-  *del,ycols
-  *dim,ycols,,2
-  ycols(1)=-GEO_columnSpacing/2,GEO_columnSpacing/2
-*else
-  ! Tubular pier column, cap-beam, or hammerhead
-  *del,ycols
-  *dim,ycols,,1
-  ycols(1)=0
-*endif
-
-arrjoin,'yCoords','GEO_pileYL','zero','ycols'
-arruniq,'yCoords','GEO_yTubeSlice',1
-
-! Calculate positions in which to slice the pile cap along the YZ plane
-*if,GEO_frameOpt,eq,1,then
-  ! Tubular pier column
-  front = GEO_columnDepth/2
-  back  = -GEO_columnDepth/2
-*else
-  ! Column-girder frame, cap-beam, or hammerhead
-  front = 0
-  back  = 0
-*endif
-arrjoin,'xCoords','GEO_xTubeSlice','front','back'
-arruniq,'xCoords','GEO_xCapSlice',1
-
-! Calculate positions in which to slice the pile cap along the XZ plane
-! TODO: this is gonna be a bitch to fix...
-*if,GEO_pileOpt,eq,0,then
-  arrjoin,'yCoords','GEO_yTubeSlice','zero'
-*elseif,GEO_pileOpt,eq,1,then
-  arrjoin,'yCoords','GEO_yTubeSlice','GEO_columnY'
-*endif
-arruniq,'yCoords','GEO_yCapSlice',1
-
 ! Determine the Z coordinate (vertical position) of the top & bottom of each pile
 *if,SEC_offset,EQ,1,THEN
   zPileTop = zFrameBot-PILECAP_h+0.1

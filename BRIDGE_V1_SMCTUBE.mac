@@ -68,12 +68,18 @@ asel,u,loc,y, GEO_columnWidth/2
 *endif
 
 ! Slice at infrastructure positions
+zero = 0
+
+arrjoin , 'y_temp' , 'GEO_pileYL' , 'zero'
+arruniq , 'y_temp' , 'y_slices'   , 1
 wpcsys,,CS_num
 wprota,180
-batch_slicexz,'GEO_yTubeSlice',1
+batch_slicexz,'y_slices',1
 
+arrjoin , 'x_temp' , 'GEO_pileXL' , 'zero'
+arruniq , 'x_temp' , 'x_slices'   , 1
 cmsel,a,%acmName%
-batch_sliceyz,'GEO_xTubeSlice',1
+batch_sliceyz,'x_slices',1
 wpcsys,,0
 
 ! Selection components

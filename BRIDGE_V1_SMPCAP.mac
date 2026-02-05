@@ -34,73 +34,38 @@
 !   COMPL_GradeBeam
 !   COMPA_PileCap
 
+! Calculate slicing positions
+zero  = 0
+front = 0
+back  = 0
+left  = 0
+right = 0
 
-xCenter = GEO_supportX(arg1)
-*if,GEO_deckRadius,eq,0,then
-  ! Straight deck:
-  xLeft  = xCenter
-  xRight = xCenter
-
-  yCenter = GEO_deckOff_beg+(GEO_deckOff_end-GEO_deckOff_beg)*(xCenter/GEO_deckLength)+(GEO_deckWidth_beg/2)
-  yLeft   = yCenter+GEO_columnY_%arg1%(1)
-  yRight  = yCenter+GEO_columnY_%arg1%(2)
-
-  zAngle = 0
-
-*else
-  ! Curved deck:
-  *afun,deg
-  chi_i = GEO_supportChi(arg1)
-
-  xLeft  = (GEO_deckLength/2)-(GEO_deckRadius+GEO_columnY_%arg1%(1))*cos(chi_i)
-  xRight = (GEO_deckLength/2)-(GEO_deckRadius+GEO_columnY_%arg1%(2))*cos(chi_i)
-
-  yCenter = GEO_deckRadius*sin(chi_i)-GEO_chordOff
-  yLeft   = (GEO_deckRadius+GEO_columnY_%arg1%(1))*sin(chi_i)-GEO_chordOff
-  yRight  = (GEO_deckRadius+GEO_columnY_%arg1%(2))*sin(chi_i)-GEO_chordOff
-
-  zAngle = 90-chi_i
-  *afun,rad
+*if,GEO_frameOpt,eq,0,then
+  ! Column-girder frame
+  left = -GEO_columnSpacing/2
+  right = GEO_columnSpacing/2
+*elseif,GEO_frameOpt,eq,1,then
+  ! Tubular pier column
+  front =  GEO_columnDepth/2
+  back  = -GEO_columnDepth/2
 *endif
 
-! Top and bottom Z coordinates of the frame
-nthFrameZTop = zFrameTop+GEO_frameTopOffset(arg1)
-nthFrameZBot = zFrameBot+GEO_frameBotOffset(arg1)
+arrjoin , 'x_temp' , 'GEO_pileXL' , 'zero' , 'front' , 'back'
+arruniq , 'x_temp' , 'x_slices'   , 1
 
-CS_center = 41+(10*arg1)
-CS_left   = CS_center+1
-CS_right  = CS_center+2
-
-cCS_name = strcat('CS_INFRA_C',chrval(arg1))
-lCS_name = strcat('CS_INFRA_L',chrval(arg1))
-rCS_name = strcat('CS_INFRA_R',chrval(arg1))
-
-%cCS_name% = CS_center
-%lCS_name% = CS_left
-%rCS_name% = CS_right
-
-local , CS_center , cart , xCenter , yCenter , nthFrameZBot , zAngle  ! TODO  csys
-local , CS_left   , cart , xLeft   , yLeft   , nthFrameZBot , zAngle  ! TODO  csys
-local , CS_right  , cart , xRight  , yRight  , nthFrameZBot , zAngle  ! TODO  csys
-csys  , 0
-
-*get , XSliceCount , parm , GEO_xCapSlice , dim , x
-*get , YSliceCount , parm , GEO_yCapSlice , dim , x
+arrjoin , 'y_temp' , 'GEO_pileYL' , 'zero' , 'left' , 'right'
+arruniq , 'y_temp' , 'y_slices'   , 1
 
 *if,GEO_capOpt,eq,0,then
   ! Two pile caps connected by grade beam:
 
   ! Left pile cap
-  csys,CS_left
-  wpcsys,,CS_left
-
-  ksel , s , loc , x , 0
-  ksel , r , loc , y , 0
-  ksel , r , loc , z , 0
-  *get,KNum,kp,,num,min
-
-  asel,none
-  blc5,0,0,GEO_capWidth,GEO_capLength
+  BRIDGE_V1_BLC5SLICED , CS_INFRA_l%ARG1% , GEO_capLy , GEO_capLx , 'x_slices' , 'y_slices' , 'cma_pileCapLeft'
+  BRIDGE_V1_BLC5SLICED , CS_INFRA_r%ARG1% , GEO_capLy , GEO_capLx , 'x_slices' , 'y_slices' , 'cma_pileCapRight'
+  cmsel,s,cma_pileCapLeft
+  cmsel,a,cma_pileCapRight
+  cm,cma_pileCap,area
 
   *do,nthX,1,XSliceCount,1
     ! Slice pile cap: YZ plane
