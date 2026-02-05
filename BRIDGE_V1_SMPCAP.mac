@@ -41,21 +41,17 @@ arruniq , _y_slices , 'y_slices' , 1
 
 *if,_capOpt,eq,0,then
   ! Two pile caps connected by grade beam:
-
   ! Left & right pile caps
   BRIDGE_V1_BLC5SLICED , CS_INFRA_l%_supIdx% , _capLy , _capLx , 'x_slices' , 'y_slices' , 'cma_pileCapLeft'
   BRIDGE_V1_BLC5SLICED , CS_INFRA_r%_supIdx% , _capLy , _capLx , 'x_slices' , 'y_slices' , 'cma_pileCapRight'
   cmsel,s,cma_pileCapLeft
   cmsel,a,cma_pileCapRight
   cm,cma_pileCap,area
-
   ! Create grade beam
   BRIDGE_V1_GRADEBEAM , CS_INFRA_c%_supIdx% , 'cma_pileCapLeft' , 'cma_pileCapRight' , 'cml_gradeBeam'
-
 *elseif,_capOpt,eq,1,then
   ! Single pile cap for both columns:
   BRIDGE_V1_BLC5SLICED , CS_INFRA_c%_supIdx% , _capLy , _capLx , 'x_slices' , 'y_slices' , 'cma_pileCap'
-
 *endif
 
 ! Export selection components
