@@ -1,24 +1,19 @@
 ! temp2 , nthSupport ,      ,      , girder_y , supIndex
 ! temp2 , arg1       , ARG2 , ARG3 , ARG4     , ARG5
 
-! Parameters:
-! - wall thk
-! - girder length
-! - gider width
-! - gider depth
-! - number of columns
-! - column 'length' (along X)
-! - column 'width' (along Y)
-! - total height
-! - approach slab length
-! - approach slab width
-! - approach slab gap
-! - number of pile rows (along X)
-! - number of pile columns (along Y)
-! - angle of piles on outer columns
-! - pile length
-! - pile diameter
-! - unbraced pile segments
+! Exported:
+!   COMPK_ABT_pileBase
+!   COMPK_ABT_pileTop
+!   COMPL_ABT_columns
+!   COMPL_ABT_frameGirder
+!   COMPL_ABT_pileConnections
+!   COMPL_ABT_piles
+!   COMPL_ABT_posts
+!   COMPL_Barrier
+!   COMPA_ABT_appSlab
+!   COMPA_ABT_cantileverWall
+!   COMPA_ABT_pileCap
+!   COMPA_ABT_pileInterface
 
 ! Parse inputs
 _abutmentCS = ARG1
@@ -43,18 +38,7 @@ girderHeight         = GIRDER_d(1)  ! TODO  hard-coded, improve
 *get,girderCount,parm,%ARG4%,dim,x
 
 ! Prepare environment
-! 'COMPK_ABT_pileBase'
-! 'COMPK_ABT_pileTop'
-! 'COMPL_ABT_pileConnections'
-! 'COMPL_ABT_piles'
-! 'COMPL_ABT_posts'
-'COMPL_Barrier'
-! 'COMPA_ABT_appSlab'
-! 'COMPA_ABT_cantileverWall'
-! 'COMPA_ABT_pileCap'
-! 'COMPA_ABT_pileInterface'
-'COMPA_ABT_postInterface'
-'COMPA_abutment'
+smdbackup,'none'
 
 ! Calculate geometric parameters
 GEO_ABT_wallHeight    = girderHeight+GEO_ABT_postHeight+(GEO_ABT_girderH/2)
@@ -245,8 +229,27 @@ cmpadd,'COMPA_ABT_pileCap'
   *enddo
 *enddo
 
+lsel,none
+*if,LOAD_barrierStatus,EQ,1,THEN
+  csbackup
+  *do,nthBarrier,1,LOAD_barrierCount,1
+    nthCS = CS_barriers(nthBarrier)
+    csys,nthCS
+    lsel,a,loc,y,0
+  *enddo
+  cmsel,s,COMPA_ABT_appSlab
+  lsla,r
+  csrestore
+*endif
+cmpadd,'COMPL_Barrier'
 
-cmdele,cml_vertical
+! Clean up
+cmdele , cml_vertical
+cmdele , cml_frameGirder
+cmdele , cml_posts
+cmdele , cml_columns
+cmdele , cma_cantileverWall
+cmdele , cma_approachSlab'
 
 ! Match mesh: girder & wall bottom
 ! Match mesh: wall top & approach slab
@@ -254,11 +257,22 @@ cmdele,cml_vertical
 ! Connect: approach slab & wall top
 ! Connect: wall bottom & girder
 
-'COMPK_FRAME_%abtnum%'
-'COMPL_FRAME_%abtnum%'
+! Parameters:
+! - wall thk
+! - girder length
+! - gider width
+! - gider depth
+! - number of columns
+! - column 'length' (along X)
+! - column 'width' (along Y)
+! - total height
+! - approach slab length
+! - approach slab width
+! - approach slab gap
+! - number of pile rows (along X)
+! - number of pile columns (along Y)
+! - angle of piles on outer columns
+! - pile length
+! - pile diameter
+! - unbraced pile segments
 
-cmpadd,'COMPK_FrameGirder'
-cmpadd,'COMPL_FrameGirder'
-cmpadd,'COMPK_FrameBottom'
-cmpadd,'COMPL_Column'
-cmpadd,'COMPK_Column'
