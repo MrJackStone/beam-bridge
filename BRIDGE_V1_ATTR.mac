@@ -1105,6 +1105,16 @@ pileWidth=SEC_ABT_pile_d-2*GEO_ABT_pileOvlap
 zero = 0
 *if,GEO_ABT1_type,eq,6,then
   BRIDGE_V1_CALCPILECOORDS , 'GEO_ABT1_x_piles' , 'GEO_ABT1_y_piles' , GEO_ABT1_pileCount , GEO_ABT1_pileConfig , SEC_ABT_pile_d , GEO_ABT1_pilePitchX , GEO_ABT1_pilePitchY , GEO_ABT1_columnCx , GEO_ABT1_columnCy , GEO_ABT1_capLx , GEO_ABT1_capLy
+  *del,GEO_ABT1_pile_data,,nopr
+  *dim,GEO_ABT1_pile_data,,GEO_ABT1_pileCount
+  *do,nthPile,1,GEO_ABT1_pileCount,1
+    GEO_ABT1_pile_data(1,nthPile) = GEO_ABT1_x_piles(nthPile)
+    GEO_ABT1_pile_data(2,nthPile) = GEO_ABT1_y_piles(nthPile)
+    GEO_ABT1_pile_data(3,nthPile) = GEO_ABT1_pileL
+    GEO_ABT1_pile_data(4,nthPile) = GEO_ABT1_pileAlpha(nthPile)
+    GEO_ABT1_pile_data(5,nthPile) = GEO_ABT1_pileBeta(nthPile)
+    GEO_ABT1_pile_data(6,nthPile) = 0
+  *enddo
   left  = -GEO_ABT1_columnSpacing/2
   right =  GEO_ABT1_columnSpacing/2
   arrjoin , 'GEO_ABT1_CAP_x_slices' , 'GEO_ABT1_x_piles'  , 'zero'
@@ -1112,6 +1122,16 @@ zero = 0
 *endif
 *if,GEO_ABT2_type,eq,6,then
   BRIDGE_V1_CALCPILECOORDS , 'GEO_ABT2_x_piles' , 'GEO_ABT2_y_piles' , GEO_ABT2_pileCount , GEO_ABT2_pileConfig , SEC_ABT_pile_d , GEO_ABT2_pilePitchX , GEO_ABT2_pilePitchY , GEO_ABT2_columnCx , GEO_ABT2_columnCy , GEO_ABT2_capLx , GEO_ABT2_capLy
+  *del,GEO_ABT2_pile_data,,nopr
+  *dim,GEO_ABT2_pile_data,,GEO_ABT2_pileCount
+  *do,nthPile,1,GEO_ABT2_pileCount,1
+    GEO_ABT2_pile_data(1,nthPile) = GEO_ABT2_x_piles(nthPile)
+    GEO_ABT2_pile_data(2,nthPile) = GEO_ABT2_y_piles(nthPile)
+    GEO_ABT2_pile_data(3,nthPile) = GEO_ABT2_pileL
+    GEO_ABT2_pile_data(4,nthPile) = GEO_ABT2_pileAlpha(nthPile)
+    GEO_ABT2_pile_data(5,nthPile) = GEO_ABT2_pileBeta(nthPile)
+    GEO_ABT2_pile_data(6,nthPile) = 0
+  *enddo
   left  = -GEO_ABT2_columnSpacing/2
   right =  GEO_ABT2_columnSpacing/2
   arrjoin , 'GEO_ABT2_CAP_x_slices' , 'GEO_ABT2_x_piles'  , 'zero'

@@ -457,6 +457,12 @@ GEO_ABT1_thinTranWallDepth = 2
   GEO_ABT1_pileConfig = 'A'
   GEO_ABT1_pilePitchX = 1.25
   GEO_ABT1_pilePitchY = 1.25
+  *del , GEO_ABT1_pileAlpha ,  , nopr
+  *del , GEO_ABT1_pileBeta  ,  , nopr
+  *dim , GEO_ABT1_pileAlpha ,  , GEO_ABT1_pileCount
+  *dim , GEO_ABT1_pileBeta  ,  , GEO_ABT1_pileCount
+  GEO_ABT1_pileAlpha(1) = -5 , -5 , 5 , 5
+  GEO_ABT1_pileBeta(1)  = 0  , 0  , 0 , 0
 
 
 !! 1.3.3  Second abutment                                                                         !!
@@ -577,6 +583,12 @@ GEO_ABT2_thinTranWallDepth = 2
   GEO_ABT2_pileConfig = 'A'
   GEO_ABT2_pilePitchX = 1.25
   GEO_ABT2_pilePitchY = 1.25
+  *del , GEO_ABT2_pileAlpha ,  , nopr
+  *del , GEO_ABT2_pileBeta  ,  , nopr
+  *dim , GEO_ABT2_pileAlpha ,  , GEO_ABT2_pileCount
+  *dim , GEO_ABT2_pileBeta  ,  , GEO_ABT2_pileCount
+  GEO_ABT2_pileAlpha(1) = -5 , -5 , 5 , 5
+  GEO_ABT2_pileBeta(1)  = 0  , 0  , 0 , 0
 
 
 !!                                                                                                !!

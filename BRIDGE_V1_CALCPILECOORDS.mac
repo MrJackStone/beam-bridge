@@ -1,6 +1,11 @@
 ! BRIDGE_V1_CALCPILECOORDS , x_coords , y_coords , pileCount , pileConfig , pileD , lngPileDist , trvPileDist , columnCx , columnCy , capLength , capWidth
 ! BRIDGE_V1_CALCPILECOORDS , ARG1     , ARG2     , ARG3      , ARG4       , ARG5  , ARG6        , ARG7        , ARG8     , ARG9     , AR10      , AR11
 
+! TODO  perhaps add 'angle_sign' array as output, in which each element corresponds to a pile
+!       and can have a value of -1, +1, or 0. This indicates how the main rotation angle (global Y)
+!       should be applied to each pile. This approach would reduce the flexibility but increase
+!       ease of use when setting values in DATA file.
+
 
 ! Parse inputs
 _x_coords    = ARG1
