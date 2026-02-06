@@ -2,6 +2,11 @@
 ! BRIDGE_V1_ABT5 , ARG1    , ARG2     , ARG3      , ARG4     , ARG5
 
 ! Exported selection components:
+! Note: '_ABT[i]_' components are never used outside this macro, so they should
+!       probably be removed from the 'exported' list. Instead, the '_ABT_' components
+!       are the ones that should be listed here, since they're effectively created/updated
+!       here and then exported to the rest of the code (TODO).
+!
 !   COMPA_ABT_[i]
 !   COMPL_ABT_[i]
 !   COMPK_ABT_[i]
@@ -89,7 +94,7 @@ cmkPostBottoms = 'COMPK_ABT%_abtIndex%_postBottoms'
 cmkPostTops    = 'COMPK_ABT%_abtIndex%_postTops'
 cmkPileTops    = 'COMPK_ABT%_abtIndex%_pileTops'
 cmkPileBottoms = 'COMPK_ABT%_abtIndex%_pileBottoms'
-cmaAreas       = 'COMPA_ABT%_abtIndex%_areas'
+cmaAreas       = 'COMPA_ABT%_abtIndex%_areas' ! TODO  local component, rename to 'cma_abtAreas' or something...
 
 
 !! C.  Coordinate systems                                                                         !!
