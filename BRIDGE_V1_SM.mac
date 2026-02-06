@@ -149,9 +149,9 @@ cm   , COMPK_PileTop , kp
   pierIdx  = GEO_SUPPORT_pierIdx(nthSupport)
 
   *if,mesoType,eq,CTE_MESO_beamcap,then
-    BRIDGE_V1_SMCBPILE , nthSupport ,            , 'GEO_PIER%pierIdx%_pile_data' , 'SUP%nthSupport%'
+    BRIDGE_V1_SMCBPILE , nthSupport ,            , 'GEO_PIER%pierIdx%_pile_data' ,,,, 'SUP%nthSupport%'
   *elseif,mesoType,ne,CTE_MESO_abutment,then
-    BRIDGE_V1_SMPILE   , nthSupport , GEO_capOpt , 'GEO_PIER%pierIdx%_pile_data' , 'SUP%nthSupport%'
+    BRIDGE_V1_SMPILE   , nthSupport , GEO_capOpt , 'GEO_PIER%pierIdx%_pile_data' ,,,, 'SUP%nthSupport%'
   *endif
 
   cmsel,s,COMPK_SUP%nthSupport%_pileTop
