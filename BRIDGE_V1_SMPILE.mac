@@ -45,26 +45,26 @@ cm   , cmk_pileTop     , kp
 cm   , cml_pile        , line
 cm   , cml_connections , line
 
-*del,pilecap_cs,,nopr
-*dim,pilecap_cs,,2
+*del,cap_cs,,nopr
+*dim,cap_cs,,2
 
 *get,pileCount,parm,%_pile_data%,dim,y
 
 ! Get pile cap CSYS
 *if,_capOpt,eq,0,then
   ! Two connected pile caps:
-  pilecapCount  = 2
-  pilecap_cs(1) = CS_INFRA_l%ARG1%, CS_INFRA_r%ARG1%
+  capCount  = 2
+  cap_cs(1) = CS_INFRA_l%ARG1%, CS_INFRA_r%ARG1%
 *elseif,_capOpt,eq,1,then
   ! Single pile cap:
-  pilecapCount  = 1
-  pilecap_cs(1) = CS_INFRA_c%ARG1%
+  capCount  = 1
+  cap_cs(1) = CS_INFRA_c%ARG1%
 *endif
 
 ! Draw piles
-*do,nthCap,1,pilecapCount,1
+*do,nthCap,1,capCount,1
 
-  nthCS = pilecap_cs(nthCap)
+  nthCS = cap_cs(nthCap)
   csys,nthCS
 
   *do,nthPile,1,pileCount,1
