@@ -34,10 +34,9 @@ GEO_ABT_postHeight   = %ARG2%(32)
 GEO_ABT_capOpt       = %ARG2%('?')
 GEO_ABT_capLx        = %ARG2%('?')
 GEO_ABT_capLy        = %ARG2%('?')
-
-GEO_ABT_pileCount  = %ARG2%('?')
-GEO_ABT_pileConfig = %ARG2%('?')
-GEO_ABT_pileD      = SEC_ABT_pile_d
+GEO_ABT_capThk       = %ARG2%('?')
+GEO_ABT_pileConfig   = %ARG2%('?')
+GEO_ABT_pileD        = SEC_ABT_pile_d
 
 girderHeight         = GIRDER_d(1)  ! TODO  hard-coded, improve
 
@@ -49,6 +48,14 @@ GEO_ABT_wallOffset    = (GEO_ABT_girderB-GEO_ABT_cantWallThk)/2
 GEO_ABT_frameGirderZ  = -(girderHeight+GEO_ABT_postHeight+(GEO_ABT_girderH/2))
 GEO_ABT_postTopZ      = GEO_ABT_frameGirderZ+(GEO_ABT_girderH/2)+GEO_ABT_postHeight
 GEO_ABT_columnBottomZ = GEO_ABT_frameGirderZ-GEO_ABT_columnHeight
+
+*if,GEO_capOpt,eq,0,then
+  GEO_capCount = 2
+*elseif,GEO_capOpt,eq,1,then
+  GEO_capCount = 1
+*endif
+
+*get,GEO_pileCount,parm,GEO_ABT%abtIdx%_pile_data,dim,y
 
 ! Draw approach slab
 asel,none
@@ -175,7 +182,7 @@ GEO_ABT_waterHeightZ = zFrameBot+GEO_waterHeight
 *endif
 
 ! Draw pile cap
-BRIDGE_V1_SMPCAP , ARG1 , GEO_ABT_capOpt , GEO_ABT_capLx , GEO_ABT_capLy , 'GEO_ABT%ARG1%_CAP_x_slices' , 'GEO_ABT%ARG1%_CAP_y_slices' , 'ABT'
+BRIDGE_V1_SMPCAP , supIdx , GEO_ABT_capOpt , GEO_ABT_capLx , GEO_ABT_capLy , 'GEO_ABT%abtIdx%_CAP_x_slices' , 'GEO_ABT%abtIdx%_CAP_y_slices' , 'ABT'
 
 ! Draw piles
 BRIDGE_V1_SMPILE , supIdx , GEO_ABT_capOpt , 'GEO_ABT%abtIdx%_pile_data' , GEO_ABT_capThk , 'COMPA_ABT%abtIdx%_pileCap' , GEO_ABT_pileD , 'ABT%abtIdx%'
