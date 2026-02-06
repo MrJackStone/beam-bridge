@@ -1,5 +1,6 @@
-! BRIDGE_V1_SMPILE , supIdx , capOpt , pile_data , cmInfix
-! BRIDGE_V1_SMPILE , ARG1   , ARG2   , ARG3      , ARG4
+! BRIDGE_V1_SMPILE , supIdx , capOpt , pile_data , capThk , cmInfix
+! BRIDGE_V1_SMPILE , ARG1   , ARG2   , ARG3      , ARG4   , ARG5
+
 
 ! Dependencies:
 ! CS_INFRA_l<i>
@@ -15,11 +16,12 @@
 !   5      beta   angle at the horizontal plane (applied first, before alpha)
 !   6      id     global pile identification number (optional)
 
+
 ! Parse inputs
 _supIdx    = ARG1
 _capOpt    = ARG2
 _pile_data = ARG3
-_cmInfix   = ARG4
+_cmInfix   = ARG5
 
 infix = ''
 *get,parType,parm,_cmInfix,type
@@ -27,12 +29,21 @@ infix = ''
   infix = strcat(_cmInfix,'_')
 *endif
 
+zZero = 0
+zTop  = 0
+*get,parType,parm,ARG4,type
+*if,parType,eq,0,and,ARG4,gt,0,then
+  ! Apply offset between pile & pile cap if a pile cap thickness is given
+  zTop = zZero-ARG4
+*endif
+
 ! Prepare environment
 ksel , none
 asel , none
-cm   , cmk_support , kp
-cm   , cmk_pileTop , kp
-cm   , cml_pile    , line
+cm   , cmk_support     , kp
+cm   , cmk_pileTop     , kp
+cm   , cml_pile        , line
+cm   , cml_connections , line
 
 *del,pilecap_cs,,nopr
 *dim,pilecap_cs,,2
@@ -54,6 +65,7 @@ cm   , cml_pile    , line
 *do,nthCap,1,pilecapCount,1
 
   nthCS = pilecap_cs(nthCap)
+  csys,nthCS
 
   *do,nthPile,1,pileCount,1
     ! Collect pile data
@@ -65,22 +77,29 @@ cm   , cml_pile    , line
 
     ! Calculate pile's top & bottom (X,Y,Z) coordinates
     afunbackup,'DEG'
-    zTop    = 0
-    zBot    = zTop-pileLen
-    xBot    = xTop+tan(yAngle)*pileLen
-    yBot    = yTop+tan(xAngle)*pileLen
+    zBot = zTop-pileLen
+    xBot = xTop+tan(yAngle)*pileLen
+    yBot = yTop+tan(xAngle)*pileLen
     afunrestore
 
     ! Create pile line
     lsel,none
-    csys,nthCS
     nextkp,'pile_ends',2
     k , pile_ends(1) , xTop , yTop , zTop
     k , pile_ends(2) , xBot , yBot , zBot
     l , pile_ends(1) , pile_ends(2)
+    cmpadd,'cml_pile'
+
+    ! Create connection line (if offset equal to pile cap thickness is applied)
+    *if,zTop,ne,zZero,then
+      lsel,none
+      nextkp,'KP_connectionTop',1
+      k , KP_connectionTop , xTop , yTop , zZero
+      l, KP_connectionTop , pile_ends(1)
+      cmpadd,'cml_connections'
+    *endif
 
     ! Internal components
-    cmpadd,'cml_pile'
     ksel,s,kp,,pile_ends(1)
     cmpadd,'cmk_pileTop'
     ksel,s,kp,,pile_ends(2)
@@ -99,7 +118,11 @@ cm,COMPK_%infix%pileTop,kp
 cmsel,s,cml_pile
 cm,COMPL_%infix%pile,line
 
+cmsel,s,cml_connections
+cm,COMPL_%infix%pileConnections,line
+
 ! Clean up
 cmdele , cmk_support
 cmdele , cmk_pileTop
 cmdele , cml_pile
+cmdele , cml_connections
