@@ -42,6 +42,20 @@ girderHeight         = GIRDER_d(1)  ! TODO  hard-coded, improve
 
 *get,girderCount,parm,%ARG4%,dim,x
 
+! Prepare environment
+! 'COMPK_ABT_pileBase'
+! 'COMPK_ABT_pileTop'
+! 'COMPL_ABT_pileConnections'
+! 'COMPL_ABT_piles'
+! 'COMPL_ABT_posts'
+'COMPL_Barrier'
+! 'COMPA_ABT_appSlab'
+! 'COMPA_ABT_cantileverWall'
+! 'COMPA_ABT_pileCap'
+! 'COMPA_ABT_pileInterface'
+'COMPA_ABT_postInterface'
+'COMPA_abutment'
+
 ! Calculate geometric parameters
 GEO_ABT_wallHeight    = girderHeight+GEO_ABT_postHeight+(GEO_ABT_girderH/2)
 GEO_ABT_wallOffset    = (GEO_ABT_girderB-GEO_ABT_cantWallThk)/2
@@ -186,6 +200,53 @@ BRIDGE_V1_SMPCAP , supIdx , GEO_ABT_capOpt , GEO_ABT_capLx , GEO_ABT_capLy , 'GE
 
 ! Draw piles
 BRIDGE_V1_SMPILE , supIdx , GEO_ABT_capOpt , 'GEO_ABT%abtIdx%_pile_data' , GEO_ABT_capThk , 'COMPA_ABT%abtIdx%_pileCap' , GEO_ABT_pileD , 'ABT%abtIdx%'
+
+! Export
+cmsel,s,cma_approachSlab
+cmpadd,'COMPA_ABT_appSlab'
+
+cmsel,s,cma_cantileverWall
+cmpadd,'COMPA_ABT_cantileverWall'
+
+! cmk_posts  TODO  2 columns hard-coded
+cmsel,s,cml_column1
+cmsel,a,cml_column2
+cmpadd,'COMPL_ABT_columns'
+
+cmsel,s,cml_frameGirder
+cmpadd,'COMPL_ABT_frameGirder'
+
+lsel,none
+*do,nthPost,1,girderCount,1
+  cmsel,a,cml_post%nthPost%
+*enddo
+cmpadd,'COMPL_ABT_posts'
+
+cmsel,s,COMPK_ABT%abtIdx%_support
+cmpadd,'COMPK_ABT_pileBase'
+
+cmsel,s,COMPK_ABT%abtIdx%_pileTop
+cmpadd,'COMPK_ABT_pileTop'
+
+cmsel,s,COMPL_ABT%abtIdx%_pileConnections
+cmpadd,'COMPL_ABT_pileConnections'
+
+cmsel,s,COMPL_ABT%abtIdx%_pile
+cmpadd,'COMPL_ABT_piles'
+
+cmsel,s,COMPA_ABT%abtIdx%_pileCap
+cmpadd,'COMPA_ABT_pileCap'
+
+*do,nthCap,1,GEO_capCount,1
+  *do,nthPile,1,GEO_pileCount,1
+    cmsel , s , COMPA_SUP%_supIdx%_CAP%nthCap%_PILE%nthPile%_itf
+    cm , COMPA_ABT%abtIdx%_CAP%nthCap%_PILE%nthPile%_itf , area
+    cmpadd,'COMPA_ABT_pileInterface'
+  *enddo
+*enddo
+
+
+cmdele,cml_vertical
 
 ! Match mesh: girder & wall bottom
 ! Match mesh: wall top & approach slab
