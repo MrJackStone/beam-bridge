@@ -1,5 +1,5 @@
-! BRIDGE_V1_SMPILE , supIdx , capOpt , pile_data , capThk , cmInfix
-! BRIDGE_V1_SMPILE , ARG1   , ARG2   , ARG3      , ARG4   , ARG5
+! BRIDGE_V1_SMPILE , supIdx , capOpt , pile_data , capThk , cmaCap , pileD , cmInfix
+! BRIDGE_V1_SMPILE , ARG1   , ARG2   , ARG3      , ARG4   , ARG5   , ARG6  , ARG7
 
 
 ! Dependencies:
@@ -21,7 +21,9 @@
 _supIdx    = ARG1
 _capOpt    = ARG2
 _pile_data = ARG3
-_cmInfix   = ARG5
+_cmaCap    = ARG5
+_pileD     = ARG6
+_cmInfix   = ARG7
 
 infix = ''
 *get,parType,parm,_cmInfix,type
@@ -35,6 +37,16 @@ zTop  = 0
 *if,parType,eq,0,and,ARG4,gt,0,then
   ! Apply offset between pile & pile cap if a pile cap thickness is given
   zTop = zZero-ARG4
+*endif
+
+sliceCap = 0
+*get,parType1,parm,_cmaCap,type
+*get,parType2,parm,_pileD,type
+*if,parType1,eq,3,and,parType2,eq,0,then
+  *get,cmType,comp,%_cmaCap%,type
+  *if,cmType,eq,8,and,_pileD,gt,0,then
+    sliceCap = 1
+  *endif
 *endif
 
 ! Prepare environment
@@ -64,8 +76,8 @@ cm   , cml_connections , line
 ! Draw piles
 *do,nthCap,1,capCount,1
 
-  nthCS = cap_cs(nthCap)
-  csys,nthCS
+  capCS = cap_cs(nthCap)
+  csys,capCS
 
   *do,nthPile,1,pileCount,1
     ! Collect pile data
@@ -99,6 +111,13 @@ cm   , cml_connections , line
       cmpadd,'cml_connections'
     *endif
 
+    ! Slice pile cap around pile
+    *if,sliceCap,eq,1,then
+      wpcsys,-1,capCS
+      wpoffs,xTop,yTop
+      BRIDGE_V1_SLICEAROUNDBEAM , _cmaCap , 'C' , _pileD , , , 'cma_cap%nthCap%_pile%nthPile%_itf'
+    *endif
+
     ! Internal components
     ksel,s,kp,,pile_ends(1)
     cmpadd,'cmk_pileTop'
@@ -108,21 +127,29 @@ cm   , cml_connections , line
   *enddo
 *enddo
 
-! Export
+! Export & clean up
 cmsel,s,cmk_support
-cm,COMPK_%infix%support,kp
+cmdele , cmk_support
+cm     , COMPK_%infix%support , kp
 
 cmsel,s,cmk_pileTop
-cm,COMPK_%infix%pileTop,kp
+cmdele , cmk_pileTop
+cm     , COMPK_%infix%pileTop , kp
 
 cmsel,s,cml_pile
-cm,COMPL_%infix%pile,line
+cmdele , cml_pile
+cm     , COMPL_%infix%pile , line
 
 cmsel,s,cml_connections
-cm,COMPL_%infix%pileConnections,line
-
-! Clean up
-cmdele , cmk_support
-cmdele , cmk_pileTop
-cmdele , cml_pile
 cmdele , cml_connections
+cm     , COMPL_%infix%pileConnections , line
+
+*if,sliceCap,eq,1,then
+  *do,nthCap,1,capCount,1
+    *do,nthPile,1,pileCount,1
+      cmsel,s,cma_cap%nthCap%_pile%nthPile%_itf
+      cm     , COMPA_SUP%_supIdx%_CAP%nthCap%_PILE%nthPile%_itf , area
+      cmdele , cma_cap%nthCap%_pile%nthPile%_itf
+    *enddo
+  *enddo
+*endif
