@@ -12,12 +12,12 @@
 !   GIRDER_d
 
 
-girderHeight          = GIRDER_d(1)  ! TODO  hard-coded, improve
-GEO_ABT_frameGirderZ  = -(girderHeight+GEO_ABT_postHeight+(GEO_ABT_girderH/2))
-GEO_ABT_columnBottomZ = GEO_ABT_frameGirderZ-GEO_ABT_columnHeight
-GEO_ABT_postTopZ      = GEO_ABT_frameGirderZ+(GEO_ABT_girderH/2)+GEO_ABT_postHeight
-GEO_ABT_wallHeight    = girderHeight+GEO_ABT_postHeight+(GEO_ABT_girderH/2)
-GEO_ABT_wallOffset    = (GEO_ABT_girderB-GEO_ABT_cantWallThk)/2
+girderHeight  = GIRDER_d(1)  ! TODO  hard-coded, improve
+frameGirderZ  = -(girderHeight+GEO_ABT_postHeight+(GEO_ABT_girderH/2))
+columnBottomZ = frameGirderZ-GEO_ABT_columnHeight
+postTopZ      = frameGirderZ+(GEO_ABT_girderH/2)+GEO_ABT_postHeight
+wallHeight    = girderHeight+GEO_ABT_postHeight+(GEO_ABT_girderH/2)
+wallOffset    = (GEO_ABT_girderB-GEO_ABT_cantWallThk)/2
 
 *get,girderCount,parm,%ARG3%,dim,x
 
@@ -25,10 +25,10 @@ GEO_ABT_wallOffset    = (GEO_ABT_girderB-GEO_ABT_cantWallThk)/2
 asel,none
 csys,_abutmentCS
 wpcsys,-1
-wpoffs,GEO_ABT_wallOffset
+wpoffs,wallOffset
 wprota,,,-90
 wpoffs,,-GEO_ABT_girderLength/2
-blc4,0,0,GEO_ABT_wallHeight,GEO_ABT_girderLength
+blc4,0,0,wallHeight,GEO_ABT_girderLength
 cm,cma_cantileverWall,area
 
 ! Draw frame girder
@@ -47,8 +47,8 @@ csys,_abutmentCS
   glo2loc,0,yGirderGlobal,0,_abutmentCS,,'yGirderLocal'
   nextkp,'post_kps',2
   lsel,none
-  k,post_kps(1),0,yGirderLocal,GEO_ABT_frameGirderZ
-  k,post_kps(2),0,yGirderLocal,GEO_ABT_postTopZ
+  k,post_kps(1),0,yGirderLocal,frameGirderZ
+  k,post_kps(2),0,yGirderLocal,postTopZ
   l,post_kps(1),post_kps(2)
   cmpadd,'cml_posts'
 *enddo
@@ -59,8 +59,8 @@ csys,_abutmentCS
   yColumn = GEO_columnY_%_supIdx%(nthCol)
   nextkp,'column_kps',2
   lsel,none
-  k,column_kps(1),0,yColumn,GEO_ABT_frameGirderZ
-  k,column_kps(2),0,yColumn,GEO_ABT_columnBottomZ
+  k,column_kps(1),0,yColumn,frameGirderZ
+  k,column_kps(2),0,yColumn,columnBottomZ
   l,column_kps(1),column_kps(2)
   cmpadd,'cml_columns'
 *enddo
