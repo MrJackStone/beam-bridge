@@ -1,5 +1,5 @@
-! BRIDGE_V1_ABT6 , CS_local , geoArray ,      , girder_y , supIndex
-! BRIDGE_V1_ABT  , ARG1     , ARG2     , ARG3 , ARG4     , ARG5
+! BRIDGE_V1_ABT6 , CS_local , geoArray , girder_y , supIndex
+! BRIDGE_V1_ABT  , ARG1     , ARG2     , ARG3     , ARG4
 
 ! Exported:
 !   COMPK_ABT_pileBase
@@ -15,8 +15,11 @@
 !   COMPA_ABT_pileCap
 !   COMPA_ABT_pileInterface
 
+
 ! Parse inputs
 _abutmentCS = ARG1
+_girder_y   = ARG3
+_supIndex   = ARG4
 
 GEO_ABT_columnHeight = %ARG2%(7)
 GEO_ABT_girderLength = %ARG2%(28)
@@ -33,223 +36,29 @@ GEO_ABT_capThk       = %ARG2%('?')
 GEO_ABT_pileConfig   = %ARG2%('?')
 GEO_ABT_pileD        = SEC_ABT_pile_d
 
-girderHeight         = GIRDER_d(1)  ! TODO  hard-coded, improve
-
-*get,girderCount,parm,%ARG4%,dim,x
-
 ! Prepare environment
-smdbackup,'none'
-
-! Calculate geometric parameters
-GEO_ABT_wallHeight    = girderHeight+GEO_ABT_postHeight+(GEO_ABT_girderH/2)
-GEO_ABT_wallOffset    = (GEO_ABT_girderB-GEO_ABT_cantWallThk)/2
-GEO_ABT_frameGirderZ  = -(girderHeight+GEO_ABT_postHeight+(GEO_ABT_girderH/2))
-GEO_ABT_postTopZ      = GEO_ABT_frameGirderZ+(GEO_ABT_girderH/2)+GEO_ABT_postHeight
-GEO_ABT_columnBottomZ = GEO_ABT_frameGirderZ-GEO_ABT_columnHeight
-
-*if,GEO_capOpt,eq,0,then
-  GEO_capCount = 2
-*elseif,GEO_capOpt,eq,1,then
-  GEO_capCount = 1
-*endif
-
-*get,GEO_pileCount,parm,GEO_ABT%abtIdx%_pile_data,dim,y
-
-! Draw approach slab
 asel,none
-csys,_abutmentCS
-wpcsys,-1
-wpoffs,,-GEO_ABT_appSlabW/2
-blc4,0,0,GEO_ABT_appSlabL,GEO_ABT_appSlabW
-cm,cma_approachSlab,area
-
-! Draw wall
-asel,none
-csys,_abutmentCS
-wpcsys,-1
-wpoffs,GEO_ABT_wallOffset
-wprota,,,-90
-wpoffs,,-GEO_ABT_girderLength/2
-blc4,0,0,GEO_ABT_wallHeight,GEO_ABT_girderLength
-cm,cma_cantileverWall,area
-
-! Draw frame girder
 lsel,none
-csys,_abutmentCS
-nextkp,'frame_girder_kps',2
-k , frame_girder_kps(1) , 0 , -GEO_ABT_girderLength , 0
-k , frame_girder_kps(2) , 0 , GEO_ABT_girderLength  , 0
-l,frame_girder_kps(1),frame_girder_kps(2)
-cm,cml_frameGirder,line
+cm , cml_columns        , line
+cm , cml_frameGirder    , line
+cm , cml_posts          , line
+cm , cma_approachSlab   , area
+cm , cma_cantileverWall , area
 
-! Draw posts
-csys,_abutmentCS
-*do,nthPost,1,girderCount,1
-  yGirderGlobal = %ARG4%(nthGirder)
-  glo2loc,0,yGirderGlobal,0,_abutmentCS,,'yGirderLocal'
-  nextkp,'post_kps',2
-  lsel,none
-  k,post_kps(1),0,yGirderLocal,GEO_ABT_frameGirderZ
-  k,post_kps(2),0,yGirderLocal,GEO_ABT_postTopZ
-  l,post_kps(1),post_kps(2)
-  cm,cml_post%nthPost%,line
-  cmpadd,'cml_posts'
-*enddo
+! Superstructure
+BRIDGE_V1_ABT6SUPER , _abutmentCS
 
-! Draw columns  TODO  currently hard-coded to always work with 2 columns
-csys,_abutmentCS
-*do,nthColumn,1,2,1
-  yColumn = GEO_columnY_%_supIdx%(nthCol)
-  nextkp,'column_kps',2
-  lsel,none
-  k,column_kps(1),0,yColumn,GEO_ABT_frameGirderZ
-  k,column_kps(2),0,yColumn,GEO_ABT_columnBottomZ
-  l,column_kps(1),column_kps(2)
-  cm,cml_column%nthColumn%,line
-  cmpadd,'cml_columns'
-*enddo
+! Mesostructure
+BRIDGE_V1_ABT6MESO  , _abutmentCS , _supIndex , _girder_y
 
-! Connect frame girder, columns & posts
-lsel,none
-cmsel,a,cml_posts
-cmsel,a,cml_columns
-cm,cml_vertical,line
-cmsel,a,cml_frameGirder
-lsbl,cml_frameGirder,cml_vertical,,delete,keep
-cmsel,u,cml_vertical
-cm,cml_frameGirder,line
+! Slice meso/super
+BRIDGE_V1_ABT6SLICE , _abutmentCS , _supIndex
 
-! Slice approach slab, frame girder & wall at superstructure positions
-BRIDGE_V1_LONGSLICE , 'cma_cantileverWall'
-BRIDGE_V1_LONGSLICE , 'cma_approachSlab'
-BRIDGE_V1_LONGSLICE , 'cml_frameGirder'    , 'line'
-
-! Slice cantilever wall & frame girder at additional approach slab vertices: left & right edges
-csys,_abutmentCS
-wpcsys,-1
-wpoffs,,-GEO_ABT_appSlabW/2
-wprota,,90
-cmwslice,'cma_cantileverWall'
-cmwslice,'cml_frameGirder'
-wpcsys,-1
-wpoffs,,GEO_ABT_appSlabW/2
-wprota,,90
-cmwslice,'cma_cantileverWall'
-cmwslice,'cml_frameGirder'
-
-! Slice cantilever wall & approach slab at posts & columns  TODO  hard-coded for 2 columns
-csys,_abutmentCS
-wpcsys,-1
-wpoffs,,GEO_columnY_%_supIdx%(1)
-wprota,,90
-cmwslice,'cma_cantileverWall'
-cmwslice,'cma_approachSlab'
-wpcsys,-1
-wpoffs,,GEO_columnY_%_supIdx%(2)
-wprota,,90
-cmwslice,'cma_cantileverWall'
-cmwslice,'cma_approachSlab'
-
-cmsel,s,cml_posts
-ksll,s
-ksel,r,loc,z,GEO_ABT_frameGirderZ
-cm,cmk_posts,kp
-kpNum = 0
-*get,kc,kp,,count
-
-*do,nthPost,1,kc,1
-  cmsel,s,cmk_posts
-  kpNum = kpnext(kpNum)
-  csys,_abutmentCS
-  wpcsys,-1
-  kwpave,kpNum
-  wprota,,90
-  cmwslice,'cma_cantileverWall'
-  cmwslice,'cma_approachSlab'
-*enddo
-
-! Slice columns at water level  TODO  this doesn't quite work because 'zFrameBot' is only ever
-!                                     properly defined for non-abutment mesostructure -- water level
-!                                     approach needs to be redefined
-GEO_ABT_waterHeightZ = zFrameBot+GEO_waterHeight
-*if,GEO_ABT_waterHeightZ,gt,GEO_ABT_columnBottomZ,then
-  csys,_abutmentCS
-  wpcsys,-1
-  wpoffs,,,GEO_ABT_waterHeightZ
-  cmwslice,'cml_columns'
-*endif
-
-! Draw pile cap
-BRIDGE_V1_SMPCAP , _supIdx , GEO_ABT_capOpt , GEO_ABT_capLx , GEO_ABT_capLy , 'GEO_ABT%abtIdx%_CAP_x_slices' , 'GEO_ABT%abtIdx%_CAP_y_slices' , 'ABT'
-
-! Draw piles
-BRIDGE_V1_SMPILE , _supIdx , GEO_ABT_capOpt , 'GEO_ABT%abtIdx%_pile_data' , GEO_ABT_capThk , 'COMPA_ABT%abtIdx%_pileCap' , GEO_ABT_pileD , 'ABT%abtIdx%'
+! Infrastructure
+BRIDGE_V1_ABT6INFRA , abtIdx      , _supIndex
 
 ! Export
-cmsel,s,cma_approachSlab
-cmpadd,'COMPA_ABT_appSlab'
-
-cmsel,s,cma_cantileverWall
-cmpadd,'COMPA_ABT_cantileverWall'
-
-! cmk_posts  TODO  2 columns hard-coded
-cmsel,s,cml_column1
-cmsel,a,cml_column2
-cmpadd,'COMPL_ABT_columns'
-
-cmsel,s,cml_frameGirder
-cmpadd,'COMPL_ABT_frameGirder'
-
-lsel,none
-*do,nthPost,1,girderCount,1
-  cmsel,a,cml_post%nthPost%
-*enddo
-cmpadd,'COMPL_ABT_posts'
-
-cmsel,s,COMPK_ABT%abtIdx%_support
-cmpadd,'COMPK_ABT_pileBase'
-
-cmsel,s,COMPK_ABT%abtIdx%_pileTop
-cmpadd,'COMPK_ABT_pileTop'
-
-cmsel,s,COMPL_ABT%abtIdx%_pileConnections
-cmpadd,'COMPL_ABT_pileConnections'
-
-cmsel,s,COMPL_ABT%abtIdx%_pile
-cmpadd,'COMPL_ABT_piles'
-
-cmsel,s,COMPA_ABT%abtIdx%_pileCap
-cmpadd,'COMPA_ABT_pileCap'
-
-*do,nthCap,1,GEO_capCount,1
-  *do,nthPile,1,GEO_pileCount,1
-    cmsel , s , COMPA_SUP%_supIdx%_CAP%nthCap%_PILE%nthPile%_itf
-    cm , COMPA_ABT%abtIdx%_CAP%nthCap%_PILE%nthPile%_itf , area
-    cmpadd,'COMPA_ABT_pileInterface'
-  *enddo
-*enddo
-
-lsel,none
-*if,LOAD_barrierStatus,EQ,1,THEN
-  csbackup
-  *do,nthBarrier,1,LOAD_barrierCount,1
-    nthCS = CS_barriers(nthBarrier)
-    csys,nthCS
-    lsel,a,loc,y,0
-  *enddo
-  cmsel,s,COMPA_ABT_appSlab
-  lsla,r
-  csrestore
-*endif
-cmpadd,'COMPL_Barrier'
-
-! Clean up
-cmdele , cml_vertical
-cmdele , cml_frameGirder
-cmdele , cml_posts
-cmdele , cml_columns
-cmdele , cma_cantileverWall
-cmdele , cma_approachSlab'
+BRIDGE_V1_ABT6COMPS
 
 ! Match mesh: girder & wall bottom
 ! Match mesh: wall top & approach slab

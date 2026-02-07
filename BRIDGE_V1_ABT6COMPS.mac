@@ -1,0 +1,107 @@
+! BRIDGE_V1_ABT6COMPS , abtIdx
+! BRIDGE_V1_ABT6COMPS , ARG1
+
+! Dependencies:
+!   GEO_capOpt
+!   GEO_ABT<i>_pile_data
+!
+!   cml_columns
+!   cml_frameGirder
+!   cml_posts
+!   cma_approachSlab
+!   cma_cantileverWall
+!
+!   COMPK_ABT<i>_support
+!   COMPK_ABT<i>_pileTop
+!   COMPL_ABT<i>_pileConnections
+!   COMPL_ABT<i>_pile
+!   COMPA_ABT<i>_pileCap
+!   COMPA_SUP<i>_CAP<j>_PILE<k>_itf
+!
+!   CS_barriers
+!   LOAD_barrierStatus
+!   LOAD_barrierCount
+
+! Exported:
+!   COMPK_ABT_pileBase
+!   COMPK_ABT_pileTop
+!   COMPL_ABT_columns
+!   COMPL_ABT_frameGirder
+!   COMPL_ABT_pileConnections
+!   COMPL_ABT_piles
+!   COMPL_ABT_posts
+!   COMPL_Barrier
+!   COMPA_ABT_appSlab
+!   COMPA_ABT_cantileverWall
+!   COMPA_ABT_pileCap
+!   COMPA_ABT_pileInterface
+
+
+_abtIdx = ARG1
+
+*if,GEO_capOpt,eq,0,then
+  GEO_capCount = 2
+*elseif,GEO_capOpt,eq,1,then
+  GEO_capCount = 1
+*endif
+
+*get,GEO_pileCount,parm,GEO_ABT%abtIdx%_pile_data,dim,y
+
+cmsel,s,cma_approachSlab
+cmpadd,'COMPA_ABT_appSlab'
+
+cmsel,s,cma_cantileverWall
+cmpadd,'COMPA_ABT_cantileverWall'
+
+cmsel,s,cml_columns
+cmpadd,'COMPL_ABT_columns'
+
+cmsel,s,cml_frameGirder
+cmpadd,'COMPL_ABT_frameGirder'
+
+cmsel,s,cml_posts
+cmpadd,'COMPL_ABT_posts'
+
+cmsel,s,COMPK_ABT%abtIdx%_support
+cmpadd,'COMPK_ABT_pileBase'
+
+cmsel,s,COMPK_ABT%abtIdx%_pileTop
+cmpadd,'COMPK_ABT_pileTop'
+
+cmsel,s,COMPL_ABT%abtIdx%_pileConnections
+cmpadd,'COMPL_ABT_pileConnections'
+
+cmsel,s,COMPL_ABT%abtIdx%_pile
+cmpadd,'COMPL_ABT_piles'
+
+cmsel,s,COMPA_ABT%abtIdx%_pileCap
+cmpadd,'COMPA_ABT_pileCap'
+
+*do,nthCap,1,GEO_capCount,1
+  *do,nthPile,1,GEO_pileCount,1
+    cmsel , s , COMPA_SUP%_supIndex%_CAP%nthCap%_PILE%nthPile%_itf
+    cm , COMPA_ABT%abtIdx%_CAP%nthCap%_PILE%nthPile%_itf , area
+    cmpadd,'COMPA_ABT_pileInterface'
+  *enddo
+*enddo
+
+lsel,none
+*if,LOAD_barrierStatus,EQ,1,THEN
+  csbackup
+  *do,nthBarrier,1,LOAD_barrierCount,1
+    nthCS = CS_barriers(nthBarrier)
+    csys,nthCS
+    lsel,a,loc,y,0
+  *enddo
+  cmsel,s,COMPA_ABT_appSlab
+  lsla,r
+  csrestore
+*endif
+cmpadd,'COMPL_Barrier'
+
+! Clean up
+cmdele , cml_columns
+cmdele , cml_frameGirder
+cmdele , cml_posts
+cmdele , cma_approachSlab'
+cmdele , cma_cantileverWall

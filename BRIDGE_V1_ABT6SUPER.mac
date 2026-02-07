@@ -1,0 +1,18 @@
+! BRIDGE_V1_ABT6SUPER , abtCS
+! BRIDGE_V1_ABT6SUPER , ARG1
+
+! Dependencies:
+!   GEO_ABT_appSlabL
+!   GEO_ABT_appSlabW
+
+
+! Draw approach slab
+asel,none
+
+csys,ARG1
+wpcsys,-1
+
+wpoffs,,-GEO_ABT_appSlabW/2
+blc4,0,0,GEO_ABT_appSlabL,GEO_ABT_appSlabW
+
+cm,cma_approachSlab,area
