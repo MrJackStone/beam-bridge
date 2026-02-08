@@ -11,6 +11,7 @@
 !   GEO_waterHeight
 
 ! Exported:
+!   COMPK_ABT_postTops
 !   COMPK_ABT_pileBase
 !   COMPK_ABT_pileTop
 !   COMPL_ABT_columns

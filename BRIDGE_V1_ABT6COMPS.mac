@@ -5,6 +5,7 @@
 !   GEO_ABT_capOpt
 !   GEO_ABT<i>_pile_data
 !
+!   cmk_postTops
 !   cml_columns
 !   cml_frameGirder
 !   cml_posts
@@ -23,6 +24,7 @@
 !   LOAD_barrierCount
 
 ! Exported:
+!   COMPK_ABT_postTops
 !   COMPK_ABT_pileBase
 !   COMPK_ABT_pileTop
 !   COMPL_ABT_columns
@@ -67,6 +69,9 @@ cmpadd,'COMPL_ABT_frameGirder'
 
 cmsel,s,cml_posts
 cmpadd,'COMPL_ABT_posts'
+
+cmsel,s,cmk_postTops
+cmpadd,'COMPK_ABT_postTops'
 
 cmsel,s,COMPK_ABT%ARG1%_support
 cmpadd,'COMPK_ABT_pileBase'

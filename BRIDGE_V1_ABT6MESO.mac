@@ -49,9 +49,11 @@ cm,cml_frameGirder,line
   yGirderGlobal = %ARG2%(nthGirder)
   glo2loc,0,yGirderGlobal,0,_abtCS,,'yGirderLocal'
   nextkp,'post_kps',2
+  ksel,none
   lsel,none
-  k,post_kps(1),0,yGirderLocal,frameGirderZ
-  k,post_kps(2),0,yGirderLocal,postTopZ
+  k,post_kps(1),0,yGirderLocal,postTopZ
+  cmpadd,'cmk_postTops'
+  k,post_kps(2),0,yGirderLocal,frameGirderZ
   l,post_kps(1),post_kps(2)
   cmpadd,'cml_posts'
 *enddo

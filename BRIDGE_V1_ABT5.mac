@@ -19,6 +19,7 @@
 !   COMPL_ABT[i]_piles
 !   COMPL_ABT[i]_posts
 !
+!   COMPK_ABT_postTops
 !   COMPK_ABT[i]_postBottoms
 !   COMPK_ABT[i]_postTops
 !   COMPK_ABT[i]_pileTops
@@ -356,6 +357,7 @@ cm,%cmkPostBottoms%,kp
 ksel,inve
 ksll,r
 cm,%cmkPostTops%,kp
+cmpadd,'COMPK_ABT_postTops'
 
 csys,%csNamePiles%
 cmsel,s,%cmlPiles%
