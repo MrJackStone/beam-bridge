@@ -609,9 +609,11 @@ secdata,GEO_ABT2_girderB,GEO_ABT2_girderH
 ! Grade beam
 sectype,SEC_ABT1_gradeBeam,beam,rect,,'ABT1_GBM'
 secdata,GEO_ABT1_gradeBeamB,GEO_ABT1_gradeBeamH
+secoffset,user,,GEO_ABT1_gradeBeamH/2
 
 sectype,SEC_ABT2_gradeBeam,beam,rect,,'ABT2_GBM'
 secdata,GEO_ABT2_gradeBeamB,GEO_ABT2_gradeBeamH
+secoffset,user,,GEO_ABT2_gradeBeamH/2
 
 ! Girder posts
 sectype,SEC_ABT_girderPost,beam,rect,,'GPOST'
@@ -866,6 +868,23 @@ arrjoin , 'GEO_arc_offsets' , 'GEO_WHEELPATH_arcOffsets' , 'GEO_FOOTPATH_arcOffs
 ! WARNING: Frame width incompatible with girder layout. GEO_FRAMEWIDTH increased to %G.
 ! *endif
 
+! Calculate column length
+*if,SEC_offset,EQ,1,THEN
+   GEO_colLength=GEO_frameHeight-FRAMEGIRDER_h
+*else
+   GEO_colLength=GEO_frameHeight
+*endif
+
+! Calculate the vertical position of the frame girder keypoints
+*if,SEC_offset,EQ,0,THEN
+   zFrameTop=0
+*elseif,SEC_offset,EQ,1,THEN
+   zFrameTop=0-GIRDER_d(1)-FRAMEGIRDER_h !! TODO: contemplate multiple girder heights
+*endif
+
+! Calculate the vertical position of the base of the columns
+zFrameBot=zFrameTop-GEO_colLength
+
 ! Number of piers
 GEO_pierCount = GEO_supportCount-(GEO_ABT1_status+GEO_ABT2_status)
 
@@ -906,23 +925,6 @@ pierIdx = 0
 ! Calculate length of the left & right frame girder cantilevers
 GEO_frameGirderLeft=(GEO_frameWidth-GEO_columnSpacing)/2
 GEO_frameGirderRight=GEO_frameGirderLeft
-
-! Calculate column length
-*if,SEC_offset,EQ,1,THEN
-   GEO_colLength=GEO_frameHeight-FRAMEGIRDER_h
-*else
-   GEO_colLength=GEO_frameHeight
-*endif
-
-! Calculate the vertical position of the frame girder keypoints
-*if,SEC_offset,EQ,0,THEN
-   zFrameTop=0
-*elseif,SEC_offset,EQ,1,THEN
-   zFrameTop=0-GIRDER_d(1)-FRAMEGIRDER_h !! TODO: contemplate multiple girder heights
-*endif
-
-! Calculate the vertical position of the base of the columns
-zFrameBot=zFrameTop-GEO_colLength
 
 ! TODO: array parameter GEO_columnY has been replaced with GEO_columnY_<supportNum>.
 !       Account for this change in the rest of the code.
@@ -1206,8 +1208,8 @@ GEO_ABT2_geometry(16) = GEO_ABT2_wingHa        , GEO_ABT2_wingL      , GEO_ABT2_
 GEO_ABT2_geometry(21) = GEO_ABT2_pileFree      , GEO_ABT2_pileShort  , GEO_ABT2_trvPileCols , GEO_ABT2_wingPileCols      , GEO_ABT2_wingCapLength
 GEO_ABT2_geometry(26) = GEO_ABT2_wingCapWidth  , GEO_ABT2_wingAngle  , GEO_ABT2_width       , GEO_ABT2_thinTranWallDepth , GEO_ABT2_beamOpt
 GEO_ABT2_geometry(31) = GEO_ABT2_pileCapOffset , GEO_ABT2_postHeight , GEO_ABT_postCx       , GEO_ABT_postCy             , GEO_ABT2_postOffset
-GEO_ABT1_geometry(36) = GEO_ABT2_appSlabW      , GEO_ABT2_columnCx   , GEO_ABT2_columnCy    , GEO_ABT2_columnSpacing     , GEO_ABT2_capOpt
-GEO_ABT1_geometry(41) = GEO_ABT2_girderB       , GEO_ABT2_girderH
+GEO_ABT2_geometry(36) = GEO_ABT2_appSlabW      , GEO_ABT2_columnCx   , GEO_ABT2_columnCy    , GEO_ABT2_columnSpacing     , GEO_ABT2_capOpt
+GEO_ABT2_geometry(41) = GEO_ABT2_girderB       , GEO_ABT2_girderH
 
 ! Abutment extents
 GEO_ABT1_xMin=-(GEO_ABT1_length>GEO_ABT1_appSlabL*GEO_ABT1_appSlab)
