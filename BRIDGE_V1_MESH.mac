@@ -268,7 +268,7 @@ BRIDGE_V1_LMESH , CS_ABT2 , , MAT_abutment , SEC_ABT2_gradeBeam , 0 , 0 , 1 , FE
 
 ! For abutment type 6: copy mesh from frame girder to bottom of cantilever wall
 *do,nthAbutment,1,2,1
-  *if,GEO_ABT1_status,eq,1,and,GEO_ABT%nthAbutment%_type,eq,6,then
+  *if,GEO_ABT%nthAbutment%_status,eq,1,and,GEO_ABT%nthAbutment%_type,eq,6,then
     ! Target: lines at the bottom of the cantilever wall
     cmsel,s,COMPL_ABT_cantileverWallBottom
     cmsel,r,COMPL_ABT_%nthAbutment%
@@ -278,9 +278,12 @@ BRIDGE_V1_LMESH , CS_ABT2 , , MAT_abutment , SEC_ABT2_gradeBeam , 0 , 0 , 1 , FE
     cmsel,r,COMPL_ABT_%nthAbutment%
     cm,COMPL_source,line
     ! Copy beam mesh from girder to wall (temporary mesh, must later be deleted)
-    wallOffsetX = (GEO_ABT%nthAbutment%_girderB-SEC_ABT_thinTranWall_t)/2
+    wallOffsetX = -(GEO_ABT%nthAbutment%_girderB-SEC_ABT_thinTranWall_t)/2
+    cmsel,s,COMPL_source
+    cmsel,a,COMPL_target
+    ksll,s
     esel,none
-    mshcopy,,COMPL_ABT_source,COMPL_ABT_target,CS_ABT%nthAbutment%,wallOffsetX
+    mshcopy,,COMPL_source,COMPL_target,CS_ABT%nthAbutment%,-wallOffsetX,0,0
     cm,COMPE_ABT%nthAbutment%_tempWallBottom,elem
   *endif
 *enddo
@@ -315,6 +318,7 @@ cmsel,r,COMPA_ABT_2
 BRIDGE_V1_AMESH,,MAT_abutment,FEM_ABT_esize,ESYS_ABT2_tw,SEC_ABT_thinTranWall
 
 ! Delete temporary mesh, used to ensure matching nodes for abutment type 6
+cmsel,s,COMPL_ABT_cantileverWallBottom
 lclear,COMPL_ABT_cantileverWallBottom
 
 ! Longitudinal walls
