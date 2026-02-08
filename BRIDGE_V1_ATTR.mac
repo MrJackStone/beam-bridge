@@ -1104,7 +1104,7 @@ pileWidth=SEC_ABT_pile_d-2*GEO_ABT_pileOvlap
 ! Pile & pile cap data for frame-type abutment
 zero = 0
 *if,GEO_ABT1_type,eq,6,then
-  BRIDGE_V1_CALCPILECOORDS , 'GEO_ABT1_x_piles' , 'GEO_ABT1_y_piles' , GEO_ABT1_pileCount , GEO_ABT1_pileConfig , SEC_ABT_pile_d , GEO_ABT1_pilePitchX , GEO_ABT1_pilePitchY , GEO_ABT1_columnCx , GEO_ABT1_columnCy , GEO_ABT1_capLx , GEO_ABT1_capLy
+  BRIDGE_V1_CALCPILECOORDS , 'GEO_ABT1_x_piles' , 'GEO_ABT1_y_piles' , GEO_ABT1_pileCount , GEO_ABT1_pileConfig , SEC_ABT_pile_d , GEO_ABT1_pilePitchX , GEO_ABT1_pilePitchY , GEO_ABT1_columnCx , GEO_ABT1_columnCy , GEO_ABT1_pileCapL , GEO_ABT1_pileCapW
   *del,GEO_ABT1_pile_data,,nopr
   *dim,GEO_ABT1_pile_data,,GEO_ABT1_pileCount
   *do,nthPile,1,GEO_ABT1_pileCount,1
@@ -1121,7 +1121,7 @@ zero = 0
   arrjoin , 'GEO_ABT1_CAP_y_slices' , 'GEO_ABT1_y_piles'  , 'zero' , 'left' , 'right'
 *endif
 *if,GEO_ABT2_type,eq,6,then
-  BRIDGE_V1_CALCPILECOORDS , 'GEO_ABT2_x_piles' , 'GEO_ABT2_y_piles' , GEO_ABT2_pileCount , GEO_ABT2_pileConfig , SEC_ABT_pile_d , GEO_ABT2_pilePitchX , GEO_ABT2_pilePitchY , GEO_ABT2_columnCx , GEO_ABT2_columnCy , GEO_ABT2_capLx , GEO_ABT2_capLy
+  BRIDGE_V1_CALCPILECOORDS , 'GEO_ABT2_x_piles' , 'GEO_ABT2_y_piles' , GEO_ABT2_pileCount , GEO_ABT2_pileConfig , SEC_ABT_pile_d , GEO_ABT2_pilePitchX , GEO_ABT2_pilePitchY , GEO_ABT2_columnCx , GEO_ABT2_columnCy , GEO_ABT2_pileCapL , GEO_ABT2_pileCapW
   *del,GEO_ABT2_pile_data,,nopr
   *dim,GEO_ABT2_pile_data,,GEO_ABT2_pileCount
   *do,nthPile,1,GEO_ABT2_pileCount,1

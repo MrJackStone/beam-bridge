@@ -443,8 +443,6 @@ GEO_ABT1_thinTranWallDepth = 2
   !   [0] Individual caps + grade beam
   !   [1] Single cap
   GEO_ABT1_capOpt = 0
-  GEO_ABT1_capLx  = 4.0
-  GEO_ABT1_capLy  = 4.0
   GEO_ABT1_capThk = 1.4
 
   ! Piles
@@ -564,8 +562,6 @@ GEO_ABT2_thinTranWallDepth = 2
   !   [0] Individual caps + grade beam
   !   [1] Single cap
   GEO_ABT2_capOpt = 0
-  GEO_ABT2_capLx  = 4.0
-  GEO_ABT2_capLy  = 4.0
   GEO_ABT2_capThk = 1.4
 
   ! Piles
