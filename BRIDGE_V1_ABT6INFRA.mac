@@ -3,10 +3,10 @@
 
 ! Dependencies:
 !   SEC_ABT_pileCap_h
+!   SEC_ABT_pile_d
 !   GEO_ABT_capLx
 !   GEO_ABT_capLy
 !   GEO_ABT_capOpt
-!   GEO_ABT_pileD
 !
 !   GEO_ABT<i>_CAP_x_slices
 !   GEO_ABT<i>_CAP_y_slices
@@ -22,4 +22,4 @@ _supIdx = ARG2
 BRIDGE_V1_SMPCAP , _supIdx , GEO_ABT_capOpt , GEO_ABT_capLx , GEO_ABT_capLy , 'GEO_ABT%_abtIdx%_CAP_x_slices' , 'GEO_ABT%_abtIdx%_CAP_y_slices' , 'ABT'
 
 ! Piles
-BRIDGE_V1_SMPILE , _supIdx , GEO_ABT_capOpt , 'GEO_ABT%_abtIdx%_pile_data' , SEC_ABT_pileCap_h , 'COMPA_ABT%_abtIdx%_pileCap' , GEO_ABT_pileD , 'ABT%_abtIdx%'
+BRIDGE_V1_SMPILE , _supIdx , GEO_ABT_capOpt , 'GEO_ABT%_abtIdx%_pile_data' , SEC_ABT_pileCap_h , 'COMPA_ABT%_abtIdx%_pileCap' , SEC_ABT_pile_d , 'ABT%_abtIdx%'

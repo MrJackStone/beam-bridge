@@ -2,6 +2,8 @@
 ! BRIDGE_V1_ABT  , ARG1     , ARG2     , ARG3     , ARG4
 
 ! Dependencies:
+!   SEC_ABT_pileCap_h
+!   SEC_ABT_pile_d
 !   GEO_ABT<i>_CAP_x_slices
 !   GEO_ABT<i>_CAP_y_slices
 !   GEO_ABT<i>_pile_data
@@ -34,12 +36,10 @@ GEO_ABT_appSlabW    = %ARG2%('?')
 GEO_ABT_capLx       = %ARG2%('?')
 GEO_ABT_capLy       = %ARG2%('?')
 GEO_ABT_capOpt      = %ARG2%('?')
-GEO_ABT_capThk      = %ARG2%('?')
 GEO_ABT_height      = %ARG2%(7)
 GEO_ABT_girderB     = %ARG2%('?')
 GEO_ABT_girderH     = %ARG2%('?')
 GEO_ABT_width       = %ARG2%(28)
-GEO_ABT_pileD       = SEC_ABT_pile_d
 GEO_ABT_postHeight  = %ARG2%(32)
 
 ! Prepare environment
