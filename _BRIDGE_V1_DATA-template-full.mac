@@ -436,7 +436,6 @@ GEO_ABT1_thinTranWallDepth = 2
   GEO_ABT1_columnCy      = 1.0
 
   ! Frame girder
-  GEO_ABT1_girderLength = 5
   GEO_ABT1_girderB      = 1.2
   GEO_ABT1_girderH      = 1.0
 
@@ -561,7 +560,6 @@ GEO_ABT2_thinTranWallDepth = 2
   GEO_ABT2_columnCy      = 1.0
 
   ! Frame girder
-  GEO_ABT2_girderLength = 5
   GEO_ABT2_girderB      = 1.2
   GEO_ABT2_girderH      = 1.0
 

@@ -28,20 +28,20 @@ _abutmentCS = ARG1
 _girder_y   = ARG3
 _supIndex   = ARG4
 
-GEO_ABT_appSlab      = %ARG2%(5)
-GEO_ABT_appSlabL     = %ARG2%(6)
-GEO_ABT_appSlabW     = %ARG2%('?')
-GEO_ABT_cantWallThk  = %ARG2%('?')
-GEO_ABT_capLx        = %ARG2%('?')
-GEO_ABT_capLy        = %ARG2%('?')
-GEO_ABT_capOpt       = %ARG2%('?')
-GEO_ABT_capThk       = %ARG2%('?')
-GEO_ABT_height       = %ARG2%(7)
-GEO_ABT_girderB      = %ARG2%('?')
-GEO_ABT_girderH      = %ARG2%('?')
-GEO_ABT_girderLength = %ARG2%(28)
-GEO_ABT_pileD        = SEC_ABT_pile_d
-GEO_ABT_postHeight   = %ARG2%(32)
+GEO_ABT_appSlab     = %ARG2%(5)
+GEO_ABT_appSlabL    = %ARG2%(6)
+GEO_ABT_appSlabW    = %ARG2%('?')
+GEO_ABT_cantWallThk = %ARG2%('?')
+GEO_ABT_capLx       = %ARG2%('?')
+GEO_ABT_capLy       = %ARG2%('?')
+GEO_ABT_capOpt      = %ARG2%('?')
+GEO_ABT_capThk      = %ARG2%('?')
+GEO_ABT_height      = %ARG2%(7)
+GEO_ABT_girderB     = %ARG2%('?')
+GEO_ABT_girderH     = %ARG2%('?')
+GEO_ABT_width       = %ARG2%(28)
+GEO_ABT_pileD       = SEC_ABT_pile_d
+GEO_ABT_postHeight  = %ARG2%(32)
 
 ! Prepare environment
 asel,none

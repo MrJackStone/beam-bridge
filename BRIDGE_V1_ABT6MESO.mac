@@ -7,7 +7,7 @@
 !   GEO_ABT_girderH
 !   GEO_ABT_girderB
 !   GEO_ABT_cantWallThk
-!   GEO_ABT_girderLength
+!   GEO_ABT_width
 !
 !   GIRDER_d
 
@@ -29,16 +29,16 @@ csys,_abtCS
 wpcsys,-1
 wpoffs,wallOffset
 wprota,,,-90
-wpoffs,,-GEO_ABT_girderLength/2
-blc4,0,0,wallHeight,GEO_ABT_girderLength
+wpoffs,,-GEO_ABT_width/2
+blc4,0,0,wallHeight,GEO_ABT_width
 cm,cma_cantileverWall,area
 
 ! Draw frame girder
 lsel,none
 csys,_abtCS
 nextkp,'frame_girder_kps',2
-k , frame_girder_kps(1) , 0 , -GEO_ABT_girderLength , 0
-k , frame_girder_kps(2) , 0 , GEO_ABT_girderLength  , 0
+k , frame_girder_kps(1) , 0 , -GEO_ABT_width , 0
+k , frame_girder_kps(2) , 0 , GEO_ABT_width  , 0
 l,frame_girder_kps(1),frame_girder_kps(2)
 cm,cml_frameGirder,line
 
