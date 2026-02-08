@@ -431,7 +431,6 @@ GEO_ABT1_thinTranWallDepth = 2
 
 ! Options for abutment type 6:
   ! Column
-  GEO_ABT1_columnHeight  = 5
   GEO_ABT1_columnSpacing = 3
   GEO_ABT1_columnCx      = 1.0
   GEO_ABT1_columnCy      = 1.0
@@ -557,7 +556,6 @@ GEO_ABT2_thinTranWallDepth = 2
 
 ! Options for abutment type 6:
   ! Column
-  GEO_ABT2_columnHeight  = 5
   GEO_ABT2_columnSpacing = 3
   GEO_ABT2_columnCx      = 1.0
   GEO_ABT2_columnCy      = 1.0

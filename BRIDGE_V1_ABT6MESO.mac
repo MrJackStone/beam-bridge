@@ -3,7 +3,7 @@
 
 ! Dependencies:
 !   GEO_ABT_postHeight
-!   GEO_ABT_columnHeight
+!   GEO_ABT_height
 !   GEO_ABT_girderH
 !   GEO_ABT_girderB
 !   GEO_ABT_cantWallThk
@@ -16,7 +16,7 @@ _abtCS = ARG1
 
 girderHeight  = GIRDER_d(1)  ! TODO  hard-coded, improve
 frameGirderZ  = -(girderHeight+GEO_ABT_postHeight+(GEO_ABT_girderH/2))
-columnBottomZ = frameGirderZ-GEO_ABT_columnHeight
+columnBottomZ = frameGirderZ-GEO_ABT_height
 postTopZ      = frameGirderZ+(GEO_ABT_girderH/2)+GEO_ABT_postHeight
 wallHeight    = girderHeight+GEO_ABT_postHeight+(GEO_ABT_girderH/2)
 wallOffset    = (GEO_ABT_girderB-GEO_ABT_cantWallThk)/2
