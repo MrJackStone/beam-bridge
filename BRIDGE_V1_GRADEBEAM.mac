@@ -12,8 +12,8 @@ lsla
 ksll
 ksel,r,loc,x,0
 ksel,r,loc,z,0
-*get,yMin,kp,,mnloc,y
-ksel,r,loc,y,yMin
+*get,yMax,kp,,mxloc,y
+ksel,r,loc,y,yMax
 KP_gradeBeamLeft = kpnext(0)
 
 ! Get connection keypoint on right pile cap
@@ -22,8 +22,8 @@ lsla
 ksll
 ksel,r,loc,x,0
 ksel,r,loc,z,0
-*get,yMax,kp,,mxloc,y
-ksel,r,loc,y,yMax
+*get,yMin,kp,,mnloc,y
+ksel,r,loc,y,yMin
 KP_gradeBeamRight = kpnext(0)
 
 ! Draw & export grade beam
