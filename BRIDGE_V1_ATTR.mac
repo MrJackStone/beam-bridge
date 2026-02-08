@@ -572,7 +572,7 @@ secdata,SEC_ABT_wing_t,MAT_Abutment
 
 ! APPROACH SLAB
 sectype,SEC_ABT_appSlab,shell,,'ABT_SLAB'
-secdata,SEC_ABT_appSlab_t,MAT_Approach
+secdata,SEC_ABT_appSlab_t,MAT_abutment
 secoffset,bot
 
 ! PILES

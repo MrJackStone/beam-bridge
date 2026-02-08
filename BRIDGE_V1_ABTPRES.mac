@@ -37,7 +37,7 @@ allsel
 *voper , dw_pres_vert , height_above , mult , MAT_ABT_soil_dens*LOAD_g
 *voper , dw_pres_vert , dw_pres_vert , add  , LOAD_pav
 *vfact , 1 , 1 , GEO_ABT%ARG1%_appSlab
-*voper , dw_pres_vert , dw_pres_vert , add  , MAT_Approach_dens*LOAD_g*SEC_ABT_appSlab_t
+*voper , dw_pres_vert , dw_pres_vert , add  , MAT_abutment_dens*LOAD_g*SEC_ABT_appSlab_t
 *voper , dw_pres_horz , dw_pres_vert , mult , MAT_ABT_SOIL_ka
 
 ! Calculate pressures due to surcharge
