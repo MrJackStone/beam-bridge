@@ -20,6 +20,14 @@ cmType      = 'area'
   *endif
 *endif
 
+*get,count,%cmType%,,count
+*if,count,eq,0,then
+  *msg,warn,ARG1
+BRIDGE_V1_LONGSLICE warning: %s selection component is empty.%/&
+BRIDGE_V1_LONGSLICE command ignored.
+  *return,-1
+*endif
+
 ! Prepare environment
 csbackup
 
