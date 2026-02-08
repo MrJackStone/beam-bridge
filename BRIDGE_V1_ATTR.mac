@@ -107,6 +107,7 @@ SEC_BEARINGX_num     = 11
 SEC_BEARINGY_num     = 12
 SEC_BEARINGZ_num     = 13
 SEC_FRICTION_num     = 14
+
 SEC_ABT_longWall     = 15
 SEC_ABT_tranWall     = 16
 SEC_ABT_column       = 17
@@ -115,16 +116,18 @@ SEC_ABT_wing         = 19
 SEC_ABT_appSlab      = 20
 SEC_ABT_pile         = 21
 SEC_ABT_pileCap      = 22
-REAL_ABT_kv          = 23
-REAL_ABT_kh          = 24
-SEC_COLWALL          = 25
-SEC_COLCAP           = 26
-SEC_PSOIL_num        = 27
-SEC_GERBER           = 28
-SEC_CONSOLE          = 29
-SEC_CROSSBEAM        = 30
-SEC_ABT_thinTranWall = 31
-SEC_ABT_girderPost   = 32
+SEC_ABT_thinTranWall = 23
+SEC_ABT_girderPost   = 24
+
+REAL_ABT_kv          = 25
+REAL_ABT_kh          = 26
+
+SEC_COLWALL          = 27
+SEC_COLCAP           = 28
+SEC_PSOIL_num        = 29
+SEC_GERBER           = 30
+SEC_CONSOLE          = 31
+SEC_CROSSBEAM        = 32
 
 *del,SEC_GIRDER_nums,,nopr
 *dim,SEC_GIRDER_nums,,GEO_girderSectionCount
