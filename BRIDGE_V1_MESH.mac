@@ -412,8 +412,8 @@ esla
 cmsel,s,COMPL_ABT_2
 esll,a
 nsle,,active
-cm,COMPE_ABT_1,elem
-cm,COMPN_ABT_1,node
+cm,COMPE_ABT_2,elem
+cm,COMPN_ABT_2,node
 
 ! Selection components: submerged and exposed elements
 *if,GEO_waterHeight,gt,0,then
@@ -463,12 +463,16 @@ cm,COMPN_ABT_wsbInterface,node
     nsel,r,loc,x,0
     cm,COMPN_source,node
     *get,ncSource,node,,count
+    *get,yMin,node,,mnloc,y
+    *get,yMax,node,,mxloc,y
 
     cmsel,s,COMPA_ABT_tranWall
     cmsel,a,COMPA_ABT_cantileverWall
     lsla
     nsll,s,1
+    cmsel,r,COMPN_ABT_%nthAbutment%
     nsel,r,loc,z,0
+    nsel,r,loc,y,yMin,yMax
     cm,COMPN_target,node
     *get,ncTarget,node,,count
 
