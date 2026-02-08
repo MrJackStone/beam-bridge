@@ -1150,7 +1150,7 @@ zero = 0
 
 ! Create abutment geometry arrays
 *del,GEO_ABT1_geometry
-*dim,GEO_ABT1_geometry,,35
+*dim,GEO_ABT1_geometry,,42
 GEO_ABT1_geometry(1)  = GEO_ABT1_type          , GEO_deckWidth_beg   , GEO_deckOff_beg      , GEO_ABT1_yc                , GEO_ABT1_appSlab
 GEO_ABT1_geometry(6)  = GEO_ABT1_appSlabL      , GEO_ABT1_height     , GEO_ABT1_length      , GEO_ABT1_longPiles         , GEO_ABT1_pileCapL
 GEO_ABT1_geometry(11) = GEO_ABT1_pileCapW      , GEO_ABT1_pileL      , GEO_ABT1_topOffset   , GEO_ABT1_tranPiles         , GEO_ABT1_wings
@@ -1158,9 +1158,11 @@ GEO_ABT1_geometry(16) = GEO_ABT1_wingHa        , GEO_ABT1_wingL      , GEO_ABT1_
 GEO_ABT1_geometry(21) = GEO_ABT1_pileFree      , GEO_ABT1_pileShort  , GEO_ABT1_trvPileCols , GEO_ABT1_wingPileCols      , GEO_ABT1_wingCapLength
 GEO_ABT1_geometry(26) = GEO_ABT1_wingCapWidth  , GEO_ABT1_wingAngle  , GEO_ABT1_width       , GEO_ABT1_thinTranWallDepth , GEO_ABT1_beamOpt
 GEO_ABT1_geometry(31) = GEO_ABT1_pileCapOffset , GEO_ABT1_postHeight , GEO_ABT_postCx       , GEO_ABT_postCy             , GEO_ABT1_postOffset
+GEO_ABT1_geometry(36) = GEO_ABT1_appSlabW      , GEO_ABT1_columnCx   , GEO_ABT1_columnCy    , GEO_ABT1_columnSpacing     , GEO_ABT1_capOpt
+GEO_ABT1_geometry(41) = GEO_ABT1_girderB       , GEO_ABT1_girderH
 
 *del,GEO_ABT2_geometry
-*dim,GEO_ABT2_geometry,,35
+*dim,GEO_ABT2_geometry,,42
 GEO_ABT2_geometry(1)  = GEO_ABT2_type          , GEO_deckWidth_end   , GEO_deckOff_end      , GEO_ABT2_yc                , GEO_ABT2_appSlab
 GEO_ABT2_geometry(6)  = GEO_ABT2_appSlabL      , GEO_ABT2_height     , GEO_ABT2_length      , GEO_ABT2_longPiles         , GEO_ABT2_pileCapL
 GEO_ABT2_geometry(11) = GEO_ABT2_pileCapW      , GEO_ABT2_pileL      , GEO_ABT2_topOffset   , GEO_ABT2_tranPiles         , GEO_ABT2_wings
@@ -1168,6 +1170,8 @@ GEO_ABT2_geometry(16) = GEO_ABT2_wingHa        , GEO_ABT2_wingL      , GEO_ABT2_
 GEO_ABT2_geometry(21) = GEO_ABT2_pileFree      , GEO_ABT2_pileShort  , GEO_ABT2_trvPileCols , GEO_ABT2_wingPileCols      , GEO_ABT2_wingCapLength
 GEO_ABT2_geometry(26) = GEO_ABT2_wingCapWidth  , GEO_ABT2_wingAngle  , GEO_ABT2_width       , GEO_ABT2_thinTranWallDepth , GEO_ABT2_beamOpt
 GEO_ABT2_geometry(31) = GEO_ABT2_pileCapOffset , GEO_ABT2_postHeight , GEO_ABT_postCx       , GEO_ABT_postCy             , GEO_ABT2_postOffset
+GEO_ABT1_geometry(36) = GEO_ABT2_appSlabW      , GEO_ABT2_columnCx   , GEO_ABT2_columnCy    , GEO_ABT2_columnSpacing     , GEO_ABT2_capOpt
+GEO_ABT1_geometry(41) = GEO_ABT2_girderB       , GEO_ABT2_girderH
 
 ! Abutment extents
 GEO_ABT1_xMin=-(GEO_ABT1_length>GEO_ABT1_appSlabL*GEO_ABT1_appSlab)
