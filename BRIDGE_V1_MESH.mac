@@ -352,9 +352,6 @@ cmsel,s,COMPA_ABT_1
 *endif
 cm,COMPE_ABT_1,elem
 cm,COMPN_ABT_1,node
-csys,CS_ABT1
-local,csyiqr(0,14)+1,cart,0,0,0,-90-GEO_supportChi_0,0,0  ! TODO  csys
-csys,0
 
 esel,none
 nsel,none
@@ -365,7 +362,7 @@ cmsel,s,COMPA_ABT_2
 *endif
 cm,COMPE_ABT_2,elem
 cm,COMPN_ABT_2,node
-csys,CS_ABT2
+
 csys,0
 
 ! Selection components: submerged and exposed elements
