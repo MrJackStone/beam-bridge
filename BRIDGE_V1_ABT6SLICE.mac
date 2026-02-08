@@ -1,5 +1,5 @@
-! BRIDGE_V1_ABT6SLICE , abtCS , supIdx
-! BRIDGE_V1_ABT6SLICE , ARG1  , ARG2
+! BRIDGE_V1_ABT6SLICE , abtCS
+! BRIDGE_V1_ABT6SLICE , ARG1
 
 ! Dependencies:
 !   GEO_ABT_appSlab

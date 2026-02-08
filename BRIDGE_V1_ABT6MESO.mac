@@ -1,5 +1,5 @@
-! BRIDGE_V1_ABT6MESO , abtCS , supIdx , girder_y
-! BRIDGE_V1_ABT6MESO , ARG1  , ARG2   , ARG3
+! BRIDGE_V1_ABT6MESO , abtCS , girder_y
+! BRIDGE_V1_ABT6MESO , ARG1  , ARG2
 
 ! Dependencies:
 !   GEO_ABT_postHeight
@@ -22,11 +22,13 @@ postTopZ      = frameGirderZ+(GEO_ABT_girderH/2)+GEO_ABT_postHeight
 wallHeight    = girderHeight+GEO_ABT_postHeight+(GEO_ABT_girderH/2)
 wallOffset    = (GEO_ABT_girderB-SEC_ABT_thinTranWall_t)/2
 
-*get,girderCount,parm,%ARG3%,dim,x
+*get,girderCount,parm,%ARG2%,dim,x
+
+! Prepare environment
+csys,_abtCS
 
 ! Draw wall
 asel,none
-csys,_abtCS
 wpcsys,-1
 wpoffs,wallOffset
 wprota,,,-90
@@ -36,7 +38,6 @@ cm,cma_cantileverWall,area
 
 ! Draw frame girder
 lsel,none
-csys,_abtCS
 nextkp,'frame_girder_kps',2
 k , frame_girder_kps(1) , 0 , -GEO_ABT_width , 0
 k , frame_girder_kps(2) , 0 , GEO_ABT_width  , 0
@@ -44,9 +45,8 @@ l,frame_girder_kps(1),frame_girder_kps(2)
 cm,cml_frameGirder,line
 
 ! Draw posts
-csys,_abtCS
 *do,nthPost,1,girderCount,1
-  yGirderGlobal = %ARG3%(nthGirder)
+  yGirderGlobal = %ARG2%(nthGirder)
   glo2loc,0,yGirderGlobal,0,_abtCS,,'yGirderLocal'
   nextkp,'post_kps',2
   lsel,none
@@ -57,7 +57,6 @@ csys,_abtCS
 *enddo
 
 ! Draw columns  TODO  currently hard-coded to always work with 2 columns
-csys,_abtCS
 lsel,none
 nextkp,'column_kps',4
 k , column_kps(1) , 0 , -GEO_ABT_columnSpacing/2 , frameGirderZ

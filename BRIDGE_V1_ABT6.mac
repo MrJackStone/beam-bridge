@@ -1,5 +1,5 @@
 ! BRIDGE_V1_ABT6 , CS_local , geoArray , girder_y , supIndex
-! BRIDGE_V1_ABT  , ARG1     , ARG2     , ARG3     , ARG4
+! BRIDGE_V1_ABT6 , ARG1     , ARG2     , ARG3     , ARG4
 
 ! Dependencies:
 !   SEC_ABT_pileCap_h
@@ -56,10 +56,10 @@ cm , cma_cantileverWall , area
 BRIDGE_V1_ABT6SUPER , _abutmentCS
 
 ! Mesostructure
-BRIDGE_V1_ABT6MESO  , _abutmentCS , _supIndex , _girder_y
+BRIDGE_V1_ABT6MESO  , _abutmentCS , _girder_y
 
 ! Slice meso/super
-BRIDGE_V1_ABT6SLICE , _abutmentCS , _supIndex
+BRIDGE_V1_ABT6SLICE , _abutmentCS
 
 ! Infrastructure
 BRIDGE_V1_ABT6INFRA , abtIdx      , _supIndex
