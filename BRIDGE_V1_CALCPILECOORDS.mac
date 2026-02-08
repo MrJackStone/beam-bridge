@@ -33,9 +33,9 @@ ex4 = _lngPileDist*(sqrt(3)/6)
 ex5 = _lngPileDist*(1.5)
 ! 5 piles
 ex6 = _lngPileDist*(sqrt(2)/2)
-ex7 = _lngPileDist(0.26287)
-ex8 = _lngPileDist(0.68819)
-ex9 = _lngPileDist(0.85065)
+ex7 = _lngPileDist*(0.26287)
+ex8 = _lngPileDist*(0.68819)
+ex9 = _lngPileDist*(0.85065)
 
 ! Calculate common transversal pile spacings (along Y)
 ! Many scenarios
