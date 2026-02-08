@@ -511,25 +511,23 @@ Run aborted.
 *enddo
 
 ! Nodal selection component: girder supports at abutments
-cmsel,s,COMPN_ABT_wsbInterface
-cmsel,s,COMPA_ABT_tranWall
-lsla,s
-nsla,r,1
-cm,COMPN_tranWall,node
-
-nsel,none
-*do,nthGirder,1,GEO_girderCount,1
-  nthCS=CS_girders(nthGirder)
-  csys,nthCS
-  nsel,a,loc,y,0
-  csys,0
-*enddo
-cm,COMPN_temp,node
-cmsel,s,COMPN_ABT_1
-cmsel,a,COMPN_ABT_2
-cmsel,r,COMPN_temp
-cmsel,r,COMPN_tranWall
-cm,COMPN_ABT_girder,node
+*if,GEO_ABT1_type,eq,5,or,GEO_ABT1_type,eq,6,then
+  cmsel,s,COMPK_ABT_postTops
+  nslk,s
+  cm,COMPN_ABT_girder,node
+*else
+  nsel,none
+  *do,nthGirder,1,GEO_girderCount,1
+    nthCS=CS_girders(nthGirder)
+    csys,nthCS
+    nsel,a,loc,y,0
+    csys,0
+  *enddo
+  cmsel,r,COMPN_ABT_wsbInterface
+  cmsel,s,COMPA_ABT_tranWall
+  lsla,s
+  nsla,r,1
+*endif
 
 ! Connect girder posts to pile cap
 *if,GEO_ABT1_status,eq,1,and,GEO_ABT1_type,eq,5,then
