@@ -7,12 +7,14 @@
   xCenter = GEO_supportX(nthSupport)
 
   *if,GEO_deckRadius,eq,0,then
-    xLeft   = xCenter
-    xRight  = xCenter
-    yCenter = GEO_deckOff_beg+(GEO_deckOff_end-GEO_deckOff_beg)*(xCenter/GEO_deckLength)+(GEO_deckWidth_beg/2)
-    yLeft   = yCenter+GEO_columnY_%nthSupport%(1)
-    yRight  = yCenter+GEO_columnY_%nthSupport%(2)
-    zAngle  = 0
+    deckOffset = GEO_deckOff_beg+(GEO_deckOff_end-GEO_deckOff_beg)*(xCenter/GEO_deckLength)
+    deckWidth  = GEO_deckWidth_beg+(GEO_deckWidth_end-GEO_deckWidth_beg)*(xCenter/GEO_deckLength)
+    xLeft      = xCenter
+    xRight     = xCenter
+    yCenter    = deckOffset+(deckWidth/2)
+    yLeft      = yCenter+GEO_columnY_%nthSupport%(1)
+    yRight     = yCenter+GEO_columnY_%nthSupport%(2)
+    zAngle     = 0
   *else
     afunbackup,'DEG'
     chi_i   = GEO_supportChi(nthSupport)
