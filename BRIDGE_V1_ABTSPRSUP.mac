@@ -92,7 +92,7 @@ cm,COMPN_valid,node
   nsla,s,1
   csbackup
   csys,_abtCS
-  nsel,u,loc,x,0,FEM_unsupportedAppSlabLength
+  nsel,u,loc,x,0,GEO_ABT%_abtIndex%_appSlabGap
   csrestore
   cmsel,r,COMPN_valid
   sprsup,,,-FEM_ABT_springL,MAT_ABT_Soil,REAL_ABT_kv,TYPE_LINK180,'COMPN_sup','COMPE_sup',1,3

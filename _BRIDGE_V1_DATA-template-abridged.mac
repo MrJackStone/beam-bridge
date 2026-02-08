@@ -326,9 +326,10 @@ GEO_ABT1_beamOpt = 0
 ! Approach slab:
 !   [0] OFF
 !   [1] ON
-GEO_ABT1_appSlab  = 1
-GEO_ABT1_appSlabL = 4
-GEO_ABT1_appSlabW = 4  ! (ABT type 6 only)
+GEO_ABT1_appSlab    = 1
+GEO_ABT1_appSlabL   = 4
+GEO_ABT1_appSlabW   = 4  ! (ABT type 6 only)
+GEO_ABT1_appSlabGap = 2
 
 ! Pile cap
 GEO_ABT1_pileCapW  = 3
@@ -444,9 +445,10 @@ GEO_ABT2_beamOpt = 0
 ! Approach slab:
 !   [0] OFF
 !   [1] ON
-GEO_ABT2_appSlab  = 1
-GEO_ABT2_appSlabL = 4
-GEO_ABT2_appSlabW = 4  ! (ABT type 6 only)
+GEO_ABT2_appSlab    = 1
+GEO_ABT2_appSlabL   = 4
+GEO_ABT2_appSlabW   = 4  ! (ABT type 6 only)
+GEO_ABT2_appSlabGap = 2
 
 ! Pile cap
 GEO_ABT2_pileCapW  = 3
