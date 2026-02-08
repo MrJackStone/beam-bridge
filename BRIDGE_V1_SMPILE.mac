@@ -51,6 +51,7 @@ sliceCap = 0
 
 ! Prepare environment
 ksel , none
+lsel , none
 asel , none
 cm   , cmk_support     , kp
 cm   , cmk_pileTop     , kp
