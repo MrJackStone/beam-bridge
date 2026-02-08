@@ -257,6 +257,15 @@ cmsel,s,COMPL_ABT_frameGirder
 cmsel,r,COMPL_ABT_2
 BRIDGE_V1_LMESH , CS_ABT2 , , MAT_abutment , SEC_ABT2_frameGirder , 0 , 0 , 1 , FEM_ABT_esize
 
+! Grade beams
+cmsel,s,COMPL_ABT_gradeBeam
+cmsel,r,COMPL_ABT_1
+BRIDGE_V1_LMESH , CS_ABT1 , , MAT_abutment , SEC_ABT1_gradeBeam , 0 , 0 , 1 , FEM_ABT_esize
+
+cmsel,s,COMPL_ABT_gradeBeam
+cmsel,r,COMPL_ABT_2
+BRIDGE_V1_LMESH , CS_ABT2 , , MAT_abutment , SEC_ABT2_gradeBeam , 0 , 0 , 1 , FEM_ABT_esize
+
 ! For abutment type 6: copy mesh from frame girder to bottom of cantilever wall
 *do,nthAbutment,1,2,1
   *if,GEO_ABT1_status,eq,1,and,GEO_ABT%nthAbutment%_type,eq,6,then

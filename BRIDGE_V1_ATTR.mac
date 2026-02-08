@@ -116,12 +116,14 @@ SEC_ABT_girderPost   = 22
 
 SEC_ABT1_column      = 23
 SEC_ABT1_frameGirder = 24
-SEC_ABT2_column      = 25
-SEC_ABT2_frameGirder = 26
+SEC_ABT1_gradeBeam   = 25
+SEC_ABT2_column      = 26
+SEC_ABT2_frameGirder = 27
+SEC_ABT2_gradeBeam   = 28
 
 *del,SEC_GIRDER_nums,,nopr
 *dim,SEC_GIRDER_nums,,GEO_girderSectionCount
-*vfill,SEC_GIRDER_nums,ramp,27,1
+*vfill,SEC_GIRDER_nums,ramp,29,1
 
 ! Real constants
 REAL_vsoil    = 1
@@ -603,6 +605,13 @@ secdata,GEO_ABT1_girderB,GEO_ABT1_girderH
 
 sectype,SEC_ABT2_frameGirder,beam,rect,,'ABT2_FRG'
 secdata,GEO_ABT2_girderB,GEO_ABT2_girderH
+
+! Grade beam
+sectype,SEC_ABT1_gradeBeam,beam,rect,,'ABT1_GBM'
+secdata,GEO_ABT1_gradeBeamB,GEO_ABT1_gradeBeamH
+
+sectype,SEC_ABT2_gradeBeam,beam,rect,,'ABT2_GBM'
+secdata,GEO_ABT2_gradeBeamB,GEO_ABT2_gradeBeamH
 
 ! Girder posts
 sectype,SEC_ABT_girderPost,beam,rect,,'GPOST'

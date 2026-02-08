@@ -16,6 +16,7 @@
 !   COMPK_ABT_pileTop
 !   COMPL_ABT_columns
 !   COMPL_ABT_frameGirder
+!   COMPL_ABT_gradeBeam
 !   COMPL_ABT_pileConnections
 !   COMPL_ABT_piles
 !   COMPL_ABT_posts
@@ -25,6 +26,7 @@
 !   COMPA_ABT_cantileverWall
 !   COMPA_ABT_pileCap
 !   COMPA_ABT_pileInterface
+!   COMPA_ABT<i>_CAP<j>_PILE<k>_itf
 
 
 ! Parse inputs

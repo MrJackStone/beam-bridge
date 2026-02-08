@@ -198,6 +198,7 @@ cm , COMPK_ABT_pileTop              , kp
 cm , COMPL_ABT_columns              , line
 cm , COMPL_ABT_frameGirder          , line
 cm , COMPL_ABT_cantileverWallBottom , line
+cm , COMPL_ABT_gradeBeam            , line
 cm , COMPL_ABT_lwPiles              , line
 cm , COMPL_ABT_pileConnections      , line
 cm , COMPL_ABT_piles                , line

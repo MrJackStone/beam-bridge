@@ -16,6 +16,7 @@
 !   COMPK_ABT<i>_pileTop
 !   COMPL_ABT<i>_pileConnections
 !   COMPL_ABT<i>_pile
+!   COMPL_ABT<i>_gradeBeam
 !   COMPA_ABT<i>_pileCap
 !   COMPA_SUP<i>_CAP<j>_PILE<k>_itf
 !
@@ -29,6 +30,7 @@
 !   COMPK_ABT_pileTop
 !   COMPL_ABT_columns
 !   COMPL_ABT_frameGirder
+!   COMPL_ABT_gradeBeam
 !   COMPL_ABT_pileConnections
 !   COMPL_ABT_piles
 !   COMPL_ABT_posts
@@ -38,6 +40,8 @@
 !   COMPA_ABT_cantileverWall
 !   COMPA_ABT_pileCap
 !   COMPA_ABT_pileInterface
+!   COMPA_ABT<i>_CAP<j>_PILE<k>_itf
+
 
 
 *if,GEO_ABT_capOpt,eq,0,then
@@ -72,6 +76,9 @@ cmpadd,'COMPL_ABT_posts'
 
 cmsel,s,cmk_postTops
 cmpadd,'COMPK_ABT_postTops'
+
+cmsel,s,COMPL_ABT%ARG1%_gradeBeam
+cmpadd,'COMPL_ABT_gradeBeam'
 
 cmsel,s,COMPK_ABT%ARG1%_support
 cmpadd,'COMPK_ABT_pileBase'
