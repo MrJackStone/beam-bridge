@@ -77,17 +77,7 @@ cmdele , cma_approachSlab
 cmdele , cma_cantileverWall
 
 
-!!                                                                                                !!
-
-! Match mesh: girder & wall bottom (or use L2ACNT?)
-! Match mesh: wall top & approach slab
-! Connect: posts & girder through elastomer
-! Connect: approach slab & wall top
-! Connect: wall bottom & girder
-
-! Parameters:
+! TODO
+! - match mesh: wall top & approach slab (current approach does not guarantee, check if it works well enough)
 ! - number of columns
-! - column 'length' (along X)
-! - column 'width' (along Y)
-! - approach slab gap
-! - unbraced pile segments
+! - column 'length' (along X) & 'width' (along Y), use to create rigid region in pile cap
