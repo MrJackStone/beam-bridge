@@ -101,5 +101,5 @@ cmpadd,'COMPL_Barrier'
 cmdele , cml_columns
 cmdele , cml_frameGirder
 cmdele , cml_posts
-cmdele , cma_approachSlab'
+cmdele , cma_approachSlab
 cmdele , cma_cantileverWall

@@ -2,6 +2,7 @@
 ! BRIDGE_V1_ABT6SUPER , ARG1
 
 ! Dependencies:
+!   GEO_ABT_appSlab
 !   GEO_ABT_appSlabL
 !   GEO_ABT_appSlabW
 
@@ -10,12 +11,16 @@
 
 
 ! Draw approach slab
-asel,none
+*if,GEO_ABT_appSlab,eq,1,then
 
-csys,ARG1
-wpcsys,-1
+  asel,none
 
-wpoffs,,-GEO_ABT_appSlabW/2
-blc4,0,0,GEO_ABT_appSlabL,GEO_ABT_appSlabW
+  csys,ARG1
+  wpcsys,-1
 
-cm,cma_approachSlab,area
+  wpoffs,,-GEO_ABT_appSlabW/2
+  blc4,0,0,GEO_ABT_appSlabL,GEO_ABT_appSlabW
+
+  cm,cma_approachSlab,area
+
+*endif
