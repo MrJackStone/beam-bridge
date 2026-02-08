@@ -18,6 +18,7 @@
 !   COMPL_ABT_pileConnections
 !   COMPL_ABT_piles
 !   COMPL_ABT_posts
+!   COMPL_ABT_cantileverWallBottom
 !   COMPL_Barrier
 !   COMPA_ABT_appSlab
 !   COMPA_ABT_cantileverWall
