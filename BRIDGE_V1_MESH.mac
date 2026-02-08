@@ -439,14 +439,47 @@ cmsel,r,COMPN_temp
 cm,COMPN_ABT_wsbInterface,node
 
 ! Connect approach slab to transversal wall
-cmsel,s,COMPA_ABT_tranWall
-cmsel,a,COMPA_ABT_appSlab
-lsla,s
-nsla,s,1
-cmsel,r,COMPN_ABT_wsbInterface
-cpintf,UX
-cpintf,UY
-cpintf,UZ
+*do,nthAbutment,1,2,1
+  *if,GEO_ABT%nthAbutment%_status,eq,1,and,GEO_ABT%nthAbutment%_appSlab,eq,1,then
+    csys,CS_ABT%nthAbutment%
+
+    cmsel,s,COMPA_ABT_appSlab
+    cmsel,r,COMPA_ABT_%nthAbutment%
+    lsla
+    nsll,s,1
+    nsel,r,loc,x,0
+    cm,COMPN_source,node
+    *get,ncSource,node,,count
+
+    cmsel,s,COMPA_ABT_tranWall
+    cmsel,a,COMPA_ABT_cantileverWall
+    lsla
+    nsll,s,1
+    nsel,r,loc,z,0
+    cm,COMPN_target,node
+    *get,ncTarget,node,,count
+
+    *if,ncSource,ne,ncTarget,then
+      *msg,fatal
+BRIDGE_V1_MESH error: approach slab and transversal wall do not have matching meshes.%/&
+Run aborted.
+    *endif
+
+    ndSource = 0
+    *do,nthNode,1,ncSource,1
+      cmsel,s,COMPN_source
+      ndSource = ndnext(ndSource)
+      cmsel,s,COMPN_target
+      ndTarget = nnear(ndSource)
+
+      nsel,s,node,,ndSource
+      nsel,a,node,,ndTarget
+      cp,next,ux,all
+      cp,next,uy,all
+      cp,next,uz,all
+    *enddo
+  *endif
+*enddo
 
 ! Connect cantilever wall to frame girder, for abutment type 6
 *do,nthAbutment,1,2,1
