@@ -21,7 +21,7 @@ csys,ARG1
 
 ! Break if blank selection
 *get,lc,line,,count
-*if,lc,gt,0,then
+*if,lc,eq,0,then
   *return,-1
 *endif
 
