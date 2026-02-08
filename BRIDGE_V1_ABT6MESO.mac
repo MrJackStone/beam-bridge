@@ -12,6 +12,8 @@
 !   GIRDER_d
 
 
+_abtCS = ARG1
+
 girderHeight  = GIRDER_d(1)  ! TODO  hard-coded, improve
 frameGirderZ  = -(girderHeight+GEO_ABT_postHeight+(GEO_ABT_girderH/2))
 columnBottomZ = frameGirderZ-GEO_ABT_columnHeight
@@ -23,7 +25,7 @@ wallOffset    = (GEO_ABT_girderB-GEO_ABT_cantWallThk)/2
 
 ! Draw wall
 asel,none
-csys,_abutmentCS
+csys,_abtCS
 wpcsys,-1
 wpoffs,wallOffset
 wprota,,,-90
@@ -33,7 +35,7 @@ cm,cma_cantileverWall,area
 
 ! Draw frame girder
 lsel,none
-csys,_abutmentCS
+csys,_abtCS
 nextkp,'frame_girder_kps',2
 k , frame_girder_kps(1) , 0 , -GEO_ABT_girderLength , 0
 k , frame_girder_kps(2) , 0 , GEO_ABT_girderLength  , 0
@@ -41,10 +43,10 @@ l,frame_girder_kps(1),frame_girder_kps(2)
 cm,cml_frameGirder,line
 
 ! Draw posts
-csys,_abutmentCS
+csys,_abtCS
 *do,nthPost,1,girderCount,1
   yGirderGlobal = %ARG3%(nthGirder)
-  glo2loc,0,yGirderGlobal,0,_abutmentCS,,'yGirderLocal'
+  glo2loc,0,yGirderGlobal,0,_abtCS,,'yGirderLocal'
   nextkp,'post_kps',2
   lsel,none
   k,post_kps(1),0,yGirderLocal,frameGirderZ
@@ -54,9 +56,9 @@ csys,_abutmentCS
 *enddo
 
 ! Draw columns  TODO  currently hard-coded to always work with 2 columns
-csys,_abutmentCS
+csys,_abtCS
 *do,nthColumn,1,2,1
-  yColumn = GEO_columnY_%_supIdx%(nthCol)
+  yColumn = GEO_columnY_%ARG2%(nthCol)
   nextkp,'column_kps',2
   lsel,none
   k,column_kps(1),0,yColumn,frameGirderZ

@@ -1,8 +1,8 @@
-! BRIDGE_V1_ABT6COMPS , abtIdx
-! BRIDGE_V1_ABT6COMPS , ARG1
+! BRIDGE_V1_ABT6COMPS , abtIdx , supIndex
+! BRIDGE_V1_ABT6COMPS , ARG1   , ARG2
 
 ! Dependencies:
-!   GEO_capOpt
+!   GEO_ABT_capOpt
 !   GEO_ABT<i>_pile_data
 !
 !   cml_columns
@@ -37,15 +37,13 @@
 !   COMPA_ABT_pileInterface
 
 
-_abtIdx = ARG1
-
-*if,GEO_capOpt,eq,0,then
-  GEO_capCount = 2
-*elseif,GEO_capOpt,eq,1,then
-  GEO_capCount = 1
+*if,GEO_ABT_capOpt,eq,0,then
+  capCount = 2
+*elseif,GEO_ABT_capOpt,eq,1,then
+  capCount = 1
 *endif
 
-*get,GEO_pileCount,parm,GEO_ABT%abtIdx%_pile_data,dim,y
+*get,pileCount,parm,GEO_ABT%ARG1%_pile_data,dim,y
 
 cmsel,s,cma_approachSlab
 cmpadd,'COMPA_ABT_appSlab'
@@ -62,25 +60,25 @@ cmpadd,'COMPL_ABT_frameGirder'
 cmsel,s,cml_posts
 cmpadd,'COMPL_ABT_posts'
 
-cmsel,s,COMPK_ABT%abtIdx%_support
+cmsel,s,COMPK_ABT%ARG1%_support
 cmpadd,'COMPK_ABT_pileBase'
 
-cmsel,s,COMPK_ABT%abtIdx%_pileTop
+cmsel,s,COMPK_ABT%ARG1%_pileTop
 cmpadd,'COMPK_ABT_pileTop'
 
-cmsel,s,COMPL_ABT%abtIdx%_pileConnections
+cmsel,s,COMPL_ABT%ARG1%_pileConnections
 cmpadd,'COMPL_ABT_pileConnections'
 
-cmsel,s,COMPL_ABT%abtIdx%_pile
+cmsel,s,COMPL_ABT%ARG1%_pile
 cmpadd,'COMPL_ABT_piles'
 
-cmsel,s,COMPA_ABT%abtIdx%_pileCap
+cmsel,s,COMPA_ABT%ARG1%_pileCap
 cmpadd,'COMPA_ABT_pileCap'
 
-*do,nthCap,1,GEO_capCount,1
-  *do,nthPile,1,GEO_pileCount,1
-    cmsel , s , COMPA_SUP%_supIndex%_CAP%nthCap%_PILE%nthPile%_itf
-    cm , COMPA_ABT%abtIdx%_CAP%nthCap%_PILE%nthPile%_itf , area
+*do,nthCap,1,capCount,1
+  *do,nthPile,1,pileCount,1
+    cmsel , s , COMPA_SUP%ARG2%_CAP%nthCap%_PILE%nthPile%_itf
+    cm , COMPA_ABT%ARG1%_CAP%nthCap%_PILE%nthPile%_itf , area
     cmpadd,'COMPA_ABT_pileInterface'
   *enddo
 *enddo

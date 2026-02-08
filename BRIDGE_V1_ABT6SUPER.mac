@@ -5,6 +5,9 @@
 !   GEO_ABT_appSlabL
 !   GEO_ABT_appSlabW
 
+! Exported:
+!   cma_approachSlab
+
 
 ! Draw approach slab
 asel,none
