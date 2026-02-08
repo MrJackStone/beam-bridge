@@ -66,27 +66,25 @@ BRIDGE_V1_ABT6INFRA , abtIdx      , _supIndex
 ! Export
 BRIDGE_V1_ABT6COMPS , abtIdx      , _supIndex
 
-! Match mesh: girder & wall bottom
+! Clean up
+cmdele , cml_columns
+cmdele , cml_frameGirder
+cmdele , cml_posts
+cmdele , cma_approachSlab
+cmdele , cma_cantileverWall
+
+
+!!                                                                                                !!
+
+! Match mesh: girder & wall bottom (or use L2ACNT?)
 ! Match mesh: wall top & approach slab
 ! Connect: posts & girder through elastomer
 ! Connect: approach slab & wall top
 ! Connect: wall bottom & girder
 
 ! Parameters:
-! - wall thk
-! - girder length
-! - gider width
-! - gider depth
 ! - number of columns
 ! - column 'length' (along X)
 ! - column 'width' (along Y)
-! - total height
-! - approach slab length
-! - approach slab width
 ! - approach slab gap
-! - number of pile rows (along X)
-! - number of pile columns (along Y)
-! - angle of piles on outer columns
-! - pile length
-! - pile diameter
 ! - unbraced pile segments
