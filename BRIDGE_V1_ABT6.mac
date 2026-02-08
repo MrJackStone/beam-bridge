@@ -48,13 +48,18 @@ GEO_ABT_girderB       = %ARG2%(41)
 GEO_ABT_girderH       = %ARG2%(42)
 
 ! Prepare environment
-asel,none
-lsel,none
-cm , cml_columns        , line
-cm , cml_frameGirder    , line
-cm , cml_posts          , line
-cm , cma_approachSlab   , area
-cm , cma_cantileverWall , area
+allsel
+cm   , COMPA_prev         , area
+cm   , COMPL_prev         , line
+cm   , COMPK_prev         , kp
+asel , none
+lsel , none
+cm   , cml_columns        , line
+cm   , cml_frameGirder    , line
+cm   , cml_posts          , line
+cm   , cma_approachSlab   , area
+cm   , cma_cantileverWall , area
+cm   , cmk_postTops       , kp
 
 ! Superstructure
 BRIDGE_V1_ABT6SUPER , _abutmentCS
@@ -72,6 +77,25 @@ BRIDGE_V1_ABT6INFRA , abtIdx      , _supIndex
 BRIDGE_V1_ABT6COMPS , abtIdx      , _supIndex
 
 ! Clean up
+asel  , none
+lsel  , none
+ksel  , none
+cmsel , a    , COMPA_ABT_appSlab
+cmsel , a    , COMPA_ABT_cantileverWall
+cmsel , a    , COMPA_ABT_pileCap
+lsla  , a
+cmsel , a    , COMPL_ABT_columns
+cmsel , a    , COMPL_ABT_frameGirder
+cmsel , a    , COMPL_ABT_gradeBeam
+cmsel , a    , COMPL_ABT_pileConnections
+cmsel , a    , COMPL_ABT_piles
+cmsel , a    , COMPL_ABT_posts
+ksll  , a
+
+cmsel , u    , COMPA_prev
+cmsel , u    , COMPL_prev
+cmsel , u    , COMPK_prev
+
 cmdele , cml_columns
 cmdele , cml_frameGirder
 cmdele , cml_posts
