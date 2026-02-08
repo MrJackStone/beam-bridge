@@ -33,20 +33,20 @@ wpcsys,-1
 wpoffs,wallOffset
 wprota,,,-90
 wpoffs,,-GEO_ABT_width/2
-blc4,0,0,wallHeight,GEO_ABT_width
+blc4,0,0,-wallHeight,GEO_ABT_width
 cm,cma_cantileverWall,area
 
 ! Draw frame girder
 lsel,none
 nextkp,'frame_girder_kps',2
-k , frame_girder_kps(1) , 0 , -GEO_ABT_width , 0
-k , frame_girder_kps(2) , 0 , GEO_ABT_width  , 0
+k , frame_girder_kps(1) , 0 , -GEO_ABT_width/2 , frameGirderZ
+k , frame_girder_kps(2) , 0 ,  GEO_ABT_width/2 , frameGirderZ
 l,frame_girder_kps(1),frame_girder_kps(2)
 cm,cml_frameGirder,line
 
 ! Draw posts
 *do,nthPost,1,girderCount,1
-  yGirderGlobal = %ARG2%(nthGirder)
+  yGirderGlobal = %ARG2%(nthPost)
   glo2loc,0,yGirderGlobal,0,_abtCS,,'yGirderLocal'
   nextkp,'post_kps',2
   ksel,none
