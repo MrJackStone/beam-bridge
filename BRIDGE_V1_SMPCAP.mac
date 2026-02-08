@@ -54,7 +54,7 @@ arruniq , _y_slices , 'y_slices' , 1
 ! Export selection components
 cmsel , s , cma_pileCapLeft
 cmsel , a , cma_pileCapRight
-cmsel , s , cma_pileCap
+cmsel , a , cma_pileCap
 cmpadd,'COMPA_%infix%pileCap'
 
 cmsel,s,cml_gradeBeam
