@@ -117,9 +117,14 @@ SEC_ABT_pileCap      = 20
 SEC_ABT_thinTranWall = 21
 SEC_ABT_girderPost   = 22
 
+SEC_ABT1_column      = 23
+SEC_ABT1_frameGirder = 24
+SEC_ABT2_column      = 25
+SEC_ABT2_frameGirder = 26
+
 *del,SEC_GIRDER_nums,,nopr
 *dim,SEC_GIRDER_nums,,GEO_girderSectionCount
-*vfill,SEC_GIRDER_nums,ramp,33,1
+*vfill,SEC_GIRDER_nums,ramp,27,1
 
 ! Real constants
 REAL_vsoil    = 1
@@ -587,6 +592,20 @@ secoffset,bot
 sectype,SEC_ABT_pileCap,shell,,'ABT_SLAB'
 secdata,SEC_ABT_pileCap_h,MAT_Abutment
 secoffset,bot  ! TODO  compatible with ABT5, ensure compatibility with other abutment types
+
+! Frame column
+sectype,SEC_ABT1_column,beam,rect,,'ABT1_COL'
+secdata,GEO_ABT1_columnCx,GEO_ABT1_columnCy
+
+sectype,SEC_ABT2_column,beam,rect,,'ABT2_COL'
+secdata,GEO_ABT2_columnCx,GEO_ABT2_columnCy
+
+! Frame girder
+sectype,SEC_ABT1_frameGirder,beam,rect,,'ABT1_FRG'
+secdata,GEO_ABT1_girderB,GEO_ABT1_girderH
+
+sectype,SEC_ABT2_frameGirder,beam,rect,,'ABT2_FRG'
+secdata,GEO_ABT2_girderB,GEO_ABT2_girderH
 
 ! Girder posts
 sectype,SEC_ABT_girderPost,beam,rect,,'GPOST'
