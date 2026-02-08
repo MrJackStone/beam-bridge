@@ -6,9 +6,9 @@
 _cs       = ARG1
 _xLength  = ARG2
 _yLength  = ARG3
-_cmaName  = ARG4
-_x_slices = ARG5
-_y_slices = ARG6
+_x_slices = ARG4
+_y_slices = ARG5
+_cmaName  = ARG6
 
 ! Prepare environment
 asel,none
