@@ -257,6 +257,25 @@ cmsel,s,COMPL_ABT_frameGirder
 cmsel,r,COMPL_ABT_2
 BRIDGE_V1_LMESH , CS_ABT2 , , MAT_abutment , SEC_ABT2_frameGirder , 0 , 0 , 1 , FEM_ABT_esize
 
+! For abutment type 6: copy mesh from frame girder to bottom of cantilever wall
+*do,nthAbutment,1,2,1
+  *if,GEO_ABT1_status,eq,1,and,GEO_ABT%nthAbutment%_type,eq,6,then
+    ! Target: lines at the bottom of the cantilever wall
+    cmsel,s,COMPL_ABT_cantileverWallBottom
+    cmsel,r,COMPL_ABT_%nthAbutment%
+    cm,COMPL_target,line
+    ! Source: frame girder lines
+    cmsel,s,COMPL_ABT_frameGirder
+    cmsel,r,COMPL_ABT_%nthAbutment%
+    cm,COMPL_source,line
+    ! Copy beam mesh from girder to wall (temporary mesh, must later be deleted)
+    wallOffsetX = (GEO_ABT%nthAbutment%_girderB-SEC_ABT_thinTranWall_t)/2
+    esel,none
+    mshcopy,,COMPL_ABT_source,COMPL_ABT_target,CS_ABT%nthAbutment%,wallOffsetX
+    cm,COMPE_ABT%nthAbutment%_tempWallBottom,elem
+  *endif
+*enddo
+
 !! 4.3.2 SHELL ELEMENTS                                                                           !!
 !!                                                                                                !!
 ! Transversal walls
@@ -285,6 +304,9 @@ BRIDGE_V1_AMESH,,MAT_abutment,FEM_ABT_esize,ESYS_ABT2_tw,SEC_ABT_thinTranWall
 cmsel,s,COMPA_ABT_cantileverWall
 cmsel,r,COMPA_ABT_2
 BRIDGE_V1_AMESH,,MAT_abutment,FEM_ABT_esize,ESYS_ABT2_tw,SEC_ABT_thinTranWall
+
+! Delete temporary mesh, used to ensure matching nodes for abutment type 6
+lclear,COMPL_ABT_cantileverWallBottom
 
 ! Longitudinal walls
 cmsel,s,COMPA_ABT_longWalls
