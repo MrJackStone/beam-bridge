@@ -114,6 +114,7 @@ CM,COMPA_PileCap,AREA
       ! Hammerhead pier: slice around solid circular column
       BRIDGE_V1_SLICEAROUNDBEAM ,  , GEO_pierColumnShape , GEO_pierColumnDiameter , GEO_pierColumnCx , GEO_pierColumnCy , 'COMPA_HAMMER%nthSupport%_botInterface'
     *endif
+    ! TODO  add this sort of slicing & coupling to abutment type 6 to connect column & pile cap
     cm,COMPA_pileCap,area
 
   *endif
