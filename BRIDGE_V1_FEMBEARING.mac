@@ -26,7 +26,7 @@ bit_dofs(1) = 'UX' , 'UY' , 'UZ' , 'ROTX' , 'ROTY' , 'ROTZ'
 
 *del , dof_rcs ,  , nopr
 *dim , dof_rcs ,  , bitCount
-dof_rcs(1) = SEC_BEARINGX_num , SEC_BEARINGY_num , SEC_BEARINGZ_num , 0 , 0 , 0
+dof_rcs(1) = REAL_bearingx , REAL_bearingy , REAL_bearingz , 0 , 0 , 0
 
 ! Prepare environment
 nsel , s , node ,  , _mesoNode

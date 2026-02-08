@@ -868,13 +868,13 @@ cm,COMPN_base,node
 *if,nc,gt,0,then
   *if,MAT_Soil_kv,GT,0,THEN
     cmsel,s,COMPN_base
-    sprsup,0,0,-FEM_springL,MAT_PileLat,SEC_VSOIL_num,TYPE_LINK180,'COMPN_PIER_VSoil','COMPE_PIER_VSoil',,3
+    sprsup,0,0,-FEM_springL,MAT_PileLat,REAL_vsoil,TYPE_LINK180,'COMPN_PIER_VSoil','COMPE_PIER_VSoil',,3
   *endif
   *if,MAT_Soil_kh,GT,0,THEN
     cmsel,s,COMPN_base
-    sprsup,-FEM_springL,0,0,MAT_Soil,SEC_HSOIL_num,TYPE_LINK180,'COMPN_PIER_HSoil','COMPE_PIER_HSoil',,4
+    sprsup,-FEM_springL,0,0,MAT_Soil,REAL_hsoil,TYPE_LINK180,'COMPN_PIER_HSoil','COMPE_PIER_HSoil',,4
     cmsel,s,COMPN_base
-    sprsup,0,-FEM_springL,0,MAT_Soil,SEC_HSOIL_num,TYPE_LINK180,'COMPN_temp' ,'COMPE_temp',,4
+    sprsup,0,-FEM_springL,0,MAT_Soil,REAL_hsoil,TYPE_LINK180,'COMPN_temp' ,'COMPE_temp',,4
     cmsel,s,COMPN_temp
     cmsel,s,COMPE_temp
     cmpadd,'COMPN_PIER_HSoil'
@@ -906,7 +906,7 @@ cm,COMPN_base,node
 
     *if,MAT_Soil_kv,GT,0,THEN
       cmsel,s,COMPN_ABT1_pileSpringSupported
-      sprsup,0,0,-FEM_springL,MAT_PileLat,SEC_VSOIL_num,TYPE_LINK180,'COMPN_ABT1_VSoil','COMPE_ABT1_VSoil',,3
+      sprsup,0,0,-FEM_springL,MAT_PileLat,REAL_vsoil,TYPE_LINK180,'COMPN_ABT1_VSoil','COMPE_ABT1_VSoil',,3
     *endif
     *if,MAT_Soil_kh,GT,0,THEN
       *if,GEO_ABT1_type,eq,3,then
@@ -915,17 +915,17 @@ cm,COMPN_base,node
         cmsel,a,COMPL_ABT_vxPiles
         nsll,s,1
         cmsel,r,COMPN_ABT1_pileSpringSupported
-        sprsup , -FEM_springL , 0            , 0 , MAT_Soil , SEC_HSOIL_num , TYPE_LINK180 , 'COMPN_ABT1_HSoil' , 'COMPE_ABT1_HSoil' ,  , 4
+        sprsup , -FEM_springL , 0            , 0 , MAT_Soil , REAL_hsoil , TYPE_LINK180 , 'COMPN_ABT1_HSoil' , 'COMPE_ABT1_HSoil' ,  , 4
         cmsel,s,COMPL_ABT_lwPiles
         cmsel,a,COMPL_ABT_vxPiles
         nsll,s,1
         cmsel,r,COMPN_ABT1_pileSpringSupported
-        sprsup , 0            , -FEM_springL , 0 , MAT_Soil , SEC_HSOIL_num , TYPE_LINK180 , 'COMPN_temp'       , 'COMPE_temp'       ,  , 4
+        sprsup , 0            , -FEM_springL , 0 , MAT_Soil , REAL_hsoil , TYPE_LINK180 , 'COMPN_temp'       , 'COMPE_temp'       ,  , 4
       *else
         cmsel,s,COMPN_ABT1_pileSpringSupported
-        sprsup , -FEM_springL , 0            , 0 , MAT_Soil , SEC_HSOIL_num , TYPE_LINK180 , 'COMPN_ABT1_HSoil' , 'COMPE_ABT1_HSoil' ,  , 4
+        sprsup , -FEM_springL , 0            , 0 , MAT_Soil , REAL_hsoil , TYPE_LINK180 , 'COMPN_ABT1_HSoil' , 'COMPE_ABT1_HSoil' ,  , 4
         cmsel,s,COMPN_ABT1_pileSpringSupported
-        sprsup , 0            , -FEM_springL , 0 , MAT_Soil , SEC_HSOIL_num , TYPE_LINK180 , 'COMPN_temp'       , 'COMPE_temp'       ,  , 4
+        sprsup , 0            , -FEM_springL , 0 , MAT_Soil , REAL_hsoil , TYPE_LINK180 , 'COMPN_temp'       , 'COMPE_temp'       ,  , 4
       *endif
       cmsel,s,COMPN_temp
       cmsel,s,COMPE_temp
@@ -961,7 +961,7 @@ cm,COMPN_base,node
 
     *if,MAT_Soil_kv,GT,0,THEN
       cmsel,s,COMPN_ABT2_pileSpringSupported
-      sprsup,0,0,-FEM_springL,MAT_PileLat,SEC_VSOIL_num,TYPE_LINK180,'COMPN_ABT2_VSoil','COMPE_ABT2_VSoil',,3
+      sprsup,0,0,-FEM_springL,MAT_PileLat,REAL_vsoil,TYPE_LINK180,'COMPN_ABT2_VSoil','COMPE_ABT2_VSoil',,3
     *endif
     *if,MAT_Soil_kh,GT,0,THEN
       *if,GEO_ABT2_type,eq,3,then
@@ -970,17 +970,17 @@ cm,COMPN_base,node
         cmsel,a,COMPL_ABT_vxPiles
         nsll,s,1
         cmsel,r,COMPN_ABT2_pileSpringSupported
-        sprsup , -FEM_springL , 0            , 0 , MAT_Soil , SEC_HSOIL_num , TYPE_LINK180 , 'COMPN_ABT2_HSoil' , 'COMPE_ABT2_HSoil' ,  , 4
+        sprsup , -FEM_springL , 0            , 0 , MAT_Soil , REAL_hsoil , TYPE_LINK180 , 'COMPN_ABT2_HSoil' , 'COMPE_ABT2_HSoil' ,  , 4
         cmsel,s,COMPL_ABT_lwPiles
         cmsel,a,COMPL_ABT_vxPiles
         nsll,s,1
         cmsel,r,COMPN_ABT2_pileSpringSupported
-        sprsup , 0            , -FEM_springL , 0 , MAT_Soil , SEC_HSOIL_num , TYPE_LINK180 , 'COMPN_temp'       , 'COMPE_temp'       ,  , 4
+        sprsup , 0            , -FEM_springL , 0 , MAT_Soil , REAL_hsoil , TYPE_LINK180 , 'COMPN_temp'       , 'COMPE_temp'       ,  , 4
       *else
         cmsel,s,COMPN_ABT2_pileSpringSupported
-        sprsup , -FEM_springL , 0            , 0 , MAT_Soil , SEC_HSOIL_num , TYPE_LINK180 , 'COMPN_ABT2_HSoil' , 'COMPE_ABT2_HSoil' ,  , 4
+        sprsup , -FEM_springL , 0            , 0 , MAT_Soil , REAL_hsoil , TYPE_LINK180 , 'COMPN_ABT2_HSoil' , 'COMPE_ABT2_HSoil' ,  , 4
         cmsel,s,COMPN_ABT2_pileSpringSupported
-        sprsup , 0            , -FEM_springL , 0 , MAT_Soil , SEC_HSOIL_num , TYPE_LINK180 , 'COMPN_temp'       , 'COMPE_temp'       ,  , 4
+        sprsup , 0            , -FEM_springL , 0 , MAT_Soil , REAL_hsoil , TYPE_LINK180 , 'COMPN_temp'       , 'COMPE_temp'       ,  , 4
       *endif
       cmsel,s,COMPN_temp
       cmsel,s,COMPE_temp

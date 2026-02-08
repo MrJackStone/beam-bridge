@@ -100,44 +100,45 @@ SEC_FRAMEGIRDER_num  = 4
 SEC_PILECAP_num      = 5
 SEC_GRADEBEAM_num    = 6
 SEC_PILE_num         = 7
-SEC_VSOIL_num        = 8
-SEC_HSOIL_num        = 9
-SEC_SPRING_num       = 10
-SEC_BEARINGX_num     = 11
-SEC_BEARINGY_num     = 12
-SEC_BEARINGZ_num     = 13
-SEC_FRICTION_num     = 14
+SEC_COLWALL          = 8
+SEC_COLCAP           = 9
+SEC_GERBER           = 10
+SEC_CONSOLE          = 11
+SEC_CROSSBEAM        = 12
 
-SEC_ABT_longWall     = 15
-SEC_ABT_tranWall     = 16
-SEC_ABT_column       = 17
-SEC_ABT_beam         = 18
-SEC_ABT_wing         = 19
-SEC_ABT_appSlab      = 20
-SEC_ABT_pile         = 21
-SEC_ABT_pileCap      = 22
-SEC_ABT_thinTranWall = 23
-SEC_ABT_girderPost   = 24
-
-REAL_ABT_kv          = 25
-REAL_ABT_kh          = 26
-
-SEC_COLWALL          = 27
-SEC_COLCAP           = 28
-SEC_PSOIL_num        = 29
-SEC_GERBER           = 30
-SEC_CONSOLE          = 31
-SEC_CROSSBEAM        = 32
+SEC_ABT_longWall     = 13
+SEC_ABT_tranWall     = 14
+SEC_ABT_column       = 15
+SEC_ABT_beam         = 16
+SEC_ABT_wing         = 17
+SEC_ABT_appSlab      = 18
+SEC_ABT_pile         = 19
+SEC_ABT_pileCap      = 20
+SEC_ABT_thinTranWall = 21
+SEC_ABT_girderPost   = 22
 
 *del,SEC_GIRDER_nums,,nopr
 *dim,SEC_GIRDER_nums,,GEO_girderSectionCount
 *vfill,SEC_GIRDER_nums,ramp,33,1
 
+! Real constants
+REAL_vsoil    = 1
+REAL_hsoil    = 2
+REAL_psoil    = 3
+REAL_spring   = 4
+REAL_bearingx = 5
+REAL_bearingy = 6
+REAL_bearingz = 7
+REAL_friction = 8
+
+REAL_ABT_kv = 9
+REAL_ABT_kh = 10
+
 ! Coordinate systems
-CS_global=11
-CS_ABT1=12
-CS_ABT2=13
-CY_deck=20
+CS_global = 11
+CS_ABT1   = 12
+CS_ABT2   = 13
+CY_deck   = 20
 
 !! 2.1.1 MATERIALS                                                                                !!
 !!                                                                                                !!
@@ -431,16 +432,16 @@ SECDATA,GRADEBEAM_b,GRADEBEAM_h
 *endif
 
 !! 2.1.3.10 SOIL: VERTICAL STIFFNESS                                                              !!
-R,SEC_VSOIL_num,SEC_VSOIL_area,,0
+R,REAL_vsoil,SEC_VSOIL_area,,0
 
 !! 2.1.3.11 SOIL: HORIZONTAL STIFFNESS                                                            !!
-R,SEC_HSOIL_num,SEC_HSOIL_area,,0
+R,REAL_hsoil,SEC_HSOIL_area,,0
 
 !! 2.1.3.12 SOIL: VERTICAL STIFFNESS AT PILE END                                                  !!
-R,SEC_PSOIL_num,SEC_PSOIL_area,,-1
+R,REAL_psoil,SEC_PSOIL_area,,-1
 
 !! 2.1.3.13 SPRINGS                                                                               !!
-R,SEC_SPRING_num,SEC_SPRING_k
+R,REAL_spring,SEC_SPRING_k
 
 !! 2.1.3.14 BEARING (X)                                                                           !!
 ! Set stiffness matrix values:
@@ -451,19 +452,19 @@ R,SEC_SPRING_num,SEC_SPRING_k
 KX = FEM_BEARING_kh
 KY = 0
 KZ = 0
-r,SEC_BEARINGX_num,  KX,  0,  0,  0,  0,   0  ! C1  - C6
-rmore,              -KX,  0,  0,  0,  0,   0  ! C7  - C12
-rmore,               KY,  0,  0,  0,  0,   0  ! C13 - C18
-rmore,              -KY,  0,  0,  0,  0,  KZ  ! C19 - C24
-rmore,                0,  0,  0,  0,  0, -KZ  ! C25 - C30
-rmore,                0,  0,  0,  0,  0,   0  ! C31 - C36
-rmore,                0,  0,  0,  0,  0,   0  ! C36 - C42
-rmore,                0,  0,  0,  0,  0,   0  ! C43 - C48
-rmore,                0,  0,  0,  0,  0,   0  ! C49 - C54
-rmore,                0,  0,  0, KX,  0,   0  ! C55 - C60
-rmore,                0,  0,  0, KY,  0,   0  ! C61 - C66
-rmore,                0,  0, KZ,  0,  0,   0  ! C67 - C72
-rmore,                0,  0,  0,  0,  0,   0  ! C73 - C78
+r,REAL_bearingx,  KX,  0,  0,  0,  0,   0  ! C1  - C6
+rmore,           -KX,  0,  0,  0,  0,   0  ! C7  - C12
+rmore,            KY,  0,  0,  0,  0,   0  ! C13 - C18
+rmore,           -KY,  0,  0,  0,  0,  KZ  ! C19 - C24
+rmore,             0,  0,  0,  0,  0, -KZ  ! C25 - C30
+rmore,             0,  0,  0,  0,  0,   0  ! C31 - C36
+rmore,             0,  0,  0,  0,  0,   0  ! C36 - C42
+rmore,             0,  0,  0,  0,  0,   0  ! C43 - C48
+rmore,             0,  0,  0,  0,  0,   0  ! C49 - C54
+rmore,             0,  0,  0, KX,  0,   0  ! C55 - C60
+rmore,             0,  0,  0, KY,  0,   0  ! C61 - C66
+rmore,             0,  0, KZ,  0,  0,   0  ! C67 - C72
+rmore,             0,  0,  0,  0,  0,   0  ! C73 - C78
 
 !! 2.1.3.14 BEARING (Y)                                                                           !!
 ! Set stiffness matrix values:
@@ -474,19 +475,19 @@ rmore,                0,  0,  0,  0,  0,   0  ! C73 - C78
 KX = 0
 KY = FEM_BEARING_kh
 KZ = 0
-r,SEC_BEARINGY_num,  KX,  0,  0,  0,  0,   0  ! C1  - C6
-rmore,              -KX,  0,  0,  0,  0,   0  ! C7  - C12
-rmore,               KY,  0,  0,  0,  0,   0  ! C13 - C18
-rmore,              -KY,  0,  0,  0,  0,  KZ  ! C19 - C24
-rmore,                0,  0,  0,  0,  0, -KZ  ! C25 - C30
-rmore,                0,  0,  0,  0,  0,   0  ! C31 - C36
-rmore,                0,  0,  0,  0,  0,   0  ! C36 - C42
-rmore,                0,  0,  0,  0,  0,   0  ! C43 - C48
-rmore,                0,  0,  0,  0,  0,   0  ! C49 - C54
-rmore,                0,  0,  0, KX,  0,   0  ! C55 - C60
-rmore,                0,  0,  0, KY,  0,   0  ! C61 - C66
-rmore,                0,  0, KZ,  0,  0,   0  ! C67 - C72
-rmore,                0,  0,  0,  0,  0,   0  ! C73 - C78
+r,REAL_bearingy,  KX,  0,  0,  0,  0,   0  ! C1  - C6
+rmore,           -KX,  0,  0,  0,  0,   0  ! C7  - C12
+rmore,            KY,  0,  0,  0,  0,   0  ! C13 - C18
+rmore,           -KY,  0,  0,  0,  0,  KZ  ! C19 - C24
+rmore,             0,  0,  0,  0,  0, -KZ  ! C25 - C30
+rmore,             0,  0,  0,  0,  0,   0  ! C31 - C36
+rmore,             0,  0,  0,  0,  0,   0  ! C36 - C42
+rmore,             0,  0,  0,  0,  0,   0  ! C43 - C48
+rmore,             0,  0,  0,  0,  0,   0  ! C49 - C54
+rmore,             0,  0,  0, KX,  0,   0  ! C55 - C60
+rmore,             0,  0,  0, KY,  0,   0  ! C61 - C66
+rmore,             0,  0, KZ,  0,  0,   0  ! C67 - C72
+rmore,             0,  0,  0,  0,  0,   0  ! C73 - C78
 
 !! 2.1.3.14 BEARING (Z)                                                                           !!
 ! Set stiffness matrix values:
@@ -497,19 +498,19 @@ rmore,                0,  0,  0,  0,  0,   0  ! C73 - C78
 KX = 0
 KY = 0
 KZ = FEM_BEARING_kv
-r,SEC_BEARINGZ_num,  KX,  0,  0,  0,  0,   0  ! C1  - C6
-rmore,              -KX,  0,  0,  0,  0,   0  ! C7  - C12
-rmore,               KY,  0,  0,  0,  0,   0  ! C13 - C18
-rmore,              -KY,  0,  0,  0,  0,  KZ  ! C19 - C24
-rmore,                0,  0,  0,  0,  0, -KZ  ! C25 - C30
-rmore,                0,  0,  0,  0,  0,   0  ! C31 - C36
-rmore,                0,  0,  0,  0,  0,   0  ! C36 - C42
-rmore,                0,  0,  0,  0,  0,   0  ! C43 - C48
-rmore,                0,  0,  0,  0,  0,   0  ! C49 - C54
-rmore,                0,  0,  0, KX,  0,   0  ! C55 - C60
-rmore,                0,  0,  0, KY,  0,   0  ! C61 - C66
-rmore,                0,  0, KZ,  0,  0,   0  ! C67 - C72
-rmore,                0,  0,  0,  0,  0,   0  ! C73 - C78
+r,REAL_bearingz,  KX,  0,  0,  0,  0,   0  ! C1  - C6
+rmore,           -KX,  0,  0,  0,  0,   0  ! C7  - C12
+rmore,            KY,  0,  0,  0,  0,   0  ! C13 - C18
+rmore,           -KY,  0,  0,  0,  0,  KZ  ! C19 - C24
+rmore,             0,  0,  0,  0,  0, -KZ  ! C25 - C30
+rmore,             0,  0,  0,  0,  0,   0  ! C31 - C36
+rmore,             0,  0,  0,  0,  0,   0  ! C36 - C42
+rmore,             0,  0,  0,  0,  0,   0  ! C43 - C48
+rmore,             0,  0,  0,  0,  0,   0  ! C49 - C54
+rmore,             0,  0,  0, KX,  0,   0  ! C55 - C60
+rmore,             0,  0,  0, KY,  0,   0  ! C61 - C66
+rmore,             0,  0, KZ,  0,  0,   0  ! C67 - C72
+rmore,             0,  0,  0,  0,  0,   0  ! C73 - C78
 
 !! 2.1.3.17 GIRDER-SLAB FRICTION                                                                  !!
 ! Set stiffness matrix values:
@@ -520,19 +521,19 @@ rmore,                0,  0,  0,  0,  0,   0  ! C73 - C78
 KX=FEM_Bearing_kh*10
 KY=FEM_Bearing_kh
 KZ=FEM_Bearing_kv
-R,SEC_FRICTION_num,  KX,  0,  0,  0,  0,   0  ! C1  - C6
-RMORE,              -KX,  0,  0,  0,  0,   0  ! C7  - C12
-RMORE,               KY,  0,  0,  0,  0,   0  ! C13 - C18
-RMORE,              -KY,  0,  0,  0,  0,  KZ  ! C19 - C24
-RMORE,                0,  0,  0,  0,  0, -KZ  ! C25 - C30
-RMORE,                0,  0,  0,  0,  0,   0  ! C31 - C36
-RMORE,                0,  0,  0,  0,  0,   0  ! C36 - C42
-RMORE,                0,  0,  0,  0,  0,   0  ! C43 - C48
-RMORE,                0,  0,  0,  0,  0,   0  ! C49 - C54
-RMORE,                0,  0,  0, KX,  0,   0  ! C55 - C60
-RMORE,                0,  0,  0, KY,  0,   0  ! C61 - C66
-RMORE,                0,  0, KZ,  0,  0,   0  ! C67 - C72
-RMORE,                0,  0,  0,  0,  0,   0  ! C73 - C78
+R,REAL_friction,  KX,  0,  0,  0,  0,   0  ! C1  - C6
+RMORE,           -KX,  0,  0,  0,  0,   0  ! C7  - C12
+RMORE,            KY,  0,  0,  0,  0,   0  ! C13 - C18
+RMORE,           -KY,  0,  0,  0,  0,  KZ  ! C19 - C24
+RMORE,             0,  0,  0,  0,  0, -KZ  ! C25 - C30
+RMORE,             0,  0,  0,  0,  0,   0  ! C31 - C36
+RMORE,             0,  0,  0,  0,  0,   0  ! C36 - C42
+RMORE,             0,  0,  0,  0,  0,   0  ! C43 - C48
+RMORE,             0,  0,  0,  0,  0,   0  ! C49 - C54
+RMORE,             0,  0,  0, KX,  0,   0  ! C55 - C60
+RMORE,             0,  0,  0, KY,  0,   0  ! C61 - C66
+RMORE,             0,  0, KZ,  0,  0,   0  ! C67 - C72
+RMORE,             0,  0,  0,  0,  0,   0  ! C73 - C78
 
 ! Clean up
 *del,kx,,nopr
