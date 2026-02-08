@@ -7,6 +7,7 @@
 !   GEO_ABT_girderH
 !   GEO_ABT_girderB
 !   GEO_ABT_width
+!   GEO_ABT_columnSpacing
 !
 !   GIRDER_d
 !   SEC_ABT_thinTranWall_t
@@ -57,12 +58,12 @@ csys,_abtCS
 
 ! Draw columns  TODO  currently hard-coded to always work with 2 columns
 csys,_abtCS
-*do,nthColumn,1,2,1
-  yColumn = GEO_columnY_%ARG2%(nthCol)
-  nextkp,'column_kps',2
-  lsel,none
-  k,column_kps(1),0,yColumn,frameGirderZ
-  k,column_kps(2),0,yColumn,columnBottomZ
-  l,column_kps(1),column_kps(2)
-  cmpadd,'cml_columns'
-*enddo
+lsel,none
+nextkp,'column_kps',4
+k , column_kps(1) , 0 , -GEO_ABT_columnSpacing/2 , frameGirderZ
+k , column_kps(2) , 0 , -GEO_ABT_columnSpacing/2 , columnBottomZ
+k , column_kps(3) , 0 ,  GEO_ABT_columnSpacing/2 , frameGirderZ
+k , column_kps(4) , 0 ,  GEO_ABT_columnSpacing/2 , columnBottomZ
+l , column_kps(1) , column_kps(2)
+l , column_kps(3) , column_kps(4)
+cmpadd,'cml_columns'

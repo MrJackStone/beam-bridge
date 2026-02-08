@@ -4,6 +4,7 @@
 ! Dependencies:
 !   GEO_ABT_appSlab
 !   GEO_ABT_appSlabW
+!   GEO_ABT_columnSpacing
 !   GEO_waterHeight
 !   zFrameBot
 !
@@ -49,12 +50,12 @@ BRIDGE_V1_LONGSLICE , 'cml_frameGirder'    , 'line'
 
 ! Slice cantilever wall & approach slab at posts & columns  TODO  hard-coded for 2 columns
 wpcsys,-1
-wpoffs,,GEO_columnY_%ARG2%(1)
+wpoffs,,-GEO_ABT_columnSpacing/2
 wprota,,90
 cmwslice,'cma_cantileverWall'
 cmwslice,'cma_approachSlab'
 wpcsys,-1
-wpoffs,,GEO_columnY_%ARG2%(2)
+wpoffs,,GEO_ABT_columnSpacing/2
 wprota,,90
 cmwslice,'cma_cantileverWall'
 cmwslice,'cma_approachSlab'
