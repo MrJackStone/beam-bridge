@@ -6,10 +6,10 @@
 !   GEO_ABT_height
 !   GEO_ABT_girderH
 !   GEO_ABT_girderB
-!   GEO_ABT_cantWallThk
 !   GEO_ABT_width
 !
 !   GIRDER_d
+!   SEC_ABT_thinTranWall_t
 
 
 _abtCS = ARG1
@@ -19,7 +19,7 @@ frameGirderZ  = -(girderHeight+GEO_ABT_postHeight+(GEO_ABT_girderH/2))
 columnBottomZ = frameGirderZ-GEO_ABT_height
 postTopZ      = frameGirderZ+(GEO_ABT_girderH/2)+GEO_ABT_postHeight
 wallHeight    = girderHeight+GEO_ABT_postHeight+(GEO_ABT_girderH/2)
-wallOffset    = (GEO_ABT_girderB-GEO_ABT_cantWallThk)/2
+wallOffset    = (GEO_ABT_girderB-SEC_ABT_thinTranWall_t)/2
 
 *get,girderCount,parm,%ARG3%,dim,x
 

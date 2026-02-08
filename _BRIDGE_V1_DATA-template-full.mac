@@ -439,9 +439,6 @@ GEO_ABT1_thinTranWallDepth = 2
   GEO_ABT1_girderB      = 1.2
   GEO_ABT1_girderH      = 1.0
 
-  ! Cantilever wall
-  GEO_ABT1_cantWallThk = 0.40
-
   ! Pile cap
   !   [0] Individual caps + grade beam
   !   [1] Single cap
@@ -562,9 +559,6 @@ GEO_ABT2_thinTranWallDepth = 2
   ! Frame girder
   GEO_ABT2_girderB      = 1.2
   GEO_ABT2_girderH      = 1.0
-
-  ! Cantilever wall
-  GEO_ABT2_cantWallThk = 0.40
 
   ! Pile cap
   !   [0] Individual caps + grade beam

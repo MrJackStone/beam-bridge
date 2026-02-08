@@ -31,7 +31,6 @@ _supIndex   = ARG4
 GEO_ABT_appSlab     = %ARG2%(5)
 GEO_ABT_appSlabL    = %ARG2%(6)
 GEO_ABT_appSlabW    = %ARG2%('?')
-GEO_ABT_cantWallThk = %ARG2%('?')
 GEO_ABT_capLx       = %ARG2%('?')
 GEO_ABT_capLy       = %ARG2%('?')
 GEO_ABT_capOpt      = %ARG2%('?')
