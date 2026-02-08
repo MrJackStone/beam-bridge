@@ -1,0 +1,22 @@
+! BRIDGE_V1_AMESH , cma  , mat  , esize , esys , sec
+! BRIDGE_V1_AMESH , ARG1 , ARG2 , ARG3  , ARG4 , ARG5
+
+
+_mat   = ARG2
+_esize = ARG3
+_esys  = ARG4
+_sec   = ARG5
+
+*get,parType,parm,ARG1,type
+*if,parType,eq,3,then
+  cmsel,s,%ARG1%
+*endif
+
+*get,ac,area,,count
+*if,ac,eq,0,then
+  *return,-1
+*endif
+
+aatt,_mat,,TYPE_shell181,_esys,_sec
+aesize,all,_esize
+amesh,all

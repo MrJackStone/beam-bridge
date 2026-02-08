@@ -263,137 +263,122 @@ BRIDGE_V1_LMESH , CS_ABT2 , , MAT_abutment , SEC_ABT2_frameGirder , 0 , 0 , 1 , 
 cmsel,s,COMPA_ABT_tranWall
 cmsel,u,COMPA_ABT_thinTranWall
 cmsel,r,COMPA_ABT_1
-aatt,MAT_Abutment,,TYPE_SHELL181,ESYS_ABT1_tw,SEC_ABT_tranWall
+BRIDGE_V1_AMESH,,MAT_abutment,FEM_ABT_esize,ESYS_ABT1_tw,SEC_ABT_tranWall
 
 cmsel,s,COMPA_ABT_thinTranWall
 cmsel,r,COMPA_ABT_1
-aatt,MAT_Abutment,,TYPE_SHELL181,ESYS_ABT1_tw,SEC_ABT_thinTranWall
+BRIDGE_V1_AMESH,,MAT_abutment,FEM_ABT_esize,ESYS_ABT1_tw,SEC_ABT_thinTranWall
 
 cmsel,s,COMPA_ABT_cantileverWall
 cmsel,r,COMPA_ABT_1
-aatt,MAT_abutment,,TYPE_shell181,ESYS_ABT1_tw,SEC_ABT_thinTranWall
+BRIDGE_V1_AMESH,,MAT_abutment,FEM_ABT_esize,ESYS_ABT1_tw,SEC_ABT_thinTranWall
 
 cmsel,s,COMPA_ABT_tranWall
 cmsel,u,COMPA_ABT_thinTranWall
 cmsel,r,COMPA_ABT_2
-aatt,MAT_Abutment,,TYPE_SHELL181,ESYS_ABT2_tw,SEC_ABT_tranWall
+BRIDGE_V1_AMESH,,MAT_abutment,FEM_ABT_esize,ESYS_ABT2_tw,SEC_ABT_tranWall
 
 cmsel,s,COMPA_ABT_thinTranWall
 cmsel,r,COMPA_ABT_2
-aatt,MAT_Abutment,,TYPE_SHELL181,ESYS_ABT2_tw,SEC_ABT_thinTranWall
+BRIDGE_V1_AMESH,,MAT_abutment,FEM_ABT_esize,ESYS_ABT2_tw,SEC_ABT_thinTranWall
 
 cmsel,s,COMPA_ABT_cantileverWall
 cmsel,r,COMPA_ABT_2
-aatt,MAT_abutment,,TYPE_shell181,ESYS_ABT2_tw,SEC_ABT_thinTranWall
+BRIDGE_V1_AMESH,,MAT_abutment,FEM_ABT_esize,ESYS_ABT2_tw,SEC_ABT_thinTranWall
 
 ! Longitudinal walls
 cmsel,s,COMPA_ABT_longWalls
 cmsel,r,COMPA_ABT_1
 cmsel,r,COMPA_ABT_leftSide
-aatt,MAT_Abutment,,TYPE_SHELL181,ESYS_ABT1_lw,SEC_ABT_longWall
+BRIDGE_V1_AMESH,,MAT_abutment,FEM_ABT_esize,ESYS_ABT1_lw,SEC_ABT_longWall
 
 cmsel,s,COMPA_ABT_longWalls
 cmsel,r,COMPA_ABT_1
 cmsel,r,COMPA_ABT_rightSide
-aatt,MAT_Abutment,,TYPE_SHELL181,ESYS_ABT1_rw,SEC_ABT_longWall
+BRIDGE_V1_AMESH,,MAT_abutment,FEM_ABT_esize,ESYS_ABT1_rw,SEC_ABT_longWall
 
 cmsel,s,COMPA_ABT_longWalls
 cmsel,r,COMPA_ABT_2
 cmsel,r,COMPA_ABT_leftSide
-aatt,MAT_Abutment,,TYPE_SHELL181,ESYS_ABT2_lw,SEC_ABT_longWall
+BRIDGE_V1_AMESH,,MAT_abutment,FEM_ABT_esize,ESYS_ABT2_lw,SEC_ABT_longWall
 
 cmsel,s,COMPA_ABT_longWalls
 cmsel,r,COMPA_ABT_2
 cmsel,r,COMPA_ABT_rightSide
-aatt,MAT_Abutment,,TYPE_SHELL181,ESYS_ABT2_rw,SEC_ABT_longWall
+BRIDGE_V1_AMESH,,MAT_abutment,FEM_ABT_esize,ESYS_ABT2_rw,SEC_ABT_longWall
 
 ! Columns
-cmsel,s,COMPA_ABT_columns
-aatt,MAT_Abutment,,TYPE_SHELL181,,SEC_ABT_column
+BRIDGE_V1_AMESH,'COMPA_ABT_columns',MAT_abutment,FEM_ABT_esize,,SEC_ABT_column
 
 ! Wings
 cmsel,s,COMPA_ABT_wings
 cmsel,r,COMPA_ABT_1
 cmsel,r,COMPA_ABT_leftSide
-aatt,MAT_Abutment,,TYPE_SHELL181,ESYS_ABT1_lw,SEC_ABT_wing
+BRIDGE_V1_AMESH,,MAT_abutment,FEM_ABT_esize,ESYS_ABT1_lw,SEC_ABT_wing
 
 cmsel,s,COMPA_ABT_wings
 cmsel,r,COMPA_ABT_1
 cmsel,r,COMPA_ABT_rightSide
-aatt,MAT_Abutment,,TYPE_SHELL181,ESYS_ABT1_rw,SEC_ABT_wing
+BRIDGE_V1_AMESH,,MAT_abutment,FEM_ABT_esize,ESYS_ABT1_rw,SEC_ABT_wing
 
 cmsel,s,COMPA_ABT_wings
 cmsel,r,COMPA_ABT_2
 cmsel,r,COMPA_ABT_leftSide
-aatt,MAT_Abutment,,TYPE_SHELL181,ESYS_ABT2_lw,SEC_ABT_wing
+BRIDGE_V1_AMESH,,MAT_abutment,FEM_ABT_esize,ESYS_ABT2_lw,SEC_ABT_wing
 
 cmsel,s,COMPA_ABT_wings
 cmsel,r,COMPA_ABT_2
 cmsel,r,COMPA_ABT_rightSide
-aatt,MAT_Abutment,,TYPE_SHELL181,ESYS_ABT2_rw,SEC_ABT_wing
+BRIDGE_V1_AMESH,,MAT_abutment,FEM_ABT_esize,ESYS_ABT2_rw,SEC_ABT_wing
 
 ! Beams
-cmsel,s,COMPA_ABT_beam
-aatt,MAT_Abutment,,TYPE_SHELL181,,SEC_ABT_beam
+BRIDGE_V1_AMESH,'COMPA_ABT_beam',MAT_abutment,FEM_ABT_esize,,SEC_ABT_beam
 
 ! Pile caps
-cmsel,s,COMPA_ABT_pileCap
-aatt,MAT_Abutment,,TYPE_SHELL181,,SEC_ABT_pileCap
+BRIDGE_V1_AMESH,'COMPA_ABT_pileCap',MAT_abutment,FEM_ABT_esize,,SEC_ABT_pileCap
 
 cmsel,s,COMPA_ABT_pileCap
 cmsel,r,COMPA_ABT_1
 cmsel,r,COMPA_ABT_leftSide
-aatt,MAT_Abutment,,TYPE_SHELL181,ESYS_ABT1_lc,SEC_ABT_pileCap
+BRIDGE_V1_AMESH,,MAT_abutment,FEM_ABT_esize,ESYS_ABT1_lc,SEC_ABT_pileCap
 
 cmsel,s,COMPA_ABT_pileCap
 cmsel,r,COMPA_ABT_1
 cmsel,r,COMPA_ABT_rightSide
-aatt,MAT_Abutment,,TYPE_SHELL181,ESYS_ABT1_rc,SEC_ABT_pileCap
+BRIDGE_V1_AMESH,,MAT_abutment,FEM_ABT_esize,ESYS_ABT1_rc,SEC_ABT_pileCap
 
 cmsel,s,COMPA_ABT_pileCap
 cmsel,r,COMPA_ABT_2
 cmsel,r,COMPA_ABT_leftSide
-aatt,MAT_Abutment,,TYPE_SHELL181,ESYS_ABT2_lc,SEC_ABT_pileCap
+BRIDGE_V1_AMESH,,MAT_abutment,FEM_ABT_esize,ESYS_ABT2_lc,SEC_ABT_pileCap
 
 cmsel,s,COMPA_ABT_pileCap
 cmsel,r,COMPA_ABT_2
 cmsel,r,COMPA_ABT_rightSide
-aatt,MAT_Abutment,,TYPE_SHELL181,ESYS_ABT2_rc,SEC_ABT_pileCap
+BRIDGE_V1_AMESH,,MAT_abutment,FEM_ABT_esize,ESYS_ABT2_rc,SEC_ABT_pileCap
 
 ! Approach slabs
-cmsel,s,COMPA_ABT_appSlab
-aatt,MAT_Approach,,TYPE_SHELL181,,SEC_ABT_appSlab
+BRIDGE_V1_AMESH,'COMPA_ABT_appSlab',MAT_abutment,FEM_ABT_esize,,SEC_ABT_appSlab
 
 ! Overhangs
-cmsel,s,COMPA_ABT_overhangs
-aatt,MAT_Abutment,,TYPE_SHELL181,,SEC_ABT_appSlab
+BRIDGE_V1_AMESH,'COMPA_ABT_overhangs',MAT_abutment,FEM_ABT_esize,,SEC_ABT_appSlab
 
-! Mesh areas
-cmsel,s,COMPA_Abutment
-aesize,all,FEM_ABT_esize
-
-esel,none
-nsel,none
+! Export mesh selection components
 cmsel,s,COMPA_ABT_1
-*get,ac,area,,count
-*if,ac,gt,0,then
-  amesh,all
-*endif
+esla
+cmsel,s,COMPL_ABT_1
+esll,a
+nsle,,active
 cm,COMPE_ABT_1,elem
 cm,COMPN_ABT_1,node
-csys,CS_ABT2
 
-esel,none
-nsel,none
 cmsel,s,COMPA_ABT_2
-*get,ac,area,,count
-*if,ac,gt,0,then
-  amesh,all
-*endif
-cm,COMPE_ABT_2,elem
-cm,COMPN_ABT_2,node
-
-csys,0
+esla
+cmsel,s,COMPL_ABT_2
+esll,a
+nsle,,active
+cm,COMPE_ABT_1,elem
+cm,COMPN_ABT_1,node
 
 ! Selection components: submerged and exposed elements
 *if,GEO_waterHeight,gt,0,then
