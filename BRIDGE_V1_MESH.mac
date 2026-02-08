@@ -240,6 +240,10 @@ cmsel,s,COMPA_ABT_thinTranWall
 cmsel,r,COMPA_ABT_1
 aatt,MAT_Abutment,,TYPE_SHELL181,ESYS_ABT1_tw,SEC_ABT_thinTranWall
 
+cmsel,s,COMPA_ABT_cantileverWall
+cmsel,r,COMPA_ABT_1
+aatt,MAT_abutment,,TYPE_shell181,ESYS_ABT1_tw,SEC_ABT_thinTranWall
+
 cmsel,s,COMPA_ABT_tranWall
 cmsel,u,COMPA_ABT_thinTranWall
 cmsel,r,COMPA_ABT_2
@@ -248,6 +252,10 @@ aatt,MAT_Abutment,,TYPE_SHELL181,ESYS_ABT2_tw,SEC_ABT_tranWall
 cmsel,s,COMPA_ABT_thinTranWall
 cmsel,r,COMPA_ABT_2
 aatt,MAT_Abutment,,TYPE_SHELL181,ESYS_ABT2_tw,SEC_ABT_thinTranWall
+
+cmsel,s,COMPA_ABT_cantileverWall
+cmsel,r,COMPA_ABT_2
+aatt,MAT_abutment,,TYPE_shell181,ESYS_ABT2_tw,SEC_ABT_thinTranWall
 
 ! Longitudinal walls
 cmsel,s,COMPA_ABT_longWalls
@@ -383,25 +391,34 @@ nsla,s,1
 cm,COMPN_ABT_pileInterface,node
 
 
-!! 4.3.2 POSTS                                                                                    !!
+!! 4.3.2 BEAM ELEMENTS                                                                            !!
 !!                                                                                                !!
-csys,CS_ABT1
+! Posts
 cmsel,s,COMPL_ABT_posts
 cmsel,r,COMPL_ABT_1
-*get,lc,line,,count
-*if,lc,gt,0,then
-  orient,TYPE_BEAM188,MAT_abutment,SEC_ABT_girderPost,1,,,,10 ! TODO  remove hardcoded mesh size
-  lmesh,all
-*endif
+BRIDGE_V1_LMESH , CS_ABT1 ,  , MAT_abutment , SEC_ABT_girderPost , 1 , 0 , 0 ,  , 10  ! TODO  remove hardcoded mesh size
 
-csys,CS_ABT2
 cmsel,s,COMPL_ABT_posts
 cmsel,r,COMPL_ABT_2
-*get,lc,line,,count
-*if,lc,gt,0,then
-  orient,TYPE_BEAM188,MAT_abutment,SEC_ABT_girderPost,1,,,,10 ! TODO  remove hardcoded mesh size
-  lmesh,all
-*endif
+BRIDGE_V1_LMESH , CS_ABT2 ,  , MAT_abutment , SEC_ABT_girderPost , 1 , 0 , 0 ,  , 10  ! TODO  remove hardcoded mesh size
+
+! Columns
+cmsel,s,COMPL_ABT_columns
+cmsel,r,COMPL_ABT_1
+BRIDGE_V1_LMESH , CS_ABT1 ,  , MAT_abutment , SEC_ABT1_column , 1 , 0 , 0 , FEM_ABT_esize
+
+cmsel,s,COMPL_ABT_columns
+cmsel,r,COMPL_ABT_2
+BRIDGE_V1_LMESH , CS_ABT2 ,  , MAT_abutment , SEC_ABT2_column , 1 , 0 , 0 , FEM_ABT_esize
+
+! Frame girders
+cmsel,s,COMPL_ABT_frameGirder
+cmsel,r,COMPL_ABT_1
+BRIDGE_V1_LMESH , CS_ABT1 , , MAT_abutment , SEC_ABT1_frameGirder , 0 , 0 , 1 , FEM_ABT_esize
+
+cmsel,s,COMPL_ABT_frameGirder
+cmsel,r,COMPL_ABT_2
+BRIDGE_V1_LMESH , CS_ABT2 , , MAT_abutment , SEC_ABT2_frameGirder , 0 , 0 , 1 , FEM_ABT_esize
 
 
 !! 4.3.3 NODAL COUPLINGS                                                                          !!

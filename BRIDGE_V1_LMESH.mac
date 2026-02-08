@@ -1,0 +1,30 @@
+! BRIDGE_V1_LMESH , cs   , cml  , mat  , sec  , dx   , dy   , dz   , esize , ediv
+! BRIDGE_V1_LMESH , ARG1 , ARG2 , ARG3 , ARG4 , ARG5 , ARG6 , ARG7 , ARG8  , ARG9
+
+
+! Parse inputs
+_mat   = ARG3
+_sec   = ARG4
+_dx    = ARG5
+_dy    = ARG6
+_dz    = ARG7
+_esize = ARG8
+_ediv  = ARG9
+
+! Prepare environment
+csys,ARG1
+
+*get,parType,parm,ARG2,type
+*if,parType,eq,3,then
+  cmsel,s,%ARG2%
+*endif
+
+! Break if blank selection
+*get,lc,line,,count
+*if,lc,gt,0,then
+  *return,-1
+*endif
+
+! Orient & mesh lines
+orient,TYPE_beam188,_mat,_sec,_dx,_dy,_dz,_esize,_ediv
+lmesh,all
