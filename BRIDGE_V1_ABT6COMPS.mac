@@ -93,6 +93,7 @@ cmsel,s,COMPL_ABT%ARG1%_pile
 cmpadd,'COMPL_ABT_piles'
 
 cmsel,s,COMPA_ABT%ARG1%_pileCap
+arzori,-1
 cmpadd,'COMPA_ABT_pileCap'
 
 *do,nthCap,1,capCount,1
