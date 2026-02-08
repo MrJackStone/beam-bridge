@@ -32,7 +32,7 @@ cmdele,cml_vertical
 ! Slice approach slab, frame girder & wall at superstructure positions
 BRIDGE_V1_LONGSLICE , 'cma_cantileverWall'
 BRIDGE_V1_LONGSLICE , 'cma_approachSlab'
-BRIDGE_V1_LONGSLICE , 'cml_frameGirder'    , 'line'
+BRIDGE_V1_LONGSLICE , 'cml_frameGirder'
 
 ! Slice cantilever wall & frame girder at additional approach slab vertices: left & right edges
 *if,GEO_ABT_appSlab,eq,1,then

@@ -3,24 +3,40 @@
 
 
 ! Parse inputs
+booleanOper = 'asbw'
+cmKind      = 'area'
+
 rebuildComponent = 0
 *get,parType,parm,ARG1,type
 *if,parType,eq,3,then
   rebuildComponent = 1
   cmsel,s,%ARG1%
-*endif
-
-booleanOper = 'asbw'
-cmType      = 'area'
-*get,parType,parm,ARG2,type
-*if,parType,eq,3,then
-  *if,upcase(ARG2),eq,'LINE',then
+  *get,cmType,comp,%ARG1%,type
+  *if,cmType,eq,7,then
     booleanOper = 'lsbw'
-    cmType      = 'line'
+    cmKind      = 'line'
+  *elseif,cmType,eq,8,then
+    booleanOper = 'asbw'
+    cmKind      = 'area'
+  *else
+    *msg,error,ARG1,cmType
+BRIDGE_V1_LONGSLICE error: selection component '%S' is of invalid type %I.%/&
+BRIDGE_V1_LONGSLICE command ignored.
+    *return,-1
   *endif
 *endif
 
-*get,count,%cmType%,,count
+*if,rebuildComponent,eq,0,then
+  *get,parType,parm,ARG2,type
+  *if,parType,eq,3,then
+    *if,upcase(ARG2),eq,'LINE',then
+      booleanOper = 'lsbw'
+      cmKind      = 'line'
+    *endif
+  *endif
+*endif
+
+*get,count,%cmKind%,,count
 *if,count,eq,0,then
   *msg,warn,ARG1
 BRIDGE_V1_LONGSLICE warning: %s selection component is empty.%/&
@@ -84,7 +100,7 @@ csbackup
 
 ! Exported selection components
 *if,rebuildComponent,eq,1,then
-  cm,%ARG1%,%cmType%
+  cm,%ARG1%,%cmKind%
 *endif
 
 ! Clean up
