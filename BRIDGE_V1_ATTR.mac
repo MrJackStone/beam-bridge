@@ -1068,6 +1068,14 @@ GEO_ABT2_appSlab=nint(((GEO_ABT2_appSlab>0)<1))
 GEO_ABT1_yc=GEO_deckOff_beg+(GEO_deckWidth_beg/2)
 GEO_ABT2_yc=GEO_deckOff_end+(GEO_deckWidth_end/2)
 
+! Fix global CS position of columns when first and/or last supports are abutment type 6
+*if,GEO_ABT1_status,eq,1,and,GEO_ABT1_type,eq,6,then
+  GEO_columnY_1(1) = GEO_ABT1_yc-(GEO_ABT1_columnSpacing/2), GEO_ABT1_yc+(GEO_ABT1_columnSpacing/2)
+*endif
+*if,GEO_ABT2_status,eq,1,and,GEO_ABT2_type,eq,2,then
+  GEO_columnY_%GEO_supportCount%(1) = GEO_ABT2_yc-(GEO_ABT2_columnSpacing/2), GEO_ABT2_yc+(GEO_ABT2_columnSpacing/2)
+*endif
+
 ! Surface area at the top of each abutment
 *if,GEO_ABT1_appSlab,eq,1,then
   GEO_ABT1_topSurfArea = GEO_ABT1_width*GEO_ABT1_appSlabL
@@ -1080,7 +1088,6 @@ GEO_ABT2_yc=GEO_deckOff_end+(GEO_deckWidth_end/2)
 *else
   GEO_ABT2_topSurfArea = GEO_ABT2_width*GEO_ABT2_length
 *endif
-
 
 ! Calculate number of piles (for curtain option)
 pileWidth=SEC_ABT_pile_d-2*GEO_ABT_pileOvlap
