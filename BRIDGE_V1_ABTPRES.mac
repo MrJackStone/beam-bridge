@@ -76,6 +76,7 @@ cteSurcharge = LOAD_vehicleTraffic
 cmsel,s,COMPA_ABT_longWalls
 cmsel,a,COMPA_ABT_wings
 cmsel,r,COMPA_ABT_%ARG1%
+cmsel,u,COMPA_ABT_noSoilRetained
 csys,CS_ABT%ARG1%
 asel,r,loc,y,-1e6,0
 csys,0
@@ -100,6 +101,7 @@ nsla,s,1
 cmsel,s,COMPA_ABT_longWalls
 cmsel,a,COMPA_ABT_wings
 cmsel,r,COMPA_ABT_%ARG1%
+cmsel,u,COMPA_ABT_noSoilRetained
 csys,CS_ABT%ARG1%
 asel,r,loc,y,0,1e6
 csys,0
@@ -123,6 +125,7 @@ nsla,s,1
 ! Transversal wall
 cmsel,s,COMPA_ABT_tranWall
 cmsel,r,COMPA_ABT_%ARG1%
+cmsel,u,COMPA_ABT_noSoilRetained
 nsla,s,1
 nslcomp,'F_h','N_n','nc','forc_horz',ARG4
 f, N_n(1:nc), fx, F_h(1:nc)
@@ -130,6 +133,7 @@ f, N_n(1:nc), fx, F_h(1:nc)
 ! Pile cap
 cmsel,s,COMPA_ABT_pileCap
 cmsel,r,COMPA_ABT_%ARG1%
+cmsel,u,COMPA_ABT_noSoilRetained
 nsla,s,1
 nslcomp,'F_v','N_n','nc','forc_vert',-abs(ARG4)
 f, N_n(1:nc), fz, F_v(1:nc)
