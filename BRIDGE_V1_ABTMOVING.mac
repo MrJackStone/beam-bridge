@@ -39,6 +39,7 @@ nbackup
       cmsel,s,COMPA_ABT_longWalls
       cmsel,a,COMPA_ABT_wings
       cmsel,r,COMPA_ABT_1
+      cmsel,u,COMPA_ABT_noSoilRetained
       csys,CS_ABT1
       asel,r,loc,y,-GEO_deckWidth_beg,0
       csys,0
@@ -54,6 +55,7 @@ nbackup
       cmsel,s,COMPA_ABT_longWalls
       cmsel,a,COMPA_ABT_wings
       cmsel,r,COMPA_ABT_1
+      cmsel,u,COMPA_ABT_noSoilRetained
       csys,CS_ABT1
       asel,r,loc,y,0,GEO_deckWidth_beg
       csys,0
@@ -69,6 +71,7 @@ nbackup
     ! Transversal wall
     cmsel,s,COMPA_ABT_tranWall
     cmsel,r,COMPA_ABT_1
+    cmsel,u,COMPA_ABT_noSoilRetained
     nsla,s,1
     *if,LOAD_ltPresMethod,eq,'BOUSSNSQ',then
       boussinesq,'LOAD_ABT1_F','LOAD_ABT1_nn','LOAD_ABT1_nc',_Fz, _xVal, _yVal, zVal, 'H', 'Z', 1, impactCoefOpt
@@ -80,6 +83,7 @@ nbackup
     ! Pile cap
     cmsel,s,COMPA_ABT_pileCap
     cmsel,r,COMPA_ABT_1
+    cmsel,u,COMPA_ABT_noSoilRetained
     nsla,s,1
     *if,LOAD_ltPresMethod,eq,'BOUSSNSQ',then
       boussinesq,'LOAD_ABT1_F','LOAD_ABT1_nn','LOAD_ABT1_nc',-(_Fz), _xVal, _yVal, zVal, 'V', 'Z', 1, impactCoefOpt
@@ -116,6 +120,7 @@ nbackup
       cmsel,s,COMPA_ABT_longWalls
       cmsel,a,COMPA_ABT_wings
       cmsel,r,COMPA_ABT_2
+      cmsel,u,COMPA_ABT_noSoilRetained
       csys,CS_ABT2
       asel,r,loc,y,-GEO_deckWidth_end,0
       csys,0
@@ -131,6 +136,7 @@ nbackup
       cmsel,s,COMPA_ABT_longWalls
       cmsel,a,COMPA_ABT_wings
       cmsel,r,COMPA_ABT_2
+      cmsel,u,COMPA_ABT_noSoilRetained
       csys,CS_ABT2
       asel,r,loc,y,0,GEO_deckWidth_end
       csys,0
@@ -146,6 +152,7 @@ nbackup
     ! Transversal wall
     cmsel,s,COMPA_ABT_tranWall
     cmsel,r,COMPA_ABT_2
+    cmsel,u,COMPA_ABT_noSoilRetained
     nsla,s,1
     *if,LOAD_ltPresMethod,eq,'BOUSSNSQ',then
       boussinesq,'LOAD_ABT2_F','LOAD_ABT2_nn','LOAD_ABT2_nc',-(_Fz), _xVal, _yVal, zVal, 'H', 'Z', 1, impactCoefOpt
@@ -157,6 +164,7 @@ nbackup
     ! Pile cap
     cmsel,s,COMPA_ABT_pileCap
     cmsel,r,COMPA_ABT_2
+    cmsel,u,COMPA_ABT_noSoilRetained
     nsla,s,1
     *if,LOAD_ltPresMethod,eq,'BOUSSNSQ',then
       boussinesq,'LOAD_ABT2_F','LOAD_ABT2_nn','LOAD_ABT2_nc',-(_Fz), _xVal, _yVal, zVal, 'V', 'Z', 1, impactCoefOpt
