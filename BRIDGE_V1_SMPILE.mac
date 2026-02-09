@@ -101,6 +101,7 @@ cm   , cml_connections , line
     k , pile_ends(1) , xTop , yTop , zTop
     k , pile_ends(2) , xBot , yBot , zBot
     l , pile_ends(1) , pile_ends(2)
+    cm, cml_cap%nthCap%_pile%nthPile% , line
     cmpadd,'cml_pile'
 
     ! Create connection line (if offset equal to pile cap thickness is applied)
@@ -140,6 +141,14 @@ cm     , COMPK_%infix%pileTop , kp
 cmsel,s,cml_pile
 cmdele , cml_pile
 cm     , COMPL_%infix%pile , line
+
+*do,nthCap,1,capCount,1
+  *do,nthPile,1,pileCount,1
+    cmsel, s , cml_cap%nthCap%_pile%nthPile%
+    cmdele , cml_cap%nthCap%_pile%nthPile%
+    cm , COMPL_SUP%_supIdx%_CAP%nthCap%_PILE%nthPile% , line
+  *enddo
+*enddo
 
 cmsel,s,cml_connections
 cmdele , cml_connections
