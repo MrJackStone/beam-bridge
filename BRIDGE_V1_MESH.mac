@@ -319,7 +319,10 @@ BRIDGE_V1_AMESH,,MAT_abutment,FEM_ABT_esize,ESYS_ABT2_tw,SEC_ABT_thinTranWall
 
 ! Delete temporary mesh, used to ensure matching nodes for abutment type 6
 cmsel,s,COMPL_ABT_cantileverWallBottom
+esll
+nsle
 lclear,COMPL_ABT_cantileverWallBottom
+ndele,all
 
 ! Longitudinal walls
 cmsel,s,COMPA_ABT_longWalls
@@ -508,7 +511,8 @@ Run aborted.
 
     cmsel,s,COMPL_ABT_frameGirder
     cmsel,r,COMPL_ABT_%nthAbutment%
-    nsll,s,1
+    esll
+    nsle,s,active
     cm,COMPN_source,node
 
     *get,nc,node,,count

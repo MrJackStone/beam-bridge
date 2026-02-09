@@ -54,6 +54,7 @@ allsel
 cm   , COMPA_prev         , area
 cm   , COMPL_prev         , line
 cm   , COMPK_prev         , kp
+ksel , none
 asel , none
 lsel , none
 cm   , cml_columns        , line
