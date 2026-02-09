@@ -1,0 +1,152 @@
+! BRIDGE_V1_POSTFRBEAM , abtIdx , body
+! BRIDGE_V1_POSTFRBEAM , ARG1   , ARG2
+
+
+! Parse inputs
+_abtIdx = ARG1
+_body   = upcase(ARG2)
+
+! Set based on type of body
+*if,_body,eq,'FRAMEGIRDER',then
+  bodyName    = 'TRAVESSA'
+  axesInPlane = 'XZ'
+*elseif,_body,eq,'COLUMNS',then
+  bodyName    = 'PILARES'
+  axesInPlane = 'YX'
+*elseif,_body,eq,'GRADEBEAM',then
+  bodyName    = 'VIGA DE EQ.'
+  axesInPlane = 'XZ'
+*endif
+
+! Set params
+PIC_res      = 1500
+scale        = 1
+diagramCount = 6
+cmlMain      = 'COMPL_ABT_%_body%'
+xLabel       = strsub(axesInPlane,1,1)
+yLabel       = strsub(axesInPlane,2,1)
+
+*del , diagrams ,      , nopr
+*dim , diagrams , char , diagramCount
+diagrams(1) = 'NX' , 'MZ' , 'MY' , 'MX' , 'QY' , 'QZ'
+
+! Set main & secondary selection components
+cmsel,s,COMPL_ABT_%_abtIdx%
+cmsel,r,%cmlMain%
+esll
+cm,cme_fg,elem
+/color,cm,dgra,cme_fg
+
+cmsel,s,COMPE_girder
+cm,cme_bgGirder,elem
+/color,cm,lgra,cme_bgGirder
+
+cmsel,s,COMPL_ABT_piles
+cmsel,r,COMPL_ABT_%_abtIdx%
+esll
+cm,cme_bgPiles,elem
+/color,cm,lgra,cme_bgPiles
+
+cmsel,s,COMPL_ABT_%_abtIdx%
+cmsel,s,COMPA_ABT_%_abtIdx%
+cmsel,u,%cmlMain%
+esll,s
+esla,a
+cm,cme_bgAbutment,elem
+/color,cm,dgra,cme_bgAbutment
+
+! Capture plots of each diagram
+*do,nthDiagram,1,diagramCount,1
+
+  ! Set based on type of diagram
+  diagram = diagrams(nthDiagram)
+
+  *if,diagram,eq,'NX',then
+    midTitle = 'F. AXIAL'
+    units    = 'kN'
+    infix    = 'N'
+  *elseif,diagram,eq,'MZ',then
+    midTitle = 'M. FLETOR'
+    units    = 'kNm'
+    infix    = 'MZ'
+  *elseif,diagram,eq,'MY',then
+    midTitle = 'M. FLETOR'
+    units    = 'kNm'
+    infix    = 'MY'
+  *elseif,diagram,eq,'MX',then
+    midTitle = 'M. TORSOR'
+    units    = 'kNm'
+    infix    = 'TQ'
+  *elseif,diagram,eq,'QY',then
+    midTitle = 'F. CORTANTE'
+    units    = 'kN'
+    infix    = 'QY'
+  *elseif,diagram,eq,'QZ',then
+    midTitle = 'F. CORTANTE'
+    units    = 'kN'
+    infix    = 'QZ'
+  *endif
+
+  ! Capture image
+  view1w
+  wincln,1
+  boldfont,1
+  g_picres,PIC_res
+  wintitle,1,'ENCONTRO 0%_abtIdx%: %bodyName%','%midTitle% (%diagram%)','ELU-Normal [%units%]',,1,13
+  axanno,1,'LLC',xLabel,yLabel
+
+  /view,1,1,0,0
+  /angle,1,0
+  /auto,1
+  /type,1,4
+  /psymb,esys,0
+  /device,vector,off
+  /eshape,1
+  /udoc,1,cntr,right
+  /gformat,f,2,1
+  /gline,1,0
+  /plopts,leg3,on
+
+  go2png,PIC_res
+
+    cmsel,s,cme_bgAbutment
+    cmsel,u,cme_bgPiles
+    /device,vector,on
+    /type,1,4
+    eplot
+    /user,1
+    /noerase
+    /device,vector,off
+
+    cmsel,s,cme_bgGirder
+    cmsel,a,cme_bgPiles
+    /gline,1,-1
+    eplot
+    /gline,1,0
+
+    cmsel,s,cme_fg
+    eplot
+    /eshape,0
+
+    cmsel,s,cme_fg
+    nsle,,active
+    cleanplot,'plls','EAB_%infix%i','EAB_%infix%j',scale
+
+  endpng,'ABT%_abtIdx%_%_body%_%diagram%',,,,,POST_resultsFolder
+
+  /erase
+  /annot,dele
+  /eshape,0
+  boldfont
+  clims
+  view1w
+  windefa,1
+
+*enddo
+
+! Clean up
+/color,defa
+cmdele,cme_bgPiles
+cmdele,cme_bgGirder
+cmdele,cme_bgAbutment
+cmdele,cme_fg

@@ -239,6 +239,15 @@ GIRDER_name0 = GIRDER_name(1,1)
     !!  Abutment: back beam                                                                           !!
     BRIDGE_V1_POSTABTBEAM
 
+    !!  Frame columns                                                                             !!
+    *do,nthAbutment,1,2,1
+      *if,GEO_ABT%nthAbutment%_status,eq,1,and,GEO_ABT%nthAbutment%_type,eq,6,then
+        BRIDGE_V1_POSTFRBEAM , nthAbutment , 'COLUMNS'
+        BRIDGE_V1_POSTFRBEAM , nthAbutment , 'FRAMEGIRDER'
+        BRIDGE_V1_POSTFRBEAM , nthAbutment , 'GRADEBEAM'
+      *endif
+    *enddo
+
   *endif
 
   BRIDGE_V1_POSTBEARING
