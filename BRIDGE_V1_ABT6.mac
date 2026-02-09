@@ -76,6 +76,9 @@ BRIDGE_V1_ABT6SLICE , _abutmentCS
 ! Infrastructure
 BRIDGE_V1_ABT6INFRA , _abtIndex   , _supIndex
 
+! Orient bodies
+BRIDGE_V1_ABT6ORI   , _abutmentCS , _abtIndex
+
 ! Export
 BRIDGE_V1_ABT6COMPS , _abtIndex   , _supIndex
 

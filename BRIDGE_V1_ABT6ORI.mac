@@ -1,0 +1,26 @@
+! BRIDGE_V1_ABT6ORI , abtCS , abtIdx
+! BRIDGE_V1_ABT6ORI , ARG1  , ARG2
+
+
+_abtCS  = ARG1
+_abtIdx = ARG2
+
+csys,_abtCS
+
+cmsel,s,cml_columns
+lnzori,1
+
+cmsel,s,cml_frameGirder
+lnyori,1
+
+cmsel,s,COMPL_ABT%_abtIdx%_gradeBeam
+lnyori,1
+
+cmsel,s,cml_posts
+lnzori,1
+
+cmsel,s,cma_approachSlab
+arzori,1
+
+cmsel,s,cma_cantileverWall
+arxori,1
