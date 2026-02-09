@@ -19,6 +19,7 @@
 !   COMPL_ABT_gradeBeam
 !   COMPL_ABT_pileConnections
 !   COMPL_ABT_piles
+!   COMPL_ABT<i>_CAP<j>_PILE<k>_itf
 !   COMPL_ABT_posts
 !   COMPL_ABT_cantileverWallBottom
 !   COMPL_Barrier

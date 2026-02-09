@@ -16,6 +16,7 @@
 !   COMPK_ABT<i>_pileTop
 !   COMPL_ABT<i>_pileConnections
 !   COMPL_ABT<i>_pile
+!   COMPL_SUP<i>_CAP<j>_PILE<k>
 !   COMPL_ABT<i>_gradeBeam
 !   COMPA_ABT<i>_pileCap
 !   COMPA_SUP<i>_CAP<j>_PILE<k>_itf
@@ -33,6 +34,7 @@
 !   COMPL_ABT_gradeBeam
 !   COMPL_ABT_pileConnections
 !   COMPL_ABT_piles
+!   COMPL_ABT<i>_CAP<j>_PILE<k>_itf
 !   COMPL_ABT_posts
 !   COMPL_ABT_cantileverWallBottom
 !   COMPL_Barrier
@@ -101,6 +103,9 @@ cmpadd,'COMPA_ABT_pileCap'
     cmsel , s , COMPA_SUP%ARG2%_CAP%nthCap%_PILE%nthPile%_itf
     cm , COMPA_ABT%ARG1%_CAP%nthCap%_PILE%nthPile%_itf , area
     cmpadd,'COMPA_ABT_pileInterface'
+
+    cmsel,s,COMPL_SUP%ARG2%_CAP%nthCap%_PILE%nthPile%
+    cm , COMPL_ABT%ARG1%_CAP%nthCap%_PILE%nthPile% , line
   *enddo
 *enddo
 
