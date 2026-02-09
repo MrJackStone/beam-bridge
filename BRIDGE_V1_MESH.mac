@@ -870,6 +870,28 @@ cmdele,COMPN_pileNodePool
       n2acnt , %ndName% , cmaName
     *enddo
 
+  *elseif,GEO_ABT%nthAbutment%_type,eq,6,then
+
+    *if,GEO_ABT%nthAbutment%_capOpt,eq,0,then
+      capCount = 2
+    *elseif,GEO_ABT%nthAbutment%_capOpt,eq,1,then
+      capCount = 1
+    *endif
+    *do,nthCap,1,capCount,1
+      *do,nthPile,1,GEO_ABT%nthAbutment%_pileCount,1
+        ndName  = 'ND_ABT%nthAbutment%_CAP%nthCap%_PILE%nthPile%_pilot'
+        cmaName = 'COMPA_ABT%nthAbutment%_CAP%nthCap%_PILE%nthPile%_itf'
+
+        cmsel,s,COMPL_ABT%nthAbutment%_CAP%nthCap%_PILE%nthPile%
+        ksll,s
+        cmsel,r,COMPK_ABT%nthAbutment%_pileTop
+        nslk,s
+        %ndName% = ndnext(0)
+
+        n2acnt , %ndName% , cmaName
+      *enddo
+    *enddo
+
   *else
 
     cmsel,s,COMPK_ABT_pileTop
