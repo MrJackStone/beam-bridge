@@ -57,11 +57,12 @@
   cm,compe_bg1,elem
   cm,compn_bg1,node
 
-  cmsel,s,compl_frame_3
-  esll,s
-  nsle,s,active
-  cm,compe_bg2,elem
-  cm,compn_bg2,node
+  ! TODO  breaks for fewer than 3 frames
+  ! cmsel,s,compl_frame_3
+  ! esll,s
+  ! nsle,s,active
+  ! cm,compe_bg2,elem
+  ! cm,compn_bg2,node
 
   cmsel,s,compl_column
   esll,s
@@ -71,13 +72,14 @@
   cm,compe_fg1,elem
   cm,compn_fg1,node
 
-  cmsel,s,compl_column
-  esll,s
-  nsle,s,active
-  cmsel,r,compe_bg2
-  cmsel,r,compn_bg2
-  cm,compe_fg2,elem
-  cm,compn_fg2,node
+  ! TODO  breaks for fewer than 3 frames
+  ! cmsel,s,compl_column
+  ! esll,s
+  ! nsle,s,active
+  ! cmsel,r,compe_bg2
+  ! cmsel,r,compn_bg2
+  ! cm,compe_fg2,elem
+  ! cm,compn_fg2,node
 
   view4w
   wincln
@@ -121,21 +123,22 @@
     cmsel,s,compn_fg1
     cleanplot,'plls',etab1,etab2,,'1'
 
-    /window,1,off
-    /window,2,on
-    cmsel,s,compe_fg2
-    cmsel,s,compn_fg2
-    /auto,2
-    eplot
-    /user,2
-    cmsel,s,compe_bg2
-    cmsel,s,compn_bg2
-    /eshape,1
-    eplot
-    /eshape,0
-    cmsel,s,compe_fg2
-    cmsel,s,compn_fg2
-    cleanplot,'plls',etab1,etab2,,'1'
+    ! TODO  breaks for fewer than 3 frames
+    ! /window,1,off
+    ! /window,2,on
+    ! cmsel,s,compe_fg2
+    ! cmsel,s,compn_fg2
+    ! /auto,2
+    ! eplot
+    ! /user,2
+    ! cmsel,s,compe_bg2
+    ! cmsel,s,compn_bg2
+    ! /eshape,1
+    ! eplot
+    ! /eshape,0
+    ! cmsel,s,compe_fg2
+    ! cmsel,s,compn_fg2
+    ! cleanplot,'plls',etab1,etab2,,'1'
   endpng,'FRAMECOLUMN_%key%',,,,,POST_resultsFolder
   /erase
   /annot,dele
