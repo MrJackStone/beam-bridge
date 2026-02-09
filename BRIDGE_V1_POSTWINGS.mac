@@ -1,19 +1,20 @@
 ! BRIDGE_V1_POSTWINGS , etable , subtitle , imgName , etabScaleFactor
 ! BRIDGE_V1_POSTWINGS , arg1   , arg2     , arg3    , arg4
 
-etabName=arg1
 
-/device,font,3,Arial,1000,0,-64,0,0,,,
-/device,font,1,Arial,1000,0,-42,0,0,,,
-/device,text,1,100
-/tspec,15,1.5,4,0,0
-/gformat,f,2,1
-/annot,dele
+etabName=arg1
 
 cmsel,s,COMPA_ABT_walls
 cmsel,u,COMPA_ABT_tranwall
 esla,s
 cm,COMPE_temp,elem
+*get,ec,elem,,count
+*if,ec,eq,0,then
+  *return,-1
+*endif
+
+boldfont,1
+/gformat,f,2,1
 
 /window,dele,all
 /annot,dele

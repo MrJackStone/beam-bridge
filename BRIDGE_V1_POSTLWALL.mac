@@ -1,6 +1,7 @@
 ! BRIDGE_V1_POSTLWALL , abtNum , etName , centerTitle , rightTitle , imgName , etabScaleFactor
 ! BRIDGE_V1_POSTLWALL , ARG1   , ARG2   , ARG3        , ARG4       , ARG5    , ARG6
 
+
 _abtNum          = ARG1
 _etName          = ARG2
 _centerTitle     = ARG3
@@ -8,21 +9,24 @@ _rightTitle      = ARG4
 _imgName         = ARG5
 _etabScaleFactor = ARG6
 
-boldfont,1
-g_picres,1200
-/gformat,f,2,1
-/annot,dele
-
 cmsel,s,COMPA_ABT_walls
 cmsel,u,COMPA_ABT_tranwall
 esla,s
 cm,COMPE_temp,elem
 
+*get,ec,elem,,count
+*if,ec,eq,0,then
+  *return,-1
+*endif
+
+boldfont,1
+g_picres,1200
+/gformat,f,2,1
+/annot,dele
 view4w
 wincln,1
 wincln,2
 wincln,3
-
 view1w
 wintitle , 1 , 'E0%_abtNum%: PAREDES LATERAIS' , _centerTitle , _rightTitle ,  , 1 , 13
 view2w,,,1,,1,2

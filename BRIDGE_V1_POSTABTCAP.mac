@@ -2,6 +2,16 @@
 ! BRIDGE_V1_POSTABTCAP , arg1   , arg2         , arg3     , arg4
 
 
+cmsel,s,COMPA_ABT_%arg1%
+cmsel,r,COMPA_ABT_pileCap
+lsla,s
+ksll,s
+
+*get,ac,area,,count
+*if,ac,eq,0,then
+  *return,-1
+*endif
+
 !! Initial configs                                                                                !!
 view2w,1
 windefa,1
@@ -23,10 +33,6 @@ clims
 /plopts,leg3,on
 /gformat,f,10,1
 
-cmsel,s,COMPA_ABT_%arg1%
-cmsel,r,COMPA_ABT_pileCap
-lsla,s
-ksll,s
 aplot
 /user,all
 /eshape,1

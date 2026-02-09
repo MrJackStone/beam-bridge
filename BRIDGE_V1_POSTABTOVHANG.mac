@@ -1,14 +1,21 @@
 ! BRIDGE_V1_POSTABTOVHANG , abtNum , etableSuffix , midTitle , units , scale
 ! BRIDGE_V1_POSTABTOVHANG , arg1   , arg2         , arg3     , arg4  , arg5
 
-yleft=-GEO_ABT%arg1%_width/2
-yright=GEO_ABT%arg1%_width/2
-ignoredWidth=0.3
 
-csys,CS_ABT%arg1%
 cmsel,s,COMPA_ABT_%arg1%
 cmsel,r,COMPA_ABT_overhangs
 esla,s
+
+*get,ec,elem,,count
+*if,ec,eq,0,then
+  *return,-1
+*endif
+
+yleft        = -GEO_ABT%arg1%_width/2
+yright       = GEO_ABT%arg1%_width/2
+ignoredWidth = 0.3
+
+csys,CS_ABT%arg1%
 nsle,s,active
 nsel,u,loc,y,yleft,yleft-ignoredWidth
 nsel,u,loc,y,yright,yright+ignoredWidth

@@ -1,12 +1,19 @@
 ! BRIDGE_V1_POSTWINGDFL, abtNum
 ! BRIDGE_V1_POSTWINGDFL, arg1
 
+
+cmsel,s,COMPA_ABT_longWalls
+cmsel,r,COMPA_ABT_%arg1%
+esla,s
+nsle,s,active
+*get,nc,node,,count
+*if,nc,eq,0,then
+  *return,-1
+*endif
+
 !! Initial configs                                                                                !!
 windefa,1
-/device,font,3,Arial,1000,0,-64,0,0,,,
-/device,font,1,Arial,1000,0,-42,0,0,,,
-/device,text,1,100
-/tspec,15,1.5,4,0,0
+boldfont,1
 /gformat,f,10,2
 /annot,dele
 
@@ -17,11 +24,6 @@ heelHeight = GEO_ABT%arg1%_wingHa
 wallLength = GEO_ABT%arg1%_wingL
 linCoef    = topHeight
 angCoef    = (heelHeight-topHeight)/wallLength
-
-cmsel,s,COMPA_ABT_longWalls
-cmsel,r,COMPA_ABT_%arg1%
-esla,s
-nsle,s,active
 
 yStep=wallLength/(pathCount-1)
 zLocalBot=0

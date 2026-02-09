@@ -1,5 +1,6 @@
 ! BRIDGE_V1_POSTABTBEAM
 
+
 *if,GEO_ABT_beamH,eq,0,then
   *return,-1
 *endif
@@ -8,12 +9,8 @@
   *return,-1
 *endif
 
-
 !! Display settings                                                                               !!
-/device,font,3,Arial,1000,0,-64,0,0,,,
-/device,font,1,Arial,1000,0,-42,0,0,,,
-/device,text,1,100
-/tspec,15,1.5,4,0,0
+boldfont,1
 /gformat,f,2,1
 /annot,dele
 

@@ -14,6 +14,7 @@ boldfont,1
 /psymb,cs,0
 
 cmsel,s,COMPA_ABT_thinTranWall
+cmsel,a,COMPA_ABT_cantileverWall
 esla,s
 cm,COMPE_temp,elem
 

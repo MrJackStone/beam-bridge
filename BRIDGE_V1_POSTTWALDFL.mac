@@ -1,6 +1,7 @@
 ! BRIDGE_V1_POSTTWALDFL , abtNum , dflType
 ! BRIDGE_V1_POSTTWALDFL , arg1   , arg2
 
+
 !! Initial configs                                                                                !!
 view1w
 windefa,1
@@ -14,6 +15,7 @@ windefa,1
 pathCount=5
 
 cmsel,s,COMPA_ABT_tranwall
+cmsel,a,COMPA_ABT_cantileverWall
 cmsel,r,COMPA_ABT_%arg1%
 esla,s
 nsle,s,active
@@ -56,6 +58,7 @@ zLocal2=-GEO_ABT%arg1%_height
 pthenv,'CLEAR','twall_envelope'
 
 cmsel,s,COMPA_ABT_tranwall
+cmsel,a,COMPA_ABT_cantileverWall
 cmsel,r,COMPA_ABT_%arg1%
 esla,s
 nsle,s,active
@@ -107,12 +110,14 @@ wintitle,1,'PAREDE TRANSVERSAL (E0%arg1%):','FLECHA','ELS-Frequente [mm]',,1,13
 /udoc,1,cntr,right
 /edge,1,0
 cmsel,s,COMPA_ABT_tranwall
+cmsel,a,COMPA_ABT_cantileverWall
 cmsel,r,COMPA_ABT_%arg1%
 /auto,1
 aplot
 /user,1
 cmsel,s,COMPA_ABT_%arg1%
 cmsel,u,COMPA_ABT_tranwall
+cmsel,u,COMPA_ABT_cantileverWall
 esla,s
 nsle,s,active
 
@@ -126,6 +131,7 @@ go2png,1200
   nsle,s,active
   eplot
   cmsel,s,COMPA_ABT_tranwall
+  cmsel,a,COMPA_ABT_cantileverWall
   cmsel,r,COMPA_ABT_%arg1%
   esla,s
   nsle,s,active
