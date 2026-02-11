@@ -28,8 +28,9 @@ wintitle,3,' ','ENCONTRO 02',' ',,1
 axanno,2
 axanno,3
 
-cmsel,s,COMPA_ABT_1
-cmsel,r,COMPA_ABT_thinTranWall
+cmsel,s,COMPA_ABT_thinTranWall
+cmsel,a,COMPA_ABT_cantileverWall
+cmsel,r,COMPA_ABT_1
 esla,s
 nsle,s,active
 
@@ -40,6 +41,7 @@ go2png,1200
   *if,GEO_ABT1_status,eq,1,then
     cmsel,s,COMPA_ABT_1
     cmsel,u,COMPA_ABT_thinTranWall
+    cmsel,u,COMPA_ABT_cantileverWall
     esla,s
     nsle,s,active
     /device,vector,on
@@ -71,6 +73,7 @@ go2png,1200
   *if,GEO_ABT2_status,eq,1,then
     cmsel,s,COMPA_ABT_2
     cmsel,u,COMPA_ABT_thinTranWall
+    cmsel,u,COMPA_ABT_cantileverWall
     esla,s
     nsle,s,active
     /device,vector,on
@@ -81,8 +84,9 @@ go2png,1200
     /device,vector,off
     /user,3
 
-    cmsel,s,COMPA_ABT_2
-    cmsel,r,COMPA_ABT_thinTranWall
+    cmsel,s,COMPA_ABT_thinTranWall
+    cmsel,a,COMPA_ABT_cantileverWall
+    cmsel,r,COMPA_ABT_2
     esla,s
     nsle,s,active
     /eshape,0

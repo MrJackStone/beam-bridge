@@ -132,7 +132,7 @@ cm,cme_bgAbutment,elem
     nsle,,active
     cleanplot,'plls','EAB_%infix%i','EAB_%infix%j',scale
 
-  endpng,'ABT%_abtIdx%_%_body%_%diagram%',,,,,POST_resultsFolder
+  endpng,'IMG27_ABT%_abtIdx%_%_body%_%diagram%',,,,,POST_resultsFolder
 
   /erase
   /annot,dele
