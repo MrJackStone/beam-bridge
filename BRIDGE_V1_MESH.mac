@@ -532,23 +532,29 @@ Run aborted.
 *enddo
 
 ! Nodal selection component: girder supports at abutments
-*if,GEO_ABT1_type,eq,5,or,GEO_ABT1_type,eq,6,then
-  cmsel,s,COMPK_ABT_postTops
-  nslk,s
-  cm,COMPN_ABT_girder,node
-*else
-  nsel,none
-  *do,nthGirder,1,GEO_girderCount,1
-    nthCS=CS_girders(nthGirder)
-    csys,nthCS
-    nsel,a,loc,y,0
-    csys,0
-  *enddo
-  cmsel,r,COMPN_ABT_wsbInterface
-  cmsel,s,COMPA_ABT_tranWall
-  lsla,s
-  nsla,r,1
-*endif
+! TODO  this approach is kinda crap and probably breaks if the two abutments are of different types
+!       (one is 5 or 6, the other any other type) -- rework
+nsel,none
+cm,COMPN_ABT_girder,node
+
+*do,nthAbutment,1,2,1
+  *if,GEO_ABT%nthAbutment%_type,eq,5,or,GEO_ABT%nthAbutment%_type,eq,6,then
+    cmsel,s,COMPK_ABT_postTops
+    nslk,s
+    cmpadd,'COMPN_ABT_girder'
+  *else
+    *do,nthGirder,1,GEO_girderCount,1
+      nthCS=CS_girders(nthGirder)
+      csys,nthCS
+      nsel,a,loc,y,0
+      csys,0
+    *enddo
+    cmsel,r,COMPN_ABT_wsbInterface
+    cmsel,s,COMPA_ABT_tranWall
+    nsla,r,1
+    cmpadd,'COMPN_ABT_girder'
+  *endif
+*enddo
 
 ! Connect girder posts to pile cap
 *if,GEO_ABT1_status,eq,1,and,GEO_ABT1_type,eq,5,then

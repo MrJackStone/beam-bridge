@@ -197,6 +197,7 @@ cm , COMPA_Abutment                 , area
 cm , COMPK_ABT_base                 , kp
 cm , COMPK_ABT_pileBase             , kp
 cm , COMPK_ABT_pileTop              , kp
+cm , COMPK_ABT_postTops             , kp
 cm , COMPL_ABT_columns              , line
 cm , COMPL_ABT_frameGirder          , line
 cm , COMPL_ABT_cantileverWallBottom , line
