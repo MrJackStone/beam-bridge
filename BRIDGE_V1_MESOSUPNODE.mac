@@ -1,0 +1,11 @@
+! BRIDGE_V1_MESOSUPNODE , abtIdx , girderIdx
+! BRIDGE_V1_MESOSUPNODE , ARG1   , ARG2
+
+! TODO  improve & use this approach for all types of mesostructure & abutment, it's much more
+!       robust than the current one (selection by X-coordinate)
+
+
+cmsel,s,COMPL_ABT%ARG1%_post%ARG2%
+ksll
+cmsel,r,COMPK_ABT_postTops
+nslk
