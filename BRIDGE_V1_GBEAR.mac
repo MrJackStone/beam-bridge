@@ -99,6 +99,9 @@ nsel,none
   cmsel,r,COMPN_mxloc
   cm,COMPN_supEnd,node
 
+  ! TODO  in development
+  ! BRIDGE_V1_MESOSUPNODE , abtIdx , girderIdx
+
   ! Couple DOFs: girders & supports
   *do,nthGirder,1,GEO_girderCount,1
     ncmName       = 'COMPN_S%nthSpan%_G%nthGirder%'

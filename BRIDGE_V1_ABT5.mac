@@ -46,6 +46,9 @@ GEO_ABT_postHeight    = %ARG2%(32)
 GEO_ABT_postCx        = %ARG2%(33)
 GEO_ABT_postCy        = %ARG2%(34)
 GEO_ABT_postOffset    = %ARG2%(35)
+GEO_ABT_appSlab       = %ARG2%(5)
+GEO_ABT_appSlabL      = %ARG2%(6)
+GEO_ABT_appSlabW      = %ARG2%(36)
 GEO_ABT_pileCapHeight = SEC_ABT_pileCap_h
 GEO_ABT_pileDiameter  = SEC_ABT_pile_d
 
@@ -81,6 +84,7 @@ csNameLeftWall    = 'CS_ABT%_abtIndex%_leftWall'
 csNameRightWall   = 'CS_ABT%_abtIndex%_rightWall'
 csNamePiles       = 'CS_ABT%_abtIndex%_piles'
 csNamePosts       = 'CS_ABT%_abtIndex%_posts'
+csNameAppSlab     = 'CS_ABT%_abtIndex%_appSlab'
 
 cmaAbutment    = 'COMPA_ABT_%_abtIndex%'
 cmlAbutment    = 'COMPL_ABT_%_abtIndex%'
@@ -95,6 +99,7 @@ cmkPostBottoms = 'COMPK_ABT%_abtIndex%_postBottoms'
 cmkPostTops    = 'COMPK_ABT%_abtIndex%_postTops'
 cmkPileTops    = 'COMPK_ABT%_abtIndex%_pileTops'
 cmkPileBottoms = 'COMPK_ABT%_abtIndex%_pileBottoms'
+cmaAppSlab     = 'COMPA_ABT%_abtIndex%_appSlab'
 cmaAreas       = 'COMPA_ABT%_abtIndex%_areas' ! TODO  local component, rename to 'cma_abtAreas' or something...
 
 
@@ -171,6 +176,10 @@ cswpla,%csNamePiles%,cart
   cswpla,%csNamePile%,cart
 *enddo
 
+csnext,csNameAppSlab
+csys,_localCS
+clocal,%csNameAppSlab%,cart
+
 ! Output coordinate systems, for compatibility with main code
 ! TODO  get rid of this, improve the approach
 csnext,'CS_trvWall'
@@ -214,6 +223,14 @@ wpcsys,-1
 blc4,0,0,-GEO_ABT_length,GEO_ABT_height
 cm,%cmaRightWall%,area
 
+! Draw approach slab
+asel,none
+*if,GEO_ABT_appSlab,eq,1,then
+  wpcsys,-1,%csNameAppSlab%
+  blc5,GEO_ABT_appSlabL/2,0,GEO_ABT_appSlabL,GEO_ABT_appSlabW
+*endif
+cm,%cmaAppSlab%,area
+
 
 !! E.  Join area parts                                                                            !!
 ! Area interfaces
@@ -228,9 +245,18 @@ wpcsys,-1,%csNameRightWall%
 asbw,all,,delete
 
 cmsel,a,%cmaTranWall%
+BRIDGE_V1_LONGSLICE
+
 cmsel,a,%cmaLeftWall%
 cmsel,a,%cmaRightWall%
 cm,%cmaAreas%,area
+
+cmsel,s,%cmaAppSlab%
+wpcsys,-1,%csNameLeftWall%
+cmwslice,cmaAppSlab
+wpcsys,-1,%csNameRightWall%
+cmwslice,cmaAppSlab
+BRIDGE_V1_LONGSLICE,cmaAppSlab
 
 ! Pile centers
 *del,x_centers,,nopr
@@ -252,6 +278,7 @@ arruniq,'y_centers','y_centers',1
   wpoffs,xCoord
   wprota,,,90
   cmwslice,cmaAreas
+  cmwslice,cmaAppSlab
 *enddo
 
 *do,nthY,1,yUniqueCount,1
@@ -349,6 +376,9 @@ cmpadd,'COMPA_ABT_longWalls'
 cmpadd,'COMPA_ABT_rightSide'
 cmpadd,'COMPA_ABT_walls'
 
+cmsel,s,%cmaAppSlab%
+cmpadd,'COMPA_ABT_appSlab'
+
 csys,%csNamePosts%
 cmsel,s,%cmlPosts%
 ksll
@@ -405,6 +435,9 @@ aryori,-1
 
 cmsel,s,%cmaPileCap%
 arzori,-1
+
+cmsel,s,%cmaAppSlab%
+arzori,1
 
 
 !! I.  Clean up                                                                                   !!

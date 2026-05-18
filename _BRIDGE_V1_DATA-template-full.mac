@@ -380,7 +380,7 @@ GEO_ABT1_beamOpt = 0
 !   [1] ON
 GEO_ABT1_appSlab    = 1
 GEO_ABT1_appSlabL   = 4
-GEO_ABT1_appSlabW   = 4  ! (ABT type 6 only)
+GEO_ABT1_appSlabW   = 4  ! (ABT types 5 and 6 only)
 GEO_ABT1_appSlabGap = 2
 
 ! Pile cap
@@ -420,6 +420,14 @@ GEO_ABT1_thinTranWallDepth = 2
 ! Options for abutment type 5:
   GEO_ABT1_pileCapOffset = 0
 
+  ! Pile data array format:
+  !  POS  DATA
+  !   1   X-coordinate
+  !   2   Y-coordinate
+  !   3   length
+  !   4   angle about Y
+  !   5   angle about X
+  !   6   number (optional)
   GEO_ABT1_pileCount = 6
   *del,GEO_ABT1_pile_data,,nopr
   *dim,GEO_ABT1_pile_data,,6,GEO_ABT1_pileCount
@@ -543,6 +551,14 @@ GEO_ABT2_thinTranWallDepth = 2
 ! Options for abutment type 5:
   GEO_ABT2_pileCapOffset = 0
 
+  ! Pile data array format:
+  !  POS  DATA
+  !   1   X-coordinate
+  !   2   Y-coordinate
+  !   3   length
+  !   4   angle about Y
+  !   5   angle about X
+  !   6   number (optional)
   GEO_ABT2_pileCount = 6
   *del,GEO_ABT2_pile_data,,nopr
   *dim,GEO_ABT2_pile_data,,6,GEO_ABT2_pileCount
