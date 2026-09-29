@@ -1049,23 +1049,23 @@ BRIDGE_V1_CALCPILECOORDS , 'GEO_pileXL' , 'GEO_pileYL' , GEO_pileCount , GEO_pil
 zero  = 0
 front = 0
 back  = 0
-left  = 0
+_lft  = 0 ! TODO  improve this param name -- can't use 'left' because it conflicts with predefined MAPDL labels
 right = 0
 
 *if,GEO_frameOpt,eq,0,then
   ! Column-girder frame
-  left  = -GEO_columnSpacing/2
+  _lft  = -GEO_columnSpacing/2
   right =  GEO_columnSpacing/2
 *elseif,GEO_frameOpt,eq,1,then
   ! Tubular pier column
-  left  = -GEO_columnWidth/2
+  _lft  = -GEO_columnWidth/2
   right =  GEO_columnWidth/2
   front =  GEO_columnDepth/2
   back  = -GEO_columnDepth/2
 *endif
 
 arrjoin , 'GEO_PIERCAP_x_slices' , 'GEO_pileXL' , 'zero' , 'front' , 'back'
-arrjoin , 'GEO_PIERCAP_y_slices' , 'GEO_pileYL' , 'zero' , 'left' , 'right'
+arrjoin , 'GEO_PIERCAP_y_slices' , 'GEO_pileYL' , 'zero' , '_lft' , 'right'
 
 ! Determine the Z coordinate (vertical position) of the top & bottom of each pile
 *if,SEC_offset,EQ,1,THEN
@@ -1153,10 +1153,10 @@ zero = 0
     GEO_ABT1_pile_data(5,nthPile) = GEO_ABT1_pileBeta(nthPile)
     GEO_ABT1_pile_data(6,nthPile) = 0
   *enddo
-  left  = -GEO_ABT1_columnSpacing/2
+  _lft  = -GEO_ABT1_columnSpacing/2
   right =  GEO_ABT1_columnSpacing/2
   arrjoin , 'GEO_ABT1_CAP_x_slices' , 'GEO_ABT1_x_piles'  , 'zero'
-  arrjoin , 'GEO_ABT1_CAP_y_slices' , 'GEO_ABT1_y_piles'  , 'zero' , 'left' , 'right'
+  arrjoin , 'GEO_ABT1_CAP_y_slices' , 'GEO_ABT1_y_piles'  , 'zero' , '_lft' , 'right'
 *endif
 *if,GEO_ABT2_type,eq,6,then
   BRIDGE_V1_CALCPILECOORDS , 'GEO_ABT2_x_piles' , 'GEO_ABT2_y_piles' , GEO_ABT2_pileCount , GEO_ABT2_pileConfig , SEC_ABT_pile_d , GEO_ABT2_pilePitchX , GEO_ABT2_pilePitchY , GEO_ABT2_columnCx , GEO_ABT2_columnCy , GEO_ABT2_pileCapL , GEO_ABT2_pileCapW
@@ -1170,10 +1170,10 @@ zero = 0
     GEO_ABT2_pile_data(5,nthPile) = GEO_ABT2_pileBeta(nthPile)
     GEO_ABT2_pile_data(6,nthPile) = 0
   *enddo
-  left  = -GEO_ABT2_columnSpacing/2
+  _lft  = -GEO_ABT2_columnSpacing/2
   right =  GEO_ABT2_columnSpacing/2
   arrjoin , 'GEO_ABT2_CAP_x_slices' , 'GEO_ABT2_x_piles'  , 'zero'
-  arrjoin , 'GEO_ABT2_CAP_y_slices' , 'GEO_ABT2_y_piles'  , 'zero' , 'left' , 'right'
+  arrjoin , 'GEO_ABT2_CAP_y_slices' , 'GEO_ABT2_y_piles'  , 'zero' , '_lft' , 'right'
 *endif
 
 ! Thin transversal wall depth
