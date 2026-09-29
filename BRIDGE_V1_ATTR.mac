@@ -1033,7 +1033,7 @@ BRIDGE_V1_CALCPILECOORDS , 'GEO_pileXL' , 'GEO_pileYL' , GEO_pileCount , GEO_pil
   supportIdx = GEO_PIER_supportIdx(nthPier)
 
   *del,GEO_PIER%nthPier%_pile_data,,nopr
-  *dim,GEO_PIER%nthPier%_pile_data,,GEO_pileCount
+  *dim,GEO_PIER%nthPier%_pile_data,,6,GEO_pileCount
 
   *do,nthPile,1,GEO_pileCount,1
     GEO_PIER%nthPier%_pile_data(1,nthPile) = GEO_pileXL(nthPile)
