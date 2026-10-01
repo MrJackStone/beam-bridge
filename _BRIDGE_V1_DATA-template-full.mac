@@ -708,6 +708,29 @@ CONSOLE_h=0.75
 !!                                                                                                !!
 !! 1.6  Soil                                                                                      !!
 !!                                                                                                !!
+! The provided _kh stiffnesses are given in units of force per length per pile unit length (N/m/m).
+! The pile diameter does not affect the stiffness provided through these parameters. Any influence
+! of lateral surface area or tip area should be accounted for when assigning a value to _kh.
+! It is often convenient to apply unit conversions to produce a number that is more meaningful.
+!
+! The following conversions are suggested:
+!
+!   • _kh * 1e-3 * 1e-3  -->  kN/mm/m  │ example:
+!                                      │    _kh = 10e7 N/m/m  -->  *1e-6  --> _kh = 10 kN/mm/m
+!      N     kN     m          kN      │
+!     --- * ---- * ----   =   ----     │
+!      m²    N      mm        mm/m     │
+!
+!
+!   • _kh * 1e-6/(Al/2)  -->  MPa/m    │ in which:
+!                                      │   Al = PI * dp * 1
+!      N     MN     m²        MPa      │   Al: area of a meter long cylindrical pile segment;
+!     --- * ---- 󰇔 ---    =  -----     │   dp: pile diameter
+!      m²    N      m          m       │   it is assumed that only half the cylindrical area of the
+!                                      │   pile pushes against the soil
+!                                      │ example:
+!                                      │   dp = 80 cm  -->  Al = 2.51 m²/m
+!                                      │   _kh = 10e7 N/m/m  -->  *1e-6/(Al/2)  -->  7.97 MPa/m
 
 !! 1.6.1  Soil around piles                                                                       !!
 MAT_Soil_Poisson=0.2
