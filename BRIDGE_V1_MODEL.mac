@@ -53,7 +53,7 @@ BRIDGE_V1_SM
 !!                                                                                                !!
 IMMED,0
 /uis,REPLOT,0
-BRIDGE_V1_MESH
+BRIDGE_V1_FEM
 
 !/input,'_manfix_mesh',mac
 !allsel
