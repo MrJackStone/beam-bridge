@@ -1,0 +1,40 @@
+! BRIDGE_V1_MESHMESO
+
+
+nsel , none
+esel , none
+
+cm   , COMPE_FrameGirder , elem
+cm   , COMPN_FrameGirder , node
+cm   , COMPE_Column      , elem
+cm   , COMPE_Column      , node
+cm   , COMPN_colCap      , node
+cm   , COMPE_colCap      , elem
+cm   , COMPE_ColTube     , elem
+cm   , COMPN_ColTube     , node
+cm   , COMPE_Submerged   , elem
+
+*if,GEO_pierCount,gt,0,then
+
+  ! Draw mesostructure
+  *do,nthSupport,1,GEO_supportCount,1
+    BRIDGE_V1_FEMMESO, nthSupport
+  *enddo
+
+  ! Selection components: submerged and exposed column elements
+  cmsel,s,COMPE_Column
+  cmsel,a,COMPE_ColTube
+  cm,COMPE_temp,elem
+  *if,GEO_waterHeight,GT,0,THEN
+    NSEL,S,LOC,Z,zFrameBot,zFrameBot+GEO_waterHeight
+    ESLN,r,1
+    CM,COMPE_Submerged,ELEM
+  *else
+    esel,none
+    CM,COMPE_Submerged,ELEM
+  *endif
+  cmsel,s,COMPE_temp
+  CMSEL,U,COMPE_Submerged
+  CM,COMPE_Exposed,ELEM
+
+*endif

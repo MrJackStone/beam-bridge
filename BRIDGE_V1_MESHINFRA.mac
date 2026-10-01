@@ -1,0 +1,459 @@
+! BRIDGE_V1_MESHINFRA
+
+
+!! 4.6.1 GRADE BEAM                                                                               !!
+!!                                                                                                !!
+*if,GEO_capOpt,eq,0,then
+  ! Grade beam mesh
+  esel,none
+  nsel,none
+  CMSEL,S,COMPL_GradeBeam
+  *get,lc,line,,count
+  *if,lc,gt,0,then
+    ORIENT,TYPE_BEAM188,MAT_GradeBeam,SEC_GradeBeam_num,,,1,FEM_ElementSize
+    LMESH,ALL
+    NSLE,S,ACTIVE
+  *endif
+  CM,COMPE_GradeBeam,ELEM
+  CM,COMPN_GradeBeam,NODE
+*endif
+
+
+!! 4.6.2 PILE CAPS                                                                                !!
+!!                                                                                                !!
+! Pile cap mesh
+*if,GEO_pierCount,gt,0,then
+  esel,none
+  nsel,none
+  cmsel,s,COMPA_PileCap
+  AATT,MAT_PileCap,,TYPE_SHELL181,CS_global,SEC_PILECAP_num
+  AESIZE,ALL,FEM_PierESize
+  *get,ac,area,,count
+  *if,ac,gt,0,then
+    AMESH,ALL
+  *endif
+  CM,COMPE_PileCap,ELEM
+  CM,COMPN_PileCap,NODE
+  *if,GEO_frameOpt,eq,3,then
+    BRIDGE_V1_FEMHAMMERPCAP
+  *endif
+*else
+  esel,none
+  nsel,none
+  CM,COMPE_PileCap,ELEM
+  CM,COMPN_PileCap,NODE
+*endif
+
+
+!! 4.6.3 PILES                                                                                    !!
+!!                                                                                                !!
+! Pile mesh
+esel,none
+nsel,none
+
+cmsel,s,COMPL_Pile
+*get,lc,line,,count
+*if,lc,gt,0,then
+  orient,TYPE_BEAM188,MAT_Pile,SEC_PILE_num,1,,,FEM_PileELength
+  lmesh,all
+*endif
+
+cmsel,s,COMPL_ABT_piles
+*get,lc,line,,count
+*if,lc,gt,0,then
+  orient,TYPE_BEAM188,MAT_Pile,SEC_ABT_pile,1,,,FEM_PileELength
+  lmesh,all
+*endif
+
+nsle,S,ACTIVE
+CM,COMPE_Pile,ELEM
+CM,COMPN_Pile,NODE
+cmsel,s,COMPK_Support
+cmsel,a,COMPK_ABT_pileBase
+nslk,s
+CM,COMPN_RockSupport,NODE
+
+! Pile components
+cmsel,s,COMPL_ABT_piles
+cmsel,r,COMPL_ABT_1
+esll,s
+nsle,s,active
+cm,COMPL_ABT1_piles,line
+cm,COMPN_ABT1_piles,node
+cm,COMPE_ABT1_piles,elem
+
+cmsel,s,COMPL_ABT_piles
+cmsel,r,COMPL_ABT_2
+esll,s
+nsle,s,active
+cm,COMPL_ABT2_piles,line
+cm,COMPN_ABT2_piles,node
+cm,COMPE_ABT2_piles,elem
+
+cmsel,s,COMPE_ABT1_piles
+cmsel,a,COMPE_ABT2_piles
+cmsel,s,COMPN_ABT1_piles
+cmsel,a,COMPN_ABT2_piles
+cm,COMPE_ABT_piles,elem
+cm,COMPN_ABT_piles,node
+
+cmsel,s,COMPL_pile
+esll,s
+nsle,s,active
+cm,COMPN_PIER_piles,node
+cm,COMPE_PIER_piles,elem
+
+! TODO  the following approach to connect piles is, in general, quite bad -- revise
+
+! Connect pier pile to pier pile cap with nodal couplings
+cmsel,s,COMPK_PileTop
+nslk,s
+cm,COMPN_pileNodePool,node
+*get,nc,node,,count
+pileNode = 0
+
+*do,nthNode,1,nc,1
+  cmsel,s,COMPN_pileNodePool
+
+  pileNode = ndnext(pileNode)
+  xVal     = nx(pileNode)
+  yVal     = ny(pileNode)
+  zVal     = nz(pileNode)
+
+  cmsel , s , COMPN_PileCap
+  nsel  , r , loc           , x , xVal
+  nsel  , r , loc           , y , yVal
+  nsel  , r , loc           , z , zVal
+  cmsel , u , COMPN_pileNodePool
+  capNode = nnear(pileNode)
+
+  nsel,a,node,,pileNode
+  cp , next , 'UX'   , capNode , pileNode
+  cp , next , 'UY'   , capNode , pileNode
+  cp , next , 'UZ'   , capNode , pileNode
+  cp , next , 'ROTZ' , capNode , pileNode
+  *if,FEM_PileTopConnection,eq,1,then
+    cp , next , 'ROTX' , capNode , pileNode
+    cp , next , 'ROTY' , capNode , pileNode
+  *endif
+
+*enddo
+
+cmdele,COMPN_pileNodePool
+
+! Connect abutment pile to abutment pile cap: couplings or contacts
+*do,nthAbutment,1,2,1
+
+  *if,GEO_ABT%nthAbutment%_type,eq,5,then
+
+    *do,nthPile,1,GEO_ABT%nthAbutment%_pileCount
+      ndName  = 'ND_ABT%nthAbutment%_PILE%nthPile%_pilot'
+      cmaName = 'COMPA_ABT%nthAbutment%_PILE%nthPile%_itf'
+
+      cmsel,s,COMPL_ABT%nthAbutment%_pile%nthPile%
+      ksll,s
+      cmsel,r,COMPK_ABT%nthAbutment%_pileTops
+      nslk,s
+      %ndName% = ndnext(0)
+
+      n2acnt , %ndName% , cmaName
+    *enddo
+
+  *elseif,GEO_ABT%nthAbutment%_type,eq,6,then
+
+    *if,GEO_ABT%nthAbutment%_capOpt,eq,0,then
+      capCount = 2
+    *elseif,GEO_ABT%nthAbutment%_capOpt,eq,1,then
+      capCount = 1
+    *endif
+    *do,nthCap,1,capCount,1
+      *do,nthPile,1,GEO_ABT%nthAbutment%_pileCount,1
+        ndName  = 'ND_ABT%nthAbutment%_CAP%nthCap%_PILE%nthPile%_pilot'
+        cmaName = 'COMPA_ABT%nthAbutment%_CAP%nthCap%_PILE%nthPile%_itf'
+
+        cmsel,s,COMPL_ABT%nthAbutment%_CAP%nthCap%_PILE%nthPile%
+        ksll,s
+        cmsel,r,COMPK_ABT%nthAbutment%_pileTop
+        nslk,s
+        %ndName% = ndnext(0)
+
+        n2acnt , %ndName% , cmaName
+      *enddo
+    *enddo
+
+  *else
+
+    cmsel,s,COMPK_ABT_pileTop
+    cmsel,r,COMPK_ABT_%nthAbutment%
+    nslk,s
+    cm,COMPN_pileNodePool,node
+    *get,nc,node,,count
+    pileNode = 0
+
+    *do,nthNode,1,nc,1
+      cmsel,s,COMPN_pileNodePool
+
+      pileNode = ndnext(pileNode)
+      xVal     = nx(pileNode)
+      yVal     = ny(pileNode)
+      zVal     = nz(pileNode)
+
+      cmsel,s,COMPN_ABT_pileCap
+      cmsel,a,COMPN_ABT_tranWall
+      nsel,r,loc,x,xVal
+      nsel,r,loc,y,yVal
+      nsel,r,loc,z,zVal
+      cmsel,s,COMPL_ABT_pileConnections
+      nsll,a,1
+      cmsel,r,COMPN_ABT_%nthAbutment%
+      cmsel,u,COMPN_pileNodePool
+      capNode = nnear(pileNode)
+
+      nsel,a,node,,pileNode
+      cp , next , 'UX'   , capNode , pileNode
+      cp , next , 'UY'   , capNode , pileNode
+      cp , next , 'UZ'   , capNode , pileNode
+      cp , next , 'ROTZ' , capNode , pileNode
+      *if,FEM_PileTopConnection,eq,1,then
+        cp , next , 'ROTX' , capNode , pileNode
+        cp , next , 'ROTY' , capNode , pileNode
+      *endif
+    *enddo
+
+  *endif
+*enddo
+
+! Pile curtain: connect piles to each other
+*if,GEO_ABT1_type,eq,3,then
+  cmsel,s,COMPL_ABT1_piles
+  BRIDGE_V1_CURTAINCP
+*endif
+*if,GEO_ABT2_type,eq,3,then
+  cmsel,s,COMPL_ABT2_piles
+  BRIDGE_V1_CURTAINCP
+*endif
+
+
+!! 4.6.4 PILE ENVELOPING SOIL                                                                     !!
+!!                                                                                                !!
+! Initialize selection components
+nsel,none
+cm , COMPN_VSoil               , node
+cm , COMPN_HSoil               , node
+cm , COMPE_VSoil               , elem
+cm , COMPE_HSoil               , elem
+cm , COMPN_PIER_VSoil          , node
+cm , COMPN_PIER_HSoil          , node
+cm , COMPE_PIER_VSoil          , elem
+cm , COMPE_PIER_HSoil          , elem
+cm , COMPN_ABT1_VSoil          , node
+cm , COMPN_ABT1_HSoil          , node
+cm , COMPE_ABT1_VSoil          , elem
+cm , COMPE_ABT1_HSoil          , elem
+cm , COMPN_ABT2_VSoil          , node
+cm , COMPN_ABT2_HSoil          , node
+cm , COMPE_ABT2_VSoil          , elem
+cm , COMPE_ABT2_HSoil          , elem
+cm , COMPN_ABT1_pileFree       , node
+cm , COMPN_ABT1_pileRestrained , node
+cm , COMPN_ABT2_pileFree       , node
+cm , COMPN_ABT2_pileRestrained , node
+cm , COMPN_PILE_absentSoil     , node
+
+! Create selection component with pile nodes that will not have soil envelopment
+cmsel,s,COMPK_pileTop
+cmsel,a,COMPK_ABT_pileTop
+nslk,s
+cm,COMPN_PILE_absentSoil,node
+
+*if,MAT_SOIL_absentOpt,eq,1,then
+  *do,nthSupport,1,GEO_supportCount,1
+    topLevel = MAT_SOIL_absent_top(nthSupport)
+    botLevel = MAT_SOIL_absent_bot(nthSupport)
+    *if,botLevel,gt,topLevel,then
+      cmsel,s,COMPL_SUP%nthSupport%_piles
+      *get,lc,line,,count
+      lnum = 0
+      *do,nthLine,1,lc,1
+        cmsel,s,COMPL_SUP%nthSupport%_piles
+        lnum = lsnext(lnum)
+        lsel,s,line,,lnum
+        ksll,s
+        *get,zRef,kp,,mxloc,z
+        topZ = zRef-topLevel
+        botZ = zRef-botLevel
+        nsll,s,1
+        nsel,r,loc,z,botZ,topZ
+        cmpadd,'COMPN_PILE_absentSoil'
+      *enddo
+    *endif
+  *enddo
+*endif
+
+! Pier piles
+cmsel,s,COMPN_PIER_piles
+cmsel,u,COMPN_PILE_absentSoil
+cmsel,u,COMPN_rockSupport
+cm,COMPN_base,node
+*get,nc,node,,count
+*if,nc,gt,0,then
+  *if,MAT_Soil_kv,GT,0,THEN
+    cmsel,s,COMPN_base
+    sprsup,0,0,-FEM_springL,MAT_PileLat,REAL_vsoil,TYPE_LINK180,'COMPN_PIER_VSoil','COMPE_PIER_VSoil',,3
+  *endif
+  *if,MAT_Soil_kh,GT,0,THEN
+    cmsel,s,COMPN_base
+    sprsup,-FEM_springL,0,0,MAT_Soil,REAL_hsoil,TYPE_LINK180,'COMPN_PIER_HSoil','COMPE_PIER_HSoil',,4
+    cmsel,s,COMPN_base
+    sprsup,0,-FEM_springL,0,MAT_Soil,REAL_hsoil,TYPE_LINK180,'COMPN_temp' ,'COMPE_temp',,4
+    cmsel,s,COMPN_temp
+    cmsel,s,COMPE_temp
+    cmpadd,'COMPN_PIER_HSoil'
+    cmpadd,'COMPE_PIER_HSoil'
+  *endif
+*endif
+
+! First abutment
+*if,GEO_ABT1_status,eq,1,then
+  cmsel,s,COMPN_ABT1_piles
+  *if,GEO_ABT1_pileFree,gt,0,then
+    *get,zmx,node,,mxloc,z
+    nsel,u,loc,z,zmx,zmx-GEO_ABT1_pileFree
+    cm,COMPN_ABT1_pileRestrained,node
+    cmsel,s,COMPN_ABT1_piles
+    cmsel,u,COMPN_ABT1_pileRestrained
+    cm,COMPN_ABT1_pileFree,node
+  *else
+    cm,COMPN_ABT1_pileRestrained,node
+  *endif
+
+  cmsel,s,COMPN_ABT1_pileRestrained
+  cmsel,u,COMPN_PILE_absentSoil
+  cmsel,u,COMPN_rockSupport
+  cm,COMPN_ABT1_pileSpringSupported,node
+
+  *get,nc,node,,count
+  *if,nc,gt,0,then
+
+    *if,MAT_Soil_kv,GT,0,THEN
+      cmsel,s,COMPN_ABT1_pileSpringSupported
+      sprsup,0,0,-FEM_springL,MAT_PileLat,REAL_vsoil,TYPE_LINK180,'COMPN_ABT1_VSoil','COMPE_ABT1_VSoil',,3
+    *endif
+    *if,MAT_Soil_kh,GT,0,THEN
+      *if,GEO_ABT1_type,eq,3,then
+        ! Pile curtain: perpendicular soil supports only
+        cmsel,s,COMPL_ABT_twPiles
+        cmsel,a,COMPL_ABT_vxPiles
+        nsll,s,1
+        cmsel,r,COMPN_ABT1_pileSpringSupported
+        sprsup , -FEM_springL , 0            , 0 , MAT_Soil , REAL_hsoil , TYPE_LINK180 , 'COMPN_ABT1_HSoil' , 'COMPE_ABT1_HSoil' ,  , 4
+        cmsel,s,COMPL_ABT_lwPiles
+        cmsel,a,COMPL_ABT_vxPiles
+        nsll,s,1
+        cmsel,r,COMPN_ABT1_pileSpringSupported
+        sprsup , 0            , -FEM_springL , 0 , MAT_Soil , REAL_hsoil , TYPE_LINK180 , 'COMPN_temp'       , 'COMPE_temp'       ,  , 4
+      *else
+        cmsel,s,COMPN_ABT1_pileSpringSupported
+        sprsup , -FEM_springL , 0            , 0 , MAT_Soil , REAL_hsoil , TYPE_LINK180 , 'COMPN_ABT1_HSoil' , 'COMPE_ABT1_HSoil' ,  , 4
+        cmsel,s,COMPN_ABT1_pileSpringSupported
+        sprsup , 0            , -FEM_springL , 0 , MAT_Soil , REAL_hsoil , TYPE_LINK180 , 'COMPN_temp'       , 'COMPE_temp'       ,  , 4
+      *endif
+      cmsel,s,COMPN_temp
+      cmsel,s,COMPE_temp
+      cmpadd,'COMPN_ABT1_HSoil'
+      cmpadd,'COMPE_ABT1_HSoil'
+    *endif
+
+  *endif
+  csys,0
+*endif
+
+! Second abutment
+*if,GEO_ABT2_status,eq,1,then
+  cmsel,s,COMPN_ABT2_piles
+  *if,GEO_ABT2_pileFree,gt,0,then
+    *get,zmx,node,,mxloc,z
+    nsel,u,loc,z,zmx,zmx-GEO_ABT2_pileFree
+    cm,COMPN_ABT2_pileRestrained,node
+    cmsel,s,COMPN_ABT2_piles
+    cmsel,u,COMPN_ABT2_pileRestrained
+    cm,COMPN_ABT2_pileFree,node
+  *else
+    cm,COMPN_ABT2_pileRestrained,node
+  *endif
+
+  cmsel,s,COMPN_ABT2_pileRestrained
+  cmsel,u,COMPN_PILE_absentSoil
+  cmsel,u,COMPN_rockSupport
+  cm,COMPN_ABT2_pileSpringSupported,node
+
+  *get,nc,node,,count
+  *if,nc,gt,0,then
+
+    *if,MAT_Soil_kv,GT,0,THEN
+      cmsel,s,COMPN_ABT2_pileSpringSupported
+      sprsup,0,0,-FEM_springL,MAT_PileLat,REAL_vsoil,TYPE_LINK180,'COMPN_ABT2_VSoil','COMPE_ABT2_VSoil',,3
+    *endif
+    *if,MAT_Soil_kh,GT,0,THEN
+      *if,GEO_ABT2_type,eq,3,then
+        ! Pile curtain: perpendicular soil supports only
+        cmsel,s,COMPL_ABT_twPiles
+        cmsel,a,COMPL_ABT_vxPiles
+        nsll,s,1
+        cmsel,r,COMPN_ABT2_pileSpringSupported
+        sprsup , -FEM_springL , 0            , 0 , MAT_Soil , REAL_hsoil , TYPE_LINK180 , 'COMPN_ABT2_HSoil' , 'COMPE_ABT2_HSoil' ,  , 4
+        cmsel,s,COMPL_ABT_lwPiles
+        cmsel,a,COMPL_ABT_vxPiles
+        nsll,s,1
+        cmsel,r,COMPN_ABT2_pileSpringSupported
+        sprsup , 0            , -FEM_springL , 0 , MAT_Soil , REAL_hsoil , TYPE_LINK180 , 'COMPN_temp'       , 'COMPE_temp'       ,  , 4
+      *else
+        cmsel,s,COMPN_ABT2_pileSpringSupported
+        sprsup , -FEM_springL , 0            , 0 , MAT_Soil , REAL_hsoil , TYPE_LINK180 , 'COMPN_ABT2_HSoil' , 'COMPE_ABT2_HSoil' ,  , 4
+        cmsel,s,COMPN_ABT2_pileSpringSupported
+        sprsup , 0            , -FEM_springL , 0 , MAT_Soil , REAL_hsoil , TYPE_LINK180 , 'COMPN_temp'       , 'COMPE_temp'       ,  , 4
+      *endif
+      cmsel,s,COMPN_temp
+      cmsel,s,COMPE_temp
+      cmpadd,'COMPN_ABT2_HSoil'
+      cmpadd,'COMPE_ABT2_HSoil'
+    *endif
+
+  *endif
+  csys,0
+*endif
+
+! Selection components
+cmsel , s           , COMPN_PIER_VSoil
+cmsel , a           , COMPN_ABT1_VSoil
+cmsel , a           , COMPN_ABT2_VSoil
+cm    , COMPN_VSoil , node
+
+cmsel , s           , COMPN_PIER_HSoil
+cmsel , a           , COMPN_ABT1_HSoil
+cmsel , a           , COMPN_ABT2_HSoil
+cm    , COMPN_HSoil , node
+
+cmsel , s           , COMPE_PIER_VSoil
+cmsel , a           , COMPE_ABT1_VSoil
+cmsel , a           , COMPE_ABT2_VSoil
+cm    , COMPE_VSoil , elem
+
+cmsel , s           , COMPE_PIER_HSoil
+cmsel , a           , COMPE_ABT1_HSoil
+cmsel , a           , COMPE_ABT2_HSoil
+cm    , COMPE_HSoil , elem
+
+cmsel , s           , COMPE_HSoil
+cmsel , a           , COMPE_VSoil
+cm    , COMPE_Soil  , elem
+
+cmsel , s           , COMPN_HSoil
+cmsel , a           , COMPN_VSoil
+cm    , COMPN_Soil  , node
+
+! Soil springs supports
+cmsel,s,COMPN_HSoil
+d,all,ux,0,,,,uy
+cmsel,s,COMPN_VSoil
+d,all,uz,0

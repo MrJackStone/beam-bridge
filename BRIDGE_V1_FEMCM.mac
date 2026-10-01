@@ -1,6 +1,36 @@
 ! BRIDGE_V1_FEMCM
 
 
+! Left footpath slab elements
+cmsel,S,COMPA_LeftFootpath
+esla,s
+esel,r,type,,TYPE_SHELL181
+cm,COMPE_LeftFootpath,elem
+
+! Right footpath slab elements
+cmsel,s,COMPA_RightFootpath
+esla,s
+esel,r,type,,TYPE_SHELL181
+cm,COMPE_RightFootpath,elem
+
+! Vehicle lane elements
+cmsel,s,COMPA_Lanes
+esla,s
+esel,r,type,,TYPE_SHELL181
+cm,COMPE_Lanes,elem
+
+! Barrier nodes
+*if,LOAD_barrierStatus,eq,1,then
+  cmsel,S,COMPL_Barrier
+  nsll,s,1
+  cmsel,s,COMPE_Slab
+  nsle,r,active
+  cm,COMPN_Barrier,node
+*else
+  nsel,none
+  cm,COMPN_Barrier,node
+*endif
+
 ! Node pairs representing girder bearings
 *del,FEM_bearing_pairs,,nopr
 *dim,FEM_bearing_pairs,,4,GEO_girderCount,GEO_spanCount

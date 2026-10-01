@@ -1,0 +1,24 @@
+! BRIDGE_V1_MESHPIC
+
+
+! Capture image of the mesh
+allsel
+view4w
+wincln,1
+wincln,2
+wincln,3
+wincln,4
+lplot
+/color,defa
+/vup,all,z
+/pnum,sec,1
+/number,1
+/eshape,1
+eplot
+takepic,'IMG01d_meshExtruded',,,,,POST_resultsFolder
+
+! Turn off automatic screen updating
+/nopr
+immed,0
+/uis,replot,0
+/uis,msgpop,3

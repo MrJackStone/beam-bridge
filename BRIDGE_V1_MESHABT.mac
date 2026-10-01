@@ -1,0 +1,487 @@
+! BRIDGE_V1_MESHABT
+
+
+! Create CSYS to use as local element coordinate systems
+csys,CS_ABT1
+csnext,'ESYS_ABT1_tw'
+clocal,ESYS_ABT1_tw,cart,0,0,0,90,90  ! TODO  csys
+
+csys,CS_ABT2
+csnext,'ESYS_ABT2_tw'
+clocal,ESYS_ABT2_tw,cart,0,0,0,90,90  ! TODO  csys
+
+csys,CS_ABT1_lw
+csnext,'ESYS_ABT1_lw'
+clocal,ESYS_ABT1_lw,cart,0,0,0,90,90  ! TODO  csys
+
+csys,CS_ABT1_lw
+csnext,'ESYS_ABT1_lc'
+clocal,ESYS_ABT1_lc,cart,0,0,0,90  ! TODO  csys
+
+csys,CS_ABT1_rw
+csnext,'ESYS_ABT1_rw'
+clocal,ESYS_ABT1_rw,cart,0,0,0,-90,90  ! TODO  csys
+
+csys,CS_ABT1_rw
+csnext,'ESYS_ABT1_rc'
+clocal,ESYS_ABT1_rc,cart,0,0,0,90,180  ! TODO  csys
+
+csys,CS_ABT2_lw
+csnext,'ESYS_ABT2_lw'
+clocal,ESYS_ABT2_lw,cart,0,0,0,90,90  ! TODO  csys
+
+csys,CS_ABT2_lw
+csnext,'ESYS_ABT2_lc'
+clocal,ESYS_ABT2_lc,cart,0,0,0,90  ! TODO  csys
+
+csys,CS_ABT2_rw
+csnext,'ESYS_ABT2_rw'
+clocal,ESYS_ABT2_rw,cart,0,0,0,-90,90  ! TODO  csys
+
+csys,CS_ABT2_rw
+csnext,'ESYS_ABT2_rc'
+clocal,ESYS_ABT2_rc,cart,0,0,0,90,180  ! TODO  csys
+
+csys,0
+
+!! 4.3.1 BEAM ELEMENTS                                                                            !!
+!!                                                                                                !!
+! Posts
+cmsel,s,COMPL_ABT_posts
+cmsel,r,COMPL_ABT_1
+BRIDGE_V1_LMESH , CS_ABT1 ,  , MAT_abutment , SEC_ABT_girderPost , 1 , 0 , 0 ,  , 10  ! TODO  remove hardcoded mesh size
+
+cmsel,s,COMPL_ABT_posts
+cmsel,r,COMPL_ABT_2
+BRIDGE_V1_LMESH , CS_ABT2 ,  , MAT_abutment , SEC_ABT_girderPost , 1 , 0 , 0 ,  , 10  ! TODO  remove hardcoded mesh size
+
+! Columns
+cmsel,s,COMPL_ABT_columns
+cmsel,r,COMPL_ABT_1
+BRIDGE_V1_LMESH , CS_ABT1 ,  , MAT_abutment , SEC_ABT1_column , 1 , 0 , 0 , FEM_ABT_esize
+
+cmsel,s,COMPL_ABT_columns
+cmsel,r,COMPL_ABT_2
+BRIDGE_V1_LMESH , CS_ABT2 ,  , MAT_abutment , SEC_ABT2_column , 1 , 0 , 0 , FEM_ABT_esize
+
+! Frame girders
+cmsel,s,COMPL_ABT_frameGirder
+cmsel,r,COMPL_ABT_1
+BRIDGE_V1_LMESH , CS_ABT1 , , MAT_abutment , SEC_ABT1_frameGirder , 0 , 0 , 1 , FEM_ABT_esize
+
+cmsel,s,COMPL_ABT_frameGirder
+cmsel,r,COMPL_ABT_2
+BRIDGE_V1_LMESH , CS_ABT2 , , MAT_abutment , SEC_ABT2_frameGirder , 0 , 0 , 1 , FEM_ABT_esize
+
+! Grade beams
+cmsel,s,COMPL_ABT_gradeBeam
+cmsel,r,COMPL_ABT_1
+BRIDGE_V1_LMESH , CS_ABT1 , , MAT_abutment , SEC_ABT1_gradeBeam , 0 , 0 , 1 , FEM_ABT_esize
+
+cmsel,s,COMPL_ABT_gradeBeam
+cmsel,r,COMPL_ABT_2
+BRIDGE_V1_LMESH , CS_ABT2 , , MAT_abutment , SEC_ABT2_gradeBeam , 0 , 0 , 1 , FEM_ABT_esize
+
+! For abutment type 6: copy mesh from frame girder to bottom of cantilever wall
+*do,nthAbutment,1,2,1
+  *if,GEO_ABT%nthAbutment%_status,eq,1,and,GEO_ABT%nthAbutment%_type,eq,6,then
+    ! Target: lines at the bottom of the cantilever wall
+    cmsel,s,COMPL_ABT_cantileverWallBottom
+    cmsel,r,COMPL_ABT_%nthAbutment%
+    cm,COMPL_target,line
+    ! Source: frame girder lines
+    cmsel,s,COMPL_ABT_frameGirder
+    cmsel,r,COMPL_ABT_%nthAbutment%
+    cm,COMPL_source,line
+    ! Copy beam mesh from girder to wall (temporary mesh, must later be deleted)
+    wallOffsetX = -(GEO_ABT%nthAbutment%_girderB-SEC_ABT_thinTranWall_t)/2
+    cmsel,s,COMPL_source
+    cmsel,a,COMPL_target
+    ksll,s
+    esel,none
+    mshcopy,,COMPL_source,COMPL_target,CS_ABT%nthAbutment%,-wallOffsetX,0,0
+    cm,COMPE_ABT%nthAbutment%_tempWallBottom,elem
+  *endif
+*enddo
+
+!! 4.3.2 SHELL ELEMENTS                                                                           !!
+!!                                                                                                !!
+! Transversal walls
+cmsel,s,COMPA_ABT_tranWall
+cmsel,u,COMPA_ABT_thinTranWall
+cmsel,r,COMPA_ABT_1
+BRIDGE_V1_AMESH,,MAT_abutment,FEM_ABT_esize,ESYS_ABT1_tw,SEC_ABT_tranWall
+
+cmsel,s,COMPA_ABT_thinTranWall
+cmsel,r,COMPA_ABT_1
+BRIDGE_V1_AMESH,,MAT_abutment,FEM_ABT_esize,ESYS_ABT1_tw,SEC_ABT_thinTranWall
+
+cmsel,s,COMPA_ABT_cantileverWall
+cmsel,r,COMPA_ABT_1
+BRIDGE_V1_AMESH,,MAT_abutment,FEM_ABT_esize,ESYS_ABT1_tw,SEC_ABT_thinTranWall
+
+cmsel,s,COMPA_ABT_tranWall
+cmsel,u,COMPA_ABT_thinTranWall
+cmsel,r,COMPA_ABT_2
+BRIDGE_V1_AMESH,,MAT_abutment,FEM_ABT_esize,ESYS_ABT2_tw,SEC_ABT_tranWall
+
+cmsel,s,COMPA_ABT_thinTranWall
+cmsel,r,COMPA_ABT_2
+BRIDGE_V1_AMESH,,MAT_abutment,FEM_ABT_esize,ESYS_ABT2_tw,SEC_ABT_thinTranWall
+
+cmsel,s,COMPA_ABT_cantileverWall
+cmsel,r,COMPA_ABT_2
+BRIDGE_V1_AMESH,,MAT_abutment,FEM_ABT_esize,ESYS_ABT2_tw,SEC_ABT_thinTranWall
+
+! Delete temporary mesh, used to ensure matching nodes for abutment type 6
+cmsel,s,COMPL_ABT_cantileverWallBottom
+esll
+nsle
+lclear,COMPL_ABT_cantileverWallBottom
+ndele,all
+
+! Longitudinal walls
+cmsel,s,COMPA_ABT_longWalls
+cmsel,r,COMPA_ABT_1
+cmsel,r,COMPA_ABT_leftSide
+BRIDGE_V1_AMESH,,MAT_abutment,FEM_ABT_esize,ESYS_ABT1_lw,SEC_ABT_longWall
+
+cmsel,s,COMPA_ABT_longWalls
+cmsel,r,COMPA_ABT_1
+cmsel,r,COMPA_ABT_rightSide
+BRIDGE_V1_AMESH,,MAT_abutment,FEM_ABT_esize,ESYS_ABT1_rw,SEC_ABT_longWall
+
+cmsel,s,COMPA_ABT_longWalls
+cmsel,r,COMPA_ABT_2
+cmsel,r,COMPA_ABT_leftSide
+BRIDGE_V1_AMESH,,MAT_abutment,FEM_ABT_esize,ESYS_ABT2_lw,SEC_ABT_longWall
+
+cmsel,s,COMPA_ABT_longWalls
+cmsel,r,COMPA_ABT_2
+cmsel,r,COMPA_ABT_rightSide
+BRIDGE_V1_AMESH,,MAT_abutment,FEM_ABT_esize,ESYS_ABT2_rw,SEC_ABT_longWall
+
+! Columns
+BRIDGE_V1_AMESH,'COMPA_ABT_columns',MAT_abutment,FEM_ABT_esize,,SEC_ABT_column
+
+! Wings
+cmsel,s,COMPA_ABT_wings
+cmsel,r,COMPA_ABT_1
+cmsel,r,COMPA_ABT_leftSide
+BRIDGE_V1_AMESH,,MAT_abutment,FEM_ABT_esize,ESYS_ABT1_lw,SEC_ABT_wing
+
+cmsel,s,COMPA_ABT_wings
+cmsel,r,COMPA_ABT_1
+cmsel,r,COMPA_ABT_rightSide
+BRIDGE_V1_AMESH,,MAT_abutment,FEM_ABT_esize,ESYS_ABT1_rw,SEC_ABT_wing
+
+cmsel,s,COMPA_ABT_wings
+cmsel,r,COMPA_ABT_2
+cmsel,r,COMPA_ABT_leftSide
+BRIDGE_V1_AMESH,,MAT_abutment,FEM_ABT_esize,ESYS_ABT2_lw,SEC_ABT_wing
+
+cmsel,s,COMPA_ABT_wings
+cmsel,r,COMPA_ABT_2
+cmsel,r,COMPA_ABT_rightSide
+BRIDGE_V1_AMESH,,MAT_abutment,FEM_ABT_esize,ESYS_ABT2_rw,SEC_ABT_wing
+
+! Beams
+BRIDGE_V1_AMESH,'COMPA_ABT_beam',MAT_abutment,FEM_ABT_esize,,SEC_ABT_beam
+
+! Pile caps
+BRIDGE_V1_AMESH,'COMPA_ABT_pileCap',MAT_abutment,FEM_ABT_esize,,SEC_ABT_pileCap
+
+cmsel,s,COMPA_ABT_pileCap
+cmsel,r,COMPA_ABT_1
+cmsel,r,COMPA_ABT_leftSide
+BRIDGE_V1_AMESH,,MAT_abutment,FEM_ABT_esize,ESYS_ABT1_lc,SEC_ABT_pileCap
+
+cmsel,s,COMPA_ABT_pileCap
+cmsel,r,COMPA_ABT_1
+cmsel,r,COMPA_ABT_rightSide
+BRIDGE_V1_AMESH,,MAT_abutment,FEM_ABT_esize,ESYS_ABT1_rc,SEC_ABT_pileCap
+
+cmsel,s,COMPA_ABT_pileCap
+cmsel,r,COMPA_ABT_2
+cmsel,r,COMPA_ABT_leftSide
+BRIDGE_V1_AMESH,,MAT_abutment,FEM_ABT_esize,ESYS_ABT2_lc,SEC_ABT_pileCap
+
+cmsel,s,COMPA_ABT_pileCap
+cmsel,r,COMPA_ABT_2
+cmsel,r,COMPA_ABT_rightSide
+BRIDGE_V1_AMESH,,MAT_abutment,FEM_ABT_esize,ESYS_ABT2_rc,SEC_ABT_pileCap
+
+! Approach slabs
+BRIDGE_V1_AMESH,'COMPA_ABT_appSlab',MAT_abutment,FEM_ABT_esize,,SEC_ABT_appSlab
+
+! Overhangs
+BRIDGE_V1_AMESH,'COMPA_ABT_overhangs',MAT_abutment,FEM_ABT_esize,,SEC_ABT_appSlab
+
+! Export mesh selection components
+cmsel,s,COMPA_ABT_1
+esla
+cmsel,s,COMPL_ABT_1
+esll,a
+nsle,,active
+cm,COMPE_ABT_1,elem
+cm,COMPN_ABT_1,node
+
+cmsel,s,COMPA_ABT_2
+esla
+cmsel,s,COMPL_ABT_2
+esll,a
+nsle,,active
+cm,COMPE_ABT_2,elem
+cm,COMPN_ABT_2,node
+
+! Selection components: submerged and exposed elements
+*if,GEO_waterHeight,gt,0,then
+  cmsel,s,COMPE_ABT_1
+  nsel,s,loc,z,zFrameBot,GEO_waterHeight-GEO_ABT1_height
+  esln,r
+  cmpadd,'COMPE_Submerged'
+
+  cmsel,s,COMPE_ABT_2
+  nsel,s,loc,z,zFrameBot,GEO_waterHeight-GEO_ABT2_height
+  esln,r
+  cmpadd,'COMPE_Submerged'
+*endif
+cmsel,s,COMPE_ABT_1
+cmsel,a,COMPE_ABT_2
+cmsel,u,COMPE_Submerged
+cmpadd,'COMPE_Exposed'
+
+! Selection components: nodes without soil support
+cmsel,s,COMPA_ABT_pileInterface
+nsla,s,1
+cm,COMPN_ABT_pileInterface,node
+
+!! 4.3.3 NODAL COUPLINGS                                                                          !!
+!!                                                                                                !!
+! Nodal selection component: nodes at wall-slab-bridge interface
+csys,CS_ABT1
+nsel,s,loc,x,0
+csys,CS_ABT2
+nsel,a,loc,x,0
+csys,0
+cm,COMPN_temp,node
+nsel,s,loc,z,GEO_ABT1_zAB
+nsel,a,loc,z,GEO_ABT2_zAB
+cmsel,r,COMPN_temp
+cm,COMPN_ABT_wsbInterface,node
+
+! Connect approach slab to transversal wall
+*do,nthAbutment,1,2,1
+  *if,GEO_ABT%nthAbutment%_status,eq,1,and,GEO_ABT%nthAbutment%_appSlab,eq,1,then
+    csys,CS_ABT%nthAbutment%
+
+    cmsel,s,COMPA_ABT_appSlab
+    cmsel,r,COMPA_ABT_%nthAbutment%
+    lsla
+    nsll,s,1
+    nsel,r,loc,x,0
+    cm,COMPN_source,node
+    *get,ncSource,node,,count
+    *get,yMin,node,,mnloc,y
+    *get,yMax,node,,mxloc,y
+
+    cmsel,s,COMPA_ABT_tranWall
+    cmsel,a,COMPA_ABT_cantileverWall
+    lsla
+    nsll,s,1
+    cmsel,r,COMPN_ABT_%nthAbutment%
+    nsel,r,loc,z,0
+    nsel,r,loc,y,yMin,yMax
+    cm,COMPN_target,node
+    *get,ncTarget,node,,count
+
+    *if,ncSource,ne,ncTarget,then
+      *msg,fatal
+      BRIDGE_V1_MESH error: approach slab and transversal wall do not have matching meshes.%/&
+      Run aborted.
+    *endif
+
+    ndSource = 0
+    *do,nthNode,1,ncSource,1
+      cmsel,s,COMPN_source
+      ndSource = ndnext(ndSource)
+      cmsel,s,COMPN_target
+      ndTarget = nnear(ndSource)
+
+      nsel,s,node,,ndSource
+      nsel,a,node,,ndTarget
+      cp,next,ux,all
+      cp,next,uy,all
+      cp,next,uz,all
+    *enddo
+  *endif
+*enddo
+
+! Connect cantilever wall to frame girder, for abutment type 6
+*do,nthAbutment,1,2,1
+  *if,GEO_ABT%nthAbutment%_status,eq,1,and,GEO_ABT%nthAbutment%_type,eq,6,then
+    cmsel,s,COMPL_ABT_cantileverWallBottom
+    cmsel,r,COMPL_ABT_%nthAbutment%
+    nsll,s,1
+    cm,COMPN_target,node
+
+    cmsel,s,COMPL_ABT_frameGirder
+    cmsel,r,COMPL_ABT_%nthAbutment%
+    esll
+    nsle,s,active
+    cm,COMPN_source,node
+
+    *get,nc,node,,count
+    ndSource = 0
+
+    *do,nthNode,1,nc,1
+      cmsel,s,COMPN_source
+      ndSource = ndnext(ndSource)
+      cmsel,s,COMPN_target
+      ndTarget = nnear(ndSource)
+
+      nsel,s,node,,ndSource
+      nsel,a,node,,ndTarget
+      cp,,all,ndSource,ndTarget
+    *enddo
+  *endif
+*enddo
+
+! Nodal selection component: girder supports at abutments
+! TODO  this approach is kinda crap and probably breaks if the two abutments are of different types
+!       (one is 5 or 6, the other any other type) -- rework
+nsel,none
+cm,COMPN_ABT_girder,node
+
+*do,nthAbutment,1,2,1
+  *if,GEO_ABT%nthAbutment%_type,eq,5,or,GEO_ABT%nthAbutment%_type,eq,6,then
+    cmsel,s,COMPK_ABT_postTops
+    nslk,s
+    cmpadd,'COMPN_ABT_girder'
+  *else
+    *do,nthGirder,1,GEO_girderCount,1
+      nthCS=CS_girders(nthGirder)
+      csys,nthCS
+      nsel,a,loc,y,0
+      csys,0
+    *enddo
+    cmsel,r,COMPN_ABT_wsbInterface
+    cmsel,s,COMPA_ABT_tranWall
+    nsla,r,1
+    cmpadd,'COMPN_ABT_girder'
+  *endif
+*enddo
+
+! Connect girder posts to pile cap
+*if,GEO_ABT1_status,eq,1,and,GEO_ABT1_type,eq,5,then
+  BRIDGE_V1_FEMJOINPOSTS , 1
+*endif
+
+*if,GEO_ABT2_status,eq,1,and,GEO_ABT2_type,eq,5,then
+  BRIDGE_V1_FEMJOINPOSTS , 2
+*endif
+
+
+!! 4.3.4 SOIL SPRING SUPPORTS                                                                     !!
+!!                                                                                                !!
+*if,GEO_ABT1_status,eq,1,then
+  csys,CS_ABT1
+  cmsel,s,COMPN_ABT_1
+  cmsel,u,COMPN_ABT_pileInterface
+  cmsel,s,COMPA_ABT_pileCap
+  nsla,u,1
+  BRIDGE_V1_ABTSPRSUP, 1 , GEO_deckWidth_beg, GEO_ABT1_type, CS_ABT1, CS_ABT1_trv, CS_ABT1_lw, CS_ABT1_rw, GEO_ABT1_beamOpt
+*endif
+
+*if,GEO_ABT2_status,eq,1,then
+  csys,CS_ABT2
+  cmsel,s,COMPN_ABT_2
+  cmsel,u,COMPN_ABT_pileInterface
+  cmsel,s,COMPA_ABT_pileCap
+  nsla,u,1
+  BRIDGE_V1_ABTSPRSUP, 2 , GEO_deckWidth_end, GEO_ABT2_type, CS_ABT2, CS_ABT2_trv, CS_ABT2_lw, CS_ABT2_rw, GEO_ABT2_beamOpt
+*endif
+
+csys,0
+
+
+!! 4.3.5 COMPONENTS                                                                               !!
+!!                                                                                                !!
+! Approach slabs
+cmsel,s,COMPA_ABT_appSlab
+esla,s
+nsle,s
+cm,COMPE_ABT_appSlab,elem
+cm,COMPN_ABT_appSlab,node
+
+! Overhangs
+cmsel,s,COMPA_ABT_overhangs
+esla,s
+nsle,s
+cm,COMPE_ABT_overhangs,elem
+cm,COMPN_ABT_overhangs,node
+
+! Left footpath slab elements
+cmsel,s,COMPA_ABT_LeftFootpath
+esla,s
+cm,COMPE_ABT_LeftFootpath,elem
+
+! Right footpath slab elements
+cmsel,s,COMPA_ABT_RightFootpath
+esla,s
+cm,COMPE_ABT_RightFootpath,elem
+
+! Vehicle lane slab elements
+cmsel,s,COMPA_ABT_Lanes
+esla,s
+cm,COMPE_ABT_Lanes,elem
+
+! Barrier nodes (abutments)
+nsel,none
+cm,COMPN_ABT_Barrier,node
+*if,GEO_ABT1_status,eq,1,or,GEO_ABT2_status,eq,1,then
+  *if,GEO_ABT1_appSlab,eq,1,or,GEO_ABT2_appSlab,eq,1,then
+    cmsel,s,COMPL_Barrier
+    nsll,s,1
+    cmsel,s,COMPA_ABT_appSlab
+    lsla,s
+    nsla,r,1
+    cmpadd,'COMPN_ABT_Barrier'
+  *endif
+*endif
+
+! Pile cap nodes
+cmsel,s,COMPA_ABT_pileCap
+nsla,s,1
+cm,COMPN_ABT_pileCap,node
+
+! Transversal wall nodes
+cmsel,s,COMPA_ABT_tranWall
+nsla,s,1
+cm,COMPN_ABT_tranWall,node
+
+! Girder posts
+cmsel,s,COMPL_ABT_posts
+esll,s
+nsle,s,active
+cm,COMPE_ABT_posts,elem
+cm,COMPN_ABT_posts,node
+
+! Abutments without earth pressure
+asel,none
+cm,COMPA_ABT1_noSoilRetained,area
+cm,COMPA_ABT2_noSoilRetained,area
+
+*if,GEO_ABT1_status,eq,1,and,GEO_ABT1_type,eq,6,then
+  cmsel,s,COMPA_ABT_1
+  cm,COMPA_ABT1_noSoilRetained,area
+*endif
+
+*if,GEO_ABT2_status,eq,1,and,GEO_ABT2_type,eq,6,then
+  cmsel,s,COMPA_ABT_2
+  cm,COMPA_ABT2_noSoilRetained,area
+*endif
+
+cmsel,s,COMPA_ABT1_noSoilRetained
+cmsel,a,COMPA_ABT2_noSoilRetained
+cm,COMPA_ABT_noSoilRetained,area
