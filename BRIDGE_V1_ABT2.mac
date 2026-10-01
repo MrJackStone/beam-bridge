@@ -1,0 +1,233 @@
+! BRIDGE_V1_ABT2 , localCS , abt_data
+! BRIDGE_V1_ABT2 , ARG1    , ARG2
+
+! Exported selection components:
+! COMPA_Abutment
+!
+! COMPA_ABT_walls
+! COMPA_ABT_tranWall
+! COMPA_ABT_appSlab
+!
+! COMPL_ABT_piles
+!
+! COMPK_ABT_base
+! COMPK_ABT_pileTop
+! COMPK_ABT_pileBase
+
+
+! Collect abutment geometric parameters
+GEO_ABT_appSlab    = %ARG2%(5)
+GEO_ABT_appSlabL   = %ARG2%(6)
+GEO_ABT_height     = %ARG2%(7)
+GEO_ABT_pileL      = %ARG2%(12)
+GEO_ABT_topOffset  = %ARG2%(13)
+GEO_ABT_tranPiles  = %ARG2%(14)
+GEO_ABT_pileAngle  = %ARG2%(18)
+GEO_ABT_width      = %ARG2%(28)
+GEO_ABT_thinDepth  = %ARG2%(29)
+
+bot_delta_X = -GEO_ABT_pileL*tan(GEO_ABT_pileAngle*pi/180)
+deltaZT     = (GEO_ABT_width-2*GEO_ABT_pileOff)/(GEO_ABT_tranPiles-1)
+firstZT     = GEO_ABT_pileOff
+
+*get,KMXD,kp,,num,maxd
+
+! Abutment wall keypoint numbers
+K01 = KMXD+1
+K02 = KMXD+2
+K03 = KMXD+3
+K04 = KMXD+4
+K08 = KMXD+8
+
+! Approach slab keypoint numbers
+KA = KMXD+29
+KB = KMXD+30
+KC = KMXD+31
+KD = KMXD+32
+
+! Key coordinates
+x01 = 0
+x05 = 1
+xc  = x01+GEO_ABT_appSlabL
+
+y01 = -(GEO_ABT_width/2)
+y02 = y01+GEO_ABT_width
+
+z01 = 0
+z03 = z01-GEO_ABT_height
+zc  = z01+GEO_ABT_topOffset
+z25 = z01-GEO_ABT_thinDepth
+
+angCoef = 0
+*if,GEO_ABT_appSlab,eq,1,then
+  angCoef = (zc-z01)/(xc-x01)
+*endif
+linCoef = z01-angCoef*x01
+
+! Prepare environment
+csys,ARG1
+
+allsel
+cm,COMPA_prev,area
+cm,COMPL_prev,line
+cm,COMPK_prev,kp
+
+! Draw abutment walls
+asel,none
+k , K01 , x01 , y01 , z01
+k , K02 , x01 , y02 , z01
+k , K03 , x01 , y01 , z03
+k , K04 , x01 , y02 , z03
+k , K08 , x05 , y02 , z03
+a , K01 , K02 , K04 , K03
+cmpadd,'COMPA_ABT_walls'
+
+! Draw approach slab
+asel,none
+*if,GEO_ABT_appSlab,eq,1,then
+  k , KA , x01 , y01 , z01
+  k , KB , x01 , y02 , z01
+  k , KC , xc  , y01 , zc
+  k , KD , xc  , y02 , zc
+  a, KA, KC, KD, KB
+*endif
+cmpadd,'COMPA_ABT_appSlab'
+
+! Slice transversal wall at piles
+cmsel,s,COMPA_ABT_tranWall
+cmsel,u,COMPA_prev
+ksel,all
+kwplan,,K04,K08,K02
+wpoffs,,,firstZT
+*do,nthPile,1,GEO_ABT_tranPiles,1
+  asbw,all,,delete
+  wpoffs,,,deltaZT
+*enddo
+cmpadd,'COMPA_ABT_tranWall'
+cmpadd,'COMPA_ABT_walls'
+wpcsys,,ARG1
+
+! Slice at bridge superstructure
+cmsel,s,COMPA_ABT_tranWall
+cmsel,u,COMPA_prev
+BRIDGE_V1_LONGSLICE
+cmpadd,'COMPA_ABT_tranWall'
+cmpadd,'COMPA_ABT_walls'
+
+*if,GEO_ABT_appSlab,eq,1,then
+  cmsel,s,COMPA_ABT_appSlab
+  cmsel,u,COMPA_prev
+  BRIDGE_V1_LONGSLICE
+  cmpadd,'COMPA_ABT_appSlab'
+*endif
+
+! Merge keypoints
+cmsel,s,COMPA_ABT_walls
+cmsel,u,COMPA_prev
+lsla,s
+ksll,s
+nummrg,kp
+cm,COMPK_ABT_temp,kp
+
+! Draw piles
+
+! Keypoints at pile cap level
+cmsel,s,COMPK_ABT_temp
+cmdele,COMPK_ABT_temp
+ksel,r,loc,z,z03
+cmpadd,'COMPK_ABT_base'
+
+! Keypoints at the top of each transversal pile
+ksel,none
+y_i = y02-firstZT
+*do,nthPile,1,GEO_ABT_tranPiles,1
+  ksel,a,loc,y,y_i
+  y_i = y_i-deltaZT
+*enddo
+cmsel,r,COMPK_ABT_base
+cm,COMPK_pileTopPairs,kp
+
+kgen,2,COMPK_pileTopPairs
+cmsel,u,COMPK_pileTopPairs
+cmdele,COMPK_pileTopPairs
+cm,COMPK_twPileTop,kp
+cmpadd,'COMPK_ABT_pileTop'
+
+! Draw transversal wall pile lines
+cmsel,s,COMPK_twPileTop
+cmsel,u,COMPK_prev
+lsel,none
+*get,kmnx,kp,,mnloc,x
+*get,kmxx,kp,,mxloc,x
+*get,kc,kp,,count
+knum = 0
+*do,nthKP,1,kc,1
+  cmsel,s,COMPK_twPileTop
+  cmsel,u,COMPK_prev
+  knum = kpnext(knum)
+  ksel,s,kp,,knum
+  nthK_deltaXmn = abs(kx(knum)-kmnx)
+  nthK_deltaXmx = abs(kx(knum)-kmxx)
+  fuzz          = 1e-3
+  *if,nthK_deltaXmn,le,fuzz,then
+    kgen,2,knum,,,bot_delta_X,,-GEO_ABT_pileL
+  *elseif,nthK_deltaXmx,lt,fuzz,then
+    kgen,2,knum,,,-bot_delta_X,,-GEO_ABT_pileL
+  *else
+    kgen,2,knum,,,0,,-GEO_ABT_pileL
+  *endif
+  *get,knew,kp,,num,max
+  l,knum,knew
+  ksel,s,kp,,knew
+  cmpadd,'COMPK_ABT_pileBase'
+*enddo
+cmpadd,'COMPL_ABT_twPiles'
+cmpadd,'COMPL_ABT_piles'
+
+
+! Export selection components
+
+! Barrier lines
+lsel,none
+*if,GEO_ABT_appSlab,eq,1,and,LOAD_barrierStatus,eq,1,then
+  *do,nthBarrier,1,LOAD_barrierCount,1
+    nthCS = CS_barriers(nthBarrier)
+    csys,nthCS
+    lsel,a,loc,y,0
+    csys,ARG1
+  *enddo
+  cmsel,s,COMPA_ABT_appSlab
+  lsla,r
+*endif
+cmpadd,'COMPL_Barrier'
+
+! Abutment walls (longitudinal and transversal)
+cmsel,s,COMPA_ABT_walls
+asel,r,loc,x,x01
+cmpadd,'COMPA_ABT_tranWall'
+asel,r,loc,z,z01,z25
+cmpadd,'COMPA_ABT_thinTranWall'
+
+! Whole abutment
+cmsel,s,COMPA_ABT_walls
+cmsel,a,COMPA_ABT_appSlab
+cmpadd,'COMPA_Abutment'
+
+lsla,s
+cmsel,a,COMPL_ABT_piles
+cmpadd,'COMPL_Abutment'
+
+ksll,s
+cmpadd,'COMPK_Abutment'
+
+allsel
+cmsel,u,COMPA_prev
+cmsel,u,COMPL_prev
+cmsel,u,COMPK_prev
+
+! Coordinate systems for local ESYS
+csys,ARG1
+csnext,'CS_leftWall'
+clocal,CS_leftWall,cart,0,0,0,,90  ! TODO  csys
+csnext,'CS_rightWall'
+clocal,CS_leftWall,cart,0,0,0,180,90  ! TODO  csys
