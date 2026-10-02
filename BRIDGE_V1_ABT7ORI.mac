@@ -1,0 +1,22 @@
+! BRIDGE_V1_ABT7ORI , abtCS
+! BRIDGE_V1_ABT7ORI , ARG1
+
+
+_abtCS  = ARG1
+
+csys,_abtCS
+
+cmsel,s,cml_columns
+lnzori,1
+
+cmsel,s,cml_frameGirder
+lnyori,1
+
+cmsel,s,cml_posts
+lnzori,1
+
+cmsel,s,cma_approachSlab
+arzori,1
+
+cmsel,s,cma_cantileverWall
+arxori,1

@@ -1,0 +1,72 @@
+! BRIDGE_V1_ABT7INFRA , abtCS , abtIdx
+! BRIDGE_V1_ABT7INFRA , ARG1  , ARG2
+
+! Dependencies:
+!   GIRDER_d
+
+! Exported:
+!   COMPK_ABT<i>_support
+!   COMPK_ABT<i>_pileTop
+!   COMPL_ABT<i>_pile
+
+
+! Params
+_abtCS        = ARG1
+_abtIdx       = ARG2
+girderHeight  = GIRDER_d(1)  ! TODO  hard-coded, improve
+frameGirderZ  = -(girderHeight+GEO_ABT_postHeight+(GEO_ABT_girderH/2))
+columnBottomZ = frameGirderZ-GEO_ABT_height
+pileBottomZ   = columnBottomZ-GEO_ABT_pileL
+infix         = 'ABT%_abtIdx%'
+
+! Prepare environment
+csys,_abtCS
+
+ksel , none
+lsel , none
+cm   , cml_pile    , line
+cm   , cmk_support , kp
+cm   , cmk_pileTop , kp
+
+! Create/select pile keypoints  TODO  currently hard-coded to always work with 2 columns
+nextkp,'pile_bottom_kps',2
+
+k , pile_bottom_kps(1) , 0 , -GEO_ABT_columnSpacing/2 , pileBottomZ
+k , pile_bottom_kps(2) , 0 ,  GEO_ABT_columnSpacing/2 , pileBottomZ
+
+ksel,a,kp,,column_kps(2)
+ksel,a,kp,,column_kps(4)
+
+cmpadd,'cmk_support',,pile_bottom_kps(1)
+cmpadd,'cmk_support',,pile_bottom_kps(2)
+cmpadd,'cmk_pileTop',,column_kps(2)
+cmpadd,'cmk_pileTop',,column_kps(4)
+
+! Draw pile lines
+l , column_kps(2) , pile_bottom_kps(1)
+l , column_kps(4) , pile_bottom_kps(2)
+
+cmpadd,'cml_pile'
+
+! Export
+cmsel,s,cmk_support
+cm,COMPK_%infix%_support,kp
+
+cmsel,s,cmk_pileTop
+cm,COMPK_%infix%_pileTop,kp
+
+cmsel,s,cml_pile
+cm,COMPL_%infix%_pile,line
+
+! Clean up
+cmdele , cmk_support
+cmdele , cmk_pileTop
+cmdele , cml_pile
+
+*del , _abtCS        ,  , nopr
+*del , _abtIdx       ,  , nopr
+*del , girderHeight  ,  , nopr
+*del , columnBottomZ ,  , nopr
+*del , frameGirderZ  ,  , nopr
+*del , pileBottomZ   ,  , nopr
+*del , infix         ,  , nopr

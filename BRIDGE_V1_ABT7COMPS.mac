@@ -1,0 +1,82 @@
+! BRIDGE_V1_ABT7COMPS , abtIdx
+! BRIDGE_V1_ABT7COMPS , ARG1
+
+! Dependencies:
+!   cmk_postTops
+!   cml_columns
+!   cml_frameGirder
+!   cml_posts
+!   cma_approachSlab
+!   cma_cantileverWall
+!
+!   COMPK_ABT<i>_support
+!   COMPK_ABT<i>_pileTop
+!   COMPL_ABT<i>_pile
+!
+!   CS_barriers
+!   LOAD_barrierStatus
+!   LOAD_barrierCount
+
+! Exported:
+!   COMPK_ABT_postTops
+!   COMPK_ABT_pileBase
+!   COMPK_ABT_pileTop
+!   COMPL_ABT_columns
+!   COMPL_ABT_frameGirder
+!   COMPL_ABT_piles
+!   COMPL_ABT_posts
+!   COMPL_ABT_cantileverWallBottom
+!   COMPL_Barrier
+!   COMPA_ABT_appSlab
+!   COMPA_ABT_cantileverWall
+
+
+_abtIdx = ARG1
+
+cmsel,s,cma_approachSlab
+cmpadd,'COMPA_ABT_appSlab'
+
+cmsel,s,cma_cantileverWall
+cmpadd,'COMPA_ABT_cantileverWall'
+
+cmsel,s,cma_cantileverWall
+lsla
+ksll
+*get,zMin,kp,,mnloc,z
+lsel,r,loc,z,zMin
+cmpadd,'COMPL_ABT_cantileverWallBottom'
+
+cmsel,s,cml_columns
+cmpadd,'COMPL_ABT_columns'
+
+cmsel,s,cml_frameGirder
+cmpadd,'COMPL_ABT_frameGirder'
+
+cmsel,s,cml_posts
+cmpadd,'COMPL_ABT_posts'
+
+cmsel,s,cmk_postTops
+cmpadd,'COMPK_ABT_postTops'
+
+cmsel,s,COMPK_ABT%_abtIdx%_support
+cmpadd,'COMPK_ABT_pileBase'
+
+cmsel,s,COMPK_ABT%_abtIdx%_pileTop
+cmpadd,'COMPK_ABT_pileTop'
+
+cmsel,s,COMPL_ABT%_abtIdx%_pile
+cmpadd,'COMPL_ABT_piles'
+
+lsel,none
+*if,LOAD_barrierStatus,eq,1,then
+  csbackup
+  *do,nthBarrier,1,LOAD_barrierCount,1
+    nthCS = CS_barriers(nthBarrier)
+    csys,nthCS
+    lsel,a,loc,y,0
+  *enddo
+  cmsel,s,COMPA_ABT_appSlab
+  lsla,r
+  csrestore
+*endif
+cmpadd,'COMPL_Barrier'

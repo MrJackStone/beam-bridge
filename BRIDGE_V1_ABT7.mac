@@ -1,0 +1,106 @@
+! BRIDGE_V1_ABT7 , CS_local , geoArray , girder_y , supIndex , abtIndex
+! BRIDGE_V1_ABT7 , ARG1     , ARG2     , ARG3     , ARG4     , ARG5
+
+! Dependencies:
+!   GEO_waterHeight
+!   GIRDER_d
+
+! Exported:
+!   COMPK_ABT_postTops
+!   COMPK_ABT_pileBase
+!   COMPK_ABT_pileTop
+!   COMPL_ABT_columns
+!   COMPL_ABT_frameGirder
+!   COMPL_ABT_piles
+!   COMPL_ABT_posts
+!   COMPL_ABT_cantileverWallBottom
+!   COMPL_Barrier
+!   COMPA_ABT_appSlab
+!   COMPA_ABT_cantileverWall
+
+
+! Parse inputs
+_abutmentCS = ARG1
+_girder_y   = ARG3
+_supIndex   = ARG4
+_abtIndex   = ARG5
+
+GEO_ABT_appSlab       = %ARG2%(5)
+GEO_ABT_appSlabL      = %ARG2%(6)
+GEO_ABT_height        = %ARG2%(7)
+GEO_ABT_width         = %ARG2%(28)
+GEO_ABT_postHeight    = %ARG2%(32)
+GEO_ABT_appSlabW      = %ARG2%(36)
+GEO_ABT_columnSpacing = %ARG2%(39)
+GEO_ABT_girderB       = %ARG2%(41)
+GEO_ABT_girderH       = %ARG2%(42)
+
+! Prepare environment
+allsel
+cm   , COMPA_prev         , area
+cm   , COMPL_prev         , line
+cm   , COMPK_prev         , kp
+ksel , none
+asel , none
+lsel , none
+cm   , cmk_postTops       , kp
+cm   , cml_columns        , line
+cm   , cml_frameGirder    , line
+cm   , cml_posts          , line
+cm   , cma_approachSlab   , area
+cm   , cma_cantileverWall , area
+
+! Superstructure (equal to type 6 abutment)
+BRIDGE_V1_ABT6SUPER , _abutmentCS
+
+! Mesostructure (equal to type 6 abutment)
+BRIDGE_V1_ABT6MESO  , _abutmentCS , _girder_y
+
+! Slice meso/super (equal to type 6 abutment)
+BRIDGE_V1_ABT6SLICE , _abutmentCS
+
+! Infrastructure
+BRIDGE_V1_ABT7INFRA , _abutmentCS , _abtIndex
+
+! Orient bodies
+BRIDGE_V1_ABT7ORI   , _abutmentCS , _abtIndex
+
+! Export
+BRIDGE_V1_ABT7COMPS , _abtIndex
+
+! Clean up
+asel  , none
+lsel  , none
+ksel  , none
+cmsel , a    , COMPA_ABT_appSlab
+cmsel , a    , COMPA_ABT_cantileverWall
+cmsel , a    , COMPA_ABT_pileCap
+lsla  , a
+cmsel , a    , COMPL_ABT_columns
+cmsel , a    , COMPL_ABT_frameGirder
+cmsel , a    , COMPL_ABT_gradeBeam
+cmsel , a    , COMPL_ABT_pileConnections
+cmsel , a    , COMPL_ABT_piles
+cmsel , a    , COMPL_ABT_posts
+ksll  , a
+
+cmsel , u    , COMPA_prev
+cmsel , u    , COMPL_prev
+cmsel , u    , COMPK_prev
+
+cmdele , cmk_postTops
+cmdele , cml_columns
+cmdele , cml_frameGirder
+cmdele , cml_posts
+cmdele , cma_approachSlab
+cmdele , cma_cantileverWall
+
+*del , _abutmentCS ,  , nopr
+*del , _girder_y   ,  , nopr
+*del , _supIndex   ,  , nopr
+*del , _abtIndex   ,  , nopr
+
+
+! TODO
+! - match mesh: wall top & approach slab (current approach does not guarantee, check if it works well enough)
+! - number of columns
