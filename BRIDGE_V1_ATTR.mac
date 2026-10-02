@@ -1190,6 +1190,14 @@ zero = 0
   GEO_ABT2_thinTranWallDepth=0
 *endif
 
+! Use pile cross-section for columns for type 7 abutment
+*if,GEO_ABT1_type,eq,7,then
+  SEC_ABT1_column = SEC_ABT_pile
+*endif
+*if,GEO_ABT2_type,eq,7,then
+  SEC_ABT2_column = SEC_ABT_pile
+*endif
+
 ! Create abutment geometry arrays
 *del,GEO_ABT1_geometry
 *dim,GEO_ABT1_geometry,,42
