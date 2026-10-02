@@ -1101,7 +1101,7 @@ GEO_ABT2_yc=GEO_deckOff_end+(GEO_deckWidth_end/2)
 
 ! Fix global CS position of columns when first and/or last supports are abutment type 6 or 7
 *if,GEO_ABT1_status,eq,1,then
-  *if,and,GEO_ABT1_type,eq,6,or,GEO_ABT1_type,eq,7,then
+  *if,GEO_ABT1_type,eq,6,or,GEO_ABT1_type,eq,7,then
     GEO_columnY_1(1) = GEO_ABT1_yc-(GEO_ABT1_columnSpacing/2), GEO_ABT1_yc+(GEO_ABT1_columnSpacing/2)
   *endif
 *endif
