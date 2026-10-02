@@ -317,34 +317,36 @@ cm,COMPN_ABT_wsbInterface,node
   *endif
 *enddo
 
-! Connect cantilever wall to frame girder, for abutment type 6
+! Connect cantilever wall to frame girder, for abutment types 6 & 7
 *do,nthAbutment,1,2,1
-  *if,GEO_ABT%nthAbutment%_status,eq,1,and,GEO_ABT%nthAbutment%_type,eq,6,then
-    cmsel,s,COMPL_ABT_cantileverWallBottom
-    cmsel,r,COMPL_ABT_%nthAbutment%
-    nsll,s,1
-    cm,COMPN_target,node
 
-    cmsel,s,COMPL_ABT_frameGirder
-    cmsel,r,COMPL_ABT_%nthAbutment%
-    esll
-    nsle,s,active
-    cm,COMPN_source,node
+  *if,GEO_ABT%nthAbutment%_status,ne,1,cycle
+  *if,GEO_ABT%nthAbutment%_type,ne,6,and,GEO_ABT%nthAbutment%_type,ne,7,cycle
 
-    *get,nc,node,,count
-    ndSource = 0
+  cmsel,s,COMPL_ABT_cantileverWallBottom
+  cmsel,r,COMPL_ABT_%nthAbutment%
+  nsll,s,1
+  cm,COMPN_target,node
 
-    *do,nthNode,1,nc,1
-      cmsel,s,COMPN_source
-      ndSource = ndnext(ndSource)
-      cmsel,s,COMPN_target
-      ndTarget = nnear(ndSource)
+  cmsel,s,COMPL_ABT_frameGirder
+  cmsel,r,COMPL_ABT_%nthAbutment%
+  esll
+  nsle,s,active
+  cm,COMPN_source,node
 
-      nsel,s,node,,ndSource
-      nsel,a,node,,ndTarget
-      cp,,all,ndSource,ndTarget
-    *enddo
-  *endif
+  *get,nc,node,,count
+  ndSource = 0
+
+  *do,nthNode,1,nc,1
+    cmsel,s,COMPN_source
+    ndSource = ndnext(ndSource)
+    cmsel,s,COMPN_target
+    ndTarget = nnear(ndSource)
+
+    nsel,s,node,,ndSource
+    nsel,a,node,,ndTarget
+    cp,,all,ndSource,ndTarget
+  *enddo
 *enddo
 
 ! Nodal selection component: girder supports at abutments
@@ -354,7 +356,17 @@ nsel,none
 cm,COMPN_ABT_girder,node
 
 *do,nthAbutment,1,2,1
-  *if,GEO_ABT%nthAbutment%_type,eq,5,or,GEO_ABT%nthAbutment%_type,eq,6,then
+
+  hasPosts = 0
+  *if,GEO_ABT%nthAbutment%_type,eq,5,then
+    hasPosts = 1
+  *elseif,GEO_ABT%nthAbutment%_type,eq,6,then
+    hasPosts = 1
+  *elseif,GEO_ABT%nthAbutment%_type,eq,7,then
+    hasPosts = 1
+  *endif
+
+  *if,hasPosts,eq,1,then
     cmsel,s,COMPK_ABT_postTops
     nslk,s
     cmpadd,'COMPN_ABT_girder'
@@ -370,6 +382,8 @@ cm,COMPN_ABT_girder,node
     nsla,r,1
     cmpadd,'COMPN_ABT_girder'
   *endif
+
+  *del,hasPosts,,nopr
 *enddo
 
 ! Connect girder posts to pile cap
@@ -472,14 +486,18 @@ asel,none
 cm,COMPA_ABT1_noSoilRetained,area
 cm,COMPA_ABT2_noSoilRetained,area
 
-*if,GEO_ABT1_status,eq,1,and,GEO_ABT1_type,eq,6,then
-  cmsel,s,COMPA_ABT_1
-  cm,COMPA_ABT1_noSoilRetained,area
+*if,GEO_ABT1_status,eq,1,then
+  *if,GEO_ABT1_type,eq,6,or,GEO_ABT1_type,eq,7,then
+    cmsel,s,COMPA_ABT_1
+    cm,COMPA_ABT1_noSoilRetained,area
+  *endif
 *endif
 
-*if,GEO_ABT2_status,eq,1,and,GEO_ABT2_type,eq,6,then
-  cmsel,s,COMPA_ABT_2
-  cm,COMPA_ABT2_noSoilRetained,area
+*if,GEO_ABT2_status,eq,1,then
+  *if,GEO_ABT2_type,eq,6,or,GEO_ABT2_type,eq,7,then
+    cmsel,s,COMPA_ABT_2
+    cm,COMPA_ABT2_noSoilRetained,area
+  *endif
 *endif
 
 cmsel,s,COMPA_ABT1_noSoilRetained

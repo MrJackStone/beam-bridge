@@ -63,6 +63,12 @@ cm,COMPN_valid,node
   cm,COMPN_sup,node
   cm,COMPE_sup,elem
 
+*elseif,_abtType,eq,7,then
+  esel,none
+  nsel,none
+  cm,COMPN_sup,node
+  cm,COMPE_sup,elem
+
 *else
   ! Longitudinal walls and wings
   cmsel,s,COMPA_ABT_longWalls

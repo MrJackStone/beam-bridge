@@ -248,6 +248,9 @@ ksel,none
     *elseif,GEO_ABT1_type,eq,6,then
       BRIDGE_V1_ABT6 , CS_ABT1 , 'GEO_ABT1_geometry' , 'GEO_girderY_beg' , 1 , 1
 
+    *elseif,GEO_ABT1_type,eq,7,then
+      BRIDGE_V2_ABT6 , CS_ABT1 , 'GEO_ABT1_geometry' , 'GEO_girderY_beg' , 1 , 1
+
     *else
       BRIDGE_V1_ABT,CS_ABT1,'GEO_ABT1_geometry',1
       ABT1_angCoef = angCoef
@@ -297,6 +300,9 @@ ksel,none
 
     *elseif,GEO_ABT2_type,eq,6,then
       BRIDGE_V1_ABT6 , CS_ABT2 , 'GEO_ABT2_geometry' , 'GEO_girderY_end' , GEO_supportCount , 2
+
+    *elseif,GEO_ABT2_type,eq,7,then
+      BRIDGE_V1_ABT7 , CS_ABT2 , 'GEO_ABT2_geometry' , 'GEO_girderY_end' , GEO_supportCount , 2
 
     *else
       BRIDGE_V1_ABT,CS_ABT2,'GEO_ABT2_geometry', 1
