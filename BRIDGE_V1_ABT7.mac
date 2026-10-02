@@ -28,6 +28,7 @@ _abtIndex   = ARG5
 GEO_ABT_appSlab       = %ARG2%(5)
 GEO_ABT_appSlabL      = %ARG2%(6)
 GEO_ABT_height        = %ARG2%(7)
+GEO_ABT_pileL         = %ARG2%(12)
 GEO_ABT_width         = %ARG2%(28)
 GEO_ABT_postHeight    = %ARG2%(32)
 GEO_ABT_appSlabW      = %ARG2%(36)
