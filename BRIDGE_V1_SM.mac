@@ -249,7 +249,7 @@ ksel,none
       BRIDGE_V1_ABT6 , CS_ABT1 , 'GEO_ABT1_geometry' , 'GEO_girderY_beg' , 1 , 1
 
     *elseif,GEO_ABT1_type,eq,7,then
-      BRIDGE_V2_ABT6 , CS_ABT1 , 'GEO_ABT1_geometry' , 'GEO_girderY_beg' , 1 , 1
+      BRIDGE_V1_ABT6 , CS_ABT1 , 'GEO_ABT1_geometry' , 'GEO_girderY_beg' , 1 , 1
 
     *else
       BRIDGE_V1_ABT,CS_ABT1,'GEO_ABT1_geometry',1
