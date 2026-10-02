@@ -7,8 +7,8 @@
 !   GEO_ABT<i>_CAP_x_slices
 !   GEO_ABT<i>_CAP_y_slices
 !   GEO_ABT<i>_pile_data
-!   GEO_columnY_<i>
 !   GEO_waterHeight
+!   GIRDER_d
 
 ! Exported:
 !   COMPK_ABT_postTops

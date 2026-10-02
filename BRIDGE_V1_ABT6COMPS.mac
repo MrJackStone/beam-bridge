@@ -45,7 +45,6 @@
 !   COMPA_ABT<i>_CAP<j>_PILE<k>_itf
 
 
-
 *if,GEO_ABT_capOpt,eq,0,then
   capCount = 2
 *elseif,GEO_ABT_capOpt,eq,1,then
