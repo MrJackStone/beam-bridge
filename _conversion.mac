@@ -1,0 +1,27 @@
+GEO_ABT_beamH           ---->  GEO_ABT1_beamH (value of '0' no longer controls existence)
+GEO_ABT_colW            ---->  GEO_ABT1_colW
+                               GEO_ABT1_colOpt
+SEC_ABT_col_W           ---->  GEO_ABT1_colT
+GEO_ABT_wingHe          ---->  GEO_ABT1_wingHe
+SEC_ABT_longWall_t      ---->  GEO_ABT1_longWallThk
+SEC_ABT_tranWall_t      ---->  GEO_ABT1_tranWallThk
+SEC_ABT_beam_W          ---->  GEO_ABT1_beamW
+SEC_ABT_wing_t          ---->  GEO_ABT1_wingThk
+SEC_ABT_appSlab_t       ---->  GEO_ABT1_appSlabThk
+SEC_ABT_pile_d          ---->  GEO_ABT1_pileD
+SEC_ABT_pile_thk        ---->  GEO_ABT1_pileThk
+SEC_ABT_pileCap_h       ---->  GEO_ABT1_pileCapThk
+GEO_ABT_pileOff         ---->  GEO_ABT1_pileOff
+SEC_ABT_thinTranWall_t  ---->  GEO_ABT1_thinTranWallThk
+
+MAT_Abutment_Poisson    ---->  MAT_ABT1_poisson
+MAT_Abutment_dens       ---->  MAT_ABT1_dens
+MAT_Abutment_fck        ---->  MAT_ABT1_fck
+MAT_Approach_Poisson    ---->  use same material as abutment
+MAT_Approach_dens       ---->  use same material as abutment
+MAT_Approach_fck        ---->  use same material as abutment
+
+GEO_ABT1_appSlab        ---->  GEO_ABT1_appSlabOpt
+GEO_ABT1_wings          ---->  GEO_ABT1_wingOpt
+
+GEO_ABT1_beamOpt ----> changed what value '0' does
