@@ -231,3 +231,20 @@ csnext,'CS_leftWall'
 clocal,CS_leftWall,cart,0,0,0,,90  ! TODO  csys
 csnext,'CS_rightWall'
 clocal,CS_leftWall,cart,0,0,0,180,90  ! TODO  csys
+
+
+
+
+
+!!                                                                                                !!
+GEO_ABT _appSlab
+GEO_ABT _appSlabL
+GEO_ABT _height
+GEO_ABT _pileAngle
+GEO_ABT _pileL
+GEO_ABT _pileOff
+GEO_ABT _thinDepth
+GEO_ABT _topOffset
+GEO_ABT _tranPiles
+GEO_ABT _width
+LOAD_barrierStatus
