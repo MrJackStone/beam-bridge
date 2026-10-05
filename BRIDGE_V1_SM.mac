@@ -103,7 +103,7 @@ CM,COMPA_PileCap,AREA
 
   *if,mesoType,ne,CTE_MESO_abutment,and,mesoType,ne,CTE_MESO_beamcap,then
 
-    BRIDGE_V1_SMPCAP , nthSupport , GEO_capOpt , GEO_capLength , GEO_capWidth , 'GEO_PIERCAP_x_slices' , 'GEO_PIERCAP_y_slices'
+    BRIDGE_V1_SMPCAP , nthSupport , GEO_capOpt , GEO_columnCount , GEO_capLength , GEO_capWidth , 'GEO_PIERCAP_x_slices' , 'GEO_PIERCAP_y_slices'
 
     ! Additional slicing for certain types of mesostructure
     cmsel,s,COMPA_pileCap
