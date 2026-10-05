@@ -4,6 +4,11 @@
 ! Create coordinate systems at the center of each pile cap
 *do,nthSupport,1,GEO_supportCount,1
 
+  *del , x_columns ,  , nopr
+  *del , y_columns ,  , nopr
+  *dim , x_columns ,  , GEO_columnCount
+  *dim , y_columns ,  , GEO_columnCount
+
   xCenter = GEO_supportX(nthSupport)
 
   *if,GEO_deckRadius,eq,0,then
@@ -15,6 +20,9 @@
     yLeft      = yCenter+GEO_columnY_%nthSupport%(1)
     yRight     = yCenter+GEO_columnY_%nthSupport%(2)
     zAngle     = 0
+    *vfill,x_columns,ramp,xCenter,0
+    *voper,y_columns,GEO_columnY_%nthSupport%,add,yCenter
+
   *else
     afunbackup,'DEG'
     chi_i   = GEO_supportChi(nthSupport)
@@ -24,6 +32,11 @@
     yLeft   = (GEO_deckRadius+GEO_columnY_%nthSupport%(1))*sin(chi_i)-GEO_chordOff
     yRight  = (GEO_deckRadius+GEO_columnY_%nthSupport%(2))*sin(chi_i)-GEO_chordOff
     zAngle  = 90-chi_i
+    *do,nthCol,1,GEO_columnCount,1
+      yColumn           = GEO_columnY_%nthSupport%(nthCol)
+      x_columns(nthCol) = (GEO_deckLength/2)-(GEO_deckRadius+yColumn)*cos(chi_i)
+      y_columns(nthCol) = (GEO_deckRadius+yColumn)*sin(chi_i)-GEO_chordOff
+    *enddo
     afunrestore
   *endif
 
@@ -46,15 +59,21 @@
     *endif
   *endif
 
-  CS_INFRA_c%nthSupport% = 41+(10*nthSupport)
-  CS_INFRA_l%nthSupport% = 42+(10*nthSupport)
-  CS_INFRA_r%nthSupport% = 43+(10*nthSupport)
+  ! Coordinate systems for pier/abutment columns & pile caps
+  *del,CS_INFRA_S%nthSupport%_col_bases,,nopr
+  *dim,CS_INFRA_S%nthSupport%_col_bases,,GEO_columnCount
+  *vfill,CS_INFRA_S%nthSupport%_col_bases,ramp,41+(10*nthSupport),1
 
-  local , CS_INFRA_c%nthSupport% , cart , xCenter , yCenter , nthFrameZBot , zAngle
-  local , CS_INFRA_l%nthSupport% , cart , xLeft   , yLeft   , nthFrameZBot , zAngle
-  local , CS_INFRA_r%nthSupport% , cart , xRight  , yRight  , nthFrameZBot , zAngle
+  *do,nthCol,1,GEO_columnCount,1
+    csNum    = CS_INFRA_S%nthSupport%_col_bases(nthCol)
+    csName   = 'CS_INFRA_S%nthSupport%_col%nthCol%'
+    %csName% = csNum
+    xColumn  = x_columns(nthCol)
+    yColumn  = y_columns(nthCol)
+    local , csNum , cart , xColumn  , yColumn  , nthFrameZBot , zAngle
+  *enddo
 
-  csys  , 0
+  csys , 0
 
 *enddo
 
