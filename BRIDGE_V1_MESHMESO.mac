@@ -16,7 +16,7 @@ cm   , COMPE_Submerged   , elem
 
 *if,GEO_pierCount,gt,0,then
 
-  ! Draw mesostructure
+  ! Mesh piers
   *do,nthSupport,1,GEO_supportCount,1
     BRIDGE_V1_FEMMESO, nthSupport
   *enddo
