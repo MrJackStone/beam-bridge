@@ -1,11 +1,10 @@
-! BRIDGE_V1_SMPILE , supIdx , capOpt , pile_data , capThk , cmaCap , pileD , cmInfix
-! BRIDGE_V1_SMPILE , ARG1   , ARG2   , ARG3      , ARG4   , ARG5   , ARG6  , ARG7
-
+! BRIDGE_V1_SMPILE , supIdx , capOpt , capCount , pile_data , capThk , cmaCap , pileD , cmInfix
+! BRIDGE_V1_SMPILE , ARG1   , ARG2   , ARG3     , ARG4      , ARG5   , ARG6   , ARG7  , ARG8
 
 ! Dependencies:
-! CS_INFRA_l<i>
-! CS_INFRA_r<i>
-! CS_INFRA_c<i>
+! CS_INFRA_S<i>_col<j>
+! CS_INFRA_S<i>_col<j>
+! CS_INFRA_S<i>_center
 
 ! 'pile_data' array format:
 !   i-pos  param  description
@@ -20,10 +19,12 @@
 ! Parse inputs
 _supIdx    = ARG1
 _capOpt    = ARG2
-_pile_data = ARG3
-_cmaCap    = ARG5
-_pileD     = ARG6
-_cmInfix   = ARG7
+_capCount  = ARG3
+_pile_data = ARG4
+_capThk    = ARG5
+_cmaCap    = ARG6
+_pileD     = ARG7
+_cmInfix   = ARG8
 
 infix = ''
 *get,parType,parm,_cmInfix,type
@@ -33,10 +34,10 @@ infix = ''
 
 zZero = 0
 zTop  = 0
-*get,parType,parm,ARG4,type
-*if,parType,eq,0,and,ARG4,gt,0,then
+*get,parType,parm,_capThk,type
+*if,parType,eq,0,and,_capThk,gt,0,then
   ! Apply offset between pile & pile cap if a pile cap thickness is given
-  zTop = zZero-ARG4
+  zTop = zZero-_capThk
 *endif
 
 sliceCap = 0
@@ -59,19 +60,25 @@ cm   , cml_pile        , line
 cm   , cml_connections , line
 
 *del,cap_cs,,nopr
-*dim,cap_cs,,2
+*dim,cap_cs,,_capCount
 
 *get,pileCount,parm,%_pile_data%,dim,y
 
 ! Get pile cap CSYS
 *if,_capOpt,eq,0,then
-  ! Two connected pile caps:
-  capCount  = 2
-  cap_cs(1) = CS_INFRA_l%ARG1%, CS_INFRA_r%ARG1%
+
+  ! Connected pile caps:
+  capCount = _capCount
+  *do,nthCap,1,capCount,1
+    cap_cs(nthCap) = CS_INFRA_S%_supIdx%_col%nthCap%
+  *enddo
+
 *elseif,_capOpt,eq,1,then
+
   ! Single pile cap:
   capCount  = 1
-  cap_cs(1) = CS_INFRA_c%ARG1%
+  cap_cs(1) = CS_INFRA_S%_supIdx%_center
+
 *endif
 
 ! Draw piles
