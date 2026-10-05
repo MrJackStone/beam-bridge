@@ -1,34 +1,42 @@
-! BRIDGE_V1_GRADEBEAM , cs   , cmaCapLeft , cmaCapRight , cmlName
-! BRIDGE_V1_GRADEBEAM , ARG1 , ARG2       , ARG3        , ARG4
+! BRIDGE_V1_GRADEBEAM , cs   , cap_cmas , cmlName
+! BRIDGE_V1_GRADEBEAM , ARG1 , ARG2     , ARG3
 
+
+! Parse inputs
+_cs       = ARG1
+_cap_cmas = ARG2
+_cmlName  = ARG3
 
 ! Prepare environment
-csys,ARG1
+csys,_cs
 wpcsys,-1
 
-! Get connection keypoint on left pile cap
-cmsel,s,%ARG2%
-lsla
-ksll
-ksel,r,loc,x,0
-ksel,r,loc,z,0
-*get,yMax,kp,,mxloc,y
-ksel,r,loc,y,yMax
-KP_gradeBeamLeft = kpnext(0)
+*get,capCount,parm,%_cap_cmas%,dim,y
+*del,cap_edge_kps,,nopr
+*dim,cap_edge_kps,,2*capCount
 
-! Get connection keypoint on right pile cap
-cmsel,s,%ARG3%
-lsla
-ksll
-ksel,r,loc,x,0
-ksel,r,loc,z,0
-*get,yMin,kp,,mnloc,y
-ksel,r,loc,y,yMin
-KP_gradeBeamRight = kpnext(0)
+! Find beam's keypoints in pile caps
+*do,nthCap,1,capCount,1
+  cmaName = %_cap_cmas%(nthCap)
+  cmsel,s,%cmaName%
+  lsla
+  ksll
+  ksel,r,loc,x,0
+  ksel,r,loc,z,0
+  *get,yMin,kp,,mnloc,y
+  *get,yMax,kp,,mxloc,y
+  cap_edge_kps(2*nthCap-1) = kp(0,yMin,0)
+  cap_edge_kps(2*nthCap-0) = kp(0,yMax,0)
+*enddo
+
+ksel,none
+ksel,a,kp,,cap_edge_kps(1:2*capCount)
 
 ! Draw & export grade beam
 lsel,none
-ksel,s,kp,,KP_gradeBeamLeft
-ksel,a,kp,,KP_gradeBeamRight
-l,KP_gradeBeamLeft,KP_gradeBeamRight
-cm,%ARG4%,line
+*do,nthBeam,1,capCount-1,1
+  leftKP  = cap_edge_kps(2*nthBeam+0)
+  rightKP = cap_edge_kps(2*nthBeam+1)
+  l , leftKP , rightKP
+*enddo
+cm,%_cmlName%,line
