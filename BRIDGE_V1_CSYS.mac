@@ -60,9 +60,12 @@
   *endif
 
   ! Coordinate systems for pier/abutment columns & pile caps
+  CS_INFRA_S%nthSupport%_center = 41+(10*nthSupport)
+  local , CS_INFRA_S%nthSupport%_center , cart , xCenter , yCenter , nthFrameZBot , zAngle
+
   *del,CS_INFRA_S%nthSupport%_col_bases,,nopr
   *dim,CS_INFRA_S%nthSupport%_col_bases,,GEO_columnCount
-  *vfill,CS_INFRA_S%nthSupport%_col_bases,ramp,41+(10*nthSupport),1
+  *vfill,CS_INFRA_S%nthSupport%_col_bases,ramp,42+(10*nthSupport),1
 
   *do,nthCol,1,GEO_columnCount,1
     csNum    = CS_INFRA_S%nthSupport%_col_bases(nthCol)
