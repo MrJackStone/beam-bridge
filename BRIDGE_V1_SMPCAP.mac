@@ -30,10 +30,9 @@ infix = ''
 ! Prepare environment
 lsel , none
 asel , none
-cm   , cma_pileCap      , area
-cm   , cma_pileCapLeft  , area
-cm   , cma_pileCapRight , area
-cm   , cml_gradeBeam    , line
+cm   , cma_pileCap   , area
+cm   , cma_pileCaps  , area
+cm   , cml_gradeBeam , line
 
 ! Compile slicing positions
 arruniq , _x_slices , 'x_slices' , 1
@@ -45,9 +44,11 @@ arruniq , _y_slices , 'y_slices' , 1
   *del,pile_cap_comps,,nopr
   *dim,pile_cap_comps,string,248,_colCount
 
+  asel,none
   *do,nthCol,1,_colCount,1
     BRIDGE_V1_BLC5SLICED , CS_INFRA_S%_supIdx%_col%nthCol% , _capLy , _capLx , 'x_slices' , 'y_slices' , 'cma_pileCap%nthCol%'
     pile_cap_comps(1,nthCol) = 'cma_pileCap%nthCol%'
+    cmpadd,'cma_pileCaps'
   *enddo
 
   BRIDGE_V1_GRADEBEAM , CS_INFRA_S%_supIdx%_center , 'pile_cap_comps' , 'cml_gradeBeam'
@@ -60,18 +61,16 @@ arruniq , _y_slices , 'y_slices' , 1
 *endif
 
 ! Export selection components
-cmsel , s , cma_pileCapLeft
-cmsel , a , cma_pileCapRight
+cmsel , s , cma_pileCaps
 cmsel , a , cma_pileCap
 cmpadd,'COMPA_%infix%pileCap'
 
-cmsel,s,cml_gradeBeam
+cmsel , s , cml_gradeBeam
 cmpadd,'COMPL_%infix%gradeBeam'
 
 ! Clean up
 cmdele , cma_pileCap
-cmdele , cma_pileCapLeft
-cmdele , cma_pileCapRight
+cmdele , cma_pileCaps
 cmdele , cml_gradeBeam
 
 *del,pile_cap_comps,,nopr
