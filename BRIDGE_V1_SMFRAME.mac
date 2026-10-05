@@ -40,7 +40,7 @@ cmpadd,'COMPL_FrameGirder'
 
 ! Create columns
 lsel,none
-*do,nthCol,1,2,1
+*do,nthCol,1,GEO_columnCount,1
   ! Create bottom keypoint
   yVal = GEO_columnY_%ARG1%(nthCol)
   *get,KMaxD,KP,,NUM,MAXD
