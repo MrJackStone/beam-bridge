@@ -3,6 +3,7 @@
 
 ! Dependencies:
 !   GIRDER_d
+!   GEO_ABT_columnCount
 
 ! Exported:
 !   COMPK_ABT<i>_support
@@ -28,25 +29,37 @@ cm   , cml_pile    , line
 cm   , cmk_support , kp
 cm   , cmk_pileTop , kp
 
-! Create/select pile keypoints  TODO  currently hard-coded to always work with 2 columns
-nextkp,'pile_bottom_kps',2
-
-k , pile_bottom_kps(1) , 0 , -GEO_ABT_columnSpacing/2 , pileBottomZ
-k , pile_bottom_kps(2) , 0 ,  GEO_ABT_columnSpacing/2 , pileBottomZ
-
-ksel,a,kp,,column_kps(2)
-ksel,a,kp,,column_kps(4)
-
-cmpadd,'cmk_support',,pile_bottom_kps(1)
-cmpadd,'cmk_support',,pile_bottom_kps(2)
-cmpadd,'cmk_pileTop',,column_kps(2)
-cmpadd,'cmk_pileTop',,column_kps(4)
-
 ! Draw pile lines
-l , column_kps(2) , pile_bottom_kps(1)
-l , column_kps(4) , pile_bottom_kps(2)
+lnum = 0
 
-cmpadd,'cml_pile'
+*do,nthCol,1,GEO_ABT_columnCount,1
+
+  ! Find column's bottom keypoint
+  cmsel,s,cml_columns
+  lnum = lsnext(lnum)
+  lsel,s,line,,lnum
+  ksll
+
+  *get,zMin,kp,,mnloc,z
+  ksel,r,loc,z,zMin
+  topKP = kpnext(0)
+  topX  = kx(topKP)
+  topY  = ky(topKP)
+  cmpadd,'cmk_piletop'
+
+  ! Create pile tip's keypoint
+  nextkp,'botKP'
+  k , botKP , topX , topY , pileBottomZ
+  ksel,u,kp,,topKP
+  cmpadd,'cmk_support'
+
+  ! Draw pile line
+  ksel,s,kp,,topKP
+  ksel,a,kp,,botKP
+  l , topKP , botKP
+  cmpadd,'cml_pile'
+
+*enddo
 
 ! Export
 cmsel,s,cmk_support
@@ -70,3 +83,5 @@ cmdele , cml_pile
 *del , frameGirderZ  ,  , nopr
 *del , pileBottomZ   ,  , nopr
 *del , infix         ,  , nopr
+*del , topKP         ,  , nopr
+*del , botKP         ,  , nopr

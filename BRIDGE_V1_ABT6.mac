@@ -48,6 +48,7 @@ GEO_ABT_columnSpacing = %ARG2%(39)
 GEO_ABT_capOpt        = %ARG2%(40)
 GEO_ABT_girderB       = %ARG2%(41)
 GEO_ABT_girderH       = %ARG2%(42)
+GEO_ABT_columnCount   = %ARG2%(43)
 
 ! Prepare environment
 allsel
