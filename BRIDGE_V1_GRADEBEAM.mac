@@ -17,7 +17,7 @@ wpcsys,-1
 
 ! Find beam's keypoints in pile caps
 *do,nthCap,1,capCount,1
-  cmaName = %_cap_cmas%(nthCap)
+  cmaName = %_cap_cmas%(1,nthCap)
   cmsel,s,%cmaName%
   lsla
   ksll
@@ -40,3 +40,17 @@ lsel,none
   l , leftKP , rightKP
 *enddo
 cm,%_cmlName%,line
+
+! Clean up
+*del , _cs          ,  , nopr
+*del , _cap_cmas    ,  , nopr
+*del , _cmlName     ,  , nopr
+*del , cap_edge_kps ,  , nopr
+*del , yMin         ,  , nopr
+*del , yMax         ,  , nopr
+*del , leftKP       ,  , nopr
+*del , rightKP      ,  , nopr
+*del , capCount     ,  , nopr
+*del , cmaName      ,  , nopr
+*del , nthCap       ,  , nopr
+*del , nthBeam      ,  , nopr
