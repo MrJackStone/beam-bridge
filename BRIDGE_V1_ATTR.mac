@@ -926,9 +926,6 @@ pierIdx = 0
 GEO_frameGirderLeft=(GEO_frameWidth-GEO_columnSpacing)/2
 GEO_frameGirderRight=GEO_frameGirderLeft
 
-! TODO: array parameter GEO_columnY has been replaced with GEO_columnY_<supportNum>.
-!       Account for this change in the rest of the code.
-
 ! Calculate key Y coordinates for frame girders
 ! TODO: this does not contemplate tubular pier columns
 yCenterBeg     = GEO_deckOff_beg+(GEO_deckWidth_beg/2)
@@ -938,30 +935,32 @@ deckWidthDelta = GEO_deckWidth_end-GEO_deckWidth_beg
 
 *do,nthFrame,1,GEO_supportCount,1
 
+  ! Initialize arrays
+  *del , GEO_frameGirderEndsY_%nthFrame% ,  , nopr
+  *del , GEO_columnY_%nthFrame%          ,  , nopr
+  *del , girder_y                        ,  , nopr
+  *dim , GEO_frameGirderEndsY_%nthFrame% ,  , 2
+  *dim , GEO_columnY_%nthFrame%          ,  , GEO_columnCount
+
   ! Get X-coordinate at this support
   xSupport            = GEO_supportX(nthFrame)
   skewnessScaleFactor = xSupport/GEO_deckLength
 
   ! Calculate deck width
-  deckWidth=deckWidthDelta*skewnessScaleFactor+GEO_deckWidth_beg
+  deckWidth = deckWidthDelta*skewnessScaleFactor+GEO_deckWidth_beg
 
-  ! Calculate Y center
-  yCenter=yCenterDelta*skewnessScaleFactor+yCenterBeg
+  ! Calculate key Y coordinates
+  yCenter         = yCenterDelta*skewnessScaleFactor+yCenterBeg
+  yOutermostWidth = GEO_columnSpacing*(GEO_columnCount-1)
+  yLeftmostColumn = yCenter-(yOutermostWidth/2)
 
-  ! Calculate frame girder ends Y coordinates
-  *del,GEO_frameGirderEndsY_%nthFrame%,,nopr
-  *dim,GEO_frameGirderEndsY_%nthFrame%,,2
-  GEO_frameGirderEndsY_%nthFrame%(1)=yCenter-(deckWidth/2), yCenter+(deckWidth/2)
+  GEO_frameGirderEndsY_%nthFrame%(1) = yCenter-(deckWidth/2) , yCenter+(deckWidth/2)
 
-  ! Calculate column Y coordinates
-  *del,GEO_columnY_%nthFrame%,,nopr
-  *dim,GEO_columnY_%nthFrame%,,2
-  GEO_columnY_%nthFrame%(1)=yCenter-(GEO_columnSpacing/2), yCenter+(GEO_columnSpacing/2)
+  *vfill , GEO_columnY_%nthFrame% , ramp , yLeftmostColumn , GEO_columnSpacing
 
   ! Calculate girder Y
-  *del,girder_y,,nopr
-  *vfact,1,1-skewnessScaleFactor,skewnessScaleFactor
-  *voper,girder_y,GEO_girderY_beg,add,GEO_girderY_end
+  *vfact , 1 , 1-skewnessScaleFactor , skewnessScaleFactor
+  *voper , girder_y , GEO_girderY_beg , add , GEO_girderY_end
 
   ! Compose key-Y location array with the following positions:
   !    left & right columns
@@ -1102,12 +1101,29 @@ GEO_ABT2_yc=GEO_deckOff_end+(GEO_deckWidth_end/2)
 ! Fix global CS position of columns when first and/or last supports are abutment type 6 or 7
 *if,GEO_ABT1_status,eq,1,then
   *if,GEO_ABT1_type,eq,6,or,GEO_ABT1_type,eq,7,then
-    GEO_columnY_1(1) = GEO_ABT1_yc-(GEO_ABT1_columnSpacing/2), GEO_ABT1_yc+(GEO_ABT1_columnSpacing/2)
+
+    *del,GEO_columnY_1,,nopr
+    *dim,GEO_columnY_1,,GEO_ABT1_columnCount
+
+    yOutermostWidth = GEO_ABT1_columnSpacing*(GEO_ABT1_columnCount-1)
+    yLeftmostColumn = GEO_ABT1_yc-(yOutermostWidth/2)
+
+    *vfill , GEO_columnY_1 , ramp , yLeftmostColumn , GEO_ABT1_columnSpacing
+
   *endif
 *endif
+
 *if,GEO_ABT2_status,eq,1,then
   *if,GEO_ABT2_type,eq,6,or,GEO_ABT2_type,eq,7,then
-    GEO_columnY_%GEO_supportCount%(1) = GEO_ABT2_yc-(GEO_ABT2_columnSpacing/2), GEO_ABT2_yc+(GEO_ABT2_columnSpacing/2)
+
+    *del,GEO_columnY_%GEO_supportCount%,,nopr
+    *dim,GEO_columnY_%GEO_supportCount%,,GEO_ABT2_columnCount
+
+    yOutermostWidth = GEO_ABT2_columnSpacing*(GEO_ABT2_columnCount-1)
+    yLeftmostColumn = GEO_ABT2_yc-(yOutermostWidth/2)
+
+    *vfill , GEO_columnY_%GEO_supportCount% , ramp , yLeftmostColumn , GEO_ABT2_columnSpacing
+
   *endif
 *endif
 
@@ -1200,7 +1216,7 @@ zero = 0
 
 ! Create abutment geometry arrays
 *del,GEO_ABT1_geometry
-*dim,GEO_ABT1_geometry,,42
+*dim,GEO_ABT1_geometry,,43
 GEO_ABT1_geometry(1)  = GEO_ABT1_type          , GEO_deckWidth_beg   , GEO_deckOff_beg      , GEO_ABT1_yc                , GEO_ABT1_appSlab
 GEO_ABT1_geometry(6)  = GEO_ABT1_appSlabL      , GEO_ABT1_height     , GEO_ABT1_length      , GEO_ABT1_longPiles         , GEO_ABT1_pileCapL
 GEO_ABT1_geometry(11) = GEO_ABT1_pileCapW      , GEO_ABT1_pileL      , GEO_ABT1_topOffset   , GEO_ABT1_tranPiles         , GEO_ABT1_wings
@@ -1209,10 +1225,10 @@ GEO_ABT1_geometry(21) = GEO_ABT1_pileFree      , GEO_ABT1_pileShort  , GEO_ABT1_
 GEO_ABT1_geometry(26) = GEO_ABT1_wingCapWidth  , GEO_ABT1_wingAngle  , GEO_ABT1_width       , GEO_ABT1_thinTranWallDepth , GEO_ABT1_beamOpt
 GEO_ABT1_geometry(31) = GEO_ABT1_pileCapOffset , GEO_ABT1_postHeight , GEO_ABT_postCx       , GEO_ABT_postCy             , GEO_ABT1_postOffset
 GEO_ABT1_geometry(36) = GEO_ABT1_appSlabW      , GEO_ABT1_columnCx   , GEO_ABT1_columnCy    , GEO_ABT1_columnSpacing     , GEO_ABT1_capOpt
-GEO_ABT1_geometry(41) = GEO_ABT1_girderB       , GEO_ABT1_girderH
+GEO_ABT1_geometry(41) = GEO_ABT1_girderB       , GEO_ABT1_girderH    , GEO_ABT1_columnCount
 
 *del,GEO_ABT2_geometry
-*dim,GEO_ABT2_geometry,,42
+*dim,GEO_ABT2_geometry,,43
 GEO_ABT2_geometry(1)  = GEO_ABT2_type          , GEO_deckWidth_end   , GEO_deckOff_end      , GEO_ABT2_yc                , GEO_ABT2_appSlab
 GEO_ABT2_geometry(6)  = GEO_ABT2_appSlabL      , GEO_ABT2_height     , GEO_ABT2_length      , GEO_ABT2_longPiles         , GEO_ABT2_pileCapL
 GEO_ABT2_geometry(11) = GEO_ABT2_pileCapW      , GEO_ABT2_pileL      , GEO_ABT2_topOffset   , GEO_ABT2_tranPiles         , GEO_ABT2_wings
@@ -1221,7 +1237,7 @@ GEO_ABT2_geometry(21) = GEO_ABT2_pileFree      , GEO_ABT2_pileShort  , GEO_ABT2_
 GEO_ABT2_geometry(26) = GEO_ABT2_wingCapWidth  , GEO_ABT2_wingAngle  , GEO_ABT2_width       , GEO_ABT2_thinTranWallDepth , GEO_ABT2_beamOpt
 GEO_ABT2_geometry(31) = GEO_ABT2_pileCapOffset , GEO_ABT2_postHeight , GEO_ABT_postCx       , GEO_ABT_postCy             , GEO_ABT2_postOffset
 GEO_ABT2_geometry(36) = GEO_ABT2_appSlabW      , GEO_ABT2_columnCx   , GEO_ABT2_columnCy    , GEO_ABT2_columnSpacing     , GEO_ABT2_capOpt
-GEO_ABT2_geometry(41) = GEO_ABT2_girderB       , GEO_ABT2_girderH
+GEO_ABT2_geometry(41) = GEO_ABT2_girderB       , GEO_ABT2_girderH    , GEO_ABT2_columnCount
 
 ! Abutment extents
 GEO_ABT1_xMin=-(GEO_ABT1_length>GEO_ABT1_appSlabL*GEO_ABT1_appSlab)
