@@ -1,37 +1,37 @@
-! BRIDGE_V1_SMFRAME, nthSupport
-! BRIDGE_V1_SMFRAME, arg1
+! BRIDGE_V1_SMFRAME , nthSupport
+! BRIDGE_V1_SMFRAME , ARG1
 
-BRIDGE_V1_CSMESO, arg1
+BRIDGE_V1_CSMESO, ARG1
 *get,CS_num,active,,csys
 
-kcmName=strcat('COMPK_FRAME_',chrval(arg1))
-lcmName=strcat('COMPL_FRAME_',chrval(arg1))
+kcmName = strcat('COMPK_FRAME_',chrval(ARG1))
+lcmName = strcat('COMPL_FRAME_',chrval(ARG1))
 
 ! Top and bottom Z coordinates of the frame
-nthFrameZTop=zFrameTop+GEO_frameTopOffset(arg1)
-nthFrameZBot=zFrameBot+GEO_frameBotOffset(arg1)
+nthFrameZTop = zFrameTop+GEO_frameTopOffset(ARG1)
+nthFrameZBot = zFrameBot+GEO_frameBotOffset(ARG1)
 
 ! Create array with keypoint numbers
-*get,FGKcount,parm,GEO_frameGirderY_%arg1%,dim,x
-*get,KMaxD,KP,,NUM,MAXD
+*get,FGKcount,parm,GEO_frameGirderY_%ARG1%,dim,x
+*get,KMaxD,kp,,num,maxd
 *del,FGKPs
-*dim,FGKPs,ARRAY,FGKcount
-*vfill,FGKPs,RAMP,KMaxD+1,1
+*dim,FGKPs,array,FGKcount
+*vfill,FGKPs,ramp,KMaxD+1,1
 
 ! Create frame girder
-LSEL,U,LINE,,ALL
-KSEL,U,KP,,ALL
+lsel,none
+ksel,none
 *do,nthKP,1,FGKcount,1
-    KNum=FGKPs(nthKP)
-    yVal=GEO_frameGirderY_%ARG1%(nthKP)
+  KNum = FGKPs(nthKP)
+  yVal = GEO_frameGirderY_%ARG1%(nthKP)
 
-    K,KNum,0,yVal,nthFrameZTop
-    *if,nthKP,NE,1,THEN
-        csys,0
-        L,KPrev,KNum
-        csys,CS_num
-    *endif
-    KPrev=KNum
+  k,KNum,0,yVal,nthFrameZTop
+  *if,nthKP,ne,1,then
+    csys,0
+    L,KPrev,KNum
+    csys,CS_num
+  *endif
+  KPrev = KNum
 *enddo
 cm,%kcmName%,kp
 cm,%lcmName%,line
@@ -39,42 +39,42 @@ cmpadd,'COMPK_FrameGirder'
 cmpadd,'COMPL_FrameGirder'
 
 ! Create columns
-LSEL,U,LINE,,ALL
+lsel,none
 *do,nthCol,1,2,1
-    ! Create bottom keypoint
-    yVal=GEO_columnY_%arg1%(nthCol)
-    *get,KMaxD,KP,,NUM,MAXD
-    KBot=KMaxD+1
-    K,KBot,0,yVal,nthFrameZBot
+  ! Create bottom keypoint
+  yVal = GEO_columnY_%ARG1%(nthCol)
+  *get,KMaxD,KP,,NUM,MAXD
+  KBot = KMaxD+1
+  k,KBot,0,yVal,nthFrameZBot
 
-    ! Create intermediary keypoint due to water level
-    *if,GEO_waterHeight+zFrameBot,GT,nthFrameZBot,THEN
-        KMid=KBot+1
-        K,KMid,0,yVal,zFrameBot+GEO_waterHeight
-        csys,0
-        L,KBot,KMid
-        csys,CS_num
-        KPrev=KMid
-    *else
-        KPrev=KBot
-    *endif
-
-    ! Finish column with existing top keypoint
-    CMSEL,S,COMPK_FrameGirder
-    KSEL,R,LOC,X,0
-    KSEL,R,LOC,Y,yVal
-    KSEL,R,LOC,Z,nthFrameZTop
-    *get,KTop,KP,,NUM,MIN
-    KSEL,A,KP,,KPrev
+  ! Create intermediary keypoint due to water level
+  *if,GEO_waterHeight+zFrameBot,GT,nthFrameZBot,THEN
+    KMid = KBot+1
+    k,KMid,0,yVal,zFrameBot+GEO_waterHeight
     csys,0
-    L,KPrev,KTop
+    l,KBot,KMid
     csys,CS_num
+    KPrev = KMid
+  *else
+    KPrev = KBot
+  *endif
 
-    ! Add column base keypoint to component
-    cm,COMPK_temp,kp
-    ksel,s,kp,,KBot
-    cmpadd,'COMPK_FrameBottom'
-    cmsel,s,COMPK_temp
+  ! Finish column with existing top keypoint
+  cmsel,s,COMPK_FrameGirder
+  ksel,r,loc,x,0
+  ksel,r,loc,y,yVal
+  ksel,r,loc,z,nthFrameZTop
+  *get,KTop,kp,,num,min
+  ksel,a,kp,,KPrev
+  csys,0
+  l,KPrev,KTop
+  csys,CS_num
+
+  ! Add column base keypoint to component
+  cm,COMPK_temp,kp
+  ksel,s,kp,,KBot
+  cmpadd,'COMPK_FrameBottom'
+  cmsel,s,COMPK_temp
 *enddo
 cmpadd,kcmName
 cmpadd,lcmName
