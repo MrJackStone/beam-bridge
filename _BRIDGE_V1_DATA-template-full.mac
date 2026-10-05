@@ -200,6 +200,8 @@ GEO_frameOpt=0
 GEO_frameHeight=8
 
 ! For frame pier only (GEO_frameOpt=0):
+    ! Number of columns (>= 2)
+    GEO_columnCount = 3
     ! Distance between column centers
     GEO_columnSpacing=16
     ! Total width of the frame at the girder
@@ -441,6 +443,7 @@ GEO_ABT1_thinTranWallDepth = 2
 
 ! Options for abutment type 6:
   ! Column
+  GEO_ABT1_columnCount   = 2
   GEO_ABT1_columnSpacing = 3
   GEO_ABT1_columnCx      = 1.0
   GEO_ABT1_columnCy      = 1.0
@@ -472,6 +475,7 @@ GEO_ABT1_thinTranWallDepth = 2
 
 ! Options for abutment type 7:
   ! Column
+  GEO_ABT1_columnCount   = 2
   GEO_ABT1_columnSpacing = 3
   GEO_ABT1_columnCx      = 1.0
   GEO_ABT1_columnCy      = 1.0
@@ -582,6 +586,7 @@ GEO_ABT2_thinTranWallDepth = 2
 
 ! Options for abutment type 6:
   ! Column
+  GEO_ABT2_columnCount   = 2
   GEO_ABT2_columnSpacing = 3
   GEO_ABT2_columnCx      = 1.0
   GEO_ABT2_columnCy      = 1.0
@@ -613,6 +618,7 @@ GEO_ABT2_thinTranWallDepth = 2
 
 ! Options for abutment type 7:
   ! Column
+  GEO_ABT2_columnCount   = 2
   GEO_ABT2_columnSpacing = 3
   GEO_ABT2_columnCx      = 1.0
   GEO_ABT2_columnCy      = 1.0
