@@ -54,6 +54,7 @@ lnum = 0
   cmpadd,'cmk_support'
 
   ! Draw pile line
+  lsel,none
   ksel,s,kp,,topKP
   ksel,a,kp,,botKP
   l , topKP , botKP

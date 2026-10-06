@@ -107,6 +107,13 @@ cm,cme_bgAbutment,elem
   /gline,1,0
   /plopts,leg3,on
 
+  cmsel,s,cme_bgAbutment
+  cmsel,u,cme_bgPiles
+  cmsel,s,%cmlMain%
+  esll,a
+  eplot
+  /user,1
+
   go2png,PIC_res
 
     cmsel,s,cme_bgAbutment
@@ -114,7 +121,6 @@ cm,cme_bgAbutment,elem
     /device,vector,on
     /type,1,4
     eplot
-    /user,1
     /noerase
     /device,vector,off
 
